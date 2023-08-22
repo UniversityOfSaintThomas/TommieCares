@@ -1,0 +1,119 @@
+<!--
+ - Created by fdf 8/2023 -->
+
+<apex:page id="TommieCares" controller="TommieCaresController" showHeader="false" sidebar="false" applyHtmlTag="false"
+           applyBodyTag="false" standardStylesheets="false" cache="false" docType="html-5.0">
+    <apex:composition template="AdvisorAttendance">
+        <apex:define name="afterJquery">
+
+        </apex:define>
+        <apex:define name="page-title">Tommie Cares</apex:define>
+
+        <apex:define name="body">
+            <style>#topNavBar {
+                    display: none;
+                }</style>
+                    <apex:pageblock >
+                        <apex:form >
+                            <apex:actionFunction immediate="true" name="setstuCourse" rerender="TommieCares" oncomplete="fadein();">
+                                <apex:param name="stuC" value="" assignTo="{!stuC}"/>
+                            </apex:actionFunction>
+                            <apex:actionFunction immediate="true" name="setstucc" rerender="TommieCares" oncomplete="fadein();">
+                                <apex:param name="stuCC" value="" assignTo="{!stuCC}"/>
+                            </apex:actionFunction>
+                            <apex:actionFunction immediate="true" name="setcons" rerender="TommieCares" oncomplete="fadein();">
+                                <apex:param name="concs" value="" assignTo="{!concs}"/>
+                            </apex:actionFunction>
+                            <apex:actionFunction immediate="true" name="setacconcs" rerender="TommieCares" oncomplete="fadein();">
+                                <apex:param name="acconcs" value="" assignTo="{!acconcs}"/>
+                            </apex:actionFunction>
+                            <apex:actionFunction immediate="true" name="setatconcs" rerender="TommieCares" oncomplete="fadein();">
+                                <apex:param name="atconcs" value="" assignTo="{!atconcs}"/>
+                            </apex:actionFunction>
+
+
+
+                        <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}">
+                            <p><strong>Reporter Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong> </p>
+                            <p> If you have immediate concerns about the health or safety of a student, or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
+                            <p> All reports will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
+
+                        <br/><br/>
+
+                        <apex:outputLabel title="Please select the student's course:"
+                                          value="Please select the student's course:" id="stuCourseL"/>
+                            <apex:selectList id="stuCourse" value="{!tcCase.Course_Offering__c}" required="true" multiselect="false" size="1" onChange="fadeout(); setstuCourse(this.value);">
+                                <apex:SelectOptions value="{!Courses}"/>
+                            </apex:selectList>
+                        <br/><br/>
+
+                        <apex:outputLabel title="Please select the student of concern:"
+                                          value="Please select the student of concern:" id="stuNameL"/>
+                            <apex:selectList id="stucc" value="{!tcCase.Course_Connection__c}" required="true" multiselect="false" size="1" onChange="fadeout(); setstucc(this.value);">
+                                <apex:SelectOptions value="{!Students}"/>
+                            </apex:selectList>
+
+                        <br/><br/>
+
+                            <apex:outputLabel title="Please select the primary category of concern:"
+                            value="Please select the primary category of concern:"
+                            id="catConcernL"/>
+                            <apex:selectList id="concerns" value="{!tcCase.Tommie_Alert_Primary_Reason__c}" required="true" multiselect="true" size="3" onChange="fadeout(); setconcs(this.value);">
+                                <apex:SelectOptions value="{!Concerns}"/>
+                            </apex:selectList>
+
+
+                            <br/><br/>
+
+                            <apex:outputLabel title="Please select academic concerns:"
+                                              value="Please select academic concerns:" id="acConcernL"/>
+                            <apex:selectList id="acconcerns" value="{!tcCase.Academic_Performance_Reason_s__c}" required="true" multiselect="true" size="3" onChange="fadeout(); setacconcs(this.value);">
+                                <apex:SelectOptions value="{!acConcerns}"/>
+                            </apex:selectList>
+
+
+                            <br/><br/>
+
+
+                            <apex:outputLabel title="Please select attendance concerns:"
+                                               value="Please select attendance concerns:" id="atConcernL"/>
+                            <apex:selectList id="atconcerns" value="{!tcCase.Attendance_Concerns_Reason_s__c}" required="true" multiselect="true" size="3" onChange="fadeout(); setatconcs(this.value);">
+                                <apex:SelectOptions value="{!atConcerns}"/>
+                            </apex:selectList>
+
+
+                            <br/><br/>
+
+
+
+
+                            <apex:outputLabel title="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
+                                    value="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
+                                    id="titIXConcernL"/>
+                            <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?"
+                                    target="_blank">Submit a Title IX Complaint | St. Thomas Conduct
+                                (symplicity.com)
+                            </apex:outputLink>
+
+                            <br/><br/>
+
+                            <apex:outputLabel title="Please share any additional concerns or information related to this student that you would like the university to know:"
+                                    value="Please share any additional concerns or information related to this student that you would like the university to know:"
+                                    id="commentsL"/>
+                            <apex:inputTextarea value="{!tcCase.Shared_Case_Notes__c}"/>
+
+                            <br/><br/>
+
+
+
+                        </apex:outputpanel>
+                            <p></p>
+                        <p>To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a>
+                            or the ITS Tech Desk at (651) 962-6230.</p>
+                        </apex:form>
+                    </apex:pageblock>
+
+
+        </apex:define>
+    </apex:composition>
+</apex:page>
