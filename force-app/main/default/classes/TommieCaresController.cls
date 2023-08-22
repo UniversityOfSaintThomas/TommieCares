@@ -15,6 +15,7 @@ public with sharing class TommieCaresController {
     public doCrud crud2Do { get; set; }
 
     public TommieCaresController() {
+        tommieCaresCase = new Case();
         crud2Do = new doCrud();
         if (String.isNotBlank(ApexPages.currentPage().getParameters().get('bid'))) {
             bannerId = ApexPages.currentPage().getParameters().get('bid').escapeHtml4();
@@ -28,7 +29,13 @@ public with sharing class TommieCaresController {
             if (advisor != null) {
                 courses = crud2Do.getCourses(bannerId);
             }
+            tommieCaresCase.RecordTypeId = tcCaseRTID;
+            tommieCaresCase.Case_Reporter__c = advisor.Id;
+            tommieCaresCase.Subject = 'Tommie Cares';
+            tommieCaresCase.Origin = 'Web';
+            //tommieCaresCase.ContactId = student.ID_
         }
+
     }
 
     public List<SelectOption> getStudents() {
@@ -45,6 +52,12 @@ public with sharing class TommieCaresController {
 
     public List<SelectOption> getAttendanceConcerns() {
         return getPicklists(Case.Attendance_Concerns_Reason_s__c.getDescribe(), false);
+    }
+
+    public PageReference save() {
+        //PageReference savePage = new PageReference();
+        crud2Do.insertCase(tommieCaresCase);
+        return null;
     }
 
     public List<SelectOption> getPicklists(Schema.DescribeFieldResult atObj, Boolean showSelectLabel) {
@@ -107,11 +120,19 @@ public with sharing class TommieCaresController {
                     AND hed__Course_Offering__c = :stuc
                     ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
             ];
-            System.debug(JSON.serializePretty(stuList));
+
             for (hed__Course_Enrollment__c stu : stuList) {
                 studentList.add(new SelectOption(stu.hed__Contact__r.Id, stu.hed__Contact__r.Last_Name_First_Name__c));
             }
             return studentList;
+        }
+
+        public void insertCase(Case caseToInsert) {
+            try {
+                insert caseToInsert
+            } catch (Exception e) {
+                System.debug(e.getMessage());
+            }
         }
 
     }
