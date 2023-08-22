@@ -29,13 +29,7 @@ public with sharing class TommieCaresController {
             if (advisor != null) {
                 courses = crud2Do.getCourses(bannerId);
             }
-            tommieCaresCase.RecordTypeId = tcCaseRTID;
-            tommieCaresCase.Case_Reporter__c = advisor.Id;
-            tommieCaresCase.Subject = 'Tommie Cares';
-            tommieCaresCase.Origin = 'Web';
-            //tommieCaresCase.ContactId = student.ID_
         }
-
     }
 
     public List<SelectOption> getStudents() {
@@ -56,7 +50,12 @@ public with sharing class TommieCaresController {
 
     public PageReference save() {
         //PageReference savePage = new PageReference();
-        crud2Do.insertCase(tommieCaresCase);
+        tommieCaresCase.RecordTypeId = tcCaseRTID;
+        tommieCaresCase.Case_Reporter__c = advisor.Id;
+        tommieCaresCase.Subject = 'Tommie Cares';
+        tommieCaresCase.Origin = 'Web';
+        System.debug(JSON.serializePretty(tommieCaresCase));
+        //crud2Do.insertCase(tommieCaresCase);
         return null;
     }
 
