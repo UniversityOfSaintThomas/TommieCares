@@ -1,0 +1,24 @@
+minimum_cumulusci_version: '3.78.0'
+project:
+    name: TommieCares
+    package:
+        name: TommieCares
+        api_version: '55.0'
+    git:
+    source_format: sfdx
+
+tasks:
+    robot:
+        options:
+            suites: robot/TommieCares/tests
+            options:
+                outputdir: robot/TommieCares/results
+
+    robot_testdoc:
+        options:
+            path: robot/TommieCares/tests
+            output: robot/TommieCares/doc/TommieCares_tests.html
+
+    run_tests:
+        options:
+            required_org_code_coverage_percent: 75
