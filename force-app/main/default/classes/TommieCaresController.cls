@@ -129,7 +129,7 @@ public with sharing class TommieCaresController {
 
         public void insertCase(Case caseToInsert) {
             try {
-                insert caseToInsert
+                insert caseToInsert;
             } catch (Exception e) {
                 System.debug(e.getMessage());
             }
