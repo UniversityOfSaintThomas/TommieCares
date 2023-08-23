@@ -97,7 +97,7 @@
                         </apex:selectList>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="academicConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic concerns'),true,false)}">
+                    <apex:outputPanel id="academicConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns'),true,false)}">
                         <apex:outputLabel title="Please select academic concerns:"
                                           value="Please select academic concerns:" for="acconcerns"
                                           styleClass="slds-form-element__label"
@@ -118,6 +118,19 @@
                         </apex:selectList>
                     </apex:outputPanel>
 
+
+                    <apex:outputPanel id="passClassSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(((CONTAINS(primaryConcern,'Academic performance concerns')) || (CONTAINS(primaryConcern,'Attendance concerns'))),true,false)}">
+                        <apex:outputLabel title="Can the student pass this course?"
+                                          value="Can the student pass this course?" for="passclassconcerns"
+                                          styleClass="slds-form-element__label"
+                        />
+                        <apex:selectList id="passclassconcerns" value="{!tommieCaresCase.Can_this_student_pass_course__c}" required="true" multiselect="false">
+                            <apex:selectOption itemValue="Yes"/>
+                            <apex:selectOption itemValue="No"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+
+
                     <apex:outputPanel id="titleIXLink" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Relationship'),true,false)}">
                         <apex:outputLabel title="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
                                           value="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
@@ -136,6 +149,14 @@
                                           styleClass="slds-form-element__label"
                                           for="commentsL"/>
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="otherconcernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other'),true,false)}">
+                        <apex:outputLabel title="Please share any additional concerns or information related to this student that you would like the university to know:"
+                                          value="Please share any additional concerns or information related to this student that you would like the university to know:"
+                                          styleClass="slds-form-element__label"
+                                          for="othercommentsL"/>
+                        <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
                     </apex:outputPanel>
 
                     <apex:outputPanel id="saveCase" style="block" styleClass="formInputPadding" rendered="{!!ISBLANK(primaryConcern)}">

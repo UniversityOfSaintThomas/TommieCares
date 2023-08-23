@@ -117,6 +117,7 @@ public with sharing class TommieCaresController {
                     FROM hed__Course_Enrollment__c
                     WHERE Current_Term_Course__c = TRUE
                     AND hed__Course_Offering__c = :stuc
+                    AND RecordType.Name = 'Student'
                     ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
             ];
 
