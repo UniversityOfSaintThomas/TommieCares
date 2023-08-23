@@ -5,6 +5,7 @@ public with sharing class TommieCaresController {
     public String bannerId { get; set; }
     public Contact advisor { get; set; }
     public Id tcCaseRTID { get; set; }
+    public hed__Term__c currentTerm { get; set; }
     public List<SelectOption> courses { get; set; }
     public Case tommieCaresCase { get; set; }
     public Id studentCourseConnection { get; set; }
@@ -21,6 +22,13 @@ public with sharing class TommieCaresController {
             bannerId = ApexPages.currentPage().getParameters().get('bid').escapeHtml4();
         }
         tcCaseRTID = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Tommie Cares').getRecordTypeId();
+
+        currentTerm = [
+                SELECT ID
+                FROM hed__Term__c
+                WHERE Current_Term__c = TRUE
+                LIMIT 1
+        ];
 
         courses = new List<SelectOption>();
 
@@ -54,6 +62,17 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Case_Reporter__c = advisor.Id;
         tommieCaresCase.Subject = 'Tommie Cares';
         tommieCaresCase.Origin = 'Web';
+        tommieCaresCase.Course_Connection__c = studentCourseConnection;
+        tommieCaresCase.Reporter_University_Email__c = advisor.hed__UniversityEmail__c;
+        //tommieCaresCase.Primary_Advisory_Email__c = ;
+        tommieCaresCase.Alert_Term_lookup__c = currentTerm.Id;
+        //tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = ;
+        //tommieCaresCase.Shared_Case_Notes__c = ;
+        //tommieCaresCase.Can_this_student_pass_course__c = ;
+        //tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
+        //tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcerns;
+        //tommieCaresCase.Academic_Performance_Reason_s__c = academicConcerns;
+
         System.debug(JSON.serializePretty(tommieCaresCase));
         //crud2Do.insertCase(tommieCaresCase);
         return null;
