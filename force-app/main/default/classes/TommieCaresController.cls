@@ -13,6 +13,7 @@ public with sharing class TommieCaresController {
     public String primaryConcern { get; set; }
     public String academicConcern { get; set; }
     public String attendanceConcern { get; set; }
+    public String tommiehigh5Reason { get; set; }
     public doCrud crud2Do { get; set; }
 
     public TommieCaresController() {
@@ -56,6 +57,11 @@ public with sharing class TommieCaresController {
         return getPicklists(Case.Attendance_Concerns_Reason_s__c.getDescribe(), false);
     }
 
+    public List<SelectOption> getTommieHigh5Reason() {
+        return getPicklists(Case.Tommie_High_5__c.getDescribe(), false);
+    }
+
+
     public PageReference save() {
         //PageReference savePage = new PageReference();
         tommieCaresCase.RecordTypeId = tcCaseRTID;
@@ -72,6 +78,7 @@ public with sharing class TommieCaresController {
         //tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
         //tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcerns;
         //tommieCaresCase.Academic_Performance_Reason_s__c = academicConcerns;
+        //tommieCaresCase.Tommie_High_5__c = tommiehigh5Reason;
 
         System.debug(JSON.serializePretty(tommieCaresCase));
         //crud2Do.insertCase(tommieCaresCase);

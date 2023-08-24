@@ -53,12 +53,16 @@
                     <apex:param name="atconcs" value="" assignTo="{!attendanceConcern}"/>
                 </apex:actionFunction>
 
+                <apex:actionFunction immediate="true" name="setth5reason" rerender="TommieCares">
+                    <apex:param name="setth5reason" value="" assignTo="{!tommiehigh5Reason}"/>
+                </apex:actionFunction>
+
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="none">
 
                     <apex:outputPanel style="block" id="introText" styleClass="formInputPadding">
                         <p class="slds-"><strong>Reporter Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
                         <p> If you have immediate concerns about the health or safety of a student, or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
-                        <p> All reports will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
+                        <p> All concerns will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
                     </apex:outputPanel>
 
                     <apex:outputPanel style="block" id="courseSelection" styleClass="formInputPadding slds-form-element">
@@ -96,6 +100,25 @@
                             <apex:SelectOptions value="{!primaryReason}"/>
                         </apex:selectList>
                     </apex:outputPanel>
+
+                    <apex:outputPanel id="tommiehigh5ReasonSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
+                        <apex:outputLabel title="Please select Tommie High 5 Reason(s):"
+                                          value="Please select Tommie High 5 Reason(s):" for="th5reasons"
+                                          styleClass="slds-form-element__label"
+                        />
+                        <apex:selectList id="th5reasons" value="{!tommieCaresCase.Tommie_High_5__c}" required="true" multiselect="true" size="3" onChange="setth5reason(this.value);">
+                            <apex:SelectOptions value="{!tommieHigh5Reason}"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="tommiehigh5Comment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
+                        <apex:outputLabel title="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
+                                          value="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
+                                          styleClass="slds-form-element__label"
+                                          for="tommiehigh5commentsL"/>
+                        <apex:inputTextarea id="tommiehigh5commentsL" required="true" value="{!tommieCaresCase.Tommie_High_5_Notes__c}"/>
+                    </apex:outputPanel>
+
 
                     <apex:outputPanel id="academicConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns'),true,false)}">
                         <apex:outputLabel title="Please select academic concerns:"
