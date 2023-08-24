@@ -106,7 +106,7 @@
                                           value="Please select Tommie High 5 Reason(s):" for="th5reasons"
                                           styleClass="slds-form-element__label"
                         />
-                        <apex:selectList id="th5reasons" value="{!tommieCaresCase.Tommie_High_5__c}" required="true" multiselect="true" size="3" onChange="setth5reason(this.value);">
+                        <apex:selectList id="th5reasons" value="{!tommieCaresCase.Tommie_High_5__c}" required="true" multiselect="true" size="3">
                             <apex:SelectOptions value="{!tommieHigh5Reason}"/>
                         </apex:selectList>
                     </apex:outputPanel>
@@ -166,6 +166,14 @@
                         </apex:outputLink>
                     </apex:outputPanel>
 
+                    <apex:outputPanel id="otherconcernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other'),true,false)}">
+                        <apex:outputLabel title="Please provide additional details about your Other concerns:"
+                                          value="Please provide additional details about your Other concerns:"
+                                          styleClass="slds-form-element__label"
+                                          for="othercommentsL"/>
+                        <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
+                    </apex:outputPanel>
+
                     <apex:outputPanel id="concernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!!ISBLANK(primaryConcern)}">
                         <apex:outputLabel title="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
                                           value="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
@@ -174,13 +182,7 @@
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="otherconcernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other'),true,false)}">
-                        <apex:outputLabel title="Please provide additional details about your Other concerns:"
-                                          value="Please provide additional details about your Other concerns:"
-                                          styleClass="slds-form-element__label"
-                                          for="othercommentsL"/>
-                        <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
-                    </apex:outputPanel>
+
 
                     <apex:outputPanel id="saveCase" style="block" styleClass="formInputPadding" rendered="{!!ISBLANK(primaryConcern)}">
                         <div class="slds-p-vertical_medium">

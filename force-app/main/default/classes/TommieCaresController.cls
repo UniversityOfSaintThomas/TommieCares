@@ -13,7 +13,7 @@ public with sharing class TommieCaresController {
     public String primaryConcern { get; set; }
     public String academicConcern { get; set; }
     public String attendanceConcern { get; set; }
-    public String tommiehigh5Reason { get; set; }
+    //public String tommiehigh5Reason { get; set; }
     public doCrud crud2Do { get; set; }
 
     public TommieCaresController() {
