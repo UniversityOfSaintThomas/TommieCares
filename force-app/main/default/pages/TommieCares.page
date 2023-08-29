@@ -11,20 +11,45 @@
                     padding: 0px 0px 15px 0px;
                     display: block;
                 }
-                .capricorn-main .slds-scope .required.slds-form-element__label, .capricorn-main .slds-scope .slds-form-element__label {font-size: 1rem;}
+
+                .capricorn-main .slds-scope .required.slds-form-element__label, .capricorn-main .slds-scope .slds-form-element__label {
+                    font-size: 1rem;
+                }
+
+                .tommieSelect td {
+                    display: inline-block;
+                    float: left;
+                    padding: 5px;
+                    margin: 5px;
+                    border: solid 1px rebeccapurple;
+                }
+
+                .tommieSelect td input {
+                    left: 45px;
+                    top: -2px;
+                    transform: translateX(-40px);
+                }
+
+                .tommieSelect td label {
+                    padding: 3px 1px;
+                    width: auto;
+                }
+
+                .messageTable {
+                    color: #000;
+                }
             </style>
 
             <script>
-                function getMultiSelectValues(select) {
+                function getMultiSelectValues(checkbox) {
+                    let inputTable = checkbox.closest('table');
                     let result = [];
-                    let options = select && select.options;
-                    let opt;
-                    for (let i = 0, iLen = options.length; i < iLen; i++) {
-                        opt = options[i];
-                        if (opt.selected) {
-                            result.push(opt.value || opt.text);
+                    inputTable.querySelectorAll('input').forEach(inputValue => {
+                        if (inputValue.checked) {
+                            result.push(inputValue.value);
                         }
-                    }
+                    })
+                    console.log(result.join(';'));
                     return result.join(';');
                 }
             </script>
@@ -32,6 +57,15 @@
 
         <apex:define name="body">
             <apex:form>
+                <apex:pageMessages/>
+
+                <apex:actionFunction immediate="true" name="setPrimaryConcern" rerender="TommieCares">
+                    <apex:param name="setPrimaryConcern" value="" assignTo="{!primaryConcern}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setHighFiveReason" rerender="TommieCares">
+                    <apex:param name="setPrimaryConcern" value="" assignTo="{!highFiveReason}"/>
+                </apex:actionFunction>
 
                 <apex:actionFunction immediate="true" name="setStudentCourse" rerender="TommieCares">
                     <apex:param name="stuC" value="" assignTo="{!courseOfferingId}"/>
@@ -41,20 +75,16 @@
                     <apex:param name="stuCC" value="" assignTo="{!studentCourseConnection}"/>
                 </apex:actionFunction>
 
-                <apex:actionFunction immediate="true" name="setPrimaryConcern" rerender="TommieCares">
-                    <apex:param name="setPrimaryConcern" value="" assignTo="{!primaryConcern}"/>
-                </apex:actionFunction>
-
-                <apex:actionFunction immediate="true" name="setacconcs" rerender="TommieCares">
+                <apex:actionFunction immediate="true" name="setAcademicConcern" rerender="TommieCares">
                     <apex:param name="acconcs" value="" assignTo="{!academicConcern}"/>
                 </apex:actionFunction>
 
-                <apex:actionFunction immediate="true" name="setatconcs" rerender="TommieCares">
+                <apex:actionFunction immediate="true" name="setAttendanceConcern" rerender="TommieCares">
                     <apex:param name="atconcs" value="" assignTo="{!attendanceConcern}"/>
                 </apex:actionFunction>
 
                 <apex:actionFunction immediate="true" name="setth5reason" rerender="TommieCares">
-                    <apex:param name="setth5reason" value="" assignTo="{!tommiehigh5Reason}"/>
+                    <apex:param name="setth5reason" value="" assignTo="{!highFiveReason}"/>
                 </apex:actionFunction>
 
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="none">
@@ -76,41 +106,42 @@
                         </div>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!students.size > 1}" styleClass="formInputPadding slds-form-element">
+                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!studentsOptions.size > 1}" styleClass="formInputPadding slds-form-element">
                         <apex:outputLabel title="Please select the student of concern:" value="Please select the student of concern:" for="stucc" styleClass="slds-form-element__label"/>
                         <div class="slds-form-element__control">
                             <div class="slds-select_container">
                                 <apex:selectList id="stucc" value="{!tommieCaresCase.ContactId}" required="true" multiselect="false" size="1" onChange="setCourseConnection(this.value);" styleClass="slds-select">
-                                    <apex:SelectOptions value="{!students}"/>
+                                    <apex:SelectOptions value="{!studentsOptions}"/>
                                 </apex:selectList>
                             </div>
                         </div>
                     </apex:outputPanel>
 
+                    <!-- Set Primary Reason for alert-->
                     <apex:outputPanel id="primaryConcern" layout="block" rendered="{!!ISBLANK(studentCourseConnection)}" styleClass="formInputPadding slds-form-element">
                         <apex:outputLabel title="Please select the primary category of concern:"
                                           value="Please select the primary category of concern:"
                                           for="concerns"
                                           styleClass="slds-form-element__label"
                         />
-
-                        <!--                            <c:MultiselectPicklist leftLabel="" leftOption="{!primaryReason}" rightLabel="" rightOption="{!primaryConcern}" showUpDownButtons="false" size="14" width="304px"/>-->
-
-                        <apex:selectList id="concerns" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason__c}" required="true" multiselect="true" size="4" onChange="setPrimaryConcern(getMultiSelectValues(this));">
-                            <apex:SelectOptions value="{!primaryReason}"/>
-                        </apex:selectList>
+                        <apex:selectCheckboxes id="concerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="setPrimaryConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!primaryReasonOptions}"/>
+                        </apex:selectCheckboxes>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="tommiehigh5ReasonSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
+
+                    <!-- Set HIGH FIVE Reason-->
+                    <apex:outputPanel id="tommieHigh5ReasonSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
                         <apex:outputLabel title="Please select Tommie High 5 Reason(s):"
                                           value="Please select Tommie High 5 Reason(s):" for="th5reasons"
                                           styleClass="slds-form-element__label"
                         />
-                        <apex:selectList id="th5reasons" value="{!tommieCaresCase.Tommie_High_5__c}" required="true" multiselect="true" size="3">
-                            <apex:SelectOptions value="{!tommieHigh5Reason}"/>
-                        </apex:selectList>
+                        <apex:selectCheckboxes id="th5reasons" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" required="true" onChange="setHighFiveReason(getMultiSelectValues(this))">
+                            <apex:SelectOptions value="{!tommieHigh5ReasonOptions}"/>
+                        </apex:selectCheckboxes>
                     </apex:outputPanel>
 
+                    <!-- Add HIGH FIVE NOTE -->
                     <apex:outputPanel id="tommiehigh5Comment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
                         <apex:outputLabel title="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
                                           value="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
@@ -119,29 +150,29 @@
                         <apex:inputTextarea id="tommiehigh5commentsL" required="true" value="{!tommieCaresCase.Tommie_High_5_Notes__c}"/>
                     </apex:outputPanel>
 
-
+                    <!-- Set Academic Performance Reason -->
                     <apex:outputPanel id="academicConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns'),true,false)}">
                         <apex:outputLabel title="Please select academic concerns:"
                                           value="Please select academic concerns:" for="acconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <apex:selectList id="acconcerns" value="{!tommieCaresCase.Academic_Performance_Reason_s__c}" required="true" multiselect="true" size="3" onChange="setacconcs(this.value);">
-                            <apex:SelectOptions value="{!academicConcerns}"/>
-                        </apex:selectList>
+                        <apex:selectCheckboxes id="acconcerns" required="true" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="setAcademicConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!academicConcernOptions}"/>
+                        </apex:selectCheckboxes>
                     </apex:outputPanel>
 
-
+                    <!-- Set Attendance Concerns Reason -->
                     <apex:outputPanel id="attendanceConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns'),true,false)}">
                         <apex:outputLabel title="Please select attendance concerns:"
                                           value="Please select attendance concerns:" for="atconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <apex:selectList id="atconcerns" value="{!tommieCaresCase.Attendance_Concerns_Reason_s__c}" required="true" multiselect="true" size="3" onChange="setatconcs(this.value);">
-                            <apex:SelectOptions value="{!attendanceConcerns}"/>
-                        </apex:selectList>
+                        <apex:selectCheckboxes id="atconcerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="setAttendanceConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!attendanceConcernsOptions}"/>
+                        </apex:selectCheckboxes>
                     </apex:outputPanel>
 
-
+                    <!-- Set Will pass course YES/NO -->
                     <apex:outputPanel id="passClassSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(((CONTAINS(primaryConcern,'Academic performance concerns')) || (CONTAINS(primaryConcern,'Attendance concerns'))),true,false)}">
                         <apex:outputLabel title="Can the student pass this course?"
                                           value="Can the student pass this course?" for="passclassconcerns"
@@ -183,10 +214,9 @@
                     </apex:outputPanel>
 
 
-
                     <apex:outputPanel id="saveCase" style="block" styleClass="formInputPadding" rendered="{!!ISBLANK(primaryConcern)}">
                         <div class="slds-p-vertical_medium">
-                            <apex:commandButton action="{!save}" styleClass="slds-button slds-button_brand" value="Save"/>
+                            <apex:commandButton action="{!saveCase}" styleClass="slds-button slds-button_brand" value="Save"/>
                         </div>
                     </apex:outputPanel>
 

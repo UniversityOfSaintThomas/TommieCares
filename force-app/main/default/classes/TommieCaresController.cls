@@ -4,16 +4,15 @@
 public with sharing class TommieCaresController {
     public String bannerId { get; set; }
     public Contact advisor { get; set; }
-    public Id tcCaseRTID { get; set; }
     public hed__Term__c currentTerm { get; set; }
     public List<SelectOption> courses { get; set; }
     public Case tommieCaresCase { get; set; }
     public Id studentCourseConnection { get; set; }
     public Id courseOfferingId { get; set; }
     public String primaryConcern { get; set; }
+    public String highFiveReason { get; set; }
     public String academicConcern { get; set; }
     public String attendanceConcern { get; set; }
-    //public String tommiehigh5Reason { get; set; }
     public doCrud crud2Do { get; set; }
 
     public TommieCaresController() {
@@ -22,7 +21,6 @@ public with sharing class TommieCaresController {
         if (String.isNotBlank(ApexPages.currentPage().getParameters().get('bid'))) {
             bannerId = ApexPages.currentPage().getParameters().get('bid').escapeHtml4();
         }
-        tcCaseRTID = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Tommie Cares').getRecordTypeId();
 
         currentTerm = [
                 SELECT ID
@@ -41,44 +39,48 @@ public with sharing class TommieCaresController {
         }
     }
 
-    public List<SelectOption> getStudents() {
+    public List<SelectOption> getStudentsOptions() {
         return crud2Do.getStudents(courseOfferingId);
     }
 
-    public List<SelectOption> getPrimaryReason() {
+    public List<SelectOption> getPrimaryReasonOptions() {
         return getPicklists(Case.Tommie_Alert_Primary_Reason__c.getDescribe(), false);
     }
 
-    public List<SelectOption> getAcademicConcerns() {
+    public List<SelectOption> getAcademicConcernOptions() {
         return getPicklists(Case.Academic_Performance_Reason_s__c.getDescribe(), false);
     }
 
-    public List<SelectOption> getAttendanceConcerns() {
+    public List<SelectOption> getAttendanceConcernsOptions() {
         return getPicklists(Case.Attendance_Concerns_Reason_s__c.getDescribe(), false);
     }
 
-    public List<SelectOption> getTommieHigh5Reason() {
+    public List<SelectOption> getTommieHigh5ReasonOptions() {
         return getPicklists(Case.Tommie_High_5__c.getDescribe(), false);
     }
 
+    public PageReference saveCase() {
+        System.debug('saving case for tommie cares');
+        Id tcCaseRTID = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Tommie Cares').getRecordTypeId();
 
-    public PageReference save() {
-        //PageReference savePage = new PageReference();
+        PageReference savePage = Page.TommieCares;
+        if (String.isNotBlank(bannerId)) {
+            savePage.getParameters().put('bid', bannerId);
+            savePage.setRedirect(true);
+        }
+        System.debug(savePage);
         tommieCaresCase.RecordTypeId = tcCaseRTID;
         tommieCaresCase.Case_Reporter__c = advisor.Id;
         tommieCaresCase.Subject = 'Tommie Cares';
         tommieCaresCase.Origin = 'Web';
         tommieCaresCase.Course_Connection__c = studentCourseConnection;
         tommieCaresCase.Reporter_University_Email__c = advisor.hed__UniversityEmail__c;
-        //tommieCaresCase.Primary_Advisory_Email__c = ;
         tommieCaresCase.Alert_Term_lookup__c = currentTerm.Id;
-        //tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = ;
-        //tommieCaresCase.Shared_Case_Notes__c = ;
-        //tommieCaresCase.Can_this_student_pass_course__c = ;
-        //tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
-        //tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcerns;
-        //tommieCaresCase.Academic_Performance_Reason_s__c = academicConcerns;
-        //tommieCaresCase.Tommie_High_5__c = tommiehigh5Reason;
+        tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
+        tommieCaresCase.Tommie_High_5__c = highFiveReason;
+        tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcern;
+        //tommieCaresCase.Primary_Advisory_Email__c = advisor.hed__UniversityEmail__c;
+        tommieCaresCase.Academic_Performance_Reason_s__c = academicConcern;
 
         System.debug(JSON.serializePretty(tommieCaresCase));
         //crud2Do.insertCase(tommieCaresCase);
@@ -152,6 +154,7 @@ public with sharing class TommieCaresController {
             }
             return studentList;
         }
+
 
         public void insertCase(Case caseToInsert) {
             try {
