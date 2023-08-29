@@ -14,12 +14,22 @@ public with sharing class TommieCaresController {
     public String academicConcern { get; set; }
     public String attendanceConcern { get; set; }
     public doCrud crud2Do { get; set; }
+    public Boolean caseSubmitted { get; set; }
 
     public TommieCaresController() {
         tommieCaresCase = new Case();
+        caseSubmitted = false;
         crud2Do = new doCrud();
         if (String.isNotBlank(ApexPages.currentPage().getParameters().get('bid'))) {
             bannerId = ApexPages.currentPage().getParameters().get('bid').escapeHtml4();
+        }
+
+        if (String.isNotBlank(ApexPages.currentPage().getParameters().get('submitted'))) {
+            try {
+                caseSubmitted = Boolean.valueOf(ApexPages.currentPage().getParameters().get('submitted').escapeHtml4());
+            } catch (Exception e) {
+
+            }
         }
 
         currentTerm = [
@@ -66,6 +76,7 @@ public with sharing class TommieCaresController {
         PageReference savePage = Page.TommieCares;
         if (String.isNotBlank(bannerId)) {
             savePage.getParameters().put('bid', bannerId);
+            savePage.getParameters().put('submitted', 'true');
             savePage.setRedirect(true);
         }
         System.debug(savePage);
@@ -73,7 +84,8 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Case_Reporter__c = advisor.Id;
         tommieCaresCase.Subject = 'Tommie Cares';
         tommieCaresCase.Origin = 'Web';
-        tommieCaresCase.Course_Connection__c = studentCourseConnection;
+        tommieCaresCase.Course_Offering__c = studentCourseConnection;
+        //tommieCaresCase.Course_Connection__c = ''
         tommieCaresCase.Reporter_University_Email__c = advisor.hed__UniversityEmail__c;
         tommieCaresCase.Alert_Term_lookup__c = currentTerm.Id;
         tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
@@ -83,8 +95,8 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Academic_Performance_Reason_s__c = academicConcern;
 
         System.debug(JSON.serializePretty(tommieCaresCase));
-        //crud2Do.insertCase(tommieCaresCase);
-        return null;
+        crud2Do.insertCase(tommieCaresCase);
+        return savePage;
     }
 
     public List<SelectOption> getPicklists(Schema.DescribeFieldResult atObj, Boolean showSelectLabel) {
@@ -157,11 +169,11 @@ public with sharing class TommieCaresController {
 
 
         public void insertCase(Case caseToInsert) {
-            try {
-                insert caseToInsert;
-            } catch (Exception e) {
-                System.debug(e.getMessage());
-            }
+            //try {
+            insert caseToInsert;
+            //  } catch (Exception e) {
+            //      System.debug(e.getMessage());
+            //  }
         }
 
     }
