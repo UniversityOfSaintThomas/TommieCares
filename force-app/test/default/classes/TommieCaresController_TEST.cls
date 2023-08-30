@@ -27,7 +27,7 @@ private class TommieCaresController_TEST {
                 LastName = 'Advisor',
                 University_Banner_ID__c = '1111111111',
                 hed__UniversityEmail__c = 'test-advisor@test.com',
-                Email = 'test@test.com'
+                Email = 'test-advisor@test.com'
         );
         insert primaryAdvisor;
 
@@ -94,17 +94,23 @@ private class TommieCaresController_TEST {
         tcc.studentCourseConnection = tcc.courses[1].getValue();
         System.debug(tcc.courses[1].getValue());
 
-        List<hed__Course_Enrollment__c> students = [
-                SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email,
-                        RecordType.Name
-                FROM hed__Course_Enrollment__c
-                WHERE Current_Term_Course__c = TRUE
-                AND hed__Course_Offering__c = : tcc.courses[1].getValue()
-                AND RecordType.Name = 'Student'
-                ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
-        ];
-
         List<SelectOption> studentOptions = tcc.getStudentsOptions();
+
+        List<SelectOption> primaryReason = tcc.getPrimaryReasonOptions();
+        System.assert(primaryReason.size() > 0);
+
+        List<SelectOption> academicConcerns = tcc.getAcademicConcernOptions();
+        System.assert(academicConcerns.size() > 0);
+
+        List<SelectOption> attendanceConcerns = tcc.getAttendanceConcernsOptions();
+        System.assert(attendanceConcerns.size() > 0);
+
+        List<SelectOption> highFives = tcc.getTommieHigh5ReasonOptions();
+        System.assert(highFives.size() > 0);
+
+        tcc.saveCase();
+
+        //Case savedCase = [Select Id FROM Case ContactId = student.];
 
 
         System.debug(studentOptions);
