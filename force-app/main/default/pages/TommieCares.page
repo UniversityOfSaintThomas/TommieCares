@@ -8,7 +8,7 @@
         <apex:define name="scriptsHead">
             <style>
                 .formInputPadding {
-                    padding: 0px 0px 15px 0px;
+                    padding: 0 0 15px 0;
                     display: block;
                 }
 
@@ -82,10 +82,8 @@
                             </span>
                     </div>
                     <div class="slds-media__body">
-                        <p class="slds-text-color_inverse-weak">
-                        <div class="slds-text-color_inverse">
+                        <p class="slds-text-color_inverse">
                             Success! Your Tommie Cares submission has been submitted. Feel free to enter another submission below.
-                        </div>
                         </p>
                     </div>
                 </apex:outputPanel>
@@ -137,7 +135,7 @@
                         </div>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!studentsOptions.size > 1}" styleClass="formInputPadding slds-form-element">
+                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!!ISBLANK(studentCourseConnection)}" styleClass="formInputPadding slds-form-element">
                         <apex:outputLabel title="Please select the student of concern:" value="Please select the student of concern:" for="stucc" styleClass="slds-form-element__label"/>
                         <div class="slds-form-element__control">
                             <div class="slds-select_container">
@@ -149,7 +147,7 @@
                     </apex:outputPanel>
 
                     <!-- Set Primary Reason for alert-->
-                    <apex:outputPanel id="primaryConcern" layout="block" rendered="{!!ISBLANK(studentCourseConnection)}" styleClass="formInputPadding slds-form-element">
+                    <apex:outputPanel id="primaryConcern" layout="block" rendered="{!!ISBLANK(courseOfferingId)}" styleClass="formInputPadding slds-form-element">
                         <apex:outputLabel title="Please select the primary category of concern:"
                                           value="Please select the primary category of concern:"
                                           for="concerns"

@@ -16,6 +16,7 @@ public with sharing class TommieCaresController {
     public doCrud crud2Do { get; set; }
     public Boolean caseSubmitted { get; set; }
 
+
     public TommieCaresController() {
         tommieCaresCase = new Case();
         caseSubmitted = false;
@@ -33,13 +34,11 @@ public with sharing class TommieCaresController {
         }
 
         currentTerm = [
-                SELECT ID
+                SELECT Id
                 FROM hed__Term__c
                 WHERE Current_Term__c = TRUE
                 LIMIT 1
         ];
-
-        courses = new List<SelectOption>();
 
         if (!String.isBlank(bannerId)) {
             advisor = crud2Do.getAdvisor(bannerId);
@@ -50,7 +49,7 @@ public with sharing class TommieCaresController {
     }
 
     public List<SelectOption> getStudentsOptions() {
-        return crud2Do.getStudents(courseOfferingId);
+        return crud2Do.getStudents(studentCourseConnection);
     }
 
     public List<SelectOption> getPrimaryReasonOptions() {
@@ -85,14 +84,35 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Subject = 'Tommie Cares';
         tommieCaresCase.Origin = 'Web';
         tommieCaresCase.Course_Offering__c = studentCourseConnection;
-        //tommieCaresCase.Course_Connection__c = ''
         tommieCaresCase.Reporter_University_Email__c = advisor.hed__UniversityEmail__c;
         tommieCaresCase.Alert_Term_lookup__c = currentTerm.Id;
         tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
         tommieCaresCase.Tommie_High_5__c = highFiveReason;
         tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcern;
-        //tommieCaresCase.Primary_Advisory_Email__c = advisor.hed__UniversityEmail__c;
         tommieCaresCase.Academic_Performance_Reason_s__c = academicConcern;
+
+        // Get advisor email
+        List<Contact> advisorContact = [
+                SELECT Id, Banner_Primary_Advisor__c, Advisor__r.Email
+                FROM Contact
+                WHERE Advisor__r.Email != NULL
+                AND Contact.Id = :tommieCaresCase.ContactId
+        ];
+        if (advisorContact.size() > 0) {
+            tommieCaresCase.Primary_Advisory_Email__c = advisorContact[0].Advisor__r.Email;
+        }
+
+        List<hed__Course_Enrollment__c> courseConnection = [
+                SELECT Id
+                FROM hed__Course_Enrollment__c
+                WHERE hed__Contact__r.Id = :tommieCaresCase.ContactId
+                AND hed__Course_Offering__c = :studentCourseConnection
+        ];
+
+        if (courseConnection.size() > 0) {
+            tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
+        }
+
 
         System.debug(JSON.serializePretty(tommieCaresCase));
         crud2Do.insertCase(tommieCaresCase);
@@ -100,7 +120,7 @@ public with sharing class TommieCaresController {
     }
 
     public List<SelectOption> getPicklists(Schema.DescribeFieldResult atObj, Boolean showSelectLabel) {
-        List<SelectOPtion> listOut = new List<SelectOption>();
+        List<SelectOption> listOut = new List<SelectOption>();
         List<Schema.PicklistEntry> ple = atObj.getPicklistValues();
         if (showSelectLabel) {
             listOut.add(new SelectOption('', 'Select...'));
@@ -136,44 +156,45 @@ public with sharing class TommieCaresController {
             coursesList.add(new SelectOption('', 'Select...'));
 
             List<hed__Course_Offering__c> advisorCourses = [
-                    SELECT Id, Name
+                    SELECT Id, Name, Course_Title__c, hed__Faculty__r.University_Banner_ID__c
                     FROM hed__Course_Offering__c
                     WHERE hed__Faculty__r.University_Banner_ID__c = :bannerIdAdvisor
                     AND Current_Term__c = TRUE
                     ORDER BY Name ASC
             ];
 
-            for (hed__Course_Offering__c co : advisorCourses) {
-                coursesList.add(new SelectOption(co.Id, co.Name));
+            for (hed__Course_Offering__c course : advisorCourses) {
+                coursesList.add(new SelectOption(course.Id, course.Name + ' - ' + course.Course_Title__c));
             }
             return coursesList;
         }
 
-        public List<SelectOption> getStudents(Id stuc) {
+        public List<SelectOption> getStudents(Id courseOfferingId) {
             List<SelectOption> studentList = new List<SelectOption>() ;
             studentList.add(new SelectOption('', 'Select...'));
-            List<hed__Course_Enrollment__c> stuList = [
-                    SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c
+            Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
+            List<hed__Course_Enrollment__c> students = [
+                    SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email
                     FROM hed__Course_Enrollment__c
                     WHERE Current_Term_Course__c = TRUE
-                    AND hed__Course_Offering__c = :stuc
-                    AND RecordType.Name = 'Student'
+                    AND hed__Course_Offering__c = :courseOfferingId
+                    AND RecordTypeId = :studentRecordId
                     ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
             ];
+            System.debug(JSON.serializePretty(students));
 
-            for (hed__Course_Enrollment__c stu : stuList) {
-                studentList.add(new SelectOption(stu.hed__Contact__r.Id, stu.hed__Contact__r.Last_Name_First_Name__c));
+            for (hed__Course_Enrollment__c student : students) {
+                studentList.add(new SelectOption(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c));
             }
             return studentList;
         }
 
-
         public void insertCase(Case caseToInsert) {
-            //try {
-            insert caseToInsert;
-            //  } catch (Exception e) {
-            //      System.debug(e.getMessage());
-            //  }
+            try {
+                insert caseToInsert;
+            } catch (Exception e) {
+                System.debug(e.getMessage());
+            }
         }
 
     }
