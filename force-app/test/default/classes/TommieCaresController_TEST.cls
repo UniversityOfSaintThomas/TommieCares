@@ -2,7 +2,6 @@
  * Created by Thaddaeus Dahlberg, Software Engineer, University of St. Thomas on 8/29/2023.
  */
 
-
 @IsTest
 private class TommieCaresController_TEST {
 
@@ -36,15 +35,24 @@ private class TommieCaresController_TEST {
                 LastName = 'Student',
                 University_Banner_ID__c = '1111111112',
                 hed__UniversityEmail__c = 'test-student@test.com',
-                Banner_Primary_Advisor__c = primaryAdvisor.Id
+                Email = 'test-student@test.com'
         );
         insert student;
+
+        hed__Relationship__c primaryAdvisorRelationship = new hed__Relationship__c(
+                hed__Contact__c = primaryAdvisor.Id,
+                hed__Type__c = 'Primary Advisor',
+                hed__RelatedContact__c = student.Id,
+                Effective_Term__c = currentTerm.Id
+        );
+        insert primaryAdvisorRelationship;
 
         Contact facultyAdvisor = new Contact(
                 FirstName = 'Test',
                 LastName = 'Faculty',
                 University_Banner_ID__c = '1111111113',
-                hed__UniversityEmail__c = 'test-facultyt@test.com'
+                hed__UniversityEmail__c = 'test-facultyt@test.com',
+                Email = 'test-facultyt@test.com'
         );
         insert facultyAdvisor;
 
@@ -72,29 +80,34 @@ private class TommieCaresController_TEST {
         hed__Course_Enrollment__c courseEnrollment = new hed__Course_Enrollment__c(
                 hed__Contact__c = student.Id,
                 hed__Course_Offering__c = courseOffering.Id,
-                RecordTypeId =  Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId()
+                RecordTypeId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId()
         );
         insert courseEnrollment;
     }
 
     @IsTest
-    static void testBehavior() {
+    static void testTommieCaresCase() {
 
         PageReference pageRef = Page.TommieCares;
         pageRef.getParameters().put('bid', '1111111113');
         pageRef.getParameters().put('submitted', 'true');
         Test.setCurrentPage(pageRef);
-        Test.startTest();
         TommieCaresController tcc = new TommieCaresController();
 
+        Test.startTest();
         //Get the course by faculty banner id
         System.assertEquals('Course - Test Course Title', tcc.courses[1].getLabel());
 
         //Set the course id to get student list
         tcc.studentCourseConnection = tcc.courses[1].getValue();
-        System.debug(tcc.courses[1].getValue());
-
+        tcc.tommieCaresCase.Course_Offering__c = tcc.courses[1].getValue();
         List<SelectOption> studentOptions = tcc.getStudentsOptions();
+
+        for (SelectOption student : studentOptions) {
+            if (student.getLabel().equalsIgnoreCase('Student, Test')) {
+                tcc.tommieCaresCase.ContactId = student.getValue();
+            }
+        }
 
         List<SelectOption> primaryReason = tcc.getPrimaryReasonOptions();
         System.assert(primaryReason.size() > 0);
@@ -110,8 +123,17 @@ private class TommieCaresController_TEST {
 
         tcc.saveCase();
 
-        //Case savedCase = [Select Id FROM Case ContactId = student.];
-
+        List<Case> savedCases = [
+                Select Id, Subject, Origin, Case_Reporter__c, Alert_Term_lookup__c, Course_Connection__c, ContactId,
+                        Course_Offering__c
+                FROM Case
+                WHERE ContactId = :tcc.tommieCaresCase.ContactId
+        ];
+        System.assertEquals(savedCases.size(), 1);
+        System.assertEquals(savedCases[0].Origin, 'Web');
+        System.assertEquals(savedCases[0].Subject, 'Tommie Cares');
+        System.assertEquals(savedCases[0].ContactId, tcc.tommieCaresCase.ContactId);
+        System.assertEquals(savedCases[0].Course_Offering__c, tcc.studentCourseConnection);
 
         System.debug(studentOptions);
         Test.stopTest();

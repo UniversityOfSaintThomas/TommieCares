@@ -18,10 +18,17 @@
 
                 .tommieSelect td {
                     display: inline-block;
+                    position:relative;
                     float: left;
                     padding: 5px;
                     margin: 5px;
                     border: solid 1px rebeccapurple;
+                }
+
+                .tommieSelect, .tommieSelect tr, .tommieSelect tablebody {
+                    position: relative;
+                    width: 100%;
+                    float:left;
                 }
 
                 .tommieSelect td input {
@@ -119,7 +126,7 @@
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="none">
 
                     <apex:outputPanel layout="block" id="introText" styleClass="formInputPadding">
-                        <p class="slds-text-heading_small slds-m-bottom_small"><strong>Reporter Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
+                        <p class="slds-text-heading_small slds-m-bottom_small"><strong>Your Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
                         <p class="slds-text-body_regular slds-m-bottom_small"> If you have immediate concerns about the health or safety of a student, or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
                         <p class="slds-text-body_regular slds-m-bottom_small"> All concerns will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
                     </apex:outputPanel>
@@ -172,8 +179,8 @@
 
                     <!-- Add HIGH FIVE NOTE -->
                     <apex:outputPanel id="tommiehigh5Comment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5'),true,false)}">
-                        <apex:outputLabel title="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
-                                          value="Reporter: the student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
+                        <apex:outputLabel title="The student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
+                                          value="The student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
                                           styleClass="slds-form-element__label"
                                           for="tommiehigh5commentsL"/>
                         <apex:inputTextarea id="tommiehigh5commentsL" required="true" value="{!tommieCaresCase.Tommie_High_5_Notes__c}"/>
@@ -227,8 +234,7 @@
                                           id="titIXConcernL"
                                           styleClass="slds-form-element__label"
                         />
-                        <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?"
-                                         target="_blank">Submit a Title IX Complaint | St. Thomas Conduct
+                        <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank" styleClass="slds-text-body_regular slds-button slds-button_outline-brand">Submit a Title IX Complaint | St. Thomas Conduct
                             (symplicity.com)
                         </apex:outputLink>
                     </apex:outputPanel>
@@ -247,6 +253,7 @@
                                           styleClass="slds-form-element__label"
                                           for="commentsL"/>
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
+                        <p><i>Note: This information will not be shared with the student. </i></p>
                     </apex:outputPanel>
 
 

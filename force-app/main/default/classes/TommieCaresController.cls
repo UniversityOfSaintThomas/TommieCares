@@ -69,7 +69,6 @@ public with sharing class TommieCaresController {
     }
 
     public PageReference saveCase() {
-        System.debug('saving case for tommie cares');
         Id tcCaseRTID = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Tommie Cares').getRecordTypeId();
 
         PageReference savePage = Page.TommieCares;
@@ -78,7 +77,6 @@ public with sharing class TommieCaresController {
             savePage.getParameters().put('submitted', 'true');
             savePage.setRedirect(true);
         }
-        System.debug(savePage);
         tommieCaresCase.RecordTypeId = tcCaseRTID;
         tommieCaresCase.Case_Reporter__c = advisor.Id;
         tommieCaresCase.Subject = 'Tommie Cares';
@@ -91,15 +89,18 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Attendance_Concerns_Reason_s__c = attendanceConcern;
         tommieCaresCase.Academic_Performance_Reason_s__c = academicConcern;
 
-        // Get advisor email
-        List<Contact> advisorContact = [
-                SELECT Id, Banner_Primary_Advisor__c, Advisor__r.Email
-                FROM Contact
-                WHERE Advisor__r.Email != NULL
-                AND Contact.Id = :tommieCaresCase.ContactId
+        List<hed__Relationship__c> advisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
+                        Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c = 'Primary Advisor'
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                AND Effective_Term__r.hed__Start_Date__c <=TODAY
+                ORDER BY Effective_Term__r.hed__End_Date__c NULLS LAST
         ];
-        if (advisorContact.size() > 0) {
-            tommieCaresCase.Primary_Advisory_Email__c = advisorContact[0].Advisor__r.Email;
+
+        if(advisorContacts.size() > 0) {
+            tommieCaresCase.Primary_Advisory_Email__c = advisorContacts[advisorContacts.size()-1].hed__Contact__r.Email;
         }
 
         List<hed__Course_Enrollment__c> courseConnection = [
@@ -112,7 +113,6 @@ public with sharing class TommieCaresController {
         if (courseConnection.size() > 0) {
             tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
         }
-
 
         System.debug(JSON.serializePretty(tommieCaresCase));
         crud2Do.insertCase(tommieCaresCase);
