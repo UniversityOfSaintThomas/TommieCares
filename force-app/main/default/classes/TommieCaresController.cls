@@ -16,7 +16,6 @@ public with sharing class TommieCaresController {
     public doCrud crud2Do { get; set; }
     public Boolean caseSubmitted { get; set; }
 
-
     public TommieCaresController() {
         tommieCaresCase = new Case();
         caseSubmitted = false;
@@ -81,8 +80,9 @@ public with sharing class TommieCaresController {
         tommieCaresCase.Case_Reporter__c = advisor.Id;
         tommieCaresCase.Subject = 'Tommie Cares';
         tommieCaresCase.Origin = 'Web';
-        tommieCaresCase.Course_Offering__c = studentCourseConnection;
         tommieCaresCase.Reporter_University_Email__c = advisor.hed__UniversityEmail__c;
+
+        tommieCaresCase.Course_Offering__c = studentCourseConnection;
         tommieCaresCase.Alert_Term_lookup__c = currentTerm.Id;
         tommieCaresCase.Tommie_Alert_Primary_Reason__c = primaryConcern;
         tommieCaresCase.Tommie_High_5__c = highFiveReason;
@@ -95,12 +95,12 @@ public with sharing class TommieCaresController {
                 FROM hed__Relationship__c
                 WHERE hed__Type__c = 'Primary Advisor'
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
-                AND Effective_Term__r.hed__Start_Date__c <=TODAY
+                AND Effective_Term__r.hed__Start_Date__c <= TODAY
                 ORDER BY Effective_Term__r.hed__End_Date__c NULLS LAST
         ];
 
-        if(advisorContacts.size() > 0) {
-            tommieCaresCase.Primary_Advisory_Email__c = advisorContacts[advisorContacts.size()-1].hed__Contact__r.Email;
+        if (advisorContacts.size() > 0) {
+            tommieCaresCase.Primary_Advisory_Email__c = advisorContacts[advisorContacts.size() - 1].hed__Contact__r.Email;
         }
 
         List<hed__Course_Enrollment__c> courseConnection = [
