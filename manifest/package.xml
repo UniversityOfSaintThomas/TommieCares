@@ -33,6 +33,8 @@
         <members>Case.Contact_Mailing_First_Name_Last_Name__c</members>
         <members>Case.Course_Connection__c</members>
         <members>Case.Course_Offering__c</members>
+        <members>Case.Has_this_student_returned_to_class__c</members>
+        <members>Case.Have_you_connected_with_this_student__c</members>
         <members>Case.Primary_Advisory_Email__c</members>
         <members>Case.Reporter_University_Email__c</members>
         <members>Case.Tommie_Alert_Primary_Reason_Other_Notes__c</members>
