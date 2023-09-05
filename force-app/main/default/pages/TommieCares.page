@@ -98,7 +98,8 @@
                     </div>
                     <div class="slds-media__body">
                         <p class="slds-text-color_inverse">
-                            Success! Your Tommie Cares submission has been submitted. Feel free to enter another submission below.
+                            Thank you for your submission, and for all you do both in the classroom and as an advisor. You have a tremendous impact on each student’s experience. <br/>
+                            <i>You can submit another below, or close this window if you are done.</i>
                         </p>
                     </div>
                 </apex:outputPanel>
@@ -165,8 +166,8 @@
 
                     <!-- Set Primary Reason for alert-->
                     <apex:outputPanel id="primaryConcern" layout="block" rendered="{!renderSecondHalf}" styleClass="formInputPadding slds-form-element">
-                        <apex:outputLabel title="Please select the primary category of concern:"
-                                          value="Please select the primary category of concern:"
+                        <apex:outputLabel title="Please select the area(s) of concern:"
+                                          value="Please select the area(s) of concern:"
                                           for="concerns"
                                           styleClass="slds-form-element__label"
                         />
@@ -174,6 +175,23 @@
                             <apex:SelectOptions value="{!primaryReasonOptions}"/>
                         </apex:selectCheckboxes>
                     </apex:outputPanel>
+
+                    <apex:outputPanel id="behaveconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Behavior concerns')  && renderSecondHalf,true,false)}">
+                        <p><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="financeconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Financial concerns')  && renderSecondHalf,true,false)}">
+                        <p><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="mhealthconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Mental health concerns')  && renderSecondHalf,true,false)}">
+                        <p><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="sofbelongconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Sense of belonging')  && renderSecondHalf,true,false)}">
+                        <p><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></p>
+                    </apex:outputPanel>
+
 
                     <!-- Set HIGH FIVE Reason-->
                     <apex:outputPanel id="tommieHigh5ReasonSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
@@ -188,10 +206,11 @@
 
                     <!-- Add HIGH FIVE NOTE -->
                     <apex:outputPanel id="tommiehigh5Comment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
-                        <apex:outputLabel title="The student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
-                                          value="The student will receive an email with your message ex: You did a great job on your assignment. Keep working hard."
+                        <apex:outputLabel title="Tommie High 5 details:"
+                                          value="Tommie High 5 details:"
                                           styleClass="slds-form-element__label"
                                           for="tommiehigh5commentsL"/>
+                        <p><i>For Tommie High 5’s the student will receive an email with your message entered in the box below. The faculty submitter and the student’s advisor(s) will also be copied on the message. Ex: You did a great job on your assignment. Keep working hard.</i></p>
                         <apex:inputTextarea id="tommiehigh5commentsL" required="true" value="{!tommieCaresCase.Tommie_High_5_Notes__c}"/>
                     </apex:outputPanel>
 
@@ -201,6 +220,7 @@
                                           value="Please select academic concerns:" for="acconcerns"
                                           styleClass="slds-form-element__label"
                         />
+                        <p><i>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</i></p>
                         <apex:selectCheckboxes id="acconcerns" required="true" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAcademicConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!academicConcernOptions}"/>
                         </apex:selectCheckboxes>
@@ -212,6 +232,7 @@
                                           value="Please select attendance concerns:" for="atconcerns"
                                           styleClass="slds-form-element__label"
                         />
+                        <p><i>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </i></p>
                         <apex:selectCheckboxes id="atconcerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAttendanceConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!attendanceConcernsOptions}"/>
                         </apex:selectCheckboxes>
@@ -246,6 +267,7 @@
                         <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank" styleClass="slds-text-body_regular slds-button slds-button_outline-brand">Submit a Title IX Complaint | St. Thomas Conduct
                             (symplicity.com)
                         </apex:outputLink>
+                        <p><i>These concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
                     </apex:outputPanel>
 
                     <apex:outputPanel id="otherconcernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other')  && renderSecondHalf,true,false)}">
@@ -253,6 +275,7 @@
                                           value="Please provide additional details about your Other concerns:"
                                           styleClass="slds-form-element__label"
                                           for="othercommentsL"/>
+                        <p><i>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
                         <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
                     </apex:outputPanel>
 
@@ -261,8 +284,9 @@
                                           value="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
                                           styleClass="slds-form-element__label"
                                           for="commentsL"/>
+                        <p><i>The information provided below will not be shared with the student. </i></p>
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
-                        <p><i>Note: This information will not be shared with the student. </i></p>
+
                     </apex:outputPanel>
 
 
@@ -273,10 +297,13 @@
                     </apex:outputPanel>
 
                 </apex:outputpanel>
-
-                <p class="formInputPadding">To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a>
-                    or the ITS Tech Desk at (651) 962-6230.</p>
-
+                <p class="formInputPadding">
+                    If you have any difficulties, you may email names of students who did not meet with you to <a href="mailto:retention@stthomas.edu">retention@stthomas.edu</a>
+                    <br/><br/>
+                    If there are no students listed or there is an error in the listing, please contact Heather Bouwmann (Director of Faculty Advising) at <a href="mailto:facultyadvisingdir@stthomas.edu">facultyadvisingdir@stthomas.edu</a> or (651)962-5603.
+                    <br/><br/>
+                    To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.
+                </p>
             </apex:form>
         </apex:define>
     </apex:composition>

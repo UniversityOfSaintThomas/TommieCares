@@ -93,7 +93,7 @@ public with sharing class TommieCaresController {
                 SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
                         Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
-                WHERE hed__Type__c = 'Primary Advisor'
+                WHERE (hed__Type__c = 'Primary Advisor' OR hed__Type__c = 'First-Year Advisor')
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
                 AND Effective_Term__r.hed__Start_Date__c <= TODAY
                 ORDER BY Effective_Term__r.hed__End_Date__c NULLS LAST
