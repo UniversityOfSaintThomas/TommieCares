@@ -29,7 +29,9 @@
         <members>Case.Alert_Term_lookup__c</members>
         <members>Case.Attendance_Concerns_Reason_s__c</members>
         <members>Case.Case_Reporter__c</members>
+        <members>Case.Course_Connection__c</members>
         <members>Case.Course_Offering__c</members>
+        <members>Case.Primary_Advisory_Email__c</members>
         <members>Case.Reporter_University_Email__c</members>
         <members>Case.Tommie_Alert_Primary_Reason_Other_Notes__c</members>
         <members>Case.Tommie_Alert_Primary_Reason__c</members>
