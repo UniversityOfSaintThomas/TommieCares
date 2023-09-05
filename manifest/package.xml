@@ -30,6 +30,7 @@
         <members>Case.Attendance_Concerns_Reason_s__c</members>
         <members>Case.Can_this_student_pass_course__c</members>
         <members>Case.Case_Reporter__c</members>
+        <members>Case.Contact_Mailing_First_Name_Last_Name__c</members>
         <members>Case.Course_Connection__c</members>
         <members>Case.Course_Offering__c</members>
         <members>Case.Primary_Advisory_Email__c</members>
