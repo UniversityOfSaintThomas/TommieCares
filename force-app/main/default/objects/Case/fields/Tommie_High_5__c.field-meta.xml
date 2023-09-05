@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tommie_High_5__c</fullName>
+    <description>Keep Up the Good Work (use to recognize good work in the classroom) 
+Showing Improvement (use when a student has showed improvement in a course</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Keep Up the Good Work (use to recognize good work in the classroom) 
+Showing Improvement (use when a student has showed improvement in a course</inlineHelpText>
+    <label>Tommie High 5 Reason(s)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Keep Up the Good Work</fullName>
+                <default>false</default>
+                <label>Keep Up the Good Work</label>
+            </value>
+            <value>
+                <fullName>Showing Improvement</fullName>
+                <default>false</default>
+                <label>Showing Improvement</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

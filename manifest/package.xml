@@ -25,6 +25,19 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
+        <members>Case.Academic_Performance_Reason_s__c</members>
+        <members>Case.Alert_Term_lookup__c</members>
+        <members>Case.Attendance_Concerns_Reason_s__c</members>
+        <members>Case.Case_Reporter__c</members>
+        <members>Case.Course_Offering__c</members>
+        <members>Case.Reporter_University_Email__c</members>
+        <members>Case.Tommie_Alert_Primary_Reason_Other_Notes__c</members>
+        <members>Case.Tommie_Alert_Primary_Reason__c</members>
+        <members>Case.Tommie_High_5_Notes__c</members>
+        <members>Case.Tommie_High_5__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
         <members>*</members>
         <name>LightningComponentBundle</name>
     </types>

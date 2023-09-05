@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Attendance_Concerns_Reason_s__c</fullName>
+    <externalId>false</externalId>
+    <label>Attendance Concerns Reason(s)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Missing periodically</fullName>
+                <default>false</default>
+                <label>Missing periodically</label>
+            </value>
+            <value>
+                <fullName>Missing excessively</fullName>
+                <default>false</default>
+                <label>Missing excessively</label>
+            </value>
+            <value>
+                <fullName>Stopped attending and/or never attended</fullName>
+                <default>false</default>
+                <label>Stopped attending and/or never attended</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

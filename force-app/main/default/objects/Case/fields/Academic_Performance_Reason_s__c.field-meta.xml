@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Academic_Performance_Reason_s__c</fullName>
+    <externalId>false</externalId>
+    <label>Academic Performance Reason(s)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Performance on tests</fullName>
+                <default>false</default>
+                <label>Performance on tests</label>
+            </value>
+            <value>
+                <fullName>Performance on assignments or papers</fullName>
+                <default>false</default>
+                <label>Performance on assignments or papers</label>
+            </value>
+            <value>
+                <fullName>Missing assignments</fullName>
+                <default>false</default>
+                <label>Missing assignments</label>
+            </value>
+            <value>
+                <fullName>Missing tests or other major assessments</fullName>
+                <default>false</default>
+                <label>Missing tests or other major assessments</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
