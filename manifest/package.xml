@@ -28,6 +28,7 @@
         <members>Case.Academic_Performance_Reason_s__c</members>
         <members>Case.Alert_Term_lookup__c</members>
         <members>Case.Attendance_Concerns_Reason_s__c</members>
+        <members>Case.Can_this_student_pass_course__c</members>
         <members>Case.Case_Reporter__c</members>
         <members>Case.Course_Connection__c</members>
         <members>Case.Course_Offering__c</members>
@@ -47,6 +48,10 @@
         <members>Cases_Tommie_Cares_Create_Guest_User</members>
         <members>Cases_Tommie_Cares_Create_Staff</members>
         <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>Case.Tommie_Cares</members>
+        <name>RecordType</name>
     </types>
     <types>
         <members>*</members>
