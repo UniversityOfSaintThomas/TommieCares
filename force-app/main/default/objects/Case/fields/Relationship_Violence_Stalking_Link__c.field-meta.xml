@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Relationship_Violence_Stalking_Link__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( INCLUDES(Tommie_Alert_Primary_Reason__c,&quot;Relationship violence/stalking&quot;),&quot;Complete this form: &quot; &amp; HYPERLINK(&quot;https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?&quot;, &quot;Submit a Title IX Complaint | St. Thomas Conduct (symplicity.com) &quot;, &quot;_blank&quot;),&quot;&quot;)</formula>
+    <label>Relationship Violence/Stalking Link</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Please_share_URL_link_for_supporting_doc__c</fullName>
+    <description>Please share URL link for supporting document you feel would be helpful.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Please share URL link for supporting document you feel would be helpful.</inlineHelpText>
+    <label>Please share URL link for supporting doc</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Url</type>
+</CustomField>

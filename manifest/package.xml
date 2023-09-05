@@ -35,7 +35,9 @@
         <members>Case.Course_Offering__c</members>
         <members>Case.Has_this_student_returned_to_class__c</members>
         <members>Case.Have_you_connected_with_this_student__c</members>
+        <members>Case.Please_share_URL_link_for_supporting_doc__c</members>
         <members>Case.Primary_Advisory_Email__c</members>
+        <members>Case.Relationship_Violence_Stalking_Link__c</members>
         <members>Case.Reporter_University_Email__c</members>
         <members>Case.Tommie_Alert_Primary_Reason_Other_Notes__c</members>
         <members>Case.Tommie_Alert_Primary_Reason__c</members>
