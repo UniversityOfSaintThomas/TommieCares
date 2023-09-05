@@ -142,7 +142,7 @@
                         <p class="slds-text-body_regular slds-m-bottom_small"> All concerns will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel style="block" id="courseSelection" styleClass="formInputPadding slds-form-element">
+                    <apex:outputPanel layout="block" id="courseSelection" styleClass="formInputPadding slds-form-element">
                         <apex:outputLabel title="Please select the student's course:" value="Please select the student's course:" for="stuCourse" styleClass="slds-form-element__label"/>
                         <div class="slds-form-element__control">
                             <div class="slds-select_container">
@@ -176,25 +176,25 @@
                         </apex:selectCheckboxes>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="behaveconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Behavior concerns')  && renderSecondHalf,true,false)}">
-                        <p><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                    <apex:outputPanel id="behaveconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Behavior concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="financeconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Financial concerns')  && renderSecondHalf,true,false)}">
-                        <p><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b></p>
+                    <apex:outputPanel id="financeconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Financial concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b></p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="mhealthconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Mental health concerns')  && renderSecondHalf,true,false)}">
-                        <p><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                    <apex:outputPanel id="mhealthconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Mental health concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="sofbelongconcernNote" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Sense of belonging')  && renderSecondHalf,true,false)}">
-                        <p><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></p>
+                    <apex:outputPanel id="sofbelongconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Sense of belonging')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></p>
                     </apex:outputPanel>
 
 
                     <!-- Set HIGH FIVE Reason-->
-                    <apex:outputPanel id="tommieHigh5ReasonSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="tommieHigh5ReasonSelect" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please select Tommie High 5 Reason(s):"
                                           value="Please select Tommie High 5 Reason(s):" for="th5reasons"
                                           styleClass="slds-form-element__label"
@@ -205,7 +205,7 @@
                     </apex:outputPanel>
 
                     <!-- Add HIGH FIVE NOTE -->
-                    <apex:outputPanel id="tommiehigh5Comment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="tommiehigh5Comment" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Tommie High 5 details:"
                                           value="Tommie High 5 details:"
                                           styleClass="slds-form-element__label"
@@ -215,31 +215,31 @@
                     </apex:outputPanel>
 
                     <!-- Set Academic Performance Reason -->
-                    <apex:outputPanel id="academicConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="academicConcernSelect" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please select academic concerns:"
                                           value="Please select academic concerns:" for="acconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <p><i>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</i></p>
+                        <p class="slds-text-body_regular"><i>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</i></p>
                         <apex:selectCheckboxes id="acconcerns" required="true" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAcademicConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!academicConcernOptions}"/>
                         </apex:selectCheckboxes>
                     </apex:outputPanel>
 
                     <!-- Set Attendance Concerns Reason -->
-                    <apex:outputPanel id="attendanceConcernSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="attendanceConcernSelect" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please select attendance concerns:"
                                           value="Please select attendance concerns:" for="atconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <p><i>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </i></p>
+                        <p class="slds-text-body_regular"><i>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </i></p>
                         <apex:selectCheckboxes id="atconcerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAttendanceConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!attendanceConcernsOptions}"/>
                         </apex:selectCheckboxes>
                     </apex:outputPanel>
 
                     <!-- Set Will pass course YES/NO -->
-                    <apex:outputPanel id="passClassSelect" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') || CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="passClassSelect" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') || CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Can the student pass this course?"
                                           value="Can the student pass this course?" for="passclassconcerns"
                                           styleClass="slds-form-element__label"
@@ -258,7 +258,7 @@
                         </div>
                     </div>
 
-                    <apex:outputPanel id="titleIXLink" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Relationship') && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="titleIXLink" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Relationship') && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
                                           value="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
                                           id="titIXConcernL"
@@ -267,41 +267,43 @@
                         <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank" styleClass="slds-text-body_regular slds-button slds-button_outline-brand">Submit a Title IX Complaint | St. Thomas Conduct
                             (symplicity.com)
                         </apex:outputLink>
-                        <p><i>These concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
+                        <p class="slds-text-body_regular"><i>These concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="otherconcernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other')  && renderSecondHalf,true,false)}">
+                    <apex:outputPanel id="otherconcernComment" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other')  && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please provide additional details about your Other concerns:"
                                           value="Please provide additional details about your Other concerns:"
                                           styleClass="slds-form-element__label"
                                           for="othercommentsL"/>
-                        <p><i>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
+                        <p class="slds-text-body_regular"><i>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
                         <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="concernComment" style="block" styleClass="formInputPadding slds-form-element" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
+                    <apex:outputPanel id="concernComment" layout="block" styleClass="formInputPadding slds-form-element" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
                         <apex:outputLabel title="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
                                           value="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
                                           styleClass="slds-form-element__label"
                                           for="commentsL"/>
-                        <p><i>The information provided below will not be shared with the student. </i></p>
+                        <p class="slds-text-body_regular"><i>The information provided below will not be shared with the student. </i></p>
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
 
                     </apex:outputPanel>
 
 
-                    <apex:outputPanel id="saveCase" style="block" styleClass="formInputPadding" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
+                    <apex:outputPanel id="saveCase" layout="block" styleClass="formInputPadding" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
                         <div class="slds-p-vertical_medium">
                             <apex:commandButton action="{!saveCase}" styleClass="slds-button slds-button_brand" value="Save"/>
                         </div>
                     </apex:outputPanel>
 
                 </apex:outputpanel>
-                <p class="formInputPadding">
+                <p class="slds-text-body_regular slds-m-bottom_medium">
                     If you have any difficulties, you may email names of students who did not meet with you to <a href="mailto:retention@stthomas.edu">retention@stthomas.edu</a>
-                    <br/><br/>
+                </p>
+                <p class="slds-text-body_regular slds-m-bottom_medium">
                     If there are no students listed or there is an error in the listing, please contact Heather Bouwmann (Director of Faculty Advising) at <a href="mailto:facultyadvisingdir@stthomas.edu">facultyadvisingdir@stthomas.edu</a> or (651)962-5603.
-                    <br/><br/>
+                </p>
+                <p class="slds-text-body_regular slds-m-bottom_medium">
                     To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.
                 </p>
             </apex:form>
