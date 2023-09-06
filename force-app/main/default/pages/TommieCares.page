@@ -24,16 +24,17 @@
                     position: relative;
                     width: 100%;
                     float: left;
+                    margin: 0;
                 }
 
                 .tommieSelect td input {
-                    left: 45px;
-                    top: -2px;
+                    left: 50px;
+                    top: 12px;
                     transform: translateX(-40px);
                 }
 
                 .tommieSelect td label {
-                    padding: 3px 1px;
+                    padding: 5px 10px 0px 30px;
                     width: auto;
                 }
 
@@ -80,7 +81,7 @@
 
         <apex:define name="body">
             <apex:form id="tommieCaresForm">
-                <apex:pageMessages/>
+                <apex:pageMessages />
 
                 <apex:outputPanel layout="block" rendered="{!caseSubmitted}" styleClass="slds-scoped-notification slds-media slds-media_center slds-theme_success slds-m-bottom_large" html-role="status">
                     <div class="slds-media__figure">
@@ -171,20 +172,34 @@
                         </apex:selectCheckboxes>
                     </apex:outputPanel>
 
+                    <apex:outputPanel id="attconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="acaconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </b><br/><br/></p>
+                    </apex:outputPanel>
+
                     <apex:outputPanel id="behaveconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Behavior concerns')  && renderSecondHalf,true,false)}">
-                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b><br/><br/></p>
                     </apex:outputPanel>
 
                     <apex:outputPanel id="financeconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Financial concerns')  && renderSecondHalf,true,false)}">
-                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b></p>
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b><br/><br/></p>
                     </apex:outputPanel>
 
                     <apex:outputPanel id="mhealthconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Mental health concerns')  && renderSecondHalf,true,false)}">
-                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b></p>
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b><br/><br/></p>
                     </apex:outputPanel>
 
                     <apex:outputPanel id="sofbelongconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Sense of belonging')  && renderSecondHalf,true,false)}">
-                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></p>
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="relviolenceconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Relationship violence')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular"><b>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </b> <br/><br/>
+                            Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form: <br/> <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank">Submit a Title IX Complaint | St. Thomas Conduct</a><br/><br/>
+                        </p>
                     </apex:outputPanel>
 
 
@@ -215,7 +230,7 @@
                                           value="Please select academic concerns:" for="acconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <p class="slds-text-body_regular"><i>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</i></p>
+
                         <apex:selectCheckboxes id="acconcerns" required="true" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAcademicConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!academicConcernOptions}"/>
                         </apex:selectCheckboxes>
@@ -227,7 +242,7 @@
                                           value="Please select attendance concerns:" for="atconcerns"
                                           styleClass="slds-form-element__label"
                         />
-                        <p class="slds-text-body_regular"><i>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </i></p>
+
                         <apex:selectCheckboxes id="atconcerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAttendanceConcern(getMultiSelectValues(this));">
                             <apex:SelectOptions value="{!attendanceConcernsOptions}"/>
                         </apex:selectCheckboxes>
@@ -252,18 +267,6 @@
                             <div class="slds-spinner__dot-b"></div>
                         </div>
                     </div>
-
-                    <apex:outputPanel id="titleIXLink" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Relationship') && renderSecondHalf,true,false)}">
-                        <apex:outputLabel title="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
-                                          value="Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:"
-                                          id="titIXConcernL"
-                                          styleClass="slds-form-element__label"
-                        />
-                        <apex:outputLink value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank" styleClass="slds-text-body_regular slds-button slds-button_outline-brand">Submit a Title IX Complaint | St. Thomas Conduct
-                            (symplicity.com)
-                        </apex:outputLink>
-                        <p class="slds-text-body_regular"><i>These concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
-                    </apex:outputPanel>
 
                     <apex:outputPanel id="otherconcernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other')  && renderSecondHalf,true,false)}">
                         <apex:outputLabel title="Please provide additional details about your Other concerns:"
@@ -293,10 +296,7 @@
 
                 </apex:outputpanel>
                 <p class="slds-text-body_regular slds-m-bottom_medium">
-                    If you have any difficulties, you may email names of students who did not meet with you to <a href="mailto:retention@stthomas.edu">retention@stthomas.edu</a>
-                </p>
-                <p class="slds-text-body_regular slds-m-bottom_medium">
-                    If there are no students listed or there is an error in the listing, please contact Heather Bouwmann (Director of Faculty Advising) at <a href="mailto:facultyadvisingdir@stthomas.edu">facultyadvisingdir@stthomas.edu</a> or (651)962-5603.
+                    If you have any questions, please email <a href="mailto:retention@stthomas.edu">retention@stthomas.edu</a>
                 </p>
                 <p class="slds-text-body_regular slds-m-bottom_medium">
                     To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.

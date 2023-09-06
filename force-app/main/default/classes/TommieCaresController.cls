@@ -43,6 +43,7 @@ public with sharing class TommieCaresController {
             advisor = crud2Do.getAdvisor(bannerId);
             if (advisor != null) {
                 courses = crud2Do.getCourses(bannerId);
+                System.debug(courses);
             }
         }
     }
