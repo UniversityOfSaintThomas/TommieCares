@@ -294,7 +294,7 @@
 
                     <apex:outputPanel id="saveCase" layout="block" styleClass="slds-m-bottom_large" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
                         <div class="slds-p-vertical_medium">
-                            <apex:commandButton action="{!saveCase}" styleClass="slds-button slds-button_brand" value="Save"/>
+                            <apex:commandButton action="{!saveCase}" styleClass="slds-button slds-button_brand" value="Submit"/>
                         </div>
                     </apex:outputPanel>
 
