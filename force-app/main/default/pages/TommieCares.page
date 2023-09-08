@@ -11,6 +11,10 @@
                     font-size: 1rem !important;
                 }
 
+                .slds-scope .slds-text-color_inverse {
+                    color: #fff !important;
+                }
+
                 .tommieSelect td {
                     display: inline-block;
                     position: relative;
@@ -81,7 +85,7 @@
 
         <apex:define name="body">
             <apex:form id="tommieCaresForm">
-                <apex:pageMessages />
+                <apex:pageMessages/>
 
                 <apex:outputPanel layout="block" rendered="{!caseSubmitted}" styleClass="slds-scoped-notification slds-media slds-media_center slds-theme_success slds-m-bottom_large" html-role="status">
                     <div class="slds-media__figure">
