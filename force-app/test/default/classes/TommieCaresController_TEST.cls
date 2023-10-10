@@ -124,7 +124,7 @@ private class TommieCaresController_TEST {
         tcc.saveCase();
 
         List<Case> savedCases = [
-                Select Id, Subject, Origin, Case_Reporter__c, Alert_Term_lookup__c, Course_Connection__c, ContactId,
+                SELECT Id, Subject, Origin, Case_Reporter__c, Alert_Term_lookup__c, Course_Connection__c, ContactId,
                         Course_Offering__c
                 FROM Case
                 WHERE ContactId = :tcc.tommieCaresCase.ContactId

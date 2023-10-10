@@ -33,10 +33,18 @@
         <members>Case.Contact_Mailing_First_Name_Last_Name__c</members>
         <members>Case.Course_Connection__c</members>
         <members>Case.Course_Offering__c</members>
+        <members>Case.Current_Professor_Emails__c</members>
+        <members>Case.Financial_Aid_Counselor_Email__c</members>
+        <members>Case.Financial_Aid_Counselor__c</members>
+        <members>Case.First_Year_Advisor_Email__c</members>
+        <members>Case.First_Year_Advisor__c</members>
         <members>Case.Has_this_student_returned_to_class__c</members>
         <members>Case.Have_you_connected_with_this_student__c</members>
         <members>Case.Please_share_URL_link_for_supporting_doc__c</members>
+        <members>Case.Primary_Advisor_Contact__c</members>
         <members>Case.Primary_Advisory_Email__c</members>
+        <members>Case.Probation_Advisor_Contact__c</members>
+        <members>Case.Probation_Advisor_Email__c</members>
         <members>Case.Relationship_Violence_Stalking_Link__c</members>
         <members>Case.Reporter_University_Email__c</members>
         <members>Case.Tommie_Alert_Primary_Reason_Other_Notes__c</members>
