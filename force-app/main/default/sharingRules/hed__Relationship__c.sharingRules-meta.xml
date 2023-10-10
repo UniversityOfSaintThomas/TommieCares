@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Relationship_Guest_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Relationship Guest User</label>
+        <sharedTo>
+            <guestUser>Admissions</guestUser>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4</booleanFilter>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Primary Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>First-Year Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Professor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Probationary Advisor,Financial Aid Counselor,Provisional Advisor</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>UST_2_Guest_User_Relationships</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>UST 2 Guest User Relationships</label>
+        <sharedTo>
+            <guestUser>University_of_St_Thomas1</guestUser>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Professor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Primary Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>First-Year Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Financial Aid Counselor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Probationary Advisor</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>UST_Guest_User_Relationships</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>UST Guest User Relationships</label>
+        <sharedTo>
+            <guestUser>University_of_St_Thomas</guestUser>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Professor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Primary Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>First-Year Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Probationary Advisor</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>hed__Type__c</field>
+            <operation>equals</operation>
+            <value>Financial Aid Counselor</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

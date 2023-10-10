@@ -67,6 +67,10 @@
         <name>RecordType</name>
     </types>
     <types>
+        <members>hed__Relationship__c</members>
+        <name>SharingRules</name>
+    </types>
+    <types>
         <members>*</members>
         <name>StaticResource</name>
     </types>
