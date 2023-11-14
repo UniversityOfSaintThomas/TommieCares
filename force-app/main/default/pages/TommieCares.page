@@ -85,7 +85,7 @@
 
         <apex:define name="body">
             <apex:form id="tommieCaresForm">
-                <apex:pageMessages/>
+                <apex:pageMessages />
 
                 <apex:outputPanel layout="block" rendered="{!caseSubmitted}" styleClass="slds-scoped-notification slds-media slds-media_center slds-theme_success slds-m-bottom_large" html-role="status">
                     <div class="slds-media__figure">
@@ -277,8 +277,18 @@
                                           value="Please provide additional details about your Other concerns:"
                                           styleClass="slds-form-element__label"
                                           for="othercommentsL"/>
-                        <p class="slds-text-body_regular"><i>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </i></p>
+                        <p class="slds-text-body_regular"><i><b>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></i></p>
                         <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="stuConcernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') || CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please provide a personalized message to the student receiving this alert (sent verbatim to the student):"
+                                          value="Please provide a personalized message to the student receiving this alert (sent verbatim to the student):"
+                                          styleClass="slds-form-element__label"
+                                          for="commentsLstu"/>
+                        <p class="slds-text-body_regular"><i>The information provided below <b><u>will</u></b> be shared with the student. </i></p>
+                        <apex:inputTextarea id="commentsLstu" value="{!tommieCaresCase.Case_Reporter_Notes_to_Student__c}"/>
+
                     </apex:outputPanel>
 
                     <apex:outputPanel id="concernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
@@ -286,7 +296,7 @@
                                           value="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
                                           styleClass="slds-form-element__label"
                                           for="commentsL"/>
-                        <p class="slds-text-body_regular"><i>The information provided below will not be shared with the student. </i></p>
+                        <p class="slds-text-body_regular"><i>The information provided below <b><u>will not</u></b> be shared with the student. </i></p>
                         <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
 
                     </apex:outputPanel>

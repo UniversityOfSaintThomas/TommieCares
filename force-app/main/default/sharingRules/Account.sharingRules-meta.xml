@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Summit_Event_Guest_User_Access_School_Name</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Allow Summit Event user to see the High School  and College Account record Name</description>
+        <label>Summit Event Guest User Access School Name</label>
+        <sharedTo>
+            <guestUser>University_of_St_Thomas</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>Type</field>
+            <operation>equals</operation>
+            <value>High School,College</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Educational Institution</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

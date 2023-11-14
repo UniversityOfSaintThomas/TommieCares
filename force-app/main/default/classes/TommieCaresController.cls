@@ -92,12 +92,12 @@ public with sharing class TommieCaresController {
 
         //Get Primary Advisor Contact and Email Address
         List<hed__Relationship__c> advisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
-                        Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c = 'Primary Advisor'
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
-                ORDER BY CreatedDate DESC NULLS LAST LIMIT 1
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
         ];
 
         if (advisorContacts.size() > 0) {
@@ -105,17 +105,32 @@ public with sharing class TommieCaresController {
             tommieCaresCase.Primary_Advisory_Email__c = advisorContacts[advisorContacts.size() - 1].hed__Contact__r.Email;
         }
 
+        //Get Student Athlete Advisor Contact and Email Address
+        List<hed__Relationship__c> STATHLadvisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c = 'Student-Athlete Advisor'
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
+        ];
+
+        if (STATHLadvisorContacts.size() > 0) {
+            tommieCaresCase.Student_Athlete_Advisor_Email__c = STATHLadvisorContacts[STATHLadvisorContacts.size() - 1].hed__Contact__r.Email;
+            tommieCaresCase.Student_Athlete_Advisor__c = STATHLadvisorContacts[STATHLadvisorContacts.size() - 1].hed__Contact__r.Id;
+        }
+
 
         //Get FY Advisor Contact and Email Address
         List<hed__Relationship__c> FYadvisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
-                        Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c = 'First-Year Advisor'
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
-                ORDER BY CreatedDate DESC NULLS LAST LIMIT 1
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
                 //AND Effective_Term__r.hed__Start_Date__c <= TODAY
-               // ORDER BY Effective_Term__r.hed__End_Date__c NULLS LAST
+                // ORDER BY Effective_Term__r.hed__End_Date__c NULLS LAST
 
         ];
 
@@ -126,12 +141,12 @@ public with sharing class TommieCaresController {
 
         //Get Probation Advisor Contact and Email Address
         List<hed__Relationship__c> PROBadvisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
-                        Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c = 'Probationary Advisor'
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
-                ORDER BY CreatedDate DESC NULLS LAST LIMIT 1
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
         ];
 
         if (PROBadvisorContacts.size() > 0) {
@@ -139,22 +154,68 @@ public with sharing class TommieCaresController {
             tommieCaresCase.Probation_Advisor_Contact__c = PROBadvisorContacts[PROBadvisorContacts.size() - 1].hed__Contact__r.Id;
         }
 
-
-
         //Get Financial Aid Counselor Contact and Email Address
         List<hed__Relationship__c> FinAidadvisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Name, Name, Effective_Term__r.Name, Effective_Term__r.hed__Start_Date__c,
-                        Effective_Term__r.hed__End_Date__c, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c = 'Financial Aid Counselor'
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
-                ORDER BY CreatedDate DESC NULLS LAST LIMIT 1
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
         ];
 
         if (FinAidadvisorContacts.size() > 0) {
             tommieCaresCase.Financial_Aid_Counselor_Email__c = FinAidadvisorContacts[FinAidadvisorContacts.size() - 1].hed__Contact__r.Email;
             tommieCaresCase.Financial_Aid_Counselor__c = FinAidadvisorContacts[FinAidadvisorContacts.size() - 1].hed__Contact__r.Id;
         }
+
+        //Get General Advisor Contact and Email Address
+        List<hed__Relationship__c> GENadvisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c = 'General Advisor'
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
+        ];
+
+        if (GENadvisorContacts.size() > 0) {
+            tommieCaresCase.General_Advisor_Email__c = GENadvisorContacts[GENadvisorContacts.size() - 1].hed__Contact__r.Email;
+            tommieCaresCase.General_Advisor__c = GENadvisorContacts[GENadvisorContacts.size() - 1].hed__Contact__r.Id;
+        }
+
+
+        //Get International Advisor Contact and Email Address
+        List<hed__Relationship__c> INTLadvisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c = 'International Advisor'
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
+        ];
+
+        if (INTLadvisorContacts.size() > 0) {
+            tommieCaresCase.International_Advisor_Email__c = INTLadvisorContacts[INTLadvisorContacts.size() - 1].hed__Contact__r.Email;
+            tommieCaresCase.International_Advisor__c = INTLadvisorContacts[INTLadvisorContacts.size() - 1].hed__Contact__r.Id;
+        }
+
+
+        //Get Faculty Advisor Contact and Email Address
+        List<hed__Relationship__c> FACadvisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c = 'Faculty Advisor'
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                ORDER BY CreatedDate DESC NULLS LAST
+                LIMIT 1
+        ];
+
+        if (FACadvisorContacts.size() > 0) {
+            tommieCaresCase.Faculty_Advisor_Email__c = FACadvisorContacts[FACadvisorContacts.size() - 1].hed__Contact__r.Email;
+            tommieCaresCase.Faculty_Advisor__c = FACadvisorContacts[FACadvisorContacts.size() - 1].hed__Contact__r.Id;
+        }
+
 
         List<hed__Course_Enrollment__c> courseConnection = [
                 SELECT Id
@@ -237,7 +298,7 @@ public with sharing class TommieCaresController {
                     ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
             ];
 
-            Map<Id,String> uniqueStudents = new Map<Id,String>();
+            Map<Id, String> uniqueStudents = new Map<Id, String>();
             for (hed__Course_Enrollment__c student : students) {
                 uniqueStudents.put(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c);
             }
