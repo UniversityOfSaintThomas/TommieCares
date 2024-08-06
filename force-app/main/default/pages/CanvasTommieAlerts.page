@@ -1,0 +1,323 @@
+<!--
+ - Created by Thaddaeus Dahlberg, Software Engineer, University of St. Thomas on 6/4/2024.
+ -->
+
+<apex:page id="CanvasTommieAlerts" controller="CanvasTommieAlertsController" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" cache="false" docType="html-5.0">
+    <apex:composition template="UndergradStThomas2023">
+        <apex:define name="metaPageTitle">Tommie Cares</apex:define>
+
+        <apex:define name="scriptsHead">
+            <style>
+                .slds-scope .required.slds-form-element__label, .slds-scope .slds-form-element__label, .slds-scope .slds-text-body_regular {
+                    font-size: 1rem !important;
+                }
+
+                .slds-scope .slds-text-color_inverse {
+                    color: #fff !important;
+                }
+
+                .tommieSelect td {
+                    display: inline-block;
+                    position: relative;
+                    float: left;
+                    padding: 5px;
+                    margin: 5px;
+                    border: solid 1px rebeccapurple;
+                }
+
+                .tommieSelect, .tommieSelect tr, .tommieSelect tablebody {
+                    position: relative;
+                    width: 100%;
+                    float: left;
+                    margin: 0;
+                }
+
+                .tommieSelect td input {
+                    left: 50px;
+                    top: 12px;
+                    transform: translateX(-40px);
+                }
+
+                .tommieSelect td label {
+                    padding: 5px 10px 0px 30px;
+                    width: auto;
+                }
+
+                .messageTable {
+                    color: #000;
+                }
+
+                .slds-scope .slds-theme_success {
+                    background-color: #672D85;
+                }
+            </style>
+
+            <script>
+                function getMultiSelectValues(checkbox) {
+                    let inputTable = checkbox.closest('table');
+                    let result = [];
+                    inputTable.querySelectorAll('input').forEach(inputValue => {
+                        if (inputValue.checked) {
+                            result.push(inputValue.value);
+                        }
+                    })
+                    return result.join(';');
+                }
+
+                function clearCheckboxes() {
+                    document.querySelectorAll('input[type="checkbox"]').forEach(check => {
+                        if (check.checked) {
+                            check.click();
+                        }
+                    });
+                }
+
+                function spinner(isOn) {
+                    const spinner = document.getElementById('spinner');
+                    if (isOn) {
+                        spinner.style.display = 'block';
+                    } else {
+                        spinner.style.display = 'none';
+                    }
+                }
+
+            </script>
+        </apex:define>
+
+        <apex:define name="body">
+            <apex:form id="tommieCaresForm">
+                <apex:pageMessages/>
+                <apex:outputPanel layout="block" rendered="{!caseSubmitted}" styleClass="slds-scoped-notification slds-media slds-media_center slds-theme_success slds-m-bottom_large" html-role="status">
+                    <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-utility-success" title="success">
+                              <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                              </svg>
+                              <span class="slds-assistive-text">success</span>
+                            </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <p class="slds-text-color_inverse">
+                            Thank you for your submission, and for all you do both in the classroom and as an advisor. You have a tremendous impact on each student’s experience. <br/>
+                            <i>You can submit another below, or close this window if you are done.</i>
+                        </p>
+                    </div>
+                </apex:outputPanel>
+
+                <apex:actionFunction immediate="true" name="setPrimaryConcern" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="setPrimaryConcern" value="" assignTo="{!primaryConcern}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setHighFiveReason" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="setPrimaryConcern" value="" assignTo="{!highFiveReason}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setStudentCourse" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="stuC" value="" assignTo="{!courseOfferingId}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setCourseConnection" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="stuCC" value="" assignTo="{!studentCourseConnection}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setAcademicConcern" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="acconcs" value="" assignTo="{!academicConcern}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setAttendanceConcern" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="atconcs" value="" assignTo="{!attendanceConcern}"/>
+                </apex:actionFunction>
+
+                <apex:actionFunction immediate="true" name="setth5reason" rerender="TommieCares" onComplete="spinner(false);">
+                    <apex:param name="setth5reason" value="" assignTo="{!highFiveReason}"/>
+                </apex:actionFunction>
+
+                <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="block" style="position:relative; float:left; width:100%; clear:both;">
+
+                    <apex:variable var="renderSecondHalf" value="{!IF(!ISBLANK(courseOfferingId) && !ISBLANK(studentCourseConnection), true, false)}"/>
+
+                    <apex:outputPanel layout="block" id="introText" styleClass="slds-m-bottom_large">
+                        <p class="slds-text-heading_small slds-m-bottom_small"><strong>Your Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
+                        <p class="slds-text-body_regular slds-m-bottom_small"> If you have immediate concerns about the health or safety of a student, or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
+                        <p class="slds-text-body_regular slds-m-bottom_small"> All concerns will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="block" id="courseSelection" styleClass="slds-m-bottom_large slds-form-element">
+                        <apex:outputLabel title="Please select the student's course:" value="Please select the student's course:" for="stuCourse" styleClass="slds-form-element__label"/>
+                        <div class="slds-form-element__control">
+                            <div class="slds-select_container">
+                                <apex:selectList id="stuCourse" value="{!tommieCaresCase.Course_Offering__c}" required="true" multiselect="false" size="1" onChange="spinner(true); clearCheckboxes(); setCourseConnection(this.value); " styleClass="slds-select">
+                                    <apex:SelectOptions value="{!Courses}"/>
+                                </apex:selectList>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!!ISBLANK(studentCourseConnection)}" styleClass="slds-m-bottom_large slds-form-element">
+                        <apex:outputLabel title="Please select the student of concern:" value="Please select the student of concern:" for="stucc" styleClass="slds-form-element__label"/>
+                        <div class="slds-form-element__control">
+                            <div class="slds-select_container">
+                                <apex:selectList id="stucc" value="{!tommieCaresCase.ContactId}" required="true" multiselect="false" size="1" onChange="spinner(true); setStudentCourse(this.value); clearCheckboxes(); " styleClass="slds-select">
+                                    <apex:SelectOptions value="{!studentsOptions}"/>
+                                </apex:selectList>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+
+                    <!-- Set Primary Reason for alert-->
+                    <apex:outputPanel id="primaryConcern" layout="block" rendered="{!renderSecondHalf}" styleClass="slds-m-bottom_large slds-form-element">
+                        <apex:outputLabel title="Please select the area(s) of concern:"
+                                          value="Please select the area(s) of concern:"
+                                          for="concerns"
+                                          styleClass="slds-form-element__label"
+                        />
+                        <apex:selectCheckboxes id="concerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setPrimaryConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!primaryReasonOptions}"/>
+                        </apex:selectCheckboxes>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="attconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="acaconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s). </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="behaveconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Behavior concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="financeconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Financial concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Financial concerns will be sent directly to the Financial Aid office. The student’s financial aid counselor will connect with the student. No advisors will be copied or notified. </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="mhealthconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Mental health concerns')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter). The Dean of Students Office will address the concern with the student. No advisors will be copied or notified. </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="sofbelongconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Sense of belonging')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular slds-m-bottom_medium"><b>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b><br/><br/></p>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="relviolenceconcernNote" layout="none" rendered="{!IF(CONTAINS(primaryConcern,'Relationship violence')  && renderSecondHalf,true,false)}">
+                        <p class="slds-text-body_regular"><b>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter). No advisors will be copied or notified. </b> <br/><br/>
+                            Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form: <br/> <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank">Submit a Title IX Complaint | St. Thomas Conduct</a><br/><br/>
+                        </p>
+                    </apex:outputPanel>
+
+
+                    <!-- Set HIGH FIVE Reason-->
+                    <apex:outputPanel id="tommieHigh5ReasonSelect" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please select Tommie High 5 Reason(s):"
+                                          value="Please select Tommie High 5 Reason(s):" for="th5reasons"
+                                          styleClass="slds-form-element__label"
+                        />
+                        <apex:selectCheckboxes id="th5reasons" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" required="true" onChange="spinner(true); setHighFiveReason(getMultiSelectValues(this))">
+                            <apex:SelectOptions value="{!tommieHigh5ReasonOptions}"/>
+                        </apex:selectCheckboxes>
+                    </apex:outputPanel>
+
+                    <!-- Add HIGH FIVE NOTE -->
+                    <apex:outputPanel id="tommiehigh5Comment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Tommie High 5') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Tommie High 5 details:"
+                                          value="Tommie High 5 details:"
+                                          styleClass="slds-form-element__label"
+                                          for="tommiehigh5commentsL"/>
+                        <p><i>For Tommie High 5’s the student will receive an email with your message entered in the box below. The faculty submitter and the student’s advisor(s) will also be copied on the message. Ex: You did a great job on your assignment. Keep working hard.</i></p>
+                        <apex:inputTextarea id="tommiehigh5commentsL" required="true" value="{!tommieCaresCase.Tommie_High_5_Notes__c}"/>
+                    </apex:outputPanel>
+
+                    <!-- Set Academic Performance Reason -->
+                    <apex:outputPanel id="academicConcernSelect" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please select academic concerns:"
+                                          value="Please select academic concerns:" for="acconcerns"
+                                          styleClass="slds-form-element__label"
+                        />
+
+                        <apex:selectCheckboxes id="acconcerns" required="true" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAcademicConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!academicConcernOptions}"/>
+                        </apex:selectCheckboxes>
+                    </apex:outputPanel>
+
+                    <!-- Set Attendance Concerns Reason -->
+                    <apex:outputPanel id="attendanceConcernSelect" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please select attendance concerns:"
+                                          value="Please select attendance concerns:" for="atconcerns"
+                                          styleClass="slds-form-element__label"
+                        />
+
+                        <apex:selectCheckboxes id="atconcerns" borderVisible="false" styleClass="tommieSelect" layout="lineDirection" onChange="spinner(true); setAttendanceConcern(getMultiSelectValues(this));">
+                            <apex:SelectOptions value="{!attendanceConcernsOptions}"/>
+                        </apex:selectCheckboxes>
+                    </apex:outputPanel>
+
+                    <!-- Set Will pass course YES/NO -->
+                    <apex:outputPanel id="passClassSelect" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') || CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Can the student pass this course?"
+                                          value="Can the student pass this course?" for="passclassconcerns"
+                                          styleClass="slds-form-element__label"
+                        />
+                        <apex:selectList id="passclassconcerns" value="{!tommieCaresCase.Can_this_student_pass_course__c}" required="true" multiselect="false">
+                            <apex:selectOption itemValue="Yes"/>
+                            <apex:selectOption itemValue="No"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+
+                    <div id="spinner" style="position:absolute;top:50%; left:50%; display:none;">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+
+                    <apex:outputPanel id="otherconcernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Other')  && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please provide additional details about your Other concerns:"
+                                          value="Please provide additional details about your Other concerns:"
+                                          styleClass="slds-form-element__label"
+                                          for="othercommentsL"/>
+                        <p class="slds-text-body_regular"><i><b>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter). No advisors will be copied or notified. </b></i></p>
+                        <apex:inputTextarea id="othercommentsL" required="true" value="{!tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c}"/>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="stuConcernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!IF(CONTAINS(primaryConcern,'Academic performance concerns') || CONTAINS(primaryConcern,'Attendance concerns') && renderSecondHalf,true,false)}">
+                        <apex:outputLabel title="Please provide a personalized message to the student receiving this alert (sent verbatim to the student):"
+                                          value="Please provide a personalized message to the student receiving this alert (sent verbatim to the student):"
+                                          styleClass="slds-form-element__label"
+                                          for="commentsLstu"/>
+                        <p class="slds-text-body_regular"><i>The information provided below <b><u>will</u></b> be shared with the student. </i></p>
+                        <apex:inputTextarea id="commentsLstu" value="{!tommieCaresCase.Case_Reporter_Notes_to_Student__c}"/>
+
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="concernComment" layout="block" styleClass="slds-m-bottom_large slds-form-element" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
+                        <apex:outputLabel title="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
+                                          value="Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:"
+                                          styleClass="slds-form-element__label"
+                                          for="commentsL"/>
+                        <p class="slds-text-body_regular"><i>The information provided below <b><u>will not</u></b> be shared with the student. </i></p>
+                        <apex:inputTextarea id="commentsL" value="{!tommieCaresCase.Shared_Case_Notes__c}"/>
+
+                    </apex:outputPanel>
+
+
+                    <apex:outputPanel id="saveCase" layout="block" styleClass="slds-m-bottom_large" rendered="{!!ISBLANK(primaryConcern)  && renderSecondHalf}">
+                        <div class="slds-p-vertical_medium">
+                            <apex:commandButton action="{!saveCase}" styleClass="slds-button slds-button_brand" value="Submit"/>
+                        </div>
+                    </apex:outputPanel>
+
+                </apex:outputpanel>
+                <p class="slds-text-body_regular slds-m-bottom_medium">
+                    If you have any questions, please email <a href="mailto:retention@stthomas.edu">retention@stthomas.edu</a>
+                </p>
+                <p class="slds-text-body_regular slds-m-bottom_medium">
+                    To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.
+                </p>
+            </apex:form>
+        </apex:define>
+    </apex:composition>
+
+
+</apex:page>
