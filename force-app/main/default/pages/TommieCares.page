@@ -132,6 +132,19 @@
                     <apex:param name="setth5reason" value="" assignTo="{!highFiveReason}"/>
                 </apex:actionFunction>
 
+                <apex:outputPanel layout="block" id="noActiveTermMessage" rendered="{!currentTerm.empty}" styleClass="slds-media slds-media_center slds-m-bottom_large">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="No Active Term Warning">
+                              <svg class="slds-icon slds-icon_small slds-icon-text-warning" aria-hidden="true">
+                                  <use xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                       xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"></use>
+                              </svg>
+                              <span class="slds-assistive-text">No Active Term Warning</span>
+                        </span>
+                    </div>
+                    <p class="slds-media__body slds-text-body_regular">No Active Terms</p>
+                </apex:outputPanel>
+
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="block" style="position:relative; float:left; width:100%; clear:both;">
 
                     <apex:variable var="renderSecondHalf" value="{!IF(!ISBLANK(courseOfferingId) && !ISBLANK(studentCourseConnection), true, false)}"/>
@@ -139,7 +152,7 @@
                     <apex:outputPanel layout="block" id="introText" styleClass="slds-m-bottom_large">
                         <p class="slds-text-heading_small slds-m-bottom_small"><strong>Your Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
                         <p class="slds-text-body_regular slds-m-bottom_small"> If you have immediate concerns about the health or safety of a student, or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
-                        <p class="slds-text-body_regular slds-m-bottom_small"> All concerns will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support to a student.</p>
+                        <p class="slds-text-body_regular slds-m-bottom_small"> All alerts will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank">here</a>.</p>
                     </apex:outputPanel>
 
                     <apex:outputPanel layout="block" id="courseSelection" styleClass="slds-m-bottom_large slds-form-element">
@@ -166,8 +179,8 @@
 
                     <!-- Set Primary Reason for alert-->
                     <apex:outputPanel id="primaryConcern" layout="block" rendered="{!renderSecondHalf}" styleClass="slds-m-bottom_large slds-form-element">
-                        <apex:outputLabel title="Please select the area(s) of concern:"
-                                          value="Please select the area(s) of concern:"
+                        <apex:outputLabel title="Please select alert reason(s):"
+                                          value="Please select alert reason(s):"
                                           for="concerns"
                                           styleClass="slds-form-element__label"
                         />
@@ -258,6 +271,7 @@
                                           value="Can the student pass this course?" for="passclassconcerns"
                                           styleClass="slds-form-element__label"
                         />
+                        <p class="slds-text-body_regular">Please do your best to answer this question. Use the personalized message text box below to explain your answer to the student.</p>
                         <apex:selectList id="passclassconcerns" value="{!tommieCaresCase.Can_this_student_pass_course__c}" required="true" multiselect="false">
                             <apex:selectOption itemValue="Yes"/>
                             <apex:selectOption itemValue="No"/>
@@ -286,7 +300,7 @@
                                           value="Please provide a personalized message to the student receiving this alert (sent verbatim to the student):"
                                           styleClass="slds-form-element__label"
                                           for="commentsLstu"/>
-                        <p class="slds-text-body_regular"><i>The information provided below <b><u>will</u></b> be shared with the student. </i></p>
+                        <p class="slds-text-body_regular">We encourage your message to be supportive and a call to action (i.e. We’ve missed you in class and wanted to check in to see how you are doing. I want to support you in creating a plan to get back on track. Please respond to this message so we can find a time to meet.). <br/><i>The information provided below <b><u>will</u></b> be shared with the student. </i></p>
                         <apex:inputTextarea id="commentsLstu" value="{!tommieCaresCase.Case_Reporter_Notes_to_Student__c}"/>
 
                     </apex:outputPanel>
