@@ -139,10 +139,10 @@
                                   <use xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                        xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"></use>
                               </svg>
-                              <span class="slds-assistive-text">No Active Term Warning</span>
+                              <span class="slds-assistive-text">No Active Term Warning.</span>
                         </span>
                     </div>
-                    <p class="slds-media__body slds-text-body_regular">No Active Terms</p>
+                    <p class="slds-media__body slds-text-body_regular">No active terms. Please contact salesforce@stthomas.edu to report this error.</p>
                 </apex:outputPanel>
 
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="block" style="position:relative; float:left; width:100%; clear:both;">
