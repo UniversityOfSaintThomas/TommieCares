@@ -4,9 +4,13 @@
 
 public with sharing class TommieCaresController {
     public String bannerId { get; set; }
+    public String studentId { get; set; }
+    public String crn { get; set; }
     public Contact advisor { get; set; }
     public List<hed__Term__c> currentTerm { get; set; }
     public List<SelectOption> courses { get; set; }
+    public hed__Course_Offering__c singleCourse { get; set; }
+    public hed__Course_Enrollment__c singleStudent { get; set; }
     public Case tommieCaresCase { get; set; }
     public Id studentCourseConnection { get; set; }
     public Id studentCourseEnrollment { get; set; }
@@ -34,6 +38,14 @@ public with sharing class TommieCaresController {
             bannerId = ApexPages.currentPage().getParameters().get('bid').escapeHtml4();
         }
 
+        if (String.isNotBlank(ApexPages.currentPage().getParameters().get('sbid'))) {
+            studentId = ApexPages.currentPage().getParameters().get('sbid').escapeHtml4();
+        }
+
+        if (String.isNotBlank(ApexPages.currentPage().getParameters().get('crn'))) {
+            crn = ApexPages.currentPage().getParameters().get('crn').escapeHtml4();
+        }
+
         if (String.isNotBlank(ApexPages.currentPage().getParameters().get('submitted'))) {
             try {
                 caseSubmitted = Boolean.valueOf(ApexPages.currentPage().getParameters().get('submitted').escapeHtml4());
@@ -54,6 +66,17 @@ public with sharing class TommieCaresController {
             if (advisor != null) {
                 courses = crud2Do.getCourses(bannerId);
                 System.debug(courses);
+            }
+
+            if (String.isNotBlank(crn) && String.isNotBlank(studentId)) {
+                singleCourse = crud2Do.getSingleCourse(bannerId, crn);
+                singleStudent = crud2Do.getSingleStudent(singleCourse.Id, studentId);
+
+                if (String.isNotBlank(singleCourse.Id) && String.isNotBlank(singleStudent.hed__Contact__c)) {
+                    courseOfferingId = singleCourse.Id;
+                    studentCourseConnection = singleCourse.Id;
+                    tommieCaresCase.ContactId = singleStudent.hed__Contact__c;
+                }
             }
         }
     }
@@ -370,6 +393,25 @@ public with sharing class TommieCaresController {
             return advisor;
         }
 
+        public hed__Course_Offering__c getSingleCourse(String bannerIdAdvisor, String courseCrn) {
+            hed__Course_Offering__c course = new hed__Course_Offering__c();
+
+            List<hed__Course_Offering__c> advisorCourses = [
+                    SELECT Id, Name, Course_Title__c, hed__Section_ID__c, hed__Faculty__r.University_Banner_ID__c
+                    FROM hed__Course_Offering__c
+                    WHERE hed__Faculty__r.University_Banner_ID__c = :bannerIdAdvisor
+                    AND Course_CRN__c = :courseCrn
+                    AND Current_Term__c = TRUE
+                    ORDER BY Name ASC
+            ];
+
+            if (!advisorCourses.isEmpty()) {
+                course = advisorCourses[0];
+            }
+
+            return course;
+        }
+
         public List<SelectOption> getCourses(String bannerIdAdvisor) {
             List<SelectOption> coursesList = new List<SelectOption>();
 
@@ -390,11 +432,37 @@ public with sharing class TommieCaresController {
             return coursesList;
         }
 
+        public hed__Course_Enrollment__c getSingleStudent(Id courseOfferingId, String studentBannerId) {
+            hed__Course_Enrollment__c student = new hed__Course_Enrollment__c();
+            Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
+
+            List<hed__Course_Enrollment__c> enrollmentStudents = [
+                    SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
+                    FROM hed__Course_Enrollment__c
+                    WHERE Current_Term_Course__c = TRUE
+                    AND hed__Course_Offering__c = :courseOfferingId
+                    AND hed__Contact__r.University_Banner_ID__c = :studentBannerId
+                    AND RecordTypeId = :studentRecordId
+                    AND Course_Connection_Deleted_in_Banner__c = FALSE
+                    AND (Registration_Code__c = 'OR'
+                    OR Registration_Code__c = 'RE')
+//                    AND Credit_Hours__c != NULL
+//                    AND Credit_Hours__c != '0'
+                    ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
+            ];
+
+            if (!enrollmentStudents.isEmpty()) {
+                student= enrollmentStudents[0];
+            }
+
+            return student;
+        }
+
         public List<SelectOption> getStudents(Id courseOfferingId) {
             List<SelectOption> studentList = new List<SelectOption>() ;
             studentList.add(new SelectOption('', 'Select...'));
             Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
-            List<hed__Course_Enrollment__c> students = [
+            List<hed__Course_Enrollment__c> enrollmentStudents = [
                     SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
                     FROM hed__Course_Enrollment__c
                     WHERE Current_Term_Course__c = TRUE
@@ -409,7 +477,7 @@ public with sharing class TommieCaresController {
             ];
 
             Map<Id, String> uniqueStudents = new Map<Id, String>();
-            for (hed__Course_Enrollment__c student : students) {
+            for (hed__Course_Enrollment__c student : enrollmentStudents) {
                 uniqueStudents.put(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c);
             }
 
