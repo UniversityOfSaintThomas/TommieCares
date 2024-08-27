@@ -113,7 +113,7 @@
                 </apex:actionFunction>
 
                 <apex:actionFunction immediate="true" name="setStudentCourse" rerender="TommieCares" onComplete="spinner(false);">
-                    <apex:param name="stuC" value="" assignTo="{!courseOfferingId}"/>
+                    <apex:param name="stuC" value="" assignTo="{!courseStudentId}"/>
                 </apex:actionFunction>
 
                 <apex:actionFunction immediate="true" name="setCourseConnection" rerender="TommieCares" onComplete="spinner(false);">
@@ -147,7 +147,7 @@
 
                 <apex:outputPanel id="TommieCares" rendered="{!!courses.empty}" layout="block" style="position:relative; float:left; width:100%; clear:both;">
 
-                    <apex:variable var="renderSecondHalf" value="{!IF(!ISBLANK(courseOfferingId) && !ISBLANK(studentCourseConnection), true, false)}"/>
+                    <apex:variable var="renderSecondHalf" value="{!IF(!ISBLANK(courseStudentId) && !ISBLANK(studentCourseConnection), true, false)}"/>
 
                     <apex:outputPanel layout="block" id="introText" styleClass="slds-m-bottom_large">
                         <p class="slds-text-heading_small slds-m-bottom_small"><strong>Your Information: {!advisor.Name} ({!advisor.hed__UniversityEmail__c})</strong></p>
@@ -155,12 +155,14 @@
                         <p class="slds-text-body_regular slds-m-bottom_small"> All alerts will be treated with discretion. Information from this form may be shared with appropriate individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank">here</a>.</p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel layout="block" id="singleStudentCourse" rendered="{!IF(!ISBLANK(singleCourse.Id) && !ISBLANK(singleStudent.hed__Contact__c), true, false)}" styleClass="slds-m-bottom_large slds-form-element">
+                    <apex:outputPanel layout="block" id="singleStudent" rendered="{!!ISBLANK(singleStudent.hed__Contact__c)}" styleClass="slds-form-element">
                         <p class="slds-text-body_regular slds-m-bottom_small"><strong>Student:</strong> {!singleStudent.hed__Contact__r.Last_Name_First_Name__c} ({!studentId})</p>
-                        <p class="slds-text-body_regular slds-m-bottom_small"><strong>Course:</strong> {!singleCourse.Name}</p>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" id="singleCourse" rendered="{!!ISBLANK(singleCourse.Id)}" styleClass="slds-m-bottom_large slds-form-element">
+                        <p class="slds-text-body_regular slds-m-bottom_small"><strong>Course:</strong> {!singleCourse.Name} - {!singleCourse.hed__Section_ID__c} ({!singleCourse.Course_Title__c })</p>
                     </apex:outputPanel>
 
-                    <apex:outputPanel layout="block" id="courseSelection" rendered="{!IF(ISBLANK(singleCourse.Id) || ISBLANK(singleStudent.hed__Contact__c), true, false)}" styleClass="slds-m-bottom_large slds-form-element">
+                    <apex:outputPanel layout="block" id="courseSelection" rendered="{!ISBLANK(singleCourse.Id)}" styleClass="slds-m-bottom_large slds-form-element">
                         <apex:outputLabel title="Please select the student's course:" value="Please select the student's course:" for="stuCourse" styleClass="slds-form-element__label"/>
                         <div class="slds-form-element__control">
                             <div class="slds-select_container">
@@ -171,7 +173,7 @@
                         </div>
                     </apex:outputPanel>
 
-                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!IF((ISBLANK(singleCourse.Id) || ISBLANK(singleStudent.hed__Contact__c)) && !ISBLANK(studentCourseConnection), true, false)}" styleClass="slds-m-bottom_large slds-form-element">
+                    <apex:outputPanel id="studentSelect" layout="block" rendered="{!IF(ISBLANK(singleStudent.hed__Contact__c) && !ISBLANK(studentCourseConnection), true, false)}" styleClass="slds-m-bottom_large slds-form-element">
                         <apex:outputLabel title="Please select the student of concern:" value="Please select the student of concern:" for="stucc" styleClass="slds-form-element__label"/>
                         <div class="slds-form-element__control">
                             <div class="slds-select_container">
