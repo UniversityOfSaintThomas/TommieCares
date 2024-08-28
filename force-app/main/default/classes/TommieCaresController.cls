@@ -24,13 +24,6 @@ public with sharing class TommieCaresController {
 
     public TommieCaresController() {
 
-//        HttpRequest req = new HttpRequest();
-//        req.setEndpoint('callout:Canvas_Tommie_Alert_NC');
-//        req.setMethod('GET');
-//        Http http = new Http();
-//        HTTPResponse res = http.send(req);
-//        System.debug(res.getBody());
-
         tommieCaresCase = new Case();
         caseSubmitted = false;
         crud2Do = new doCrud();
@@ -77,7 +70,6 @@ public with sharing class TommieCaresController {
                     studentCourseConnection = singleCourse.Id;
                     tommieCaresCase.ContactId = singleStudent.hed__Contact__c;
                 } else if (String.isNotBlank(singleCourse.Id) && String.isBlank(singleStudent.hed__Contact__c)) {
-                    courseStudentId = singleStudent.hed__Contact__c;
                     studentCourseConnection = singleCourse.Id;
                 }
             } else if (String.isNotBlank(crn) && String.isBlank(studentId)) {
@@ -232,15 +224,6 @@ public with sharing class TommieCaresController {
         }
         return listOut;
     }
-
-//    public void getCanvasAccessToken() {
-//        HttpRequest req = new HttpRequest();
-//        req.setEndpoint('callout:Canvas_Tommie_Alert_NC');
-//        req.setMethod('GET');
-//        Http http = new Http();
-//        HTTPResponse res = http.send(req);
-//        System.debug(res.getBody());
-//    }
 
     public without sharing class doCrud {
 
