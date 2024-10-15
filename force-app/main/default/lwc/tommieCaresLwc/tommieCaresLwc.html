@@ -1,0 +1,25 @@
+<!--
+ - Created by nguy0092 on 10/8/2024.
+ -->
+
+<!-- Tommie Alerts Lwc -->
+<template>
+    <lightning-card title="Tommie Alerts">
+        <div style="display:block;">
+            <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or
+                safety of a student, or for the St. Thomas community,
+                please call Public Safety at 651-962-5555.</p>
+            <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion.
+                Information from this form may be shared with appropriate
+                individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and
+                responded to on an as needed basis. Learn more about our alert process here.</p>
+            <lightning-checkbox-group name="Checkbox Group"
+                                      label="Checkbox Group"
+                                      options={performanceReasonsPicklist}
+                                      value="selected"
+                                      onchange={handleChange}
+                                      variant=label-inline></lightning-checkbox-group>
+
+        </div>
+    </lightning-card>
+</template>

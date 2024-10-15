@@ -1,0 +1,51 @@
+/**
+ * Created by nguy0092 on 10/8/2024.
+ */
+
+/*.slds-scope .required.slds-form-element__label, .slds-scope .slds-form-element__label, .slds-scope .slds-text-body_regular {*/
+/*    !*font-size: 1rem !important;*!*/
+/*    font-size: 24px;*/
+/*}*/
+
+.slds-text-body_regular {
+    font-size: 1rem !important;
+}
+
+.slds-scope .slds-text-color_inverse {
+    color: #fff !important;
+}
+
+.tommieSelect td {
+    display: inline-block;
+    position: relative;
+    float: left;
+    padding: 5px;
+    margin: 5px;
+    border: solid 1px rebeccapurple;
+}
+
+.tommieSelect, .tommieSelect tr, .tommieSelect tablebody {
+    position: relative;
+    width: 100%;
+    float: left;
+    margin: 0;
+}
+
+.tommieSelect td input {
+    left: 50px;
+    top: 12px;
+    transform: translateX(-40px);
+}
+
+.tommieSelect td label {
+    padding: 5px 10px 0px 30px;
+    width: auto;
+}
+
+.messageTable {
+    color: #000;
+}
+
+.slds-scope .slds-theme_success {
+    background-color: #672D85;
+}
