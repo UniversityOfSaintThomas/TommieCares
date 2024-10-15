@@ -150,10 +150,11 @@ public with sharing class TommieCaresController {
 
         //Get All Relationship Information
         List<hed__Relationship__c> advisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Name, Name, hed__Type__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Name, Name, hed__Type__c, hed__Status__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c IN :relationshipTypes
                 AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                AND hed__Status__c = 'Current'
                 ORDER BY CreatedDate DESC NULLS LAST
         ];
 
