@@ -17,12 +17,11 @@ public without sharing class TommieCaresLwcController {
                 WHERE Current_Term__c = TRUE
         ];
 
-        if(!currentTerm.isEmpty()) {
-
-            termAdvisorMap.put('CurrentTerm', currentTerm[0].Id);
+        if (!currentTerm.isEmpty()) {
+            termAdvisorMap.put('Current_Term', currentTerm[0].Id);
         }
 
-        if(String.isNotBlank(urlBid)) {
+        if (String.isNotBlank(urlBid)) {
             advisor = [
                     SELECT Id,
                             Name,
@@ -34,112 +33,93 @@ public without sharing class TommieCaresLwcController {
             ];
         }
 
-        if(!advisor.isEmpty()) {
-
-            termAdvisorMap.put('AdvisorContactId', advisor[0].Id);
-            termAdvisorMap.put('AdvisorContactName', advisor[0].Name);
-            termAdvisorMap.put('AdvisorLNameFName', advisor[0].Last_Name_First_Name__c);
-            termAdvisorMap.put('AdvisorEmail', advisor[0].hed__UniversityEmail__c);
-            termAdvisorMap.put('AdvisorBannerId', advisor[0].University_Banner_ID__c);
+        if (!advisor.isEmpty()) {
+            termAdvisorMap.put('Advisor_ContactId', advisor[0].Id);
+            termAdvisorMap.put('Advisor_ContactName', advisor[0].Name);
+            termAdvisorMap.put('Advisor_LNameFName', advisor[0].Last_Name_First_Name__c);
+            termAdvisorMap.put('Advisor_Email', advisor[0].hed__UniversityEmail__c);
+            termAdvisorMap.put('Advisor_BannerId', advisor[0].University_Banner_ID__c);
         }
 
-        System.debug('What is termAdvisorList: '+termAdvisorMap);
+        System.debug('What is termAdvisorList: ' + termAdvisorMap);
 
         return termAdvisorMap;
     }
 
-//    public hed__Course_Offering__c getSingleCourse(String bannerIdAdvisor, String courseCrn) {
-//        hed__Course_Offering__c course = new hed__Course_Offering__c();
-//
-//        List<hed__Course_Offering__c> advisorCourses = [
-//                SELECT Id, Name, Course_Title__c, hed__Section_ID__c, hed__Faculty__r.University_Banner_ID__c
-//                FROM hed__Course_Offering__c
-//                WHERE hed__Faculty__r.University_Banner_ID__c = :bannerIdAdvisor
-//                AND Course_CRN__c = :courseCrn
-//                AND Current_Term__c = TRUE
-//                ORDER BY Name ASC
-//        ];
-//
-//        if (!advisorCourses.isEmpty()) {
-//            course = advisorCourses[0];
-//        }
-//
-//        return course;
-//    }
-//
-//    public List<SelectOption> getCourses(String bannerIdAdvisor) {
-//        List<SelectOption> coursesList = new List<SelectOption>();
-//
-//        //Get a list of current term courses assigned to that advisor
-//        coursesList.add(new SelectOption('', 'Select...'));
-//
-//        List<hed__Course_Offering__c> advisorCourses = [
-//                SELECT Id, Name, Course_Title__c, hed__Section_ID__c, hed__Faculty__r.University_Banner_ID__c
-//                FROM hed__Course_Offering__c
-//                WHERE hed__Faculty__r.University_Banner_ID__c = :bannerIdAdvisor
-//                AND Current_Term__c = TRUE
-//                ORDER BY Name ASC
-//        ];
-//
-//        for (hed__Course_Offering__c course : advisorCourses) {
-//            coursesList.add(new SelectOption(course.Id, course.Name + ' - ' + course.hed__Section_ID__c + ' (' + course.Course_Title__c + ')'));
-//        }
-//        return coursesList;
-//    }
-//
-//    public hed__Course_Enrollment__c getSingleStudent(Id courseOfferingId, String studentBannerId) {
-//        hed__Course_Enrollment__c student = new hed__Course_Enrollment__c();
-//        Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
-//
-//        List<hed__Course_Enrollment__c> enrollmentStudents = [
-//                SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
-//                FROM hed__Course_Enrollment__c
-//                WHERE Current_Term_Course__c = TRUE
-//                AND hed__Course_Offering__c = :courseOfferingId
-//                AND hed__Contact__r.University_Banner_ID__c = :studentBannerId
-//                AND RecordTypeId = :studentRecordId
-//                AND Course_Connection_Deleted_in_Banner__c = FALSE
-//                AND (Registration_Code__c = 'OR'
-//                OR Registration_Code__c = 'RE')
-////                    AND Credit_Hours__c != NULL
-////                    AND Credit_Hours__c != '0'
-//                ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
-//        ];
-//
-//        if (!enrollmentStudents.isEmpty()) {
-//            student= enrollmentStudents[0];
-//        }
-//
-//        return student;
-//    }
-//
-//    public List<SelectOption> getStudents(Id courseOfferingId) {
-//        List<SelectOption> studentList = new List<SelectOption>() ;
-//        studentList.add(new SelectOption('', 'Select...'));
-//        Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
-//        List<hed__Course_Enrollment__c> enrollmentStudents = [
-//                SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
-//                FROM hed__Course_Enrollment__c
-//                WHERE Current_Term_Course__c = TRUE
-//                AND hed__Course_Offering__c = :courseOfferingId
-//                AND RecordTypeId = :studentRecordId
-//                AND Course_Connection_Deleted_in_Banner__c = FALSE
-//                AND (Registration_Code__c = 'OR'
-//                OR Registration_Code__c = 'RE')
-////                    AND Credit_Hours__c != NULL
-////                    AND Credit_Hours__c != '0'
-//                ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC
-//        ];
-//
-//        Map<Id, String> uniqueStudents = new Map<Id, String>();
-//        for (hed__Course_Enrollment__c student : enrollmentStudents) {
-//            uniqueStudents.put(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c);
-//        }
-//
-//        for (Id key : uniqueStudents.keySet()) {
-//            studentList.add(new SelectOption(key, uniqueStudents.get(key)));
-//        }
-//        return studentList;
-//    }
+    @AuraEnabled(Cacheable=true)
+    public static List<Map<String, String>> advisorCoursesList(String advisorBannerId, String courseCrn) {
+
+        List<Map<String, String>> courseMapList = new List<Map<String, String>>();
+
+        String singleCrnCriteria = '';
+
+        if (String.isNotBlank(courseCrn)) {
+            singleCrnCriteria = ' AND Course_CRN__c = \'' + courseCrn + '\'';
+        }
+
+        String coursesQuery = 'SELECT Id, Name, Course_Title__c, hed__Section_ID__c\n' +
+                ' FROM hed__Course_Offering__c\n' +
+                ' WHERE hed__Faculty__r.University_Banner_ID__c = :advisorBannerId\n' +
+                singleCrnCriteria + '\n' +
+                ' AND Current_Term__c = TRUE\n' +
+                ' ORDER BY Name ASC';
+
+        List<hed__Course_Offering__c> courses = Database.query(coursesQuery);
+
+        for (hed__Course_Offering__c c : courses) {
+
+            Map<String, String> courseValueLabel = new Map<String, String>{'value' => c.Id, 'label' => c.Name + ' - ' + c.hed__Section_ID__c + ' (' + c.Course_Title__c + ')'
+            };
+            courseMapList.add(courseValueLabel);
+        }
+
+        System.debug('What is courseMapList: ' + courseMapList);
+
+        return courseMapList;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
+
+        List<Map<String, String>> studentMapList = new List<Map<String, String>>();
+        String singleStudentCriteria = '';
+
+        List<RecordType> recordId = [
+                SELECT Id,
+                        Name
+                FROM RecordType
+                WHERE SobjectType = 'hed__Course_Enrollment__c'
+                AND DeveloperName = 'Student'
+        ];
+
+        String studentRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
+
+        if (String.isNotBlank(studentBannerId)) {
+            singleStudentCriteria = ' AND hed__Contact__r.University_Banner_ID__c = \'' + studentBannerId + '\'';
+        }
+
+        String studentsQuery = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.University_Banner_ID__c\n' +
+                ' FROM hed__Course_Enrollment__c\n' +
+                ' WHERE Current_Term_Course__c = TRUE\n' +
+                ' AND hed__Course_Offering__c = :courseId\n' +
+                ' AND RecordTypeId = :studentRecordId\n' +
+                ' AND Course_Connection_Deleted_in_Banner__c = FALSE\n' +
+                singleStudentCriteria + '\n' +
+                ' AND (Registration_Code__c = \'OR\'\n' +
+                ' OR Registration_Code__c = \'RE\')\n' +
+                ' ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC';
+
+        List<hed__Course_Enrollment__c> students = Database.query(studentsQuery);
+
+        for (hed__Course_Enrollment__c s : students) {
+
+            Map<String, String> studentValueLabel = new Map<String, String>{'value' => s.hed__Contact__r.Id, 'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.University_Banner_ID__c+')'};
+            studentMapList.add(studentValueLabel);
+        }
+
+        System.debug('What is studentMapList: ' + studentMapList);
+
+        return studentMapList;
+    }
 
 }

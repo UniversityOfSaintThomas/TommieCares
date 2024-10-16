@@ -2,50 +2,37 @@
  * Created by nguy0092 on 10/8/2024.
  */
 
-/*.slds-scope .required.slds-form-element__label, .slds-scope .slds-form-element__label, .slds-scope .slds-text-body_regular {*/
-/*    !*font-size: 1rem !important;*!*/
-/*    font-size: 24px;*/
-/*}*/
-
-.slds-text-body_regular {
-    font-size: 1rem !important;
-}
-
-.slds-scope .slds-text-color_inverse {
-    color: #fff !important;
-}
-
-.tommieSelect td {
+.picklist-options {
     display: inline-block;
     position: relative;
     float: left;
-    padding: 5px;
-    margin: 5px;
     border: solid 1px rebeccapurple;
 }
 
-.tommieSelect, .tommieSelect tr, .tommieSelect tablebody {
-    position: relative;
-    width: 100%;
-    float: left;
-    margin: 0;
+.picklist-legend, .textarea-label {
+    font-size: 14px;
+    font-weight: normal;
+    color: rebeccapurple;
 }
 
-.tommieSelect td input {
-    left: 50px;
-    top: 12px;
-    transform: translateX(-40px);
+.textarea-sublabel {
+    font-size: 14px;
+    font-style: italic;
 }
 
-.tommieSelect td label {
-    padding: 5px 10px 0px 30px;
-    width: auto;
+.slds-form-element .picklist-text {
+    font-size: 14px;
+    text-transform: capitalize;
 }
 
-.messageTable {
-    color: #000;
+.picklist-checkbox-check {
+    box-shadow: none;
 }
 
-.slds-scope .slds-theme_success {
+.picklist-checkbox:checked+.slds-checkbox__label .picklist-checkbox-check,
+.picklist-checkbox:checked+.slds-checkbox__label .picklist-checkbox-check::after {
     background-color: #672D85;
+    border: none;
+    content: none;
+    box-shadow: none;
 }

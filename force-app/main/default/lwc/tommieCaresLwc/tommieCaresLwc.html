@@ -5,7 +5,7 @@
 <!-- Tommie Alerts Lwc -->
 <template>
     <lightning-card title="Tommie Cares">
-        <div style="display:block;">
+        <div class="slds-m-horizontal_medium" style="display:block;">
             <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or
                 safety of a student, or for the St. Thomas community,
                 please call Public Safety at 651-962-5555.</p>
@@ -13,13 +13,130 @@
                 Information from this form may be shared with appropriate
                 individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and
                 responded to on an as needed basis. Learn more about our alert process here.</p>
+
+            <p>This is paramBId: {paramBId}</p>
+            <p>This is paramSBid: {paramSBid}</p>
+            <p>This is paramCrn: {paramCrn}</p>
+            <p>This is CurrentTerm: {currentTerm}</p>
+            <p>This is advisorBannerId: {advisorBannerId}</p>
+            <p>This is AdvisorContactName: {advisorContactName}</p>
+            <p>This is AdvisorLNameFName: {advisorLNameFName}</p>
+            <p>
+                <lightning-combobox label="Courses"
+                                    value={courseSelection}
+                                    placeholder="Select Course"
+                                    options={coursesList}
+                                    onchange={courseSelect}>
+                </lightning-combobox>
+            </p>
+            <p>This is courseSelect: {courseSelection}</p>
+            <p>
+                <lightning-combobox label="Students"
+                                    value={studentSelection}
+                                    placeholder="Select Student"
+                                    options={studentsList}
+                                    onchange={studentSelect}>
+                </lightning-combobox>
+            </p>
+            <p>This is studentSelect: {studentSelection}</p>
         </div>
-        <p>This is urlBid: {urlBid}</p>
-        <p>This is urlSbid: {urlSbid}</p>
-        <p>This is urlCrn: {urlCrn}</p>
-        <p>This is CurrentTerm: {CurrentTerm}</p>
-        <p>This is advisorBannerId: {AdvisorBannerId}</p>
-        <p>This is AdvisorContactName: {AdvisorContactName}</p>
-        <p>This is AdvisorLNameFName: {AdvisorLNameFName}</p>
+
+        <div class="slds-m-vertical_small">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label slds-m-horizontal_small slds-m-vertical_xx-small picklist-legend">Please select alert reason(s):</legend>
+                <div class="slds-form-element__control slds-p-horizontal_small">
+                    <template for:each={tommieCaresPicklist} for:item="cares" for:index="index">
+                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-options" key={cares.index}>
+                            <input type="checkbox"
+                                   id={cares.value}
+                                   value={cares.value}
+                                   data-picklisttype="cares"
+                                   onclick={reasonsCheckbox}
+                                   class="picklist-checkbox"/>
+                            <label class="slds-checkbox__label" for={cares.value}>
+                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
+                                <span class="slds-form-element__label picklist-text">{cares.label}</span>
+                            </label>
+                        </div>
+                    </template>
+                </div>
+            </fieldset>
+        </div>
+        <div class="slds-m-vertical_small">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label slds-m-horizontal_small slds-m-vertical_xx-small picklist-legend">Please select Tommie High 5 Reason(s):</legend>
+                <div class="slds-form-element__control slds-p-horizontal_small">
+                    <template for:each={tommieHigh5Picklist} for:item="high5" for:index="index">
+                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-options" key={high5.index}>
+                            <input type="checkbox"
+                                   id={high5.value}
+                                   value={high5.value}
+                                   data-picklisttype="high5"
+                                   onclick={reasonsCheckbox}
+                                   class="picklist-checkbox"/>
+                            <label class="slds-checkbox__label" for={high5.value}>
+                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
+                                <span class="slds-form-element__label picklist-text">{high5.label}</span>
+                            </label>
+                        </div>
+                    </template>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="slds-m-vertical_small slds-m-horizontal_small">
+            <label class="slds-form-element__label slds-m-vertical_xx-small textarea-label" for="high5-details-id">Tommie High 5 details:</label>
+            <p class="textarea-sublabel">For Tommie High 5’s the student will receive an email with your message entered in the box below.
+                The faculty submitter and the student’s advisor(s) will also be copied on the message.
+                Ex: You did a great job on your assignment. Keep working hard.</p>
+            <lightning-textarea id="high5-details-id"
+                                label=""
+                                value={high5Details}
+                                variant="label-hidden">
+            </lightning-textarea>
+        </div>
+
+        <div class="slds-m-vertical_small">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label slds-m-horizontal_small slds-m-vertical_xx-small picklist-legend">Please select academic concerns:</legend>
+                <div class="slds-form-element__control slds-p-horizontal_small">
+                    <template for:each={academicPerformancePicklist} for:item="academic" for:index="index">
+                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-options" key={academic.index}>
+                            <input type="checkbox"
+                                   id={academic.value}
+                                   value={academic.value}
+                                   class="picklist-checkbox"
+                                   data-picklisttype="academic"
+                                   onclick={reasonsCheckbox} />
+                            <label class="slds-checkbox__label" for={academic.value}>
+                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
+                                <span class="slds-form-element__label picklist-text">{academic.label}</span>
+                            </label>
+                        </div>
+                    </template>
+                </div>
+            </fieldset>
+        </div>
+        <div class="slds-m-vertical_small">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label slds-m-horizontal_small slds-m-vertical_xx-small picklist-legend">Please select attendance concerns:</legend>
+                <div class="slds-form-element__control slds-p-horizontal_small">
+                    <template for:each={attendanceConcernsPicklist} for:item="attendance" for:index="index">
+                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-options" key={attendance.index}>
+                            <input type="checkbox"
+                                   id={attendance.value}
+                                   value={attendance.value}
+                                   data-picklisttype="attendance"
+                                   onclick={reasonsCheckbox}
+                                   class="picklist-checkbox" />
+                            <label class="slds-checkbox__label" for={attendance.value}>
+                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
+                                <span class="slds-form-element__label picklist-text">{attendance.label}</span>
+                            </label>
+                        </div>
+                    </template>
+                </div>
+            </fieldset>
+        </div>
     </lightning-card>
 </template>
