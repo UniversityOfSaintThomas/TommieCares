@@ -68,8 +68,7 @@ public without sharing class TommieCaresLwcController {
 
         for (hed__Course_Offering__c c : courses) {
 
-            Map<String, String> courseValueLabel = new Map<String, String>{'value' => c.Id, 'label' => c.Name + ' - ' + c.hed__Section_ID__c + ' (' + c.Course_Title__c + ')'
-            };
+            Map<String, String> courseValueLabel = new Map<String, String>{'label' => c.Name + ' - ' + c.hed__Section_ID__c + ' (' + c.Course_Title__c + ')', 'value' => c.Id};
             courseMapList.add(courseValueLabel);
         }
 
@@ -113,7 +112,7 @@ public without sharing class TommieCaresLwcController {
 
         for (hed__Course_Enrollment__c s : students) {
 
-            Map<String, String> studentValueLabel = new Map<String, String>{'value' => s.hed__Contact__r.Id, 'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.University_Banner_ID__c+')'};
+            Map<String, String> studentValueLabel = new Map<String, String>{'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.University_Banner_ID__c+')', 'value' => s.hed__Contact__r.Id};
             studentMapList.add(studentValueLabel);
         }
 

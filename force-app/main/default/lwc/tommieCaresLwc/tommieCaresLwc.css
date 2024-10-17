@@ -2,14 +2,14 @@
  * Created by nguy0092 on 10/8/2024.
  */
 
-.picklist-options {
+.picklist-checkbox-options {
     display: inline-block;
     position: relative;
     float: left;
     border: solid 1px rebeccapurple;
 }
 
-.picklist-legend, .textarea-label {
+.picklist-dropdown-label, .picklist-checkbox-legend, .textarea-label {
     font-size: 14px;
     font-weight: normal;
     color: rebeccapurple;
@@ -20,7 +20,7 @@
     font-style: italic;
 }
 
-.slds-form-element .picklist-text {
+.slds-form-element .picklist-checkbox-text {
     font-size: 14px;
     text-transform: capitalize;
 }
