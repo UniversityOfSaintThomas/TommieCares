@@ -1,36 +1,54 @@
 /**
  * Created by nguy0092 on 10/8/2024.
  */
+.slds-is-required .slds-form-element__help {
+    clear: both;
+}
 
-.picklist-checkbox-options {
+.advisor_info {
+    font-size: 14px;
+    font-weight: bold;
+    color: rebeccapurple;
+}
+
+.default_info p {
+    font-size: 14px;
+}
+
+.additional_info p {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.picklist_checkbox_options {
     display: inline-block;
     position: relative;
     float: left;
     border: solid 1px rebeccapurple;
 }
 
-.picklist-dropdown-label, .picklist-checkbox-legend, .textarea-label {
+.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
     font-size: 14px;
     font-weight: normal;
     color: rebeccapurple;
 }
 
-.textarea-sublabel {
+.textarea_sublabel {
     font-size: 14px;
     font-style: italic;
 }
 
-.slds-form-element .picklist-checkbox-text {
+.slds-form-element .picklist_checkbox_text {
     font-size: 14px;
     text-transform: capitalize;
 }
 
-.picklist-checkbox-check {
+.picklist_checkbox_check {
     box-shadow: none;
 }
 
-.picklist-checkbox:checked+.slds-checkbox__label .picklist-checkbox-check,
-.picklist-checkbox:checked+.slds-checkbox__label .picklist-checkbox-check::after {
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {
     background-color: #672D85;
     border: none;
     content: none;

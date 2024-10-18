@@ -4,227 +4,254 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
-    <lightning-card title="Tommie Cares">
-        <div class="slds-m-horizontal_medium" style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or
-                safety of a student, or for the St. Thomas community,
-                please call Public Safety at 651-962-5555.</p>
-            <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion.
-                Information from this form may be shared with appropriate
-                individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and
-                responded to on an as needed basis. Learn more about our alert process here.</p>
+    <template lwc:if={AdvisorIdCheck}>
+        <div class="slds-m-horizontal_medium">
+            <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Your Information: {advisorContactName} ({advisorEmail})</p>
+        </div>
+        <div class="slds-m-horizontal_medium default_info">
+            <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+                or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
+            <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
+                <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
+        </div>
+    </template>
+    <form lwc:if={AdvisorIdCheck}>
+        <div class="slds-form-element slds-m-around_small">
+            <label class="slds-form-element__label slds-m-vertical_xx-small picklist_dropdown_label" for="course-selection-id">
+                <abbr class="slds-required" title="Course is required">*</abbr>Please select the student's course:</label>
+            <div class="slds-form-element__control">
+                <lightning-combobox id="course-selection-id"
+                                    label=""
+                                    value={courseSelection}
+                                    placeholder="Select Course"
+                                    options={coursesList}
+                                    data-selecttype="courseSelect"
+                                    onchange={singleSelect}
+                                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
         </div>
 
-        <div>
-            <p>This is paramBId: {paramBId}</p>
-            <p>This is paramSBid: {paramSBid}</p>
-            <p>This is paramCrn: {paramCrn}</p>
-            <p>This is CurrentTerm: {currentTerm}</p>
-            <p>This is advisorBannerId: {advisorBannerId}</p>
-            <p>This is AdvisorContactName: {advisorContactName}</p>
-            <p>This is AdvisorLNameFName: {advisorLNameFName}</p>
+        <div class="slds-form-element slds-m-around_small" lwc:if={courseSelectionCheck}>
+            <label class="slds-form-element__label slds-m-vertical_xx-small picklist_dropdown_label" for="student-selection-id">
+                <abbr class="slds-required" title="Student is required">*</abbr>Please select the student of concern:</label>
+            <div class="slds-form-element__control">
+                <lightning-combobox id="student-selection-id"
+                                    label=""
+                                    value={studentSelection}
+                                    placeholder="Select Student"
+                                    options={studentsList}
+                                    data-selecttype="studentSelect"
+                                    onchange={singleSelect}
+                                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
         </div>
-
-        <div class="slds-m-around_small">
-            <label class="slds-form-element__label slds-m-vertical_xx-small picklist-dropdown-label" for="course-selection-id">Please select the student's course:</label>
-            <lightning-combobox id="course-selection-id"
-                                label=""
-                                value={courseSelection}
-                                placeholder="Select Course"
-                                options={coursesList}
-                                data-selecttype="courseSelect"
-                                onchange={singleSelect}
-                                variant="label-hidden">
-            </lightning-combobox>
-        </div>
-        <p>This is courseSelect: {courseSelection}</p>
-        <div class="slds-m-around_small">
-            <label class="slds-form-element__label slds-m-vertical_xx-small picklist-dropdown-label" for="student-selection-id">Please select the student of concern:</label>
-            <lightning-combobox id="student-selection-id"
-                                label=""
-                                value={studentSelection}
-                                placeholder="Select Student"
-                                options={studentsList}
-                                data-selecttype="studentSelect"
-                                onchange={singleSelect}
-                                variant="label-hidden">
-            </lightning-combobox>
-        </div>
-        <p>This is studentSelect: {studentSelection}</p>
-
-        <div class="slds-m-around_small">
-            <fieldset class="slds-form-element">
-                <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist-checkbox-legend">Please select alert reason(s):</legend>
-                <div class="slds-form-element__control">
-                    <template for:each={tommieCaresPicklist} for:item="cares" for:index="index">
-                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.index}>
-                            <input type="checkbox"
-                                   id={cares.value}
-                                   value={cares.value}
-                                   data-checkboxtype="cares"
-                                   onclick={reasonsCheckbox}
-                                   class="picklist-checkbox"/>
-                            <label class="slds-checkbox__label" for={cares.value}>
-                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
-                                <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
-                            </label>
-                        </div>
-                    </template>
+        <template lwc:if={studentSelectionCheck}>
+            <div class="slds-m-around_small">
+                <fieldset class="slds-form-element slds-is-required">
+                    <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist_checkbox_legend">
+                        <abbr class="slds-required" title="required">*</abbr>Please select alert reason(s):</legend>
+                    <div class="slds-form-element__control">
+                        <template for:each={tommieCaresPicklist} for:item="cares" for:index="index">
+                            <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist_checkbox_options" key={cares.index}>
+                                <input type="checkbox"
+                                       name="caresCheckboxes"
+                                       id={cares.value}
+                                       value={cares.value}
+                                       data-checkboxtype="cares"
+                                       onclick={reasonsCheckbox}
+                                       class="picklist_checkbox"
+                                       aria-describedby="checkboxError_01" />
+                                <label class="slds-checkbox__label" for={cares.value}>
+                                    <span class="slds-checkbox_faux picklist_checkbox_check"></span>
+                                    <span class="slds-form-element__label picklist_checkbox_text">{cares.label}</span>
+                                </label>
+                            </div>
+                        </template>
+                    </div>
+                    <div id="checkboxError_01" class="slds-form-element__help"></div>
+                </fieldset>
+            </div>
+            <div class="slds-m-horizontal_medium additional_info">
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={attendanceCheck}>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</p>
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={academicCheck}>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</p>
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={behaviorCheck}>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
+                    The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={financialConcernsCheck}>Financial concerns will be sent directly to the Financial Aid office.
+                    The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</p>
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={mentalHealthCheck}>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
+                    The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                <div lwc:if={relationshipCheck}>
+                    <p class="slds-text-body_regular slds-m-bottom_small">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter).
+                        No advisors will be copied or notified.</p>
+                    <p class="slds-text-body_regular slds-m-bottom_small">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
+                        <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
                 </div>
-            </fieldset>
-        </div>
-
-        <div class="slds-m-horizontal_medium" if:true={behaviorCheck} style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
-                The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
-        </div>
-        <div class="slds-m-horizontal_medium" if:true={financialConcernsCheck} style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">Financial concerns will be sent directly to the Financial Aid office.
-                The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</p>
-        </div>
-        <div class="slds-m-horizontal_medium" if:true={mentalHealthCheck} style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
-                The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
-        </div>
-        <div class="slds-m-horizontal_medium" if:true={relationshipCheck} style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter).
-                No advisors will be copied or notified.</p>
-            <p class="slds-text-body_regular slds-m-bottom_small">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
-                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank">Submit a Title IX Complaint | St. Thomas Conduct</a></p>
-        </div>
-        <div class="slds-m-horizontal_medium" if:true={belongingCheck} style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
-                No advisors will be copied or notified.</p>
-        </div>
-
-        <div class="slds-m-around_small" if:true={high5Check}>
-            <fieldset class="slds-form-element">
-                <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist-checkbox-legend">Please select Tommie High 5 Reason(s):</legend>
+                <p class="slds-text-body_regular slds-m-bottom_small" lwc:if={belongingCheck} >Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
+                    No advisors will be copied or notified.</p>
+            </div>
+            <div class="slds-m-around_small" lwc:if={high5Check}>
+                <fieldset class="slds-form-element slds-is-required">
+                    <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist_checkbox_legend">
+                        <abbr class="slds-required" title="required">*</abbr>Please select Tommie High 5 Reason(s):</legend>
+                    <div class="slds-form-element__control">
+                        <template for:each={tommieHigh5Picklist} for:item="high5" for:index="index">
+                            <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist_checkbox_options" key={high5.index}>
+                                <input type="checkbox"
+                                       id={high5.value}
+                                       value={high5.value}
+                                       data-checkboxtype="high5"
+                                       onclick={reasonsCheckbox}
+                                       class="picklist_checkbox"
+                                       aria-describedby="checkboxError_02" />
+                                <label class="slds-checkbox__label" for={high5.value}>
+                                    <span class="slds-checkbox_faux picklist_checkbox_check"></span>
+                                    <span class="slds-form-element__label picklist_checkbox_text">{high5.label}</span>
+                                </label>
+                            </div>
+                        </template>
+                    </div>
+                    <div id="checkboxError_02" class="slds-form-element__help"></div>
+                </fieldset>
+            </div>
+            <div class="slds-form-element slds-m-around_small" lwc:if={high5Check}>
+                <label class="slds-form-element__label slds-m-vertical_xx-small textarea_label" for="high5-details-id">
+                    <abbr class="slds-required" title="required">*</abbr>Tommie High 5 details:</label>
+                <p class="textarea_sublabel">For Tommie High 5’s the student will receive an email with your message entered in the box below.
+                    The faculty submitter and the student’s advisor(s) will also be copied on the message.
+                    Ex: You did a great job on your assignment. Keep working hard.</p>
                 <div class="slds-form-element__control">
-                    <template for:each={tommieHigh5Picklist} for:item="high5" for:index="index">
-                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={high5.index}>
-                            <input type="checkbox"
-                                   id={high5.value}
-                                   value={high5.value}
-                                   data-checkboxtype="high5"
-                                   onclick={reasonsCheckbox}
-                                   class="picklist-checkbox"/>
-                            <label class="slds-checkbox__label" for={high5.value}>
-                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
-                                <span class="slds-form-element__label picklist-checkbox-text">{high5.label}</span>
-                            </label>
-                        </div>
-                    </template>
+                    <lightning-textarea id="high5-details-id"
+                                        label=""
+                                        value={high5DetailsSelection}
+                                        data-texttype="high5Details"
+                                        onchange={textAreaDetails}
+                                        variant="label-hidden"
+                                        required>
+                    </lightning-textarea>
                 </div>
-            </fieldset>
-        </div>
-
-        <div class="slds-m-around_small" if:true={high5Check}>
-            <label class="slds-form-element__label slds-m-vertical_xx-small textarea-label" for="high5-details-id">Tommie High 5 details:</label>
-            <p class="textarea-sublabel">For Tommie High 5’s the student will receive an email with your message entered in the box below.
-                The faculty submitter and the student’s advisor(s) will also be copied on the message.
-                Ex: You did a great job on your assignment. Keep working hard.</p>
-            <lightning-textarea id="high5-details-id"
-                                label=""
-                                value={high5DetailsSelection}
-                                data-texttype="high5Details"
-                                onchange={textAreaDetails}
-                                variant="label-hidden">
-            </lightning-textarea>
-        </div>
-
-        <div class="slds-m-around_small">
-            <fieldset class="slds-form-element">
-                <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist-checkbox-legend">Please select academic concerns:</legend>
+            </div>
+            <div class="slds-m-around_small" lwc:if={attendanceCheck}>
+                <fieldset class="slds-form-element slds-is-required">
+                    <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist_checkbox_legend">
+                        <abbr class="slds-required" title="required">*</abbr>Please select attendance concerns:</legend>
+                    <div class="slds-form-element__control">
+                        <template for:each={attendanceConcernsPicklist} for:item="attendance" for:index="index">
+                            <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist_checkbox_options" key={attendance.index}>
+                                <input type="checkbox"
+                                       id={attendance.value}
+                                       value={attendance.value}
+                                       data-checkboxtype="attendance"
+                                       onclick={reasonsCheckbox}
+                                       class="picklist_checkbox"
+                                       aria-describedby="checkboxError_03" />
+                                <label class="slds-checkbox__label" for={attendance.value}>
+                                    <span class="slds-checkbox_faux picklist_checkbox_check"></span>
+                                    <span class="slds-form-element__label picklist_checkbox_text">{attendance.label}</span>
+                                </label>
+                            </div>
+                        </template>
+                    </div>
+                    <div id="checkboxError_03" class="slds-form-element__help"></div>
+                </fieldset>
+            </div>
+            <div class="slds-m-around_small" lwc:if={academicCheck}>
+                <fieldset class="slds-form-element slds-is-required">
+                    <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist_checkbox_legend">
+                        <abbr class="slds-required" title="required">*</abbr>Please select academic concerns:</legend>
+                    <div class="slds-form-element__control">
+                        <template for:each={academicPerformancePicklist} for:item="academic" for:index="index">
+                            <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist_checkbox_options" key={academic.index}>
+                                <input type="checkbox"
+                                       id={academic.value}
+                                       value={academic.value}
+                                       data-checkboxtype="academic"
+                                       onclick={reasonsCheckbox}
+                                       class="picklist_checkbox"
+                                       aria-describedby="checkboxError_04" />
+                                <label class="slds-checkbox__label" for={academic.value}>
+                                    <span class="slds-checkbox_faux picklist_checkbox_check"></span>
+                                    <span class="slds-form-element__label picklist_checkbox_text">{academic.label}</span>
+                                </label>
+                            </div>
+                        </template>
+                    </div>
+                    <div id="checkboxError_04" class="slds-form-element__help"></div>
+                </fieldset>
+            </div>
+            <div class="slds-form-element slds-m-around_small" lwc:if={attendanceAcademicCheck}>
+                <label class="slds-form-element__label slds-m-vertical_xx-small picklist_dropdown_label" for="pass-course-id">
+                    <abbr class="slds-required" title="required">*</abbr>Can the student pass this course?</label>
+                <p class="textarea_sublabel">Please do your best to answer this question. Use the personalized message text box below to explain your answer to the student.</p>
                 <div class="slds-form-element__control">
-                    <template for:each={academicPerformancePicklist} for:item="academic" for:index="index">
-                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={academic.index}>
-                            <input type="checkbox"
-                                   id={academic.value}
-                                   value={academic.value}
-                                   class="picklist-checkbox"
-                                   data-checkboxtype="academic"
-                                   onclick={reasonsCheckbox} />
-                            <label class="slds-checkbox__label" for={academic.value}>
-                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
-                                <span class="slds-form-element__label picklist-checkbox-text">{academic.label}</span>
-                            </label>
-                        </div>
-                    </template>
+                    <lightning-combobox id="pass-course-id"
+                                        label=""
+                                        value=""
+                                        placeholder="Select..."
+                                        options={passCourseOption}
+                                        data-selecttype="passCourseSelect"
+                                        onchange={singleSelect}
+                                        variant="label-hidden"
+                                        required>
+                    </lightning-combobox>
                 </div>
-            </fieldset>
-        </div>
-        <div class="slds-m-around_small">
-            <fieldset class="slds-form-element">
-                <legend class="slds-form-element__legend slds-form-element__label slds-m-vertical_xx-small picklist-checkbox-legend">Please select attendance concerns:</legend>
+            </div>
+            <div class="slds-form-element slds-is-required slds-has-error slds-m-around_small" lwc:if={otherCheck}>
+                <label class="slds-form-element__label slds-m-vertical_xx-small textarea_label" for="other-details-id">
+                    <abbr class="slds-required" title="required">*</abbr>Please provide additional details about your Other concerns:</label>
+                <p class="textarea_sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
+                    No advisors will be copied or notified.</p>
                 <div class="slds-form-element__control">
-                    <template for:each={attendanceConcernsPicklist} for:item="attendance" for:index="index">
-                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={attendance.index}>
-                            <input type="checkbox"
-                                   id={attendance.value}
-                                   value={attendance.value}
-                                   data-checkboxtype="attendance"
-                                   onclick={reasonsCheckbox}
-                                   class="picklist-checkbox" />
-                            <label class="slds-checkbox__label" for={attendance.value}>
-                                <span class="slds-checkbox_faux picklist-checkbox-check"></span>
-                                <span class="slds-form-element__label picklist-checkbox-text">{attendance.label}</span>
-                            </label>
-                        </div>
-                    </template>
+                    <lightning-textarea id="other-details-id"
+                                        label=""
+                                        value=""
+                                        data-texttype="otherDetails"
+                                        onchange={textAreaDetails}
+                                        variant="label-hidden"
+                                        aria-describedby="checkboxError_04">
+                    </lightning-textarea>
                 </div>
-            </fieldset>
-        </div>
+                <div id="textAreaError_02" class="slds-form-element__help">Please fill out this field.</div>
+            </div>
+            <div class="slds-form-element slds-m-around_small" lwc:if={attendanceAcademicCheck}>
+                <label class="slds-form-element__label slds-m-vertical_xx-small textarea_label" for="personal-message-id">Please provide a personalized message to the student receiving this alert (sent verbatim to the student):</label>
+                <p class="textarea_sublabel">We encourage your message to be supportive and a call to action (i.e. We’ve missed you in class and wanted to check in to see how you are doing.
+                    I want to support you in creating a plan to get back on track. Please respond to this message so we can find a time to meet.).
+                    The information provided below will be shared with the student.</p>
+                <div class="slds-form-element__control">
+                    <lightning-textarea id="personal-message-id"
+                                        label=""
+                                        value=""
+                                        data-texttype="personalMessage"
+                                        onchange={textAreaDetails}
+                                        variant="label-hidden">
+                    </lightning-textarea>
+                </div>
+            </div>
+            <div class="slds-form-element slds-m-around_small" lwc:if={additionalConcernsCheck}>
+                <label class="slds-form-element__label slds-m-vertical_xx-small textarea_label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
+                <p class="textarea_sublabel">The information provided below will not be shared with the student.</p>
+                <div class="slds-form-element__control">
+                    <lightning-textarea id="additional-concerns-id"
+                                        label=""
+                                        value=""
+                                        data-texttype="additionalConcerns"
+                                        onchange={textAreaDetails}
+                                        variant="label-hidden">
+                    </lightning-textarea>
+                </div>
+            </div>
+            <div class="slds-m-around_medium default_info">
+                <p class="slds-text-body_regular slds-m-bottom_small additional_info">If you have any questions, please email <a href="mailto: retention@stthomas.edu">retention@stthomas.edu</a></p>
+                <p class="slds-text-body_regular slds-m-bottom_small additional_info">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.</p>
+            </div>
 
-        <div class="slds-m-around_small">
-            <label class="slds-form-element__label slds-m-vertical_xx-small picklist-dropdown-label" for="pass-course-id">Can the student pass this course?</label>
-            <p class="textarea-sublabel">Please do your best to answer this question. Use the personalized message text box below to explain your answer to the student.</p>
-            <lightning-combobox id="pass-course-id"
-                                label=""
-                                value=""
-                                placeholder=""
-                                options={passCourseOption}
-                                data-selecttype="passCourseSelect"
-                                onchange={singleSelect}
-                                variant="label-hidden">
-            </lightning-combobox>
-        </div>
-
-        <div class="slds-m-around_small">
-            <label class="slds-form-element__label slds-m-vertical_xx-small textarea-label" for="other-details-id">Please provide additional details about your Other concerns:</label>
-            <p class="textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
-                No advisors will be copied or notified.</p>
-            <lightning-textarea id="other-details-id"
-                                label=""
-                                value=""
-                                data-texttype="otherDetails"
-                                onchange={textAreaDetails}
-                                variant="label-hidden">
-            </lightning-textarea>
-        </div>
-
-        <div class="slds-m-around_small">
-            <label class="slds-form-element__label slds-m-vertical_xx-small textarea-label" for="personal-message-id">Please provide a personalized message to the student receiving this alert (sent verbatim to the student):</label>
-            <p class="textarea-sublabel">We encourage your message to be supportive and a call to action (i.e. We’ve missed you in class and wanted to check in to see how you are doing.
-                I want to support you in creating a plan to get back on track. Please respond to this message so we can find a time to meet.).
-                The information provided below will be shared with the student.</p>
-            <lightning-textarea id="personal-message-id"
-                                label=""
-                                value=""
-                                data-texttype="personalMessage"
-                                onchange={textAreaDetails}
-                                variant="label-hidden">
-            </lightning-textarea>
-        </div>
-
-        <div class="slds-m-horizontal_medium" style="display:block;">
-            <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto: retention@stthomas.edu">retention@stthomas.edu></a></p>
-            <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.</p>
-        </div>
-
-        <div class="slds-m-around_small">
-            <lightning-button variant="brand" type="button" label="Console formSelection" onclick={showFormsSelection}>
-            </lightning-button>
-        </div>
-    </lightning-card>
+            <div class="slds-m-around_small">
+                <lightning-button variant="brand" type="submit" label="Console formSelection" onclick={showFormsSelection}>
+                </lightning-button>
+            </div>
+        </template>
+    </form>
 </template>
