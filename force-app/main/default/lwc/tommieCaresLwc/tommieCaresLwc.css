@@ -1,8 +1,9 @@
 /**
  * Created by nguy0092 on 10/8/2024.
  */
-.slds-is-required .slds-form-element__help {
-    clear: both;
+
+abbr.slds-required {
+    font-weight: bold;
 }
 
 .advisor_info {
