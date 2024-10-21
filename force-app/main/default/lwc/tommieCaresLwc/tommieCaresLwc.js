@@ -19,21 +19,16 @@ export default class TommieCaresLwc extends LightningElement {
     @api paramSBid = "";
     @api paramCrn= "";
 
-    advisorBannerId;
-    advisorContactName= "";
-    advisorLNameFName = "";
-    advisorEmail = ""
-    currentTerm;
-    courseCrn;
-    studentBannerId;
+    termAdvisorData;
+    currentTermCheck;
 
-    coursesList = [];
-    studentsList = [];
-    tommieCaresPicklist= [];
-    tommieHigh5Picklist= [];
-    attendancePicklist= [];
-    academicPicklist= [];
-    passCourseOption = [
+    coursesListOptions = [];
+    studentsListOptions = [];
+    tommieCaresOptions= [];
+    tommieHigh5Options= [];
+    attendanceOptions= [];
+    academicOptions= [];
+    passCourseOptions = [
         {label: "", value: ""},
         {label: "Yes", value: "Yes"},
         {label: "No", value: "No"},
@@ -46,10 +41,7 @@ export default class TommieCaresLwc extends LightningElement {
     get studentSelection() {
         return this.formSubmitSelections.Student_Selection;
     }
-    @track tommieCaresSelection= [];
-    @track tommieHigh5Selection= [];
-    @track attendanceSelection= [];
-    @track academicSelection = [];
+
     @track formSubmitSelections = {
         TommieCares_Reasons: "",
         High5_Reasons: "",
@@ -74,23 +66,26 @@ export default class TommieCaresLwc extends LightningElement {
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     };
-    high5Check = false;
-    attendanceCheck = false;
-    academicCheck = false;
-    attendanceAcademicCheck = false;
-    behaviorCheck = false;
-    financialConcernsCheck = false;
-    mentalHealthCheck = false;
-    relationshipCheck = false;
-    belongingCheck = false;
-    otherCheck = false;
+
+    @track selectionsCheck = {
+        high5Check: false,
+        attendanceCheck: false,
+        academicCheck: false,
+        attendanceAcademicCheck: false,
+        behaviorCheck: false,
+        financialConcernsCheck: false,
+        mentalHealthCheck: false,
+        relationshipCheck: false,
+        belongingCheck: false,
+        otherCheck: false,
+    }
 
     @track formRequired = {
-        High5: false,
-        Attendance: false,
-        Academic: false,
-        PassCourse: false,
-        Other: false,
+        High5_Required: false,
+        Attendance_Required: false,
+        Academic_Required: false,
+        PassCourse_Required: false,
+        Other_Required: false,
     }
 
     get submitDisable() {
@@ -100,16 +95,10 @@ export default class TommieCaresLwc extends LightningElement {
     @wire(currentTermAdvisor, {urlBid: "$paramBId"})
     termAdvisorWire({error, data}) {
         if (data) {
-            const termAdvisor = JSON.parse(JSON.stringify(data));
+            this.termAdvisorData = JSON.parse(JSON.stringify(data));
 
-            this.advisorBannerId = this.paramBId;
-            this.studentBannerId = this.paramSBid;
-            this.courseCrn = this.paramCrn;
-            this.currentTerm = termAdvisor.Current_Term;
-            this.advisorContactName = termAdvisor.Advisor_ContactName;
-            this.advisorLNameFName = termAdvisor.Advisor_LNameFName;
-            this.advisorEmail = termAdvisor.Advisor_Email;
-            this.formSubmitSelections.AdvisorContactId = termAdvisor.Advisor_ContactId;
+            this.currentTermCheck = !this.termAdvisorData.Current_Term;
+            this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
         }
 
         if (error) {
@@ -117,15 +106,15 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    @wire(advisorCoursesList, {advisorBannerId: "$advisorBannerId", courseCrn: "$courseCrn"})
+    @wire(advisorCoursesList, {advisorContactId: "$formSubmitSelections.AdvisorContactId", courseCrn: "$paramCrn"})
     coursesListWire({error, data}) {
         if (data) {
-            this.coursesList = JSON.parse(JSON.stringify(data));
+            this.coursesListOptions = JSON.parse(JSON.stringify(data));
 
-            if (this.coursesList.length === 1) {
-                this.formSubmitSelections.Course_Selection = this.coursesList[0].value;
+            if (this.coursesListOptions.length === 1) {
+                this.formSubmitSelections.Course_Selection = this.coursesListOptions[0].value;
             } else {
-                this.coursesList.unshift({value: "", label: "Select Course"});
+                this.coursesListOptions.unshift({value: "", label: "Select Course"});
                 this.formSubmitSelections.Course_Selection = "";
             }
         }
@@ -135,15 +124,15 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    @wire(studentCourseList, {studentBannerId: "$studentBannerId", courseId: "$courseSelection"})
+    @wire(studentCourseList, {studentBannerId: "$paramSBid", courseId: "$formSubmitSelections.Course_Selection"})
     studentCourseListWire({error, data}) {
         if (data) {
-            this.studentsList = JSON.parse(JSON.stringify(data));
+            this.studentsListOptions = JSON.parse(JSON.stringify(data));
 
-            if (this.studentsList.length === 1) {
-                this.formSubmitSelections.Student_Selection = this.studentsList[0].value;
+            if (this.studentsListOptions.length === 1) {
+                this.formSubmitSelections.Student_Selection = this.studentsListOptions[0].value;
             } else {
-                this.studentsList.unshift({value: "", label: "Select Student"});
+                this.studentsListOptions.unshift({value: "", label: "Select Student"});
                 this.formSubmitSelections.Student_Selection = "";
             }
         }
@@ -156,7 +145,7 @@ export default class TommieCaresLwc extends LightningElement {
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
     pickListTommieCares({ error, data }) {
         if (data) {
-            this.tommieCaresPicklist = JSON.parse(JSON.stringify(data.values));
+            this.tommieCaresOptions = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
             console.log("tommieCaresPicklist Error: " + error);
         }
@@ -165,38 +154,40 @@ export default class TommieCaresLwc extends LightningElement {
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
     pickListTommieHigh5({ error, data }) {
         if (data) {
-            this.tommieHigh5Picklist = JSON.parse(JSON.stringify(data.values));
+            this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
-            console.log("tommieHigh5Picklist Error: " + error);
+            console.log("tommieHigh5PicklistWire Error: " + error);
         }
     }
 
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
     pickListAcademicPerformance({ error, data }) {
         if (data) {
-            this.academicPicklist = JSON.parse(JSON.stringify(data.values));
+            this.academicOptions = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
-            console.log("academicPerformancePicklist Error: " + error);
+            console.log("academicPerformancePicklistWire Error: " + error);
         }
     }
 
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
     pickListAttendanceConcerns({ error, data }) {
         if (data) {
-            this.attendancePicklist = JSON.parse(JSON.stringify(data.values));
+            this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
-            console.log("attendanceConcernsPicklist Error: " + error);
+            console.log("attendanceConcernsPicklistWire Error: " + error);
         }
     }
 
     singleSelect(event) {
         switch (event.currentTarget.dataset.selecttype) {
+
             case "courseSelect":
+                this.resetForm();
                 this.formSubmitSelections.Course_Selection = event.detail.value;
-                this.formSubmitSelections.Student_Selection = '';
-                refreshApex(this.studentsList);
+                refreshApex(this.studentsListOptions);
                 break;
             case "studentSelect":
+                this.resetForm();
                 this.formSubmitSelections.Student_Selection = event.detail.value;
                 break;
             case "passCourseSelect":
@@ -208,70 +199,68 @@ export default class TommieCaresLwc extends LightningElement {
 
     reasonsCheckbox(event) {
         switch (event.currentTarget.dataset.checkboxtype) {
+
             case "cares":
-                this.formSubmitSelections.TommieCares_Reasons = this.checkBoxSelect(event, this.tommieCaresSelection);
+                this.formSubmitSelections.TommieCares_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.TommieCares_Reasons);
 
                 if (event.target.value === "Tommie High 5") {
                     if (!event.target.checked) {
-                        this.tommieHigh5Selection.length = 0;
                         this.formSubmitSelections.High5_Reasons = "";
                         this.formSubmitSelections.High5_Details = "";
                     }
-                    this.high5Check = event.target.checked;
-                    this.formRequired.High5 = event.target.checked;
+                    this.selectionsCheck.high5Check = event.target.checked;
+                    this.formRequired.High5_Required = event.target.checked;
                 }
                 if (event.target.value === "Attendance concerns") {
                     if (!event.target.checked) {
-                        this.attendanceSelection.length = 0;
                         this.formSubmitSelections.Attendance_Reasons = "";
                     }
-                    this.attendanceCheck = event.target.checked;
-                    this.formRequired.Attendance = event.target.checked;
+                    this.selectionsCheck.attendanceCheck = event.target.checked;
+                    this.formRequired.Attendance_Required = event.target.checked;
                     this.attendanceAcademic();
                 }
                 if (event.target.value === "Academic performance concerns") {
                     if (!event.target.checked) {
-                        this.academicSelection.length = 0;
                         this.formSubmitSelections.Academic_Reasons = "";
                     }
-                    this.academicCheck = event.target.checked;
-                    this.formRequired.Academic = event.target.checked;
+                    this.selectionsCheck.academicCheck = event.target.checked;
+                    this.formRequired.Academic_Required = event.target.checked;
                     this.attendanceAcademic();
                 }
                 if (event.target.value === "Behavior concerns") {
-                    this.behaviorCheck = event.target.checked;
+                    this.selectionsCheck.behaviorCheck = event.target.checked;
                 }
                 if (event.target.value === "Financial concerns") {
-                    this.financialConcernsCheck = event.target.checked;
+                    this.selectionsCheck.financialConcernsCheck = event.target.checked;
                 }
                 if (event.target.value === "Mental health concerns") {
-                    this.mentalHealthCheck = event.target.checked;
+                    this.selectionsCheck.mentalHealthCheck = event.target.checked;
                 }
                 if (event.target.value === "Relationship violence/stalking") {
-                    this.relationshipCheck = event.target.checked;
+                    this.selectionsCheck.relationshipCheck = event.target.checked;
                 }
                 if (event.target.value === "Sense of belonging") {
-                    this.belongingCheck = event.target.checked;
+                    this.selectionsCheck.belongingCheck = event.target.checked;
                 }
                 if (event.target.value === "Other") {
                     if (!event.target.checked) {
                         this.formSubmitSelections.Other_Details = "";
                     }
-                    this.otherCheck = event.target.checked;
-                    this.formRequired.Other = event.target.checked;
+                    this.selectionsCheck.otherCheck = event.target.checked;
+                    this.formRequired.Other_Required = event.target.checked;
                 }
                 break;
             case "high5":
-                this.formSubmitSelections.High5_Reasons = this.checkBoxSelect(event, this.tommieHigh5Selection);
-                this.formRequired.High5 = !(!!this.formSubmitSelections.High5_Reasons && !!this.formSubmitSelections.High5_Details);
+                this.formSubmitSelections.High5_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.High5_Reasons);
+                this.formRequired.High5_Required = !(!!this.formSubmitSelections.High5_Reasons && !!this.formSubmitSelections.High5_Details);
                 break;
             case "attendance":
-                this.formSubmitSelections.Attendance_Reasons = this.checkBoxSelect(event, this.attendanceSelection);
-                this.formRequired.Attendance = !(!!this.formSubmitSelections.Attendance_Reasons)
+                this.formSubmitSelections.Attendance_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.Attendance_Reasons);
+                this.formRequired.Attendance_Required = !(!!this.formSubmitSelections.Attendance_Reasons)
                 this.passCourseRequired();
                 break;
             case "academic":
-                this.formSubmitSelections.Academic_Reasons = this.checkBoxSelect(event, this.academicSelection);
+                this.formSubmitSelections.Academic_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.Academic_Reasons);
                 this.formRequired.Academic = !(!!this.formSubmitSelections.Academic_Reasons)
                 this.passCourseRequired();
                 break;
@@ -286,11 +275,11 @@ export default class TommieCaresLwc extends LightningElement {
         switch (event.currentTarget.dataset.texttype) {
             case "high5Details":
                 this.formSubmitSelections.High5_Details = event.detail.value.trim();
-                this.formRequired.High5 = !(!!this.formSubmitSelections.High5_Reasons && !!this.formSubmitSelections.High5_Details);
+                this.formRequired.High5_Required = !(!!this.formSubmitSelections.High5_Reasons && !!this.formSubmitSelections.High5_Details);
                 break;
             case "otherDetails":
                 this.formSubmitSelections.Other_Details = event.detail.value.trim();
-                this.formRequired.Other = !(!!this.formSubmitSelections.Other_Details);
+                this.formRequired.Other_Required = !(!!this.formSubmitSelections.Other_Details);
                 break;
             case "personalMessage":
                 this.formSubmitSelections.Personal_Message = event.detail.value.trim();
@@ -301,7 +290,9 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    checkBoxSelect(evt, selections) {
+    checkBoxSelect(evt, selectionType) {
+        let selections = !!selectionType ? selectionType.split(";") : [];
+
         if (evt.target.checked) {
             selections.push(evt.target.value);
         } else {
@@ -315,25 +306,50 @@ export default class TommieCaresLwc extends LightningElement {
     }
 
     attendanceAcademic() {
-        if (this.attendanceCheck || this.academicCheck) {
+        if (this.selectionsCheck.attendanceCheck || this.selectionsCheck.academicCheck) {
             this.attendanceAcademicCheck = true;
             this.passCourseRequired();
         } else {
-            this.attendanceAcademicCheck = false;
+            this.selectionsCheck.attendanceAcademicCheck = false;
             this.formSubmitSelections.Pass_Course_Selection = "";
             this.formSubmitSelections.Personal_Message = "";
-            this.formRequired.PassCourse = false;
+            this.formRequired.PassCourse_Required = false;
         }
     }
 
     passCourseRequired() {
-        this.formRequired.PassCourse = !(!!this.formSubmitSelections.Pass_Course_Selection);
+        this.formRequired.PassCourse_Required = !(!!this.formSubmitSelections.Pass_Course_Selection);
+    }
+
+    resetForm() {
+
+        const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
+
+        if (checkboxes) {
+            checkboxes.forEach(check => {
+                check.checked = false;
+            })
+        }
+
+        for (const selection in this.formSubmitSelections) {
+            if (selection !== "AdvisorContactId" && selection !== "Course_Selection")
+            this.formSubmitSelections[selection] = "";
+        }
+
+        for (const check in this.selectionsCheck) {
+            this.selectionsCheck[check] = false;
+        }
+
+        for (const required in this.formRequired) {
+            this.formRequired[required] = false;
+        }
     }
 
     showConsoleLog(event) {
         console.log("This is formSelections: "+JSON.stringify(this.formSubmitSelections));
         console.log("formsRequired: "+JSON.stringify(this.formRequired));
         console.log("submitDisable: "+this.submitDisable);
+        console.log("currentTermCheck: "+this.currentTermCheck);
     }
 
 }

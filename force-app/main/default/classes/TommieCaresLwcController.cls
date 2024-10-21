@@ -47,7 +47,7 @@ public without sharing class TommieCaresLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Map<String, String>> advisorCoursesList(String advisorBannerId, String courseCrn) {
+    public static List<Map<String, String>> advisorCoursesList(String advisorContactId, String courseCrn) {
 
         List<Map<String, String>> courseMapList = new List<Map<String, String>>();
 
@@ -59,7 +59,7 @@ public without sharing class TommieCaresLwcController {
 
         String coursesQuery = 'SELECT Id, Name, Course_Title__c, hed__Section_ID__c\n' +
                 ' FROM hed__Course_Offering__c\n' +
-                ' WHERE hed__Faculty__r.University_Banner_ID__c = :advisorBannerId\n' +
+                ' WHERE hed__Faculty__r.Id = :advisorContactId\n' +
                 singleCrnCriteria + '\n' +
                 ' AND Current_Term__c = TRUE\n' +
                 ' ORDER BY Name ASC';
