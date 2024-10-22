@@ -121,4 +121,139 @@ public without sharing class TommieCaresLwcController {
         return studentMapList;
     }
 
+    @AuraEnabled(Cacheable=false)
+    public static void saveCase(Map<String, String> formSelections) {
+        Case tommieCaresCase = new Case();
+
+        List<RecordType> recordId = [
+                SELECT Id,
+                        Name
+                FROM RecordType
+                WHERE SobjectType = 'Case'
+                AND DeveloperName = 'Tommie_Cares'
+        ];
+
+        String caseRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
+
+//        PageReference savePage = Page.TommieCares;
+//        if (String.isNotBlank(bannerId)) {
+//            savePage.getParameters().put('bid', bannerId);
+//            savePage.getParameters().put('submitted', 'true');
+//            savePage.setRedirect(true);
+//        }
+
+        tommieCaresCase.RecordTypeId = caseRecordId;
+        tommieCaresCase.Case_Reporter__c = formSelections.get('AdvisorContactId');
+        tommieCaresCase.Subject = 'Tommie Cares';
+        tommieCaresCase.Origin = 'Web';
+        tommieCaresCase.Reporter_University_Email__c = formSelections.get('AdvisorEmail');
+        tommieCaresCase.ContactId = formSelections.get('StudentContactId');
+        tommieCaresCase.Course_Offering__c = formSelections.get('CourseSelectionId');
+        tommieCaresCase.Alert_Term_lookup__c = formSelections.get('currentTermId');
+        tommieCaresCase.Tommie_Alert_Primary_Reason__c = formSelections.get('TommieCares_Reasons');
+        tommieCaresCase.Tommie_High_5__c = formSelections.get('High5_Reasons');
+        tommieCaresCase.Attendance_Concerns_Reason_s__c = formSelections.get('Attendance_Reasons');
+        tommieCaresCase.Academic_Performance_Reason_s__c = formSelections.get('Academic_Reasons');
+        tommieCaresCase.Can_this_student_pass_course__c = formSelections.get('Pass_Course_Selection');
+        tommieCaresCase.Tommie_High_5_Notes__c = formSelections.get('High5_Details');
+        tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = formSelections.get('Other_Details');
+        tommieCaresCase.Case_Reporter_Notes_to_Student__c = formSelections.get('Personal_Message');
+        tommieCaresCase.Shared_Case_Notes__c = formSelections.get('Additional_Concerns');
+
+        //Get Course Connection for student selected
+        List<hed__Course_Enrollment__c> studentCourseEnrollmentList = [
+                SELECT Id
+                FROM hed__Course_Enrollment__c
+                WHERE Course_Offering_ID__c = :tommieCaresCase.Course_Offering__c
+                AND hed__Contact__c = :tommieCaresCase.ContactId
+        ];
+
+        if (studentCourseEnrollmentList.size() > 0) {
+            tommieCaresCase.Course_Connection__c = studentCourseEnrollmentList[studentCourseEnrollmentList.size() - 1].Id;
+        }
+
+        List <String> relationshipTypes = new List<String>{
+                'Primary Advisor',
+                'Student-Athlete Advisor',
+                'Secondary Advisor',
+                'First-Year Advisor',
+                'Probationary Advisor',
+                'Financial Aid Counselor',
+                'General Advisor',
+                'International Advisor',
+                'Faculty Advisor'
+        };
+
+        //Get All Relationship Information
+        List<hed__Relationship__c> advisorContacts = [
+                SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Name, Name, hed__Type__c, hed__Status__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                FROM hed__Relationship__c
+                WHERE hed__Type__c IN :relationshipTypes
+                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                AND hed__Status__c = 'Current'
+                ORDER BY CreatedDate DESC NULLS LAST
+        ];
+
+        Map<String, hed__Relationship__c> advisorContactsMap = new Map<String, hed__Relationship__c>();
+        for (hed__Relationship__c contact : advisorContacts) {
+            advisorContactsMap.put(contact.hed__Type__c, contact);
+        }
+
+        if (advisorContactsMap.size() > 0) {
+            tommieCaresCase.Primary_Advisor_Contact__c = getAdvisorInfo('Id', 'Primary Advisor', advisorContactsMap);
+            tommieCaresCase.Primary_Advisory_Email__c = getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
+            tommieCaresCase.Student_Athlete_Advisor_Email__c = getAdvisorInfo('Email', 'Student-Athlete Advisor', advisorContactsMap);
+            tommieCaresCase.Student_Athlete_Advisor__c = getAdvisorInfo('Id', 'Student-Athlete Advisor', advisorContactsMap);
+            tommieCaresCase.Secondary_Advisor_Email__c = getAdvisorInfo('Email', 'Secondary Advisor', advisorContactsMap);
+            tommieCaresCase.Secondary_Advisor__c = getAdvisorInfo('Id', 'Secondary Advisor', advisorContactsMap);
+            tommieCaresCase.First_Year_Advisor_Email__c = getAdvisorInfo('Email', 'First-Year Advisor', advisorContactsMap);
+            tommieCaresCase.First_Year_Advisor__c = getAdvisorInfo('Id', 'First-Year Advisor', advisorContactsMap);
+            tommieCaresCase.Probation_Advisor_Email__c = getAdvisorInfo('Email', 'Probationary Advisor', advisorContactsMap);
+            tommieCaresCase.Probation_Advisor_Contact__c = getAdvisorInfo('Id', 'Probationary Advisor', advisorContactsMap);
+            tommieCaresCase.Financial_Aid_Counselor_Email__c = getAdvisorInfo('Email', 'Financial Aid Counselor', advisorContactsMap);
+            tommieCaresCase.Financial_Aid_Counselor__c = getAdvisorInfo('Id', 'Financial Aid Counselor', advisorContactsMap);
+            tommieCaresCase.General_Advisor_Email__c = getAdvisorInfo('Email', 'General Advisor', advisorContactsMap);
+            tommieCaresCase.General_Advisor__c = getAdvisorInfo('Id', 'General Advisor', advisorContactsMap);
+            tommieCaresCase.International_Advisor_Email__c = getAdvisorInfo('Email', 'International Advisor', advisorContactsMap);
+            tommieCaresCase.International_Advisor__c = getAdvisorInfo('Id', 'International Advisor', advisorContactsMap);
+            tommieCaresCase.Faculty_Advisor_Email__c = getAdvisorInfo('Email', 'Faculty Advisor', advisorContactsMap);
+            tommieCaresCase.Faculty_Advisor__c = getAdvisorInfo('Id', 'Faculty Advisor', advisorContactsMap);
+        }
+
+        List<hed__Course_Enrollment__c> courseConnection = [
+                SELECT Id
+                FROM hed__Course_Enrollment__c
+                WHERE hed__Contact__r.Id = :tommieCaresCase.ContactId
+                AND hed__Course_Offering__c = :formSelections.get('CourseSelectionId')
+        ];
+
+        if (courseConnection.size() > 0) {
+            tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
+        }
+
+        System.debug(JSON.serializePretty(tommieCaresCase));
+
+        try {
+            insert tommieCaresCase;
+        } catch (Exception e) {
+            System.debug(e.getMessage());
+        }
+
+//        return savePage;
+    }
+
+    public static String getAdvisorInfo(String EmailOrId, String relationshipType, Map<String, hed__Relationship__c> advisorContactsMap) {
+        String advisorInfo;
+        if (advisorContactsMap.size() > 0) {
+            if (advisorContactsMap.containsKey(relationshipType)) {
+                if (EmailOrId == 'Id') {
+                    advisorInfo = advisorContactsMap.get(relationshipType).hed__Contact__r.Id;
+                } else if (EmailOrId == 'Email') {
+                    advisorInfo = advisorContactsMap.get(relationshipType).hed__Contact__r.Email;
+                }
+            }
+        }
+        return advisorInfo;
+    }
+
 }

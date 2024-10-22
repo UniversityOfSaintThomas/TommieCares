@@ -4,6 +4,11 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
+    <div class="slds-m-horizontal_medium" lwc:if={caseSubmitted}>
+        <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Thank you for your submission, and for all you do both in the classroom and as an advisor.
+            You have a tremendous impact on each student’s experience.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small advisor_info"><i>You can submit another below, or close this window if you are done.</i></p>
+    </div>
     <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={AdvisorContactIdCheck}>
         <div class="slds-m-horizontal_medium">
             <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Your Information:
@@ -236,7 +241,7 @@
         </div>
 
         <div class="slds-m-around_small" lwc:if={caresSelectionCheck}>
-            <lightning-button variant="brand" type="submit" label="Submit" disabled={submitDisable}>
+            <lightning-button variant="brand" type="button" label="Submit" disabled={submitDisable} onclick={submitCase}>
             </lightning-button>
         </div>
         <div class="slds-m-around_small">
@@ -244,4 +249,7 @@
             </lightning-button>
         </div>
     </form>
+    <template lwc:if={submittingCase}>
+        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+    </template>
 </template>
