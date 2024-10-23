@@ -4,15 +4,73 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
-    <div class="slds-m-horizontal_medium" lwc:if={caseSubmitted}>
-        <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Thank you for your submission, and for all you do both in the classroom and as an advisor.
-            You have a tremendous impact on each student’s experience.</p>
-        <p class="slds-text-body_regular slds-m-bottom_small advisor_info"><i>You can submit another below, or close this window if you are done.</i></p>
-    </div>
-    <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={AdvisorContactIdCheck}>
+    <template lwc:if={noCurrentTermCheck}>
+        <div class="slds-media slds-media_center slds-theme_warning slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:warning"
+                                alternative-text="current term warning"
+                                title="current term warning"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_regular">No Active Academic Terms. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={caseSubmittedErrorCheck}>
+        <div class="slds-media slds-media_center slds-theme_error slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error"
+                                alternative-text="submit case error"
+                                title="submit case error"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_regular">There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={caseSubmittedCheck}>
+        <div class="slds-media slds-theme_success slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:success"
+                                alternative-text="submit success"
+                                title="submit success"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_regular">Thank you for your submission, and for all you do both in the
+                    classroom and as an advisor.
+                    You have a tremendous impact on each student’s experience.</p>
+                <p class="slds-text-body_regular slds-m-top_xx-small"><i>You can submit another below, or close this
+                    window if you are done.</i></p>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={noAdvisorContactIdCheck}>
+        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error"
+                                alternative-text="submit case error"
+                                title="submit case error"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_regular">No Advisor Information Found. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
+    <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={advisorContactIdCheck} >
         <div class="slds-m-horizontal_medium">
-            <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Your Information:
-                {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
+            <p class="slds-text-body_regular slds-m-bottom_small advisor_info">Your Information: {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
         </div>
         <div class="slds-m-horizontal_medium default_info">
             <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
@@ -239,17 +297,17 @@
             <p class="slds-text-body_regular slds-m-bottom_small additional_info">If you have any questions, please email <a href="mailto: retention@stthomas.edu">retention@stthomas.edu</a></p>
             <p class="slds-text-body_regular slds-m-bottom_small additional_info">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.</p>
         </div>
-
         <div class="slds-m-around_small" lwc:if={caresSelectionCheck}>
             <lightning-button variant="brand" type="button" label="Submit" disabled={submitDisable} onclick={submitCase}>
             </lightning-button>
         </div>
-        <div class="slds-m-around_small">
-            <lightning-button variant="brand" type="button" label="Console.Log Stuff" onclick={showConsoleLog}>
-            </lightning-button>
-        </div>
     </form>
-    <template lwc:if={submittingCase}>
+    <template lwc:if={submitCaseSpinner}>
         <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
     </template>
+
+    <div class="slds-m-around_small">
+        <lightning-button variant="brand" type="button" label="Console.Log Stuff" onclick={showConsoleLog}>
+        </lightning-button>
+    </div>
 </template>

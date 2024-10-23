@@ -13,7 +13,6 @@ import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_R
 import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
 import ATTENDANCE_CONCERNS_REASONS from "@salesforce/schema/Case.Attendance_Concerns_Reason_s__c";
 import ACADEMIC_PERFORMANCE_REASONS from '@salesforce/schema/Case.Academic_Performance_Reason_s__c';
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
 
 export default class TommieCaresLwc extends LightningElement {
 
@@ -23,10 +22,10 @@ export default class TommieCaresLwc extends LightningElement {
 
     coursesListOptions = [];
     studentsListOptions = [];
-    tommieCaresOptions= [];
-    tommieHigh5Options= [];
-    attendanceOptions= [];
-    academicOptions= [];
+    tommieCaresOptions = [];
+    tommieHigh5Options = [];
+    attendanceOptions = [];
+    academicOptions = [];
     passCourseOptions = [
         {label: "", value: ""},
         {label: "Yes", value: "Yes"},
@@ -34,9 +33,10 @@ export default class TommieCaresLwc extends LightningElement {
         {label: "Maybe", value: "Maybe"},
     ]
 
-    caseSubmitted = false;
-    termAdvisorData;
+    @track termAdvisorData = {};
+
     courseSelection;
+
     get studentSelection() {
         return this.formSubmitSelections.StudentContactId;
     }
@@ -58,8 +58,11 @@ export default class TommieCaresLwc extends LightningElement {
         Additional_Concerns: "",
     };
 
-    currentTermCheck;
-    AdvisorContactIdCheck;
+    noCurrentTermCheck = false;
+    advisorContactIdCheck = false;
+    noAdvisorContactIdCheck = false;
+    caseSubmittedCheck = false;
+    caseSubmittedErrorCheck = false;
 
     get courseSelectionCheck() {
         return !!this.courseSelection;
@@ -92,7 +95,7 @@ export default class TommieCaresLwc extends LightningElement {
         Other_Required: false,
     }
 
-    submittingCase = false;
+    submitCaseSpinner = false;
 
     get submitDisable() {
         return Object.values(this.formRequired).includes(true);
@@ -103,8 +106,9 @@ export default class TommieCaresLwc extends LightningElement {
         if (data) {
             this.termAdvisorData = JSON.parse(JSON.stringify(data));
 
-            this.currentTermCheck = !!this.termAdvisorData.Current_Term;
-            this.AdvisorContactIdCheck = !!this.termAdvisorData.Advisor_ContactId;
+            this.noCurrentTermCheck = !(!!this.termAdvisorData.Current_Term);
+            this.advisorContactIdCheck = !!this.termAdvisorData.Advisor_ContactId;
+            this.noAdvisorContactIdCheck = !this.advisorContactIdCheck;
         }
 
         if (error) {
@@ -191,6 +195,7 @@ export default class TommieCaresLwc extends LightningElement {
                 this.resetForm();
                 this.courseSelection = event.detail.value;
                 refreshApex(this.studentsListOptions);
+                this.caseSubmittedCheck = false;
                 break;
             case "studentSelect":
                 this.resetForm();
@@ -357,25 +362,20 @@ export default class TommieCaresLwc extends LightningElement {
         this.formSubmitSelections.CourseSelectionId = this.courseSelection;
 
         try {
-            this.submittingCase = true;
+            this.caseSubmittedErrorCheck = false;
+            window.scrollTo(0, 0);
+            this.submitCaseSpinner = true;
             await saveCase({formSelections: this.formSubmitSelections});
             this.paramSBid = "";
             this.paramCrn = "";
             this.resetForm();
             refreshApex(this.termAdvisorData);
-            this.submittingCase = false;
-            // this.dispatchEvent(
-            //     new ShowToastEvent({
-            //         title: 'Success',
-            //         message: 'Tommie Cares has been submitted!',
-            //         variant: 'success'
-            //     })
-            // );
-            this.caseSubmitted = true;
-            this.submittingCase = false;
-            window.scrollTo(0, 0);
+            this.caseSubmittedCheck = true;
+            this.submitCaseSpinner = false;
         } catch (e) {
-            console.log("what is error: "+e);
+            console.log("Submission Error: "+JSON.stringify(e));
+            this.caseSubmittedErrorCheck = true;
+            this.submitCaseSpinner = false;
         }
     }
 
@@ -388,7 +388,9 @@ export default class TommieCaresLwc extends LightningElement {
         console.log("This is formSelections: "+JSON.stringify(this.formSubmitSelections));
         console.log("formsRequired: "+JSON.stringify(this.formRequired));
         console.log("submitDisable: "+this.submitDisable);
-        console.log("currentTermCheck: "+this.currentTermCheck);
+        console.log("currentTermCheck: "+this.noCurrentTermCheck);
+        console.log("advisorContactIdCheck: "+this.advisorContactIdCheck);
+        console.log("noAdvisorContactIdCheck: "+this.noAdvisorContactIdCheck);
     }
 
 }
