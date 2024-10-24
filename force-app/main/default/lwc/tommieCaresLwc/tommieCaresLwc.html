@@ -5,7 +5,7 @@
 <!-- Tommie Alerts Lwc -->
 <template>
     <template lwc:if={noCurrentTermCheck}>
-        <div class="slds-media slds-media_center slds-theme_warning slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+        <div class="slds-media slds-media_center slds-theme_warning slds-scoped-notification slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="current term warning"
@@ -20,7 +20,7 @@
         </div>
     </template>
     <template lwc:if={caseSubmittedErrorCheck}>
-        <div class="slds-media slds-media_center slds-theme_error slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+        <div class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:error"
                                 alternative-text="submit case error"
@@ -35,7 +35,7 @@
         </div>
     </template>
     <template lwc:if={caseSubmittedCheck}>
-        <div class="slds-media slds-theme_success slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+        <div class="slds-media slds-theme_success slds-scoped-notification slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:success"
                                 alternative-text="submit success"
@@ -45,8 +45,7 @@
                                 variant="inverse"></lightning-icon>
             </div>
             <div class="slds-media__body">
-                <p class="slds-text-body_regular">Thank you for your submission, and for all you do both in the
-                    classroom and as an advisor.
+                <p class="slds-text-body_regular">Thank you for your submission, and for all you do both in the classroom and as an advisor.
                     You have a tremendous impact on each student’s experience.</p>
                 <p class="slds-text-body_regular slds-m-top_xx-small"><i>You can submit another below, or close this
                     window if you are done.</i></p>
@@ -54,7 +53,7 @@
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
-        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small">
+        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-horizontal_medium slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:error"
                                 alternative-text="submit case error"
@@ -79,7 +78,7 @@
                 individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                 <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
         </div>
-        <div class="slds-form-element slds-m-around_small">
+        <div class="slds-form-element slds-m-around_small" style="display: block">
             <label class="slds-form-element__label slds-m-vertical_xx-small picklist_dropdown_label" for="course-selection-id">
                 <abbr class="slds-required" title="Required">*</abbr>Please select the student's course:</label>
             <div class="slds-form-element__control">
@@ -94,7 +93,7 @@
                 </lightning-combobox>
             </div>
         </div>
-        <div class="slds-form-element slds-m-around_small" lwc:if={courseSelectionCheck}>
+        <div class="slds-form-element slds-m-around_small" style="display: block" lwc:if={courseSelectionCheck}>
             <label class="slds-form-element__label slds-m-vertical_xx-small picklist_dropdown_label" for="student-selection-id">
                 <abbr class="slds-required" title="Required">*</abbr>Please select the student of concern:</label>
             <div class="slds-form-element__control">

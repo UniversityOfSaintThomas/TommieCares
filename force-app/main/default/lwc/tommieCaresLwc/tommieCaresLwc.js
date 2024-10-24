@@ -19,6 +19,7 @@ export default class TommieCaresLwc extends LightningElement {
     @api paramBId = "";
     @api paramSBid = "";
     @api paramCrn = "";
+    @api paramUrl = "";
 
     coursesListOptions = [];
     studentsListOptions = [];
@@ -99,6 +100,32 @@ export default class TommieCaresLwc extends LightningElement {
 
     get submitDisable() {
         return Object.values(this.formRequired).includes(true);
+    }
+
+    connectedCallback() {
+        const urlString = this.paramUrl;
+        const queryUrlString = new URLSearchParams(urlString.split("?")[1]);
+
+        for (let keyValue of queryUrlString.entries()) {
+
+            switch (keyValue[0]) {
+                case "bid":
+                    if(!this.paramBId) {
+                        this.paramBId = keyValue[1];
+                    }
+                    break;
+                case "sbid":
+                    if(!this.paramSBid) {
+                        this.paramSBid = keyValue[1];
+                    }
+                    break;
+                case "crn":
+                    if(!this.paramCrn) {
+                        this.paramCrn = keyValue[1];
+                    }
+                    break;
+            }
+        }
     }
 
     @wire(currentTermAdvisor, {urlBid: "$paramBId"})
@@ -210,7 +237,6 @@ export default class TommieCaresLwc extends LightningElement {
 
     reasonsCheckbox(event) {
         switch (event.currentTarget.dataset.checkboxtype) {
-
             case "cares":
                 this.formSubmitSelections.TommieCares_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.TommieCares_Reasons);
 
@@ -379,7 +405,7 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    async showConsoleLog(event) {
+    showConsoleLog(event) {
         this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
         this.formSubmitSelections.AdvisorEmail = this.termAdvisorData.Advisor_Email;
