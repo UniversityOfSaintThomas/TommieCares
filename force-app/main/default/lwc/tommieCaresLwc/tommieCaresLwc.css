@@ -26,6 +26,10 @@ abbr.slds-required {
     font-weight: bold;
 }
 
+.additional_info p.no_bold_text {
+    font-weight: normal !important;
+}
+
 .picklist_checkbox_options {
     display: inline-block;
     position: relative;
