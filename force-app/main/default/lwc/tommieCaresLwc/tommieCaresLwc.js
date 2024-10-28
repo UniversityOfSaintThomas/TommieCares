@@ -103,27 +103,31 @@ export default class TommieCaresLwc extends LightningElement {
     }
 
     connectedCallback() {
-        const urlString = this.paramUrl;
-        const queryUrlString = new URLSearchParams(urlString.split("?")[1]);
+        let searchParamsUrl = new URL(this.paramUrl);
+        let paramsString = new URLSearchParams(searchParamsUrl.searchParams);
 
-        for (let keyValue of queryUrlString.entries()) {
+        for (let keyValue of paramsString.entries()) {
 
             switch (keyValue[0]) {
                 case "bid":
-                    if(!this.paramBId) {
+                    if (!this.paramBId) {
                         this.paramBId = keyValue[1];
                     }
                     break;
                 case "sbid":
-                    if(!this.paramSBid) {
+                    if (!this.paramSBid) {
                         this.paramSBid = keyValue[1];
                     }
                     break;
                 case "crn":
-                    if(!this.paramCrn) {
+                    if (!this.paramCrn) {
                         this.paramCrn = keyValue[1];
                     }
                     break;
+                case "submitted":
+                    if (keyValue[1] === "true") {
+                        this.caseSubmittedCheck = true;
+                    }
             }
         }
     }
@@ -381,6 +385,17 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
+    submittedUrl() {
+        let reloadUrl = new URL(this.paramUrl);
+
+        reloadUrl.searchParams.set("bid", this.paramBId);
+        reloadUrl.searchParams.set("sbid", "");
+        reloadUrl.searchParams.set("crn", "");
+        reloadUrl.searchParams.set("submitted", "true");
+
+        return reloadUrl;
+    }
+
     async submitCase() {
         this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
@@ -392,12 +407,8 @@ export default class TommieCaresLwc extends LightningElement {
             window.scrollTo(0, 0);
             this.submitCaseSpinner = true;
             await saveCase({formSelections: this.formSubmitSelections});
-            this.paramSBid = "";
-            this.paramCrn = "";
-            this.resetForm();
-            refreshApex(this.termAdvisorData);
-            this.caseSubmittedCheck = true;
             this.submitCaseSpinner = false;
+            location.replace(this.submittedUrl());
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
