@@ -13,7 +13,7 @@ public with sharing class TommieCaresController {
     public hed__Course_Enrollment__c singleStudent { get; set; }
     public Case tommieCaresCase { get; set; }
     public Id studentCourseConnection { get; set; }
-    public Id studentCourseEnrollment { get; set; }
+//    public Id studentCourseEnrollment { get; set; }
     public Id courseStudentId { get; set; }
     public String primaryConcern { get; set; }
     public String highFiveReason { get; set; }
@@ -165,7 +165,7 @@ public with sharing class TommieCaresController {
 
         if (advisorContactsMap.size() > 0) {
             tommieCaresCase.Primary_Advisor_Contact__c = getAdvisorInfo('Id', 'Primary Advisor', advisorContactsMap);
-            tommieCaresCase.Primary_Advisory_Email__c = getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
+            tommieCaresCase.Primary_Advisory_Email__c = String.isBlank(tommieCaresCase.Primary_Advisor_Contact__c) ? 'registrar@stthomas.edu' : getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
             tommieCaresCase.Student_Athlete_Advisor_Email__c = getAdvisorInfo('Email', 'Student-Athlete Advisor', advisorContactsMap);
             tommieCaresCase.Student_Athlete_Advisor__c = getAdvisorInfo('Id', 'Student-Athlete Advisor', advisorContactsMap);
             tommieCaresCase.Secondary_Advisor_Email__c = getAdvisorInfo('Email', 'Secondary Advisor', advisorContactsMap);
@@ -182,6 +182,8 @@ public with sharing class TommieCaresController {
             tommieCaresCase.International_Advisor__c = getAdvisorInfo('Id', 'International Advisor', advisorContactsMap);
             tommieCaresCase.Faculty_Advisor_Email__c = getAdvisorInfo('Email', 'Faculty Advisor', advisorContactsMap);
             tommieCaresCase.Faculty_Advisor__c = getAdvisorInfo('Id', 'Faculty Advisor', advisorContactsMap);
+        } else {
+            tommieCaresCase.Primary_Advisory_Email__c = 'registrar@stthomas.edu';
         }
 
         List<hed__Course_Enrollment__c> courseConnection = [
