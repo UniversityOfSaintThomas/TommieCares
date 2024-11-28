@@ -2,6 +2,10 @@
  * Created by nguy0092 on 10/8/2024.
  */
 
+.slds-theme_success {
+    background: #672D85 !important;
+}
+
 .notification_text p {
     font-size: 1rem !important;
     color: white;
