@@ -215,7 +215,6 @@ public without sharing class TommieCaresLwcController {
 
         if (advisorContactsMap.size() > 0) {
             tommieCaresCase.Primary_Advisor_Contact__c = getAdvisorInfo('Id', 'Primary Advisor', advisorContactsMap);
-//            tommieCaresCase.Primary_Advisory_Email__c = getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
             tommieCaresCase.Primary_Advisory_Email__c = String.isBlank(tommieCaresCase.Primary_Advisor_Contact__c) ? 'registrar@stthomas.edu' : getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
             tommieCaresCase.Student_Athlete_Advisor_Email__c = getAdvisorInfo('Email', 'Student-Athlete Advisor', advisorContactsMap);
             tommieCaresCase.Student_Athlete_Advisor__c = getAdvisorInfo('Id', 'Student-Athlete Advisor', advisorContactsMap);
@@ -250,7 +249,6 @@ public without sharing class TommieCaresLwcController {
 
         System.debug(JSON.serializePretty(tommieCaresCase));
 
-//        tommieCaresCase.Course_Connection__c = '1254'; //testing failed insert
         insert tommieCaresCase;
 
     }

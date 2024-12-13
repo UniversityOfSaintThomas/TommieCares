@@ -416,18 +416,4 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    showConsoleLog(event) {
-        this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
-        this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
-        this.formSubmitSelections.AdvisorEmail = this.termAdvisorData.Advisor_Email;
-        this.formSubmitSelections.CourseSelectionId = this.courseSelection;
-
-        console.log("This is formSelections: "+JSON.stringify(this.formSubmitSelections));
-        console.log("formsRequired: "+JSON.stringify(this.formRequired));
-        console.log("submitDisable: "+this.submitDisable);
-        console.log("currentTermCheck: "+this.noCurrentTermCheck);
-        console.log("advisorContactIdCheck: "+this.advisorContactIdCheck);
-        console.log("noAdvisorContactIdCheck: "+this.noAdvisorContactIdCheck);
-    }
-
 }
