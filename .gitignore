@@ -51,3 +51,8 @@ $RECYCLE.BIN/
 target/
 .idea
 *.iml
+
+.localdev/
+/.illuminatedCloud/
+**/tsconfig*.json
+**/*.tsbuildinfo
