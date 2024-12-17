@@ -282,6 +282,7 @@
                         <apex:selectList id="passclassconcerns" value="{!tommieCaresCase.Can_this_student_pass_course__c}" required="true" multiselect="false">
                             <apex:selectOption itemValue="Yes"/>
                             <apex:selectOption itemValue="No"/>
+                            <apex:selectOption itemValue="Maybe"/>
                         </apex:selectList>
                     </apex:outputPanel>
 
