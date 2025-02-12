@@ -290,7 +290,7 @@ public with sharing class TommieCaresController {
             Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
 
             List<hed__Course_Enrollment__c> enrollmentStudents = [
-                    SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
+                    SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
                     FROM hed__Course_Enrollment__c
                     WHERE Current_Term_Course__c = TRUE
                     AND hed__Course_Offering__c = :courseOfferingId
@@ -316,7 +316,7 @@ public with sharing class TommieCaresController {
             studentList.add(new SelectOption('', 'Select...'));
             Id studentRecordId = Schema.SObjectType.hed__Course_Enrollment__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
             List<hed__Course_Enrollment__c> enrollmentStudents = [
-                    SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
+                    SELECT hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c, hed__Contact__r.Advisor__r.Email, Credit_Hours__c, Id
                     FROM hed__Course_Enrollment__c
                     WHERE Current_Term_Course__c = TRUE
                     AND hed__Course_Offering__c = :courseOfferingId
@@ -331,7 +331,7 @@ public with sharing class TommieCaresController {
 
             Map<Id, String> uniqueStudents = new Map<Id, String>();
             for (hed__Course_Enrollment__c student : enrollmentStudents) {
-                uniqueStudents.put(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c);
+                uniqueStudents.put(student.hed__Contact__r.Id, student.hed__Contact__r.Last_Name_First_Name__c+' ('+student.hed__Contact__r.hed__UniversityEmail__c+')');
             }
 
             for (Id key : uniqueStudents.keySet()) {

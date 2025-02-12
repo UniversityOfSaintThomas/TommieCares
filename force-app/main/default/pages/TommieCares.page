@@ -156,7 +156,7 @@
                     </apex:outputPanel>
 
                     <apex:outputPanel layout="block" id="singleStudent" rendered="{!!ISBLANK(singleStudent.hed__Contact__c)}" styleClass="slds-form-element">
-                        <p class="slds-text-body_regular slds-m-bottom_small"><strong>Student:</strong> {!singleStudent.hed__Contact__r.Last_Name_First_Name__c} ({!studentId})</p>
+                        <p class="slds-text-body_regular slds-m-bottom_small"><strong>Student:</strong> {!singleStudent.hed__Contact__r.Last_Name_First_Name__c} ({!singleStudent.hed__Contact__r.hed__UniversityEmail__c})</p>
                     </apex:outputPanel>
                     <apex:outputPanel layout="block" id="singleCourse" rendered="{!!ISBLANK(singleCourse.Id)}" styleClass="slds-m-bottom_large slds-form-element">
                         <p class="slds-text-body_regular slds-m-bottom_small"><strong>Course:</strong> {!singleCourse.Name} - {!singleCourse.hed__Section_ID__c} ({!singleCourse.Course_Title__c })</p>

@@ -1,0 +1,37 @@
+<!--
+ - Created by nguy0092 on 2/11/2025.
+ -->
+
+<apex:page id="TommieCaresNonFacultyLwc" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" cache="false" docType="html-5.0">
+    <apex:includeLightning/>
+
+    <apex:composition template="UndergradStThomas2023">
+        <apex:define name="metaPageTitle">Tommie Cares Non Faculty LWC</apex:define>
+
+        <apex:define name="body">
+            <div id="tommieCaresNonFacultyLwc"></div>
+        </apex:define>
+
+        <!--    <script type="text/javascript" src="https://uofstthomasmn&#45;&#45;edastaging.sandbox.my.salesforce.com/lightning/lightning.out.js"></script>-->
+        <apex:define name="scriptsHead">
+            <script type="text/javascript">
+
+                const paramUrl = window.location.href;
+
+                $Lightning.use("c:TommieCaresNonFacultyLwcWrapper",
+                    function () {
+                        $Lightning.createComponent(
+                            "c:tommieCaresNonFacultyLwc",
+                            {},
+                            "tommieCaresNonFacultyLwc",
+                            function (cmp) {
+                                console.log("LWC Component Created.");
+                            }
+                        );
+                    },
+                    // 'https://uofstthomasmn--edastaging.sandbox.my.site.com/Admissions'
+                );
+            </script>
+        </apex:define>
+    </apex:composition>
+</apex:page>

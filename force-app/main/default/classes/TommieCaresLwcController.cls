@@ -107,7 +107,7 @@ public without sharing class TommieCaresLwcController {
 
         String studentRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
 
-        String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.University_Banner_ID__c\n' +
+        String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c, hed__Contact__r.University_Banner_ID__c\n' +
                 ' FROM hed__Course_Enrollment__c\n' +
                 ' WHERE Current_Term_Course__c = TRUE\n' +
                 ' AND hed__Course_Offering__c = :courseId\n' +
@@ -135,7 +135,7 @@ public without sharing class TommieCaresLwcController {
 
         for (hed__Course_Enrollment__c s : students) {
 
-            Map<String, String> studentValueLabel = new Map<String, String>{'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.University_Banner_ID__c+')', 'value' => s.hed__Contact__r.Id};
+            Map<String, String> studentValueLabel = new Map<String, String>{'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.hed__UniversityEmail__c+')', 'value' => s.hed__Contact__r.Id};
             studentMapList.add(studentValueLabel);
         }
 

@@ -1,0 +1,29 @@
+<!--
+ - Created by nguy0092 on 2/7/2025.
+ -->
+
+<!-- Tommie Cares Non Faculty Lwc -->
+<template>
+    <lightning-card>
+
+        <lightning-record-picker
+                label="Search Students"
+                placeholder="Enter Name or Banner ID"
+                object-api-name="Contact"
+                filter={filter}
+                matching-info={matchingInfo}
+                display-info={displayInfo}
+                onchange={showId}>
+        </lightning-record-picker>
+
+        <div>
+            Course Listings:
+            <template for:each={courseListInfo} for:item="course">
+                <p key={course.Id}>
+                    {course.Course_Name__c}
+                </p>
+            </template>
+        </div>
+
+    </lightning-card>
+</template>
