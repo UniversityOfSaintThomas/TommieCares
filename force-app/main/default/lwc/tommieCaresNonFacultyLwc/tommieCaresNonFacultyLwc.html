@@ -4,8 +4,56 @@
 
 <!-- Tommie Cares Non Faculty Lwc -->
 <template>
+    <template lwc:if={caseSubmittedErrorCheck}>
+        <div class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error"
+                                alternative-text="submit case error"
+                                title="submit case error"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body notification_text">
+                <p class="slds-text-body_regular">There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={caseSubmittedCheck}>
+        <div class="slds-media slds-theme_success slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:success"
+                                alternative-text="submit success"
+                                title="submit success"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body notification_text">
+                <p class="slds-text-body_regular">Thank you for your submission, and for all you do both in the classroom and as an advisor.
+                    You have a tremendous impact on each student’s experience.</p>
+                <p class="slds-text-body_regular slds-m-top_xx-small"><i>You can submit another below, or close this
+                    window if you are done.</i></p>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={noAdvisorContactIdCheck}>
+        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error"
+                                alternative-text="submit case error"
+                                title="submit case error"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body notification_text">
+                <p class="slds-text-body_regular">No Advisor Information Found. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
 
-    <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={advisorContactInfo}>
+    <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={advisorContactIdCheck}>
         <div class="advisor_info">
             <p class="slds-text-body_regular slds-m-bottom_small">Your Information: {advisorContactInfo.Last_Name_First_Name__c} ({advisorContactInfo.Email})</p>
         </div>
@@ -16,9 +64,8 @@
                 individuals in order to provide additional support. All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                 <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
         </div>
-
         <div class="slds-size_1-of-2">
-            <c-reusable-lookup label="Select Student"
+            <c-reusable-lookup label="Select a Student"
                                selected-icon-name="standard:contact"
                                object-label=""
                                object-api-name="Contact"
@@ -31,7 +78,7 @@
             ></c-reusable-lookup>
         </div>
 
-        <button type=button onclick={clickMeValue} class="slds-m-vertical_medium">Show Form Values</button>
+        <button type=button onclick={clickMeValue} class="slds-m-top_medium">Show Form Values</button>
 <!--        <div>-->
 <!--            Student Information Check:-->
 <!--            <template lwc:if={studentContactInfo}>-->
@@ -185,7 +232,23 @@
                 </div>
             </div>
         </template>
-
+        <div class="slds-m-vertical_x-large" lwc:if={caresSelectionCheck}>
+            <lightning-button variant="success"
+                              type="button"
+                              label="SUBMIT"
+                              disabled={submitDisable}
+                              onclick={submitCase}
+                              class="submit_button"
+                              disable-animation>
+            </lightning-button>
+        </div>
+        <div class="slds-m-vertical_medium footer_info">
+            <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto: retention@stthomas.edu">retention@stthomas.edu</a></p>
+            <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.</p>
+        </div>
     </form>
+    <template lwc:if={submitCaseSpinner}>
+        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+    </template>
 
 </template>

@@ -16,13 +16,13 @@
         <apex:define name="scriptsHead">
             <script type="text/javascript">
 
-                // const paramUrl = window.location.href;
+                const paramUrl = window.location.href;
 
                 $Lightning.use("c:TommieCaresNonFacultyLwcWrapper",
                     function () {
                         $Lightning.createComponent(
                             "c:tommieCaresNonFacultyLwc",
-                            {},
+                            {paramBId: "", paramUrl: paramUrl},
                             "tommieCaresNonFacultyLwc",
                             function (cmp) {
                                 console.log("LWC Component Created.");

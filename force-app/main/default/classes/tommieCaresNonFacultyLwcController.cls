@@ -29,9 +29,10 @@ public without sharing class tommieCaresNonFacultyLwcController {
     public static Contact advisorInformation(String advisorBannerId) {
 
         Contact advisorContact = new Contact();
+        List<Contact> advisorContactList = new List<Contact>();
 
         if (String.isNotBlank(advisorBannerId)) {
-            advisorContact = [
+            advisorContactList = [
                     SELECT Id,
                             Name,
                             Email,
@@ -40,7 +41,12 @@ public without sharing class tommieCaresNonFacultyLwcController {
                             University_Banner_ID__c
                     FROM Contact
                     WHERE University_Banner_ID__c = :advisorBannerId
+                    AND St_Thomas_Connection__c INCLUDES ('Faculty', 'Staff')
             ];
+        }
+
+        if (advisorContactList.size() > 0) {
+            advisorContact = advisorContactList[0];
         }
 
         return advisorContact;
