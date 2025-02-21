@@ -1,3 +1,81 @@
 /**
  * Created by nguy0092 on 2/7/2025.
  */
+.slds-theme_success {
+    background: #672D85 !important;
+}
+
+.notification_text p {
+    font-size: 1rem !important;
+    color: white;
+}
+
+abbr.slds-required {
+    font-weight: bold;
+}
+
+.advisor_info p {
+    font-size: 1rem !important;
+    font-weight: bold;
+    color: rebeccapurple;
+}
+
+.footer_info p {
+    font-size: 1rem !important;
+}
+
+.additional_info p {
+    font-size: 1rem !important;
+    font-weight: bold;
+}
+
+.additional_info p.no_bold_text {
+    font-weight: normal !important;
+}
+
+.picklist_checkbox_options {
+    display: inline-block;
+    position: relative;
+    float: left;
+    border: solid 1px rebeccapurple;
+}
+
+.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
+    font-size: 1rem !important;
+    font-weight: normal;
+    color: rebeccapurple;
+}
+
+.textarea_sublabel {
+    font-size: 1rem !important;
+    color: black;
+}
+
+.slds-form-element .picklist_checkbox_text {
+    font-size: 1rem !important;
+    text-transform: capitalize;
+    color: black;
+}
+
+.picklist_checkbox_check {
+    box-shadow: none;
+}
+
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {
+    background-color: rebeccapurple;
+    border: none;
+    content: none;
+    box-shadow: none;
+}
+
+lightning-button.submit_button {
+    --slds-c-button-success-text-color: #fff;
+    --slds-c-button-success-color-background: #510c76;
+    --slds-c-button-success-color-border: #510c76;
+    --slds-c-button-success-color-background-hover: #8348ad;
+    --slds-c-button-success-color-background-active: #8348ad;
+    --slds-c-button-success-radius-border: 0px;
+    font-size: 1rem !important;
+    font-weight: bold;
+}

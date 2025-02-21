@@ -5,6 +5,49 @@
 public without sharing class tommieCaresNonFacultyLwcController {
 
     @AuraEnabled(Cacheable=true)
+    public static Contact studentInformation(String studentContactId) {
+
+        Contact studentContact = new Contact();
+
+        if (String.isNotBlank(studentContactId)) {
+            studentContact = [
+                    SELECT Id,
+                            Name,
+                            Last_Name_First_Name__c,
+                            hed__UniversityEmail__c,
+                            University_Banner_ID__c,
+                            St_Thomas_Connection__c
+                    FROM Contact
+                    WHERE Id = :studentContactId
+            ];
+        }
+
+        return studentContact;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static Contact advisorInformation(String advisorBannerId) {
+
+        Contact advisorContact = new Contact();
+
+        if (String.isNotBlank(advisorBannerId)) {
+            advisorContact = [
+                    SELECT Id,
+                            Name,
+                            Email,
+                            Last_Name_First_Name__c,
+                            hed__UniversityEmail__c,
+                            University_Banner_ID__c
+                    FROM Contact
+                    WHERE University_Banner_ID__c = :advisorBannerId
+            ];
+        }
+
+        return advisorContact;
+    }
+
+
+    @AuraEnabled(Cacheable=true)
     public static List<hed__Course_Enrollment__c> studentCourseList(String studentContactId) {
 
 //        List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
