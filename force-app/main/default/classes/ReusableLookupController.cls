@@ -29,9 +29,9 @@ public with sharing class ReusableLookupController {
                                 oField = oField.replaceAll('\\s+', '');
                                 DescribeFieldResult fieldDescribe = fieldsMap.get(oField).getDescribe();
                                 if (fieldDescribe.isAccessible()) {
-                                    if (fieldDescribe.getType() == Schema.DisplayType.PICKLIST) {
+                                    if (fieldDescribe.getType().name() == 'PICKLIST') {
                                         sanitizedOtherPickListFields.add(oField);
-                                    } else if (fieldDescribe.getType() == Schema.DisplayType.MULTIPICKLIST) {
+                                    } else if (fieldDescribe.getType().name() == 'MULTIPICKLIST') {
                                         sanitizedOtherMultiPickListFields.add(oField);
                                     } else {
                                         sanitizedOtherFields.add(oField);
@@ -44,7 +44,7 @@ public with sharing class ReusableLookupController {
                             sanitizedAllOtherFields.addAll(sanitizedOtherMultiPickListFields);
 
                             if (sanitizedAllOtherFields.size() > 0) {
-                                fieldsToQuery = fieldsToQuery + ', ' + String.join(sanitizedAllOtherFields, ',');
+                                fieldsToQuery = fieldsToQuery + ', ' + String.join(sanitizedAllOtherFields, ', ');
                             }
                         }
                     } catch (Exception e) {
@@ -57,7 +57,19 @@ public with sharing class ReusableLookupController {
                         String recordTypeName = inputWrapper.recordTypeName.trim().escapeHtml4();
                         String type = inputWrapper.type.trim().escapeHtml4();
                         String query = fieldsToQuery + ' FROM ' + inputWrapper.objectApiName;
-                        String filterCriteria = inputWrapper.fieldApiName + ' LIKE :searchLikeString ';
+                        String filterCriteria = '';
+
+                        switch on fieldsMap.get(inputWrapper.fieldApiName).getDescribe().getType().name() {
+                            when 'PICKLIST' {
+                                filterCriteria = inputWrapper.fieldApiName + ' = :searchString ';
+                            }
+                            when 'MULTIPICKLIST' {
+                                filterCriteria = inputWrapper.fieldApiName + ' INCLUDES (:searchString) ';
+                            }
+                            when else {
+                                filterCriteria = inputWrapper.fieldApiName + ' LIKE :searchLikeString ';
+                            }
+                        }
 
                         for (String f : sanitizedOtherFields) {
                             filterCriteria += ' OR ' + f + ' LIKE :searchLikeString ';
@@ -75,9 +87,9 @@ public with sharing class ReusableLookupController {
                             query += ' WHERE Id = : inputWrapper.selectedRecordId ';
                         } else if (String.isNotBlank(inputWrapper.parentFieldApiName) && String.isNotBlank(inputWrapper.parentRecordId)) {
                             query += ' WHERE ' + inputWrapper.parentFieldApiName + ' = \'' + inputWrapper.parentRecordId + '\'';
-                            query += ' AND ' + filterCriteria;
+                            query += ' AND (' + filterCriteria + ')';
                         } else {
-                            query += ' WHERE ' + filterCriteria;
+                            query += ' WHERE (' + filterCriteria + ')';
                         }
 
                         if (String.isNotBlank(recordTypeName)) {
@@ -87,6 +99,15 @@ public with sharing class ReusableLookupController {
                         if (String.isNotBlank(type)) {
                             query += ' AND Type = :type';
                         }
+
+                        if (String.isNotBlank(inputWrapper.andCriteria)) {
+                            query += ' '+inputWrapper.andCriteria.trim();
+                        }
+
+                        if (String.isNotBlank(inputWrapper.orderByCriteria)) {
+                            query += ' '+inputWrapper.orderByCriteria.trim();
+                        }
+
                         query += ' LIMIT 50';
                         System.debug(query);
 
@@ -132,5 +153,7 @@ public with sharing class ReusableLookupController {
         @AuraEnabled public String parentFieldApiName { get; set; }
         @AuraEnabled public String recordTypeName { get; set; }
         @AuraEnabled public String type { get; set; }
+        @AuraEnabled public String andCriteria { get; set; }
+        @AuraEnabled public String orderByCriteria { get; set; }
     }
 }

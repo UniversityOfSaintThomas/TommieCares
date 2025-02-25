@@ -26,6 +26,8 @@ export default class ReusableLookup extends LightningElement {
     @api parentFieldApiName;
     @api recordTypeName;
     @api type;
+    @api andCriteria = '';
+    @api orderByCriteria = '';
     @api placeholder;
 
     @api
@@ -52,7 +54,9 @@ export default class ReusableLookup extends LightningElement {
             parentRecordId: this.parentRecordId,
             parentFieldApiName: this.parentFieldApiName,
             recordTypeName: this.recordTypeName,
-            type: this.type
+            type: this.type,
+            andCriteria: this.andCriteria,
+            orderByCriteria: this.orderByCriteria
         };
     }
 
