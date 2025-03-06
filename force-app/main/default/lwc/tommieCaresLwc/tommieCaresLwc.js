@@ -22,11 +22,23 @@ export default class TommieCaresLwc extends LightningElement {
     @api paramUrl = "";
 
     coursesListOptions = [];
-    studentsListOptions = [];
-    tommieCaresOptions = [];
+    studentsList = [];
+    @track studentsListOptions = [];
+    tommieCaresOptionsAll = [];
+    @track tommieCaresOptions = [];
     tommieHigh5Options = [];
     attendanceOptions = [];
     academicOptions = [];
+
+    tommieCaresGraduateExclusions = [
+        "Behavior concerns",
+        "Financial concerns",
+        "Mental health concerns",
+        "Relationship violence/stalking",
+        "Sense of belonging",
+        "Other",
+    ];
+
     passCourseOptions = [
         {label: "", value: ""},
         {label: "Yes", value: "Yes"},
@@ -167,13 +179,22 @@ export default class TommieCaresLwc extends LightningElement {
 
     @wire(studentCourseList, {studentBannerId: "$paramSBid", courseId: "$courseSelection"})
     studentCourseListWire({error, data}) {
+        let listOptions = [];
+
         if (data) {
-            this.studentsListOptions = JSON.parse(JSON.stringify(data));
+            this.studentsList = JSON.parse(JSON.stringify(data));
+
+            this.studentsList.forEach(s => {
+                listOptions.push({label: s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.hed__UniversityEmail__c+')', value: s.hed__Contact__r.Id});
+            })
+
+            this.studentsListOptions = listOptions;
 
             if (this.studentsListOptions.length === 1) {
                 this.formSubmitSelections.StudentContactId = this.studentsListOptions[0].value;
+                this.studentTypeCheck(this.formSubmitSelections.StudentContactId);
             } else {
-                this.studentsListOptions.unshift({value: "", label: "Select Student"});
+                this.studentsListOptions.unshift({label: "Select Student", value: ""});
                 this.formSubmitSelections.StudentContactId = "";
             }
         }
@@ -186,7 +207,7 @@ export default class TommieCaresLwc extends LightningElement {
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
     pickListTommieCares({ error, data }) {
         if (data) {
-            this.tommieCaresOptions = JSON.parse(JSON.stringify(data.values));
+            this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
             console.log("tommieCaresPicklist Error: " + error);
         }
@@ -220,22 +241,44 @@ export default class TommieCaresLwc extends LightningElement {
     }
 
     singleSelect(event) {
-        switch (event.currentTarget.dataset.selecttype) {
 
+        switch (event.currentTarget.dataset.selecttype) {
             case "courseSelect":
                 this.resetForm();
                 this.courseSelection = event.detail.value;
-                refreshApex(this.studentsListOptions);
+                refreshApex(this.studentsList);
                 this.caseSubmittedCheck = false;
                 break;
             case "studentSelect":
                 this.resetForm();
                 this.formSubmitSelections.StudentContactId = event.detail.value;
+                this.studentTypeCheck(event.detail.value);
                 break;
             case "passCourseSelect":
                 this.formSubmitSelections.Pass_Course_Selection = event.detail.value;
                 this.passCourseRequired();
                 break;
+        }
+    }
+
+    studentTypeCheck(contactId) {
+        this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
+
+        let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
+        console.log("Selected Student: ", foundStudent);
+
+        function removeTommieCaresOptions(exclusionList, optionsList) {
+            for (const exclusion of exclusionList) {
+                const index = optionsList.findIndex(option => option.label === exclusion);
+
+                if (index !== -1) {
+                    optionsList.splice(index, 1);
+                }
+            }
+        }
+
+        if (foundStudent.hed__Contact__r.St_Thomas_Connection__c.toLowerCase().includes("graduate student")) {
+            removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
         }
     }
 

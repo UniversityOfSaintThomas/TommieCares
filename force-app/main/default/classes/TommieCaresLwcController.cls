@@ -91,7 +91,8 @@ public without sharing class TommieCaresLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
+//    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
+    public static List<hed__Course_Enrollment__c> studentCourseList(String studentBannerId, String courseId) {
 
         List<Map<String, String>> studentMapList = new List<Map<String, String>>();
         List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
@@ -107,7 +108,7 @@ public without sharing class TommieCaresLwcController {
 
         String studentRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
 
-        String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c, hed__Contact__r.University_Banner_ID__c\n' +
+        String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c, hed__Contact__r.University_Banner_ID__c, hed__Contact__r.St_Thomas_Connection__c\n' +
                 ' FROM hed__Course_Enrollment__c\n' +
                 ' WHERE Current_Term_Course__c = TRUE\n' +
                 ' AND hed__Course_Offering__c = :courseId\n' +
@@ -133,13 +134,7 @@ public without sharing class TommieCaresLwcController {
             students = Database.query(allStudentQuery);
         }
 
-        for (hed__Course_Enrollment__c s : students) {
-
-            Map<String, String> studentValueLabel = new Map<String, String>{'label' => s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.hed__UniversityEmail__c+')', 'value' => s.hed__Contact__r.Id};
-            studentMapList.add(studentValueLabel);
-        }
-
-        return studentMapList;
+        return students;
     }
 
     @AuraEnabled(Cacheable=false)
@@ -200,10 +195,18 @@ public without sharing class TommieCaresLwcController {
 
         //Get All Relationship Information
         List<hed__Relationship__c> advisorContacts = [
-                SELECT hed__Contact__c, hed__Contact__r.Id, hed__Contact__r.Name, Name, hed__Type__c, hed__Status__c, hed__RelatedContact__r.Name, hed__Contact__r.Email
+                SELECT hed__Contact__c,
+                        hed__Contact__r.Id,
+                        hed__Contact__r.Name,
+                        hed__Contact__r.Email,
+                        Name, hed__Type__c,
+                        hed__Status__c,
+                        hed__RelatedContact__r.Id,
+                        hed__RelatedContact__r.Name,
+                        hed__RelatedContact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c IN :relationshipTypes
-                AND hed__RelatedContact__c = :tommieCaresCase.ContactId
+                AND hed__Contact__c = :tommieCaresCase.ContactId
                 AND hed__Status__c = 'Current'
                 ORDER BY CreatedDate DESC NULLS LAST
         ];
@@ -258,9 +261,9 @@ public without sharing class TommieCaresLwcController {
         if (advisorContactsMap.size() > 0) {
             if (advisorContactsMap.containsKey(relationshipType)) {
                 if (EmailOrId == 'Id') {
-                    advisorInfo = advisorContactsMap.get(relationshipType).hed__Contact__r.Id;
+                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Id;
                 } else if (EmailOrId == 'Email') {
-                    advisorInfo = advisorContactsMap.get(relationshipType).hed__Contact__r.Email;
+                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Email;
                 }
             }
         }

@@ -1,6 +1,12 @@
 /**
  * Created by nguy0092 on 2/7/2025.
  */
+
+
+.slds-input {
+    padding-left: 100px !important;
+}
+
 .slds-theme_success {
     background: #672D85 !important;
 }
@@ -40,11 +46,11 @@ abbr.slds-required {
     border: solid 1px rebeccapurple;
 }
 
-.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
-    font-size: 1rem !important;
-    font-weight: normal;
-    color: rebeccapurple;
-}
+/*.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {*/
+/*    font-size: 1rem !important;*/
+/*    font-weight: normal;*/
+/*    color: rebeccapurple;*/
+/*}*/
 
 .textarea_sublabel {
     font-size: 1rem !important;

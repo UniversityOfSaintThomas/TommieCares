@@ -4,14 +4,13 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
-import studentCourseList from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentCourseList";
-import studentInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentInformation";
+// import studentCourseList from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentCourseList";
+// import studentInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentInformation";
 import advisorInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.advisorInformation";
 
 import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
 import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
-// import saveCase from "@salesforce/apex/TommieCaresLwcController.saveCase";
-
+import saveCase from "@salesforce/apex/tommieCaresNonFacultyLwcController.saveCase";
 
 export default class TommieCaresNonFacultyLwc extends LightningElement {
 
@@ -165,8 +164,9 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         }
     }
 
-    selectedStudentContactId(event) {
+    selectStudentContactId(event) {
         this.formSubmitSelections.StudentContactId = event.detail.id;
+        this.caseSubmittedCheck = false;
 
         if (!(!!this.formSubmitSelections.StudentContactId)) {
             this.resetForm();
@@ -174,9 +174,9 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         console.log("What is Student Contact Id: "+event.detail.id);
     }
 
-    clickMeValue(event) {
-        console.log("formSubmitSelections: "+JSON.stringify(this.formSubmitSelections));
-    }
+    // clickMeValue(event) {
+    //     console.log("formSubmitSelections: "+JSON.stringify(this.formSubmitSelections));
+    // }
 
     reasonsCheckbox(event) {
         switch (event.currentTarget.dataset.checkboxtype) {
