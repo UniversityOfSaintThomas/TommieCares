@@ -80,3 +80,7 @@ lightning-button.submit_button {
     font-size: 1rem !important;
     font-weight: bold;
 }
+
+.advisor_info_text_hide {
+    display: none;
+}

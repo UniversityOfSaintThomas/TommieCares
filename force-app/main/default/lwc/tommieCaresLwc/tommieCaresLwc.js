@@ -459,4 +459,24 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
+    @api fromCommunityOfConcernLwc = "";
+    // renderedCommunityOfConcernLwc = false;
+    renderedCount = 0;
+
+    renderedCallback() {
+        if (this.fromCommunityOfConcernLwc === "render") {
+            const advisorInfoText = this.template.querySelector('div.advisor_info');
+            if (advisorInfoText) {
+                // advisorInfo.classList.add("advisor_info_text_hide");
+                console.log("what is div 20: " + advisorInfoText);
+                advisorInfoText.classList.add("advisor_info_text_hide");
+            } else {
+                console.log("BOOO! Nothing");
+            }
+            // this.renderedCommunityOfConcernLwc = true;
+        }
+        this.renderedCount++;
+        console.log("RenderedCount: "+this.renderedCount);
+    }
+
 }
