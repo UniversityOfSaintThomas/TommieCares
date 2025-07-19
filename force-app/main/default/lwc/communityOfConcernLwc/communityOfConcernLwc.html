@@ -4,4 +4,53 @@
 
 <!-- Community Of Concern Lwc -->
 <template>
+    <p class="slds-m-bottom_medium slds-text-body_regular heading_text">Tell Someone</p>
+    <div class="regular_body_text">
+        <p class="slds-text-body_regular slds-m-bottom_small"><span class="bold_text">Tell Someone</span> is a St. Thomas tool that
+            allows you to report concerns about an undergraduate or graduate student or employee who may be
+            struggling with issues related to health, well-being, or threats of harm, or who may be navigating a
+            situation where they suspect discrimination, bias, or harassment are present.
+            The goal of <span class="bold_text">Tell Someone</span> is to help students and employees who may need
+            support and to enhance the well-being of our University community.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small bold_text">Online reports are reviewed during regular business hours. If
+            you believe someone is at risk of immediate harm, call 911 or the Public Safety emergency line at
+            651-962-5555.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small">The University of St. Thomas is committed to a culture of care and respect
+            for one another.
+            Because speaking up, advocating, and supporting others are foundational values at St. Thomas, we
+            encourage you to <span class="bold_text">Tell Someone</span> when you witness concerning behavior.
+            Each report is individually reviewed by designated staff and a team works to connect people of concern
+            to campus partners who can provide mental health support, basic needs, and a multitude of other
+            resources.
+            <span class="bold_text">Tell Someone</span> also triages and refers any threats of violence to the
+            appropriate campus authority.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small"><span class="bold_text">Tell Someone</span> is coordinated by the Dean of
+            Students Office.
+            However, if the <span class="bold_text">Tell Someone</span> Report involves faculty or staff and no
+            students are involved, the report is automatically sent to Human Resources.
+            Staff who receive reports are trained to identify concerns, strategize pathways to resolution, and offer
+            connection to university resources.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small bold_text">Information on reporting party:</p>
+        <p class="slds-text-body_regular slds-m-bottom_small">Student records, including incident reports, are protected by FERPA
+            (Family Educational Rights and Privacy Act), therefore any information regarding the outcome of this
+            report will not be shared with you without the direct written consent of the student(s) involved.</p>
+        <p class="slds-text-body_regular slds-m-bottom_small">Reports about faculty/staff are private [add language on confidentiality
+            and privacy].</p>
+        <div class="slds-form-element slds-m-vertical_large">
+            <label class="slds-form-element__label picklist_dropdown_label" for="concerned-selection-id">
+                <abbr class="slds-required" title="Required">*</abbr>What are you concerned about?</label>
+            <div class="slds-form-element__control">
+                <lightning-combobox id="concerned-selection-id"
+                                    label=""
+                                    value={concernedValue}
+                                    placeholder="Choose an item"
+                                    options={concernedOptions}
+                                    data-selecttype="concernedSelect"
+                                    onchange={singleSelect}
+                                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
+        </div>
+    </div>
+    <c-tommie-cares-lwc lwc:if={tommieAlertsShow} param-url={paramUrl} from-community-of-concern-lwc="render"></c-tommie-cares-lwc>
 </template>

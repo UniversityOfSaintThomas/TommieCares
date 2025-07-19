@@ -4,4 +4,9 @@
     <description>Community Of Concern Lwc</description>
     <isExposed>true</isExposed>
     <masterLabel>Community Of Concern Lwc</masterLabel>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
 </LightningComponentBundle>
