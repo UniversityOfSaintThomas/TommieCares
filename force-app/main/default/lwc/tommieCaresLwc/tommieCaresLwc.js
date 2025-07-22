@@ -144,6 +144,19 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
+    @api communityOfConcernLwc = ""; //used as a variable for child component in Community of Concern LWC
+    renderedCommunityOfConcernLwc = false;
+    renderedCallback() {
+        //hiding Advisor information when displaying on Community of Concern LWC
+        if (this.communityOfConcernLwc === "render" && !this.renderedCommunityOfConcernLwc) {
+            const advisorInfoText = this.template.querySelector('div.advisor_info');
+            if (advisorInfoText) {
+                advisorInfoText.classList.add("advisor_info_text_hide");
+                this.renderedCommunityOfConcernLwc = true;
+            }
+        }
+    }
+
     @wire(currentTermAdvisor, {urlBid: "$paramBId"})
     termAdvisorWire({error, data}) {
         if (data) {
@@ -277,7 +290,7 @@ export default class TommieCaresLwc extends LightningElement {
             }
         }
 
-        if (foundStudent.hed__Contact__r.St_Thomas_Connection__c.toLowerCase().includes("graduate student")) {
+        if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
             removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
         }
     }
@@ -457,26 +470,6 @@ export default class TommieCaresLwc extends LightningElement {
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
         }
-    }
-
-    @api fromCommunityOfConcernLwc = "";
-    // renderedCommunityOfConcernLwc = false;
-    renderedCount = 0;
-
-    renderedCallback() {
-        if (this.fromCommunityOfConcernLwc === "render") {
-            const advisorInfoText = this.template.querySelector('div.advisor_info');
-            if (advisorInfoText) {
-                // advisorInfo.classList.add("advisor_info_text_hide");
-                console.log("what is div 20: " + advisorInfoText);
-                advisorInfoText.classList.add("advisor_info_text_hide");
-            } else {
-                console.log("BOOO! Nothing");
-            }
-            // this.renderedCommunityOfConcernLwc = true;
-        }
-        this.renderedCount++;
-        console.log("RenderedCount: "+this.renderedCount);
     }
 
 }

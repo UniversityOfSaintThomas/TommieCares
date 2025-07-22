@@ -6,9 +6,10 @@
     font-size: 1rem !important;
 }
 
-.bold_text {
-    font-weight: bold;
-}
+/*.bold_text {*/
+/*    font-weight: bold;*/
+/*}*/
+
 
 .heading_text {
     font-size: 1.50rem !important;
@@ -16,9 +17,16 @@
     color: rebeccapurple !important;
 }
 
-.advisor_info_text_hide {
-    display: none;
+.input_text_label {
+    padding: 10px 0 0 0;
+    /*font-size: 1rem !important;*/
+    /*font-weight: normal;*/
+    /*color: rebeccapurple;*/
 }
+
+/*.advisor_info_text_hide {*/
+/*    display: none;*/
+/*}*/
 
 /*.slds-input {*/
 /*    padding-left: 100px !important;*/
@@ -63,11 +71,11 @@
 /*    border: solid 1px rebeccapurple;*/
 /*}*/
 
-.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
-    font-size: 1rem !important;
-    font-weight: normal;
-    color: rebeccapurple;
-}
+/*.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {*/
+/*    font-size: 1rem !important;*/
+/*    font-weight: normal;*/
+/*    color: rebeccapurple;*/
+/*}*/
 
 /*.textarea_sublabel {*/
 /*    font-size: 1rem !important;*/
