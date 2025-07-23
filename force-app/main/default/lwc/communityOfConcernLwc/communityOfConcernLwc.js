@@ -12,17 +12,19 @@ export default class CommunityOfConcernLwc extends LightningElement {
     // @api paramSBid = "";
     // @api paramCrn = "";
     @api paramUrl = "";
-    // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sbid=&crn=";
+    // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sfid=003f200002qXsc4AAC&sbid=&crn=";
 
     iAmValue = "";
     concernedWhatValue = "";
     concernedWhoValue;
 
+    searchParamsUrl;
+    paramsString;
     connectedCallback() {
-        let searchParamsUrl = new URL(this.paramUrl);
-        let paramsString = new URLSearchParams(searchParamsUrl.searchParams);
+        this.searchParamsUrl = new URL(this.paramUrl);
+        this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
 
-        for (let keyValue of paramsString.entries()) {
+        for (let keyValue of this.paramsString.entries()) {
             switch (keyValue[0]) {
                 case "sfid":
                     if (!this.paramsfId) {
@@ -83,13 +85,13 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return !!this.iAmValue.match(matchValue);
     }
     get showConcernedWhoSelect() {
-        return !!((this.reporterInfo.FirstName && !!this.reporterInfo.LastName && !!this.reporterInfo.Email) || this.iAmValue === "anon");
+        return !!(!!this.iAmValue && ((!!this.reporterInfo.FirstName && !!this.reporterInfo.LastName && !!this.reporterInfo.Email) || this.iAmValue === "anon"));
     }
     get showConcernedWhoInfo() {
-        return !!this.concernedWhoValue;
+        return !!this.showConcernedWhoSelect && !!this.concernedWhoValue;
     }
     get showConcernedWhatSelect() {
-        return !!this.concernedWhoInfo.FirstName && !!this.concernedWhoInfo.LastName && !!this.concernedWhoInfo.Email;
+        return !!this.showConcernedWhoInfo && !!this.concernedWhoInfo.FirstName && !!this.concernedWhoInfo.LastName && !!this.concernedWhoInfo.Email;
     }
     get showTommieAlerts() {
         if (this.concernedWhatValue !== "") {
@@ -106,20 +108,57 @@ export default class CommunityOfConcernLwc extends LightningElement {
         Phone: "",
     }
 
-    singleSelect(event) {
+    singleSelectHandler(event) {
 
         switch (event.currentTarget.dataset.selecttype) {
-            case "iAmSelect":
+            case "iamselect":
                 this.iAmValue = event.detail.value;
                 break;
-            case "concernedWhatSelect":
+            case "concernedwhoselect":
+                this.concernedWhoValue = event.detail.value;
+                break;
+            case "concernedwhatwelect":
                 this.concernedWhatValue = event.detail.value;
                 break;
         }
     }
 
-    inputInfo(event) {
-        this.reporterInfo.Email = event.detail.value;
+    inputTextHandler(event) {
+        console.log("Am I being called and validity 5: "+event.target.checkValidity());
+        switch (event.currentTarget.dataset.inputgroup) {
+            case "reporterinfo":
+                switch (event.currentTarget.dataset.inputtype) {
+                    case "firstname":
+                        this.reporterInfo.FirstName = event.detail.value.trim();
+                        break;
+                    case "lastname":
+                        this.reporterInfo.LastName = event.detail.value.trim();
+                        break;
+                    case "email":
+                        this.reporterInfo.Email = event.target.checkValidity() ? event.detail.value.trim() : "";
+                        break;
+                    case "phone":
+                        this.reporterInfo.Phone = event.detail.value.trim();
+                        break;
+                }
+                break;
+            case "concernedwhoinfo":
+                switch (event.currentTarget.dataset.inputtype) {
+                    case "firstname":
+                        this.concernedWhoInfo.FirstName = event.detail.value.trim();
+                        break;
+                    case "lastname":
+                        this.concernedWhoInfo.LastName = event.detail.value.trim();
+                        break;
+                    case "email":
+                        this.concernedWhoInfo.Email = event.target.checkValidity() ? event.detail.value.trim() : "";
+                        break;
+                    case "phone":
+                        this.concernedWhoInfo.Phone = event.detail.value.trim();
+                        break;
+                }
+                break;
+        }
     }
 
     @track reporterInfo = {
@@ -138,11 +177,17 @@ export default class CommunityOfConcernLwc extends LightningElement {
               query 
               {
                 Contact ( where: { 
-                            or: [ 
-                                { Id: { eq: $salesforceId } }
-                                { University_Banner_ID__c: { eq: $bannerId } }
-                                ]
-                          },
+                                  or: [
+                                        {
+                                          Id: { eq: $salesforceId } 
+                                        },
+                                        { and: [ 
+                                                  { University_Banner_ID__c: { eq: $bannerId } } ,
+                                                  { University_Banner_ID__c: { ne: "" } }
+                                               ]
+                                        }
+                                      ]
+                                 },
                           upperBound: 1
                         ) 
                 {
@@ -153,6 +198,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
                       LastName {value}
                       St_Thomas_Connection__c {value}
                       hed__UniversityEmail__c {value}
+                      University_Banner_ID__c {value}
                     }
                   }
                 }
@@ -163,17 +209,26 @@ export default class CommunityOfConcernLwc extends LightningElement {
         variables: "$variables",
     })
     graphqlQueryResult({data, errors}) {
+        console.log("paramsUrl before 2: "+this.paramUrl);
         if (data) {
             const results = data.uiapi.query.Contact.edges.map((edge) => edge.node);
-            this.reporterInfo = {
-                    Id: results[0].Id.value,
+            if (results.length > 0) {
+                this.reporterInfo = {
+                    Id: results[0].Id,
                     FirstName: results[0].FirstName.value,
                     LastName: results[0].LastName.value,
                     StThomasConnection: results[0].St_Thomas_Connection__c.value,
-                    UniversityEmail: results[0].hed__UniversityEmail__c.value,
+                    Email: results[0].hed__UniversityEmail__c.value,
+                    BannerId: results[0].University_Banner_ID__c.value,
                 };
 
-            console.log("reporterContactInfo: "+JSON.stringify(this.reporterInfo));
+                this.searchParamsUrl.searchParams.set("bid", this.reporterInfo.BannerId);
+                this.searchParamsUrl.searchParams.set("sfid", this.reporterInfo.Id);
+                this.paramUrl = this.searchParamsUrl.toString();
+            }
+
+            console.log("reporterContactInfo 2: "+JSON.stringify(this.reporterInfo));
+            console.log("paramsUrl after 2: "+this.paramUrl);
         }
         this.errors = errors;
     }

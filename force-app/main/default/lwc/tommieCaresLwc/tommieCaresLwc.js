@@ -20,6 +20,7 @@ export default class TommieCaresLwc extends LightningElement {
     @api paramSBid = "";
     @api paramCrn = "";
     @api paramUrl = "";
+    searchParamsUrl;
 
     coursesListOptions = [];
     studentsList = [];
@@ -115,8 +116,8 @@ export default class TommieCaresLwc extends LightningElement {
     }
 
     connectedCallback() {
-        let searchParamsUrl = new URL(this.paramUrl);
-        let paramsString = new URLSearchParams(searchParamsUrl.searchParams);
+        this.searchParamsUrl = new URL(this.paramUrl);
+        let paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
 
         for (let keyValue of paramsString.entries()) {
 
@@ -442,14 +443,14 @@ export default class TommieCaresLwc extends LightningElement {
     }
 
     submittedUrl() {
-        let reloadUrl = new URL(this.paramUrl);
+        // let reloadUrl = new URL(this.paramUrl);
 
-        reloadUrl.searchParams.set("bid", this.paramBId);
-        reloadUrl.searchParams.set("sbid", "");
-        reloadUrl.searchParams.set("crn", "");
-        reloadUrl.searchParams.set("submitted", "true");
+        this.searchParamsUrl.searchParams.set("bid", this.paramBId);
+        this.searchParamsUrl.searchParams.set("sbid", "");
+        this.searchParamsUrl.searchParams.set("crn", "");
+        this.searchParamsUrl.searchParams.set("submitted", "true");
 
-        return reloadUrl;
+        return this.searchParamsUrl;
     }
 
     async submitCase() {

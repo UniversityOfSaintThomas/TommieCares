@@ -41,9 +41,9 @@
                                     value={iAmValue}
                                     placeholder="Choose an item"
                                     options={iAmOptions}
-                                    data-selecttype="iAmSelect"
-                                    onchange={singleSelect}
-                                    variant="label-hidden">
+                                    data-selecttype="iamselect"
+                                    variant="label-hidden"
+                                    onchange={singleSelectHandler}>
                 </lightning-combobox>
             </div>
         </div>
@@ -63,8 +63,11 @@
                                          type="text"
                                          label=""
                                          value={reporterInfo.FirstName}
+                                         data-inputgroup="reporterinfo"
+                                         data-inputtype="firstname"
                                          placeholder="First Name"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -78,8 +81,11 @@
                                          type="text"
                                          label="Last Name:"
                                          value={reporterInfo.LastName}
+                                         data-inputgroup="reporterinfo"
+                                         data-inputtype="lastname"
                                          placeholder="Last Name"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -93,24 +99,28 @@
                                          type="email"
                                          label="Email:"
                                          value={reporterInfo.Email}
+                                         data-inputgroup="reporterinfo"
+                                         data-inputtype="email"
                                          placeholder="Email"
                                          variant="label-hidden"
-                                         onchange={inputInfo}>
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
                 <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                     <div class="slds-col slds-size_2-of-12 input_text_label">
-                        <label class="slds-form-element__label" for="reporter-phone-id">
-                            <abbr class="slds-required" title="Required">*</abbr>Phone:</label>
+                        <label class="slds-form-element__label" for="reporter-phone-id">Phone:</label>
                     </div>
                     <div class="slds-form-element__control slds-col slds-size_5-of-12">
                         <lightning-input id="reporter-phone-id"
                                          type="text"
                                          label="Phone:"
                                          value={reporterInfo.Phone}
+                                         data-inputgroup="reporterinfo"
+                                         data-inputtype="phone"
                                          placeholder="Phone"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -129,9 +139,9 @@
                                         value={concernedWhoValue}
                                         placeholder="Choose an item"
                                         options={concernedWhoOptions}
-                                        data-selecttype="concernedWhoSelect"
-                                        onchange={singleSelect}
-                                        variant="label-hidden">
+                                        data-selecttype="concernedwhoselect"
+                                        variant="label-hidden"
+                                        onchange={singleSelectHandler}>
                     </lightning-combobox>
                 </div>
             </div>
@@ -148,8 +158,11 @@
                                          type="text"
                                          label=""
                                          value={concernedWhoInfo.FirstName}
+                                         data-inputgroup="concernedwhoinfo"
+                                         data-inputtype="firstname"
                                          placeholder="First Name"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -163,8 +176,11 @@
                                          type="text"
                                          label="Last Name:"
                                          value={concernedWhoInfo.LastName}
+                                         data-inputgroup="concernedwhoinfo"
+                                         data-inputtype="lastname"
                                          placeholder="Last Name"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -178,23 +194,28 @@
                                          type="email"
                                          label="Email:"
                                          value={concernedWhoInfo.Email}
+                                         data-inputgroup="concernedwhoinfo"
+                                         data-inputtype="email"
                                          placeholder="Email"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
                 <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                     <div class="slds-col slds-size_2-of-12 input_text_label">
-                        <label class="slds-form-element__label" for="concerned-who-phone-id">
-                            <abbr class="slds-required" title="Required">*</abbr>Phone:</label>
+                        <label class="slds-form-element__label" for="concerned-who-phone-id">Phone:</label>
                     </div>
                     <div class="slds-form-element__control slds-col slds-size_5-of-12">
                         <lightning-input id="concerned-who-phone-id"
                                          type="text"
                                          label="Phone:"
                                          value={concernedWhoInfo.Phone}
+                                         data-inputgroup="concernedwhoinfo"
+                                         data-inputtype="phone"
                                          placeholder="Phone"
-                                         variant="label-hidden">
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
                         </lightning-input>
                     </div>
                 </div>
@@ -209,9 +230,9 @@
                                     value={concernedWhatValue}
                                     placeholder="Choose an item"
                                     options={concernedWhatOptions}
-                                    data-selecttype="concernedWhatSelect"
-                                    onchange={singleSelect}
-                                    variant="label-hidden">
+                                    data-selecttype="concernedwhatwelect"
+                                    variant="label-hidden"
+                                    onchange={singleSelectHandler}>
                 </lightning-combobox>
             </div>
         </div>
