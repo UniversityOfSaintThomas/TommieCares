@@ -291,8 +291,10 @@ export default class TommieCaresLwc extends LightningElement {
             }
         }
 
-        if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
-            removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+        if (foundStudent) {
+            if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
+                removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+            }
         }
     }
 
