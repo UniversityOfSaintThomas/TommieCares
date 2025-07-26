@@ -53,7 +53,19 @@
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
-        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div lwc:if={communityOfConcernLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:warning"
+                                alternative-text="current term warning"
+                                title="current term warning"
+                                size="small"
+                                class="slds-align-middle"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <p class="slds-text-body_regular" style="font-size: 1rem">No faculty or student course information was found. Please select another option.</p>
+            </div>
+        </div>
+        <div lwc:else class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:error"
                                 alternative-text="submit case error"
@@ -68,7 +80,7 @@
         </div>
     </template>
     <form id="tommieCaresForm" data-form="tommieCaresForm" lwc:if={advisorContactIdCheck} >
-        <div class="advisor_info">
+        <div class={advisorInfoViewClass}>
             <p class="slds-text-body_regular slds-m-bottom_small">Your Information: {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
         </div>
         <div class="footer_info">

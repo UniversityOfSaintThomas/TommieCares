@@ -47,10 +47,10 @@
                 </lightning-combobox>
             </div>
         </div>
-        <div lwc:if={iAmAnonymousCheck} class="slds-m-bottom_small"><b><i>Reports can be made anonymously
+        <p lwc:if={iAmAnonymousCheck} class="slds-m-bottom_small"><i>Reports can be made anonymously
             via this form. If you choose to submit this form anonymously, please understand our ability to take action may be limited,
-            as we may need additional information and will not have a way to ask follow-up questions</i></b>
-        </div>
+            as we may need additional information and will not have a way to ask follow-up questions</i>
+        </p>
         <template lwc:if={showReporterInfo}>
             <div class="slds-m-bottom_large">
                 <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
@@ -230,12 +230,101 @@
                                     value={concernedWhatValue}
                                     placeholder="Choose an item"
                                     options={concernedWhatOptions}
-                                    data-selecttype="concernedwhatwelect"
+                                    data-selecttype="concernedwhatselect"
                                     variant="label-hidden"
                                     onchange={singleSelectHandler}>
                 </lightning-combobox>
             </div>
         </div>
     </div>
-    <c-tommie-cares-lwc lwc:if={showTommieAlerts} param-url={paramUrl} community-of-concern-lwc="render"></c-tommie-cares-lwc>
+    <c-tommie-cares-lwc lwc:if={showWhatTommieAlerts} param-url={paramUrl} community-of-concern-lwc="advisor_info_hide"></c-tommie-cares-lwc>
+    <div class="regular_body_text">
+        <template lwc:if={showWhatWellBeing.student}>
+            <p class="slds-m-bottom_small"><i>Concerns for students may include mental health, self-harm, substance
+                misuse, food insecurity, financial hardship, threatening behaviors, and much more. Reports are reviewed by
+                the Dean of Students in consultation with the Title IX Coordinator, Counseling and Psychological Services,
+                Residence Life, and other relevant campus partners.</i>
+            </p>
+            <p>
+                Who Student display this form: [need link to form]
+            </p>
+        </template>
+        <template lwc:if={showWhatWellBeing.nonStudent}>
+            <p class="slds-m-bottom_small"><i>Concerns for staff or faculty may include mental health, substance
+                misuse, concerning workplace behaviors, and more. Reports are reviewed by Human Resources in consultation
+                with Title IX and/or other campus partners when appropriate.</i>
+            </p>
+            <p>
+                Who Non Student display this form: [need link to form]
+            </p>
+        </template>
+        <template lwc:if={showWhatDiscrimination.text}>
+            <p class="slds-m-bottom_small"><i>This form should be used by anyone who believes they have witnessed or
+                been the target of an incident of discrimination, bias, or harassment based on a protected class (sex,
+                race, color, religion, national origin, ancestry, disability, age, sexual orientation, marital status,
+                military status, gender expression/identity, genetic information, pregnancy or any other protected
+                classes). These reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,
+                dependent on the status of the individual who caused harm.</i>
+            </p>
+            <p lwc:if={showWhatDiscrimination.anon}>
+                I am Anonymous display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatDiscrimination.facStaff}>
+                I am Faculty or Staff display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatDiscrimination.student}>
+                I am Student display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatDiscrimination.other}>
+                I am Other display this form: [need link to form]
+            </p>
+        </template>
+        <template lwc:if={showWhatMisconduct.text}>
+            <p class="slds-m-bottom_small"><i>Sexual misconduct, under our policy, includes sexual harassment, sexual
+                assault, domestic or dating violence, stalking, and sexual exploitation). The Title IX Coordinator
+                receives these reports and works to address incidents and connects individuals to resources and
+                reporting options with the goals of support, safety, and security in an effort to reduce harm.</i>
+            </p>
+            <p lwc:if={showWhatMisconduct.anon}>
+                I am Anonymous display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatMisconduct.facStaff}>
+                I am Faculty or Staff display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatMisconduct.student}>
+                I am Student display this form: [need link to form]
+            </p>
+            <p lwc:if={showWhatMisconduct.other}>
+                I am Other display this form: [need link to form]
+            </p>
+        </template>
+        <template lwc:if={showWhatOther}>
+            <div class="slds-m-bottom_small">
+                <div class="slds-form-element slds-m-bottom_x-small">
+                    <label class="slds-form-element__label" for="concerned-what-additional-info-id">
+                        <abbr class="slds-required" title="Required">*</abbr>Please provide additional information about your concern:</label>
+                    <div class="slds-form-element__control">
+                        <lightning-textarea id="concerned-what-additional-info-id"
+                                         label=""
+                                         value={concernedWhatAdditionalInfo}
+                                         data-inputgroup="concernedwhatinfo"
+                                         placeholder="Additional information"
+                                         variant="label-hidden"
+                                         onchange={inputTextHandler}>
+                        </lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-m-vertical_x-large">
+                <lightning-button variant="brand"
+                                  type="button"
+                                  label="SUBMIT"
+                                  disabled={submitDisable}
+                                  onclick={submitCase}
+                                  class="submit_button"
+                                  disable-animation>
+                </lightning-button>
+            </div>
+        </template>
+    </div>
 </template>

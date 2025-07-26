@@ -100,13 +100,14 @@
 /*    box-shadow: none;*/
 /*}*/
 
-/*lightning-button.submit_button {*/
-/*    --slds-c-button-success-text-color: #fff;*/
-/*    --slds-c-button-success-color-background: #510c76;*/
-/*    --slds-c-button-success-color-border: #510c76;*/
-/*    --slds-c-button-success-color-background-hover: #8348ad;*/
-/*    --slds-c-button-success-color-background-active: #8348ad;*/
-/*    --slds-c-button-success-radius-border: 0px;*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: bold;*/
-/*}*/
+lightning-button.submit_button {
+    /*--slds-c-button-success-text-color: #fff;*/
+    /*--slds-c-button-success-color-background: #510c76;*/
+    /*--slds-c-button-success-color-border: #510c76;*/
+    /*--slds-c-button-success-color-background-hover: #8348ad;*/
+    /*--slds-c-button-success-color-background-active: #8348ad;*/
+    /*--slds-c-button-success-radius-border: 0px;*/
+    font-size: 1rem !important;
+    font-weight: bold;
+}
+

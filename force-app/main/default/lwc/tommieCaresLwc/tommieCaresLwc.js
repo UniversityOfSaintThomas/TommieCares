@@ -20,17 +20,26 @@ export default class TommieCaresLwc extends LightningElement {
     @api paramSBid = "";
     @api paramCrn = "";
     @api paramUrl = "";
-    searchParamsUrl;
 
+    @api communityOfConcernLwc = ""; //used as a variable for child component in Community of Concern LWC
+    get advisorInfoViewClass() {
+        return "advisor_info "+this.communityOfConcernLwc; //hiding Advisor information when displaying on Community of Concern LWC
+    }
+    get communityOfConcernLwcNoAdvisor() {
+        return !!this.communityOfConcernLwc; //returns no faculty information was found when displaying on Community of Concern LWC
+    }
+
+    searchParamsUrl;
     coursesListOptions = [];
     studentsList = [];
+    courseSelection;
     @track studentsListOptions = [];
-    tommieCaresOptionsAll = [];
+    @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
-    tommieHigh5Options = [];
-    attendanceOptions = [];
-    academicOptions = [];
-
+    @track tommieHigh5Options = [];
+    @track attendanceOptions = [];
+    @track academicOptions = [];
+    @track termAdvisorData = {};
     tommieCaresGraduateExclusions = [
         "Behavior concerns",
         "Financial concerns",
@@ -39,22 +48,15 @@ export default class TommieCaresLwc extends LightningElement {
         "Sense of belonging",
         "Other",
     ];
-
     passCourseOptions = [
         {label: "", value: ""},
         {label: "Yes", value: "Yes"},
         {label: "No", value: "No"},
         {label: "Maybe", value: "Maybe"},
     ]
-
-    @track termAdvisorData = {};
-
-    courseSelection;
-
     get studentSelection() {
         return this.formSubmitSelections.StudentContactId;
     }
-
     @track formSubmitSelections = {
         currentTermId: "",
         AdvisorContactId: "",
@@ -71,13 +73,11 @@ export default class TommieCaresLwc extends LightningElement {
         Personal_Message: "",
         Additional_Concerns: "",
     };
-
     noCurrentTermCheck = false;
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
     caseSubmittedCheck = false;
     caseSubmittedErrorCheck = false;
-
     get courseSelectionCheck() {
         return !!this.courseSelection;
     }
@@ -87,7 +87,6 @@ export default class TommieCaresLwc extends LightningElement {
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     };
-
     @track selectionsCheck = {
         high5Check: false,
         attendanceCheck: false,
@@ -100,7 +99,6 @@ export default class TommieCaresLwc extends LightningElement {
         belongingCheck: false,
         otherCheck: false,
     }
-
     @track formRequired = {
         High5_Required: false,
         Attendance_Required: false,
@@ -108,9 +106,7 @@ export default class TommieCaresLwc extends LightningElement {
         PassCourse_Required: false,
         Other_Required: false,
     }
-
     submitCaseSpinner = false;
-
     get submitDisable() {
         return Object.values(this.formRequired).includes(true);
     }
@@ -141,19 +137,6 @@ export default class TommieCaresLwc extends LightningElement {
                     if (keyValue[1] === "true") {
                         this.caseSubmittedCheck = true;
                     }
-            }
-        }
-    }
-
-    @api communityOfConcernLwc = ""; //used as a variable for child component in Community of Concern LWC
-    renderedCommunityOfConcernLwc = false;
-    renderedCallback() {
-        //hiding Advisor information when displaying on Community of Concern LWC
-        if (this.communityOfConcernLwc === "render" && !this.renderedCommunityOfConcernLwc) {
-            const advisorInfoText = this.template.querySelector('div.advisor_info');
-            if (advisorInfoText) {
-                advisorInfoText.classList.add("advisor_info_text_hide");
-                this.renderedCommunityOfConcernLwc = true;
             }
         }
     }
