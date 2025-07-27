@@ -5,9 +5,25 @@
 import {api, LightningElement, track, wire} from 'lwc';
 import {gql, graphql} from "lightning/uiGraphQLApi";
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
+import {createRecord, generateRecordInputForCreate} from "lightning/uiRecordApi";
 import COMMUNITY_CONCERN_REPORTER_TYPE from "@salesforce/schema/Case.Community_Concern_Reporter_Type__c";
 import COMMUNITY_CONCERN_WHO_TYPE from "@salesforce/schema/Case.Community_Concern_Who_Type__c";
-import COMMUNITY_CONCERN from "@salesforce/schema/Case.Community_Concern__c";
+import COMMUNITY_CONCERN_WHAT from "@salesforce/schema/Case.Community_Concern__c";
+import CASE_OBJECT from "@salesforce/schema/Case";
+import CASE_STATUS from "@salesforce/schema/Case.Status";
+import RECORD_TYPE from "@salesforce/schema/Case.RecordTypeId";
+import ORIGIN from "@salesforce/schema/Case.Origin";
+import SUBJECT from "@salesforce/schema/Case.Subject";
+import CASE_REPORTER from "@salesforce/schema/Case.Case_Reporter__c";
+import SUPPLIED_NAME from "@salesforce/schema/Case.SuppliedName";
+import SUPPLIED_EMAIL from "@salesforce/schema/Case.SuppliedEmail";
+import SUPPLIED_PHONE from "@salesforce/schema/Case.SuppliedPhone";
+import FIRST_NAME from "@salesforce/schema/Case.First_Name__c";
+import LAST_NAME from "@salesforce/schema/Case.Last_Name__c";
+import ST_THOMAS_EMAIL from "@salesforce/schema/Case.St_Thomas_Email__c";
+import PHONE from "@salesforce/schema/Case.Phone__c";
+import {updateRecord} from "lightning/uiRecordApi";
+import {ShowToastEvent} from "lightning/platformShowToastEvent";
 
 export default class CommunityOfConcernLwc extends LightningElement {
 
@@ -19,13 +35,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
     // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sfid=003f200002qXsc4AAC&sbid=&crn=";
     searchParamsUrl;
     paramsString;
+    caseSubmittedCheck = false;
     iAmValue = "";
-    concernedWhatValue = "";
     concernedWhoValue = "";
+    concernedWhatValue = "";
     @track iAmOptions = [];
     @track concernedWhoOptions = [];
-    @track concernedWhoPicklist = [];
-    @track studentInClass = {};
+    whatPicklist = [];
+    whatNoStudentPicklist = [];
 
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE })
     pickListReporterType({ error, data }) {
@@ -46,13 +63,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN })
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHAT })
     pickListConcern({ error, data }) {
         if (data) {
-            this.concernedWhoPicklist = JSON.parse(JSON.stringify(data.values));
-            const index = this.concernedWhoPicklist.findIndex((obj) => obj.label === "I would like to report a concern about a student in one of my classes");
+            this.whatPicklist = JSON.parse(JSON.stringify(data.values));
+            this.whatNoStudentPicklist = JSON.parse(JSON.stringify(data.values));
+            const index = this.whatNoStudentPicklist.findIndex((obj) => obj.label === "I would like to report a concern about a student in one of my classes");
             if (index !== -1) {
-                this.studentInClass = this.concernedWhoPicklist[index];
+                this.whatNoStudentPicklist.splice(index, 1);
             }
         } else if (error) {
             console.log("pickListConcern Error: " + error);
@@ -60,20 +78,11 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     get concernedWhatOptions() {
-        if (!!this.concernedWhoPicklist && !!this.studentInClass) {
-            const index = this.concernedWhoPicklist.findIndex((obj) => obj.label === this.studentInClass.label);
-            if (this.iAmValue === "Faculty" && this.reporterInfo.StThomasConnection?.includes("Faculty") && this.concernedWhoValue === "Student") {
-                if (index === -1) {
-                    this.concernedWhoPicklist = [this.studentInClass, ...this.concernedWhoPicklist];
-                }
-            } else {
-                if (index !== -1) {
-                    let picklistModified = this.concernedWhoPicklist.toSpliced(index, 1);
-                    this.concernedWhoPicklist = [...picklistModified];
-                }
-            }
+        if (this.iAmValue === "Faculty" && this.reporterInfo.StThomasConnection?.includes("Faculty") && this.concernedWhoValue === "Student") {
+            return this.whatPicklist;
+        } else {
+            return this.whatNoStudentPicklist;
         }
-        return this.concernedWhoPicklist;
     }
 
     get iAmAnonymousCheck() {
@@ -123,10 +132,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
     get showWhatOther() {
-        return this.showConcernedWhatSelect && this.concernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
+        let requiredSelected = this.showConcernedWhatSelect && this.concernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
+        return {
+            show: requiredSelected,
+            text: this.concernedWhoValue !== "Student"
+        }
     }
     get submitDisable() {
-        return !!this.concernedWhatAdditionalInfo;
+        return !!!this.concernedWhatAdditionalInfo;
     }
     @track reporterInfo = {
         Id: "",
@@ -135,6 +148,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         StThomasConnection: "",
         Email: "",
         Phone: "",
+        BannerId: "",
     };
     @track concernedWhoInfo = {
         FirstName: "",
@@ -144,6 +158,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
     concernedWhatAdditionalInfo = "";
     caseRecordTypeId;
+    submitCaseSpinner = false;
 
     connectedCallback() {
         this.searchParamsUrl = new URL(this.paramUrl);
@@ -213,7 +228,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         variables: "$variables",
     })
     graphqlContactResult({data, errors}) {
-        console.log("paramsUrl before 2: "+this.paramUrl);
+        // console.log("paramsUrl before 2: "+this.paramUrl);
         if (data) {
             const results = data.uiapi.query.Contact.edges.map((edge) => edge.node);
             if (results.length > 0) {
@@ -231,8 +246,8 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 this.paramUrl = this.searchParamsUrl.toString();
             }
 
-            console.log("reporterContactInfo 3: "+JSON.stringify(this.reporterInfo));
-            console.log("paramsUrl after 3: "+this.paramUrl);
+            // console.log("reporterContactInfo 3: "+JSON.stringify(this.reporterInfo));
+            // console.log("paramsUrl after 3: "+this.paramUrl);
         }
         this.errors = errors;
     }
@@ -252,7 +267,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
               {
                 RecordType ( where: { 
                                       SobjectType: { eq: "Case" }
-                                      DeveloperName: { eq: "Community_Concern" }
+                                      DeveloperName: { eq: "Tommie_Cares" }
                                     },
                           upperBound: 1
                         ) 
@@ -278,7 +293,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
                     Name: results[0].Name.value,
                 };
             }
-            console.log("Case RecordType Id: "+JSON.stringify(this.caseRecordTypeId));
         }
         this.errors = errors;
     }
@@ -300,7 +314,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     inputTextHandler(event) {
-        // console.log("Am I being called and validity 5: "+event.target.checkValidity());
         switch (event.currentTarget.dataset.inputgroup) {
             case "reporterinfo":
                 switch (event.currentTarget.dataset.inputtype) {
@@ -337,6 +350,74 @@ export default class CommunityOfConcernLwc extends LightningElement {
             case "concernedwhatinfo":
                 this.concernedWhatAdditionalInfo = event.detail.value.trim();
                 break;
+        }
+    }
+
+    submittedUrl() {
+        // this.searchParamsUrl.searchParams.set("bid", this.paramBId);
+        // this.searchParamsUrl.searchParams.set("sbid", "");
+        // this.searchParamsUrl.searchParams.set("crn", "");
+        this.searchParamsUrl.searchParams.set("submitted", "true");
+
+        return this.searchParamsUrl;
+    }
+
+    async submitCase() {
+        const fields = {};
+        fields[RECORD_TYPE.fieldApiName] = this.caseRecordTypeId.Id;
+        fields[ORIGIN.fieldApiName] = 'Web';
+        fields[SUBJECT.fieldApiName] = 'Tommie Cares';
+        // fields[CASE_STATUS.fieldApiName] = 'New';
+        // fields[COMMUNITY_CONCERN_WHO_TYPE.fieldApiName] = this.concernedWhoValue;
+        // if (!!this.reporterInfo.Id) {
+        //     fields[CASE_REPORTER.fieldApiName] = this.reporterInfo.Id;
+        // }
+        // fields[COMMUNITY_CONCERN_REPORTER_TYPE.fieldApiName] = this.iAmValue;
+        // fields[SUPPLIED_NAME.fieldApiName] = this.reporterInfo.FirstName + ' ' + this.reporterInfo.LastName;
+        // fields[SUPPLIED_EMAIL.fieldApiName] = this.reporterInfo.Email;
+        // fields[SUPPLIED_PHONE.fieldApiName] = this.reporterInfo.Phone;
+        // fields[COMMUNITY_CONCERN_WHAT.fieldApiName] = this.concernedWhatValue;
+        // fields[FIRST_NAME.fieldApiName] = this.concernedWhoInfo.FirstName;
+        // fields[LAST_NAME.fieldApiName] = this.concernedWhoInfo.LastName;
+        // fields[ST_THOMAS_EMAIL.fieldApiName] = this.concernedWhoInfo.Email;
+        // fields[PHONE.fieldApiName] = this.concernedWhoInfo.Phone;
+
+        const recordInput = {apiName: CASE_OBJECT.objectApiName, fields};
+        console.log("What is createRecord 5: " + JSON.stringify(fields));
+
+        try {
+            window.scrollTo(0, 0);
+            this.submitCaseSpinner = true;
+            const caseRecord = await createRecord(recordInput);
+
+            console.log("We good");
+
+            // await createRecord(recordInput).then((record) => {
+            //     this.submitCaseSpinner = false;
+            //     // location.replace(this.submittedUrl());
+            //     // this.dispatchEvent(
+            //     //     new ShowToastEvent({
+            //     //         title: "Success",
+            //     //         message: "Tell Someone form submitted",
+            //     //         variant: "success",
+            //     //     }),
+            //     // );
+            // }) .catch((error) => {
+            //         console.log("createRecord error: " + JSON.stringify(error));
+            //         this.submitCaseSpinner = false;
+            //     });
+                //     this.dispatchEvent(
+                //         new ShowToastEvent({
+                //             title: "Error",
+                //             message: error.body.message,
+                //             variant: "error",
+                //         }),
+                //     );
+                // });
+
+        } catch (e) {
+            console.log("createRecord error: " + JSON.stringify(e));
+            this.submitCaseSpinner = false;
         }
     }
 
