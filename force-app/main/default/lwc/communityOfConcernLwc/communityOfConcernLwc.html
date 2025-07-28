@@ -42,7 +42,7 @@
                 <div class="slds-form-element__control slds-col slds-size_3-of-12">
                     <lightning-combobox id="i-am-selection-id"
                                         label=""
-                                        value={iAmValue}
+                                        value={communityOfConcernCase.IAmValue}
                                         placeholder="Choose an item"
                                         options={iAmOptions}
                                         data-selecttype="iamselect"
@@ -55,19 +55,19 @@
                 via this form. If you choose to submit this form anonymously, please understand our ability to take action may be limited,
                 as we may need additional information and will not have a way to ask follow-up questions</i>
             </p>
-            <template lwc:if={showReporterInfo}>
+            <template lwc:if={showIAmInfo}>
                 <div class="slds-m-bottom_large">
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                         <div class="slds-col slds-size_2-of-12 input_text_label">
-                            <label class="slds-form-element__label" for="reporter-first-name-id">
+                            <label class="slds-form-element__label" for="i-am-first-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>First Name:</label>
                         </div>
                         <div class="slds-form-element__control slds-col slds-size_5-of-12">
-                            <lightning-input id="reporter-first-name-id"
+                            <lightning-input id="i-am-first-name-id"
                                              type="text"
                                              label=""
-                                             value={reporterInfo.FirstName}
-                                             data-inputgroup="reporterinfo"
+                                             value={communityOfConcernCase.IAmFirstName}
+                                             data-inputgroup="iaminfo"
                                              data-inputtype="firstname"
                                              placeholder="First Name"
                                              variant="label-hidden"
@@ -77,15 +77,15 @@
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                         <div class="slds-col slds-size_2-of-12 input_text_label">
-                            <label class="slds-form-element__label" for="reporter-last-name-id">
+                            <label class="slds-form-element__label" for="i-am-last-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>Last Name:</label>
                         </div>
                         <div class="slds-form-element__control slds-col slds-size_5-of-12">
-                            <lightning-input id="reporter-last-name-id"
+                            <lightning-input id="i-am-last-name-id"
                                              type="text"
                                              label="Last Name:"
-                                             value={reporterInfo.LastName}
-                                             data-inputgroup="reporterinfo"
+                                             value={communityOfConcernCase.IAmLastName}
+                                             data-inputgroup="iaminfo"
                                              data-inputtype="lastname"
                                              placeholder="Last Name"
                                              variant="label-hidden"
@@ -95,15 +95,15 @@
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                         <div class="slds-col slds-size_2-of-12 input_text_label">
-                            <label class="slds-form-element__label" for="reporter-email-id">
+                            <label class="slds-form-element__label" for="i-am-email-id">
                                 <abbr class="slds-required" title="Required">*</abbr>Email:</label>
                         </div>
                         <div class="slds-form-element__control slds-col slds-size_5-of-12">
-                            <lightning-input id="reporter-email-id"
+                            <lightning-input id="i-am-email-id"
                                              type="email"
                                              label="Email:"
-                                             value={reporterInfo.Email}
-                                             data-inputgroup="reporterinfo"
+                                             value={communityOfConcernCase.IAmEmail}
+                                             data-inputgroup="iaminfo"
                                              data-inputtype="email"
                                              placeholder="Email"
                                              variant="label-hidden"
@@ -113,14 +113,14 @@
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
                         <div class="slds-col slds-size_2-of-12 input_text_label">
-                            <label class="slds-form-element__label" for="reporter-phone-id">Phone:</label>
+                            <label class="slds-form-element__label" for="i-am-phone-id">Phone:</label>
                         </div>
                         <div class="slds-form-element__control slds-col slds-size_5-of-12">
-                            <lightning-input id="reporter-phone-id"
+                            <lightning-input id="i-am-phone-id"
                                              type="text"
                                              label="Phone:"
-                                             value={reporterInfo.Phone}
-                                             data-inputgroup="reporterinfo"
+                                             value={communityOfConcernCase.IAmPhone}
+                                             data-inputgroup="iaminfo"
                                              data-inputtype="phone"
                                              placeholder="Phone"
                                              variant="label-hidden"
@@ -140,7 +140,7 @@
                     <div class="slds-form-element__control slds-col slds-size_3-of-12">
                         <lightning-combobox id="concerned-who_select-id"
                                             label=""
-                                            value={concernedWhoValue}
+                                            value={communityOfConcernCase.ConcernedWhoValue}
                                             placeholder="Choose an item"
                                             options={concernedWhoOptions}
                                             data-selecttype="concernedwhoselect"
@@ -161,7 +161,7 @@
                             <lightning-input id="concerned-who-first-name-id"
                                              type="text"
                                              label=""
-                                             value={concernedWhoInfo.FirstName}
+                                             value={communityOfConcernCase.ConcernedWhoFirstName}
                                              data-inputgroup="concernedwhoinfo"
                                              data-inputtype="firstname"
                                              placeholder="First Name"
@@ -179,7 +179,7 @@
                             <lightning-input id="concerned-who-last-name-id"
                                              type="text"
                                              label="Last Name:"
-                                             value={concernedWhoInfo.LastName}
+                                             value={communityOfConcernCase.ConcernedWhoLastName}
                                              data-inputgroup="concernedwhoinfo"
                                              data-inputtype="lastname"
                                              placeholder="Last Name"
@@ -197,7 +197,7 @@
                             <lightning-input id="concerned-who-email-id"
                                              type="email"
                                              label="Email:"
-                                             value={concernedWhoInfo.Email}
+                                             value={communityOfConcernCase.ConcernedWhoEmail}
                                              data-inputgroup="concernedwhoinfo"
                                              data-inputtype="email"
                                              placeholder="Email"
@@ -214,7 +214,7 @@
                             <lightning-input id="concerned-who-phone-id"
                                              type="text"
                                              label="Phone:"
-                                             value={concernedWhoInfo.Phone}
+                                             value={communityOfConcernCase.ConcernedWhoPhone}
                                              data-inputgroup="concernedwhoinfo"
                                              data-inputtype="phone"
                                              placeholder="Phone"
@@ -231,7 +231,7 @@
                 <div class="slds-form-element__control">
                     <lightning-combobox id="concerned-what-selection-id"
                                         label=""
-                                        value={concernedWhatValue}
+                                        value={communityOfConcernCase.ConcernedWhatValue}
                                         placeholder="Choose an item"
                                         options={concernedWhatOptions}
                                         data-selecttype="concernedwhatselect"
@@ -313,8 +313,8 @@
                         <div class="slds-form-element__control">
                             <lightning-textarea id="concerned-what-additional-info-id"
                                              label=""
-                                             value={concernedWhatAdditionalInfo}
-                                             data-inputgroup="concernedwhatinfo"
+                                             value={communityOfConcernCase.ConcernedWhatAdditionalInfo}
+                                             data-inputgroup="concernedwhatadditionalinfo"
                                              placeholder="Additional information"
                                              variant="label-hidden"
                                              onchange={inputTextHandler}>
