@@ -94,7 +94,7 @@ public without sharing class TommieCaresLwcController {
 //    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
     public static List<hed__Course_Enrollment__c> studentCourseList(String studentBannerId, String courseId) {
 
-        List<Map<String, String>> studentMapList = new List<Map<String, String>>();
+//        List<Map<String, String>> studentMapList = new List<Map<String, String>>();
         List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
         String singleStudentCriteria = '';
 

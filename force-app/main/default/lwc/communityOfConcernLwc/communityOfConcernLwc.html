@@ -35,11 +35,11 @@
             <p class="slds-m-bottom_small">Reports about faculty/staff are private [add language on confidentiality and privacy].</p>
             <p class="heading_text slds-m-vertical_medium">Tell Us About You</p>
             <div class="slds-form-element slds-grid slds-wrap slds-m-vertical_large">
-                <div class="slds-col slds-size_1-of-12">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-12">
                     <label class="slds-form-element__label" for="i-am-selection-id">
                         <abbr class="slds-required" title="Required">*</abbr>I am: </label>
                 </div>
-                <div class="slds-form-element__control slds-col slds-size_3-of-12">
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
                     <lightning-combobox id="i-am-selection-id"
                                         label=""
                                         value={communityOfConcernCase.IAmValue}
@@ -58,11 +58,11 @@
             <template lwc:if={showIAmInfo}>
                 <div class="slds-m-bottom_large">
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="i-am-first-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>First Name:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="i-am-first-name-id"
                                              type="text"
                                              label=""
@@ -71,16 +71,17 @@
                                              data-inputtype="firstname"
                                              placeholder="First Name"
                                              variant="label-hidden"
+                                             disabled={iAmInfoInputDisabled}
                                              onchange={inputTextHandler}>
                             </lightning-input>
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="i-am-last-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>Last Name:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="i-am-last-name-id"
                                              type="text"
                                              label="Last Name:"
@@ -89,16 +90,17 @@
                                              data-inputtype="lastname"
                                              placeholder="Last Name"
                                              variant="label-hidden"
+                                             disabled={iAmInfoInputDisabled}
                                              onchange={inputTextHandler}>
                             </lightning-input>
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="i-am-email-id">
                                 <abbr class="slds-required" title="Required">*</abbr>Email:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="i-am-email-id"
                                              type="email"
                                              label="Email:"
@@ -107,15 +109,16 @@
                                              data-inputtype="email"
                                              placeholder="Email"
                                              variant="label-hidden"
+                                             disabled={iAmInfoInputDisabled}
                                              onchange={inputTextHandler}>
                             </lightning-input>
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="i-am-phone-id">Phone:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="i-am-phone-id"
                                              type="text"
                                              label="Phone:"
@@ -133,11 +136,11 @@
             <template lwc:if={showConcernedWhoSelect}>
                 <p class="heading_text slds-m-vertical_medium">Tell Us Who You're Concerned About</p>
                 <div class="slds-form-element slds-grid slds-wrap slds-m-vertical_large">
-                    <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
                         <label class="slds-form-element__label" for="concerned-who_select-id">
                             <abbr class="slds-required" title="Required">*</abbr>Who are you concerned about:</label>
                     </div>
-                    <div class="slds-form-element__control slds-col slds-size_3-of-12">
+                    <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
                         <lightning-combobox id="concerned-who_select-id"
                                             label=""
                                             value={communityOfConcernCase.ConcernedWhoValue}
@@ -153,11 +156,11 @@
             <template lwc:if={showConcernedWhoInfo}>
                 <div class="slds-m-bottom_small">
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="concerned-who-first-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>First Name:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="concerned-who-first-name-id"
                                              type="text"
                                              label=""
@@ -171,11 +174,11 @@
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="concerned-who-last-name-id">
                                 <abbr class="slds-required" title="Required">*</abbr>Last Name:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="concerned-who-last-name-id"
                                              type="text"
                                              label="Last Name:"
@@ -189,11 +192,10 @@
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
-                            <label class="slds-form-element__label" for="concerned-who-email-id">
-                                <abbr class="slds-required" title="Required">*</abbr>Email:</label>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
+                            <label class="slds-form-element__label" for="concerned-who-email-id">Email:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="concerned-who-email-id"
                                              type="email"
                                              label="Email:"
@@ -207,10 +209,10 @@
                         </div>
                     </div>
                     <div class="slds-form-element slds-grid slds-wrap slds-m-bottom_x-small">
-                        <div class="slds-col slds-size_2-of-12 input_text_label">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input_text_label">
                             <label class="slds-form-element__label" for="concerned-who-phone-id">Phone:</label>
                         </div>
-                        <div class="slds-form-element__control slds-col slds-size_5-of-12">
+                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-medium-size_5-of-12">
                             <lightning-input id="concerned-who-phone-id"
                                              type="text"
                                              label="Phone:"
@@ -250,7 +252,7 @@
                     Residence Life, and other relevant campus partners.</i>
                 </p>
                 <p>
-                    Who Student display this form: [need link to form]
+                    Who "Student" display this form: [need link to form]
                 </p>
             </template>
             <template lwc:if={showWhatWellBeing.nonStudent}>
@@ -259,7 +261,7 @@
                     with Title IX and/or other campus partners when appropriate.</i>
                 </p>
                 <p>
-                    Who Non Student display this form: [need link to form]
+                    Who "Non Student" display this form: [need link to form]
                 </p>
             </template>
             <template lwc:if={showWhatDiscrimination.text}>
@@ -270,18 +272,32 @@
                     classes). These reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,
                     dependent on the status of the individual who caused harm.</i>
                 </p>
-                <p lwc:if={showWhatDiscrimination.anon}>
-                    I am Anonymous display this form: [need link to form]
+                <p>
+                    <lightning-button variant="base"
+                                      type="button"
+                                      label="Submit a Bias Incident Report"
+                                      data-formlink="bias"
+                                      onclick={formLink}
+                                      disable-animation>
+                    </lightning-button>
                 </p>
-                <p lwc:if={showWhatDiscrimination.facStaff}>
-                    I am Faculty or Staff display this form: [need link to form]
-                </p>
-                <p lwc:if={showWhatDiscrimination.student}>
-                    I am Student display this form: [need link to form]
-                </p>
-                <p lwc:if={showWhatDiscrimination.other}>
-                    I am Other display this form: [need link to form]
-                </p>
+<!--                <p lwc:if={showWhatDiscrimination.anon}>-->
+<!--                <p>-->
+<!--                    I am "all" display this form:-->
+<!--                    <lightning-formatted-url value="https://stthomas-advocate.symplicity.com/public_report/index.php/"-->
+<!--                                             tooltip="https://stthomas-advocate.symplicity.com/public_report/index.php/"-->
+<!--                                             label="Submit a Bias Incident Report"-->
+<!--                                             target="_blank"></lightning-formatted-url>-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatDiscrimination.facStaff}>-->
+<!--                    I am Faculty or Staff display this form: [need link to form]-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatDiscrimination.student}>-->
+<!--                    I am Student display this form: [need link to form]-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatDiscrimination.other}>-->
+<!--                    I am Other display this form: [need link to form]-->
+<!--                </p>-->
             </template>
             <template lwc:if={showWhatMisconduct.text}>
                 <p class="slds-m-bottom_small"><i>Sexual misconduct, under our policy, includes sexual harassment, sexual
@@ -289,18 +305,32 @@
                     receives these reports and works to address incidents and connects individuals to resources and
                     reporting options with the goals of support, safety, and security in an effort to reduce harm.</i>
                 </p>
-                <p lwc:if={showWhatMisconduct.anon}>
-                    I am Anonymous display this form: [need link to form]
+                <p>
+                    <lightning-button variant="base"
+                                      type="button"
+                                      label="Submit a Title IX (sexual misconduct) Report"
+                                      data-formlink="misconduct"
+                                      onclick={formLink}
+                                      disable-animation>
+                    </lightning-button>
                 </p>
-                <p lwc:if={showWhatMisconduct.facStaff}>
-                    I am Faculty or Staff display this form: [need link to form]
-                </p>
-                <p lwc:if={showWhatMisconduct.student}>
-                    I am Student display this form: [need link to form]
-                </p>
-                <p lwc:if={showWhatMisconduct.other}>
-                    I am Other display this form: [need link to form]
-                </p>
+<!--                <p lwc:if={showWhatMisconduct.anon}>-->
+<!--                <p>-->
+<!--                    I am "all" display this form:-->
+<!--                    <lightning-formatted-url value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/"-->
+<!--                                             tooltip="https://stthomas-advocate.symplicity.com/titleix_report/index.php/"-->
+<!--                                             label="Submit a Title IX (sexual misconduct) Report"-->
+<!--                                             target="_blank"></lightning-formatted-url>-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatMisconduct.facStaff}>-->
+<!--                    I am Faculty or Staff display this form: [need link to form]-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatMisconduct.student}>-->
+<!--                    I am Student display this form: [need link to form]-->
+<!--                </p>-->
+<!--                <p lwc:if={showWhatMisconduct.other}>-->
+<!--                    I am Other display this form: [need link to form]-->
+<!--                </p>-->
             </template>
             <template lwc:if={showWhatOther.show}>
                 <div lwc:if={showWhatOther.text} class="slds-m-bottom_small">
