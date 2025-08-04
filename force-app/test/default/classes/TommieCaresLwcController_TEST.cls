@@ -175,7 +175,7 @@ private class TommieCaresLwcController_TEST {
         List<Map<String, String>> advisorCoursesList = TommieCaresLwcController.advisorCoursesList(currentTermAdvisor.get('Advisor_ContactId'), '12345');
         System.assert(advisorCoursesList.size() > 0);
 
-        List<Map<String, String>> studentCourseList = TommieCaresLwcController.studentCourseList('1111111112', advisorCoursesList[0].get('value'));
+        List<hed__Course_Enrollment__c> studentCourseList = TommieCaresLwcController.studentCourseList('1111111112', advisorCoursesList[0].get('value'));
         System.assert(studentCourseList.size() > 0);
 
         Map<String, String> formSubmitSelections = new Map<String, String>{
@@ -183,7 +183,7 @@ private class TommieCaresLwcController_TEST {
                 'AdvisorContactId' => currentTermAdvisor.get('Advisor_ContactId'),
                 'AdvisorEmail' => currentTermAdvisor.get('Advisor_Email'),
                 'CourseSelectionId' => advisorCoursesList[0].get('value'),
-                'StudentContactId' => studentCourseList[0].get('value'),
+                'StudentContactId' => studentCourseList[0].hed__Contact__r.Id,
                 'TommieCares_Reasons' => '',
                 'High5_Reasons' => '',
                 'Attendance_Reasons' => '',
@@ -201,13 +201,13 @@ private class TommieCaresLwcController_TEST {
                 SELECT Id, Subject, Origin, Case_Reporter__c, Alert_Term_lookup__c, Course_Connection__c, ContactId,
                         Course_Offering__c
                 FROM Case
-                WHERE ContactId = :studentCourseList[0].get('value')
+                WHERE ContactId = :studentCourseList[0].hed__Contact__r.Id
         ];
 
         System.assertEquals(savedCases.size(), 1);
         System.assertEquals(savedCases[0].Origin, 'Web');
         System.assertEquals(savedCases[0].Subject, 'Tommie Cares');
-        System.assertEquals(savedCases[0].ContactId, studentCourseList[0].get('value'));
+        System.assertEquals(savedCases[0].ContactId, studentCourseList[0].hed__Contact__r.Id);
         System.assertEquals(savedCases[0].Course_Offering__c, advisorCoursesList[0].get('value'));
 
         Test.stopTest();
