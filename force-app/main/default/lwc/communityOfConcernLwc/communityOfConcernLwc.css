@@ -11,18 +11,29 @@
 /*}*/
 
 
-.heading_text {
+.heading-text {
     font-size: 1.50rem !important;
     font-weight: bold;
     color: rebeccapurple !important;
 }
-
-.input_text_label {
-    padding: 10px 0 0 0;
-    /*font-size: 1rem !important;*/
-    /*font-weight: normal;*/
+.selection-labels {
+    font-size: 1rem !important;
+    font-weight: normal;
     /*color: rebeccapurple;*/
 }
+.selection-width {
+    width: 40%;
+}
+.selection-width-wider {
+    width: 65%;
+}
+
+/*.input-text-label {*/
+/*    padding: 10px 0 0 0;*/
+/*    !*font-size: 1rem !important;*!*/
+/*    !*font-weight: normal;*!*/
+/*    !*color: rebeccapurple;*!*/
+/*}*/
 
 /*.advisor_info_text_hide {*/
 /*    display: none;*/

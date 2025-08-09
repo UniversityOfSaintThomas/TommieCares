@@ -22,6 +22,13 @@ export default class CommunityOfConcernLwc extends LightningElement {
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
+
+    childProps = {
+        communityOfConcernReportType: "",
+        communityOfConcernName: "",
+        communityOfConcernEmail: ""
+    }
+
     @track iAmOptions = [];
     @track concernedWhoOptions = [];
     whatPicklist = [];
@@ -71,26 +78,46 @@ export default class CommunityOfConcernLwc extends LightningElement {
     get iAmAnonymousCheck() {
         return this.communityOfConcernCase.IAmValue === "Anonymous";
     }
-    get showIAmInfo() {
-        const matchValue = /\b(faculty)\b|\b(staff)\b|\b(student)\b|\b(other)\b/ig;
-        if (!!this.communityOfConcernCase.IAmValue) {
-            return !!this.communityOfConcernCase?.IAmValue.match(matchValue);
-        } else {
-            return false;
-        }
-    }
+
     get showConcernedWhoSelect() {
-        return !!(!!this.communityOfConcernCase.IAmValue && ((!!this.communityOfConcernCase.IAmFirstName && !!this.communityOfConcernCase.IAmLastName && !!this.communityOfConcernCase.IAmEmail) || this.communityOfConcernCase.IAmValue === "Anonymous"));
-    }
-    get showConcernedWhoInfo() {
-        return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
+        // return !!(!!this.communityOfConcernCase.IAmValue && ((!!this.communityOfConcernCase.IAmFirstName && !!this.communityOfConcernCase.IAmLastName && !!this.communityOfConcernCase.IAmEmail) || this.communityOfConcernCase.IAmValue === "Anonymous"));
+        return !!this.communityOfConcernCase.IAmValue;
     }
     get showConcernedWhatSelect() {
-        return this.showConcernedWhoInfo && !!this.communityOfConcernCase.ConcernedWhoFirstName && !!this.communityOfConcernCase.ConcernedWhoLastName;
+        // return this.showConcernedWhoInfo && !!this.communityOfConcernCase.ConcernedWhoFirstName && !!this.communityOfConcernCase.ConcernedWhoLastName;
+        return this.showConcernedWhoSelect;
     }
+
     get showWhatTommieAlerts() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.ConcernedWhoValue === "Student";
     }
+
+    get showWhatDiscrimination() {
+        // let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
+        // return {
+        //     text: requiredSelected,
+        //     anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
+        //     facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
+        //     student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
+        //     other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
+        // }
+        return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // get showIAmInfo() {
+    //     const matchValue = /\b(faculty)\b|\b(staff)\b|\b(student)\b|\b(other)\b/ig;
+    //     if (!!this.communityOfConcernCase.IAmValue) {
+    //         return !!this.communityOfConcernCase?.IAmValue.match(matchValue);
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+    // get showConcernedWhoInfo() {
+    //     return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
+    // }
+
+
     get showWhatWellBeing() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
         return {
@@ -98,16 +125,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
             nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
         }
     }
-    get showWhatDiscrimination() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
-        return {
-            text: requiredSelected,
-            anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
-            facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
-            student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
-            other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
-        }
-    }
+
     get showWhatMisconduct() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
         return {
@@ -128,7 +146,8 @@ export default class CommunityOfConcernLwc extends LightningElement {
     get submitDisable() {
         return !!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo;
     }
-    submitCaseSpinner = false;
+
+    @track initialContactInfo = {};
 
     @track communityOfConcernCase = {
         IAmValue: "",
@@ -148,12 +167,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
         ConcernedWhatAdditionalInfo: "",
     }
 
+    submitCaseSpinner = false;
+
     get iAmInfoInputDisabled() {
         return !!this.communityOfConcernCase.IAmContactId;
     }
 
     connectedCallback() {
-        console.log("Version 23");
+        console.log("Version 39");
 
         this.searchParamsUrl = new URL(this.paramUrl);
         this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
@@ -183,7 +204,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    @track initialContactInfo = {};
     @wire(iAmContactInfo,{salesforceId: "$paramSfId", bannerId: "$paramBId"})
     iAmContactInfoWire({error, data}) {
         if (data) {
@@ -199,10 +219,20 @@ export default class CommunityOfConcernLwc extends LightningElement {
                     IAmBannerId: this.initialContactInfo.University_Banner_ID__c,
                 }
 
+                this.childProps = {
+                    communityOfConcernName: this.initialContactInfo.FirstName + ' ' + this.initialContactInfo.LastName,
+                    communityOfConcernEmail: this.initialContactInfo.hed__UniversityEmail__c,
+                };
+
                 if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty")) {
                     this.communityOfConcernCase.IAmValue = "Faculty"
+                    this.childProps.communityOfConcernReportType = "Faculty"
                 } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Staff")) {
                     this.communityOfConcernCase.IAmValue = "Staff"
+                    this.childProps.communityOfConcernReportType = "Staff"
+                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Student")) {
+                    this.communityOfConcernCase.IAmValue = "Student"
+                    this.childProps.communityOfConcernReportType = "Student"
                 }
 
                 this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
