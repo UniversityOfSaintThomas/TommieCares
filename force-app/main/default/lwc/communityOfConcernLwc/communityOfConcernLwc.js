@@ -23,8 +23,10 @@ export default class CommunityOfConcernLwc extends LightningElement {
     paramsString;
     caseSubmittedCheck = false;
 
-    childProps = {
-        communityOfConcernReportType: "",
+    get communityOfConcernReportType() {
+        return this.communityOfConcernCase?.IAmValue;
+    };
+    @track childProps = {
         communityOfConcernName: "",
         communityOfConcernEmail: ""
     }
@@ -57,11 +59,12 @@ export default class CommunityOfConcernLwc extends LightningElement {
     pickListConcern({ error, data }) {
         if (data) {
             this.whatPicklist = JSON.parse(JSON.stringify(data.values));
-            this.whatNoStudentPicklist = JSON.parse(JSON.stringify(data.values));
-            const index = this.whatNoStudentPicklist.findIndex((obj) => obj.label === "I would like to report a concern about a student in one of my classes");
-            if (index !== -1) {
-                this.whatNoStudentPicklist.splice(index, 1);
-            }
+            this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
+            // this.whatNoStudentPicklist = JSON.parse(JSON.stringify(data.values));
+            // const index = this.whatNoStudentPicklist.findIndex((obj) => obj.label === "I would like to report a concern about a student in one of my classes");
+            // if (index !== -1) {
+            //     this.whatNoStudentPicklist.splice(index, 1);
+            // }
         } else if (error) {
             console.log("pickListConcern Error: " + error);
         }
@@ -103,6 +106,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
         // }
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
     }
+
+    get showWhatOther() {
+        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
+        return {
+            show: requiredSelected,
+            text: this.communityOfConcernCase.ConcernedWhoValue !== "Student"
+        }
+    }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // get showIAmInfo() {
     //     const matchValue = /\b(faculty)\b|\b(staff)\b|\b(student)\b|\b(other)\b/ig;
@@ -136,13 +147,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
             other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
         }
     }
-    get showWhatOther() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
-        return {
-            show: requiredSelected,
-            text: this.communityOfConcernCase.ConcernedWhoValue !== "Student"
-        }
-    }
+
     get submitDisable() {
         return !!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo;
     }
@@ -174,7 +179,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     connectedCallback() {
-        console.log("Version 39");
+        console.log("Version 54");
 
         this.searchParamsUrl = new URL(this.paramUrl);
         this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
@@ -226,13 +231,10 @@ export default class CommunityOfConcernLwc extends LightningElement {
 
                 if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty")) {
                     this.communityOfConcernCase.IAmValue = "Faculty"
-                    this.childProps.communityOfConcernReportType = "Faculty"
                 } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Staff")) {
                     this.communityOfConcernCase.IAmValue = "Staff"
-                    this.childProps.communityOfConcernReportType = "Staff"
                 } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Student")) {
                     this.communityOfConcernCase.IAmValue = "Student"
-                    this.childProps.communityOfConcernReportType = "Student"
                 }
 
                 this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
@@ -242,115 +244,10 @@ export default class CommunityOfConcernLwc extends LightningElement {
             }
         }
 
-            if (error) {
-                console.log("iAmContactInfoWire error: " + error);
-            }
+        if (error) {
+            console.log("iAmContactInfoWire error: " + error);
         }
-
-    // @wire(graphql, {
-    //     query: gql`
-    //       query ReporterContact ($salesforceId: ID, $bannerId: String) {
-    //         uiapi {
-    //           query
-    //           {
-    //             Contact ( where: {
-    //                               or: [
-    //                                     {
-    //                                       Id: { eq: $salesforceId }
-    //                                     },
-    //                                     { and: [
-    //                                               { University_Banner_ID__c: { eq: $bannerId } } ,
-    //                                               { University_Banner_ID__c: { ne: "" } }
-    //                                            ]
-    //                                     }
-    //                                   ]
-    //                              },
-    //                       upperBound: 1
-    //                     )
-    //             {
-    //               edges {
-    //                 node {
-    //                   Id
-    //                   FirstName {value}
-    //                   LastName {value}
-    //                   St_Thomas_Connection__c {value}
-    //                   hed__UniversityEmail__c {value}
-    //                   University_Banner_ID__c {value}
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     `,
-    //     variables: "$variables",
-    // })
-    // graphqlContactResult({data, errors}) {
-    //     // console.log("paramsUrl before 2: "+this.paramUrl);
-    //     if (data) {
-    //         const results = data.uiapi.query.Contact.edges.map((edge) => edge.node);
-    //         if (results.length > 0) {
-    //             this.communityOfConcernCase = {
-    //                 IAmContactId: results[0].Id,
-    //                 IAmFirstName: results[0].FirstName.value,
-    //                 IAmLastName: results[0].LastName.value,
-    //                 IAmStThomasConnection: results[0].St_Thomas_Connection__c.value,
-    //                 IAmEmail: results[0].hed__UniversityEmail__c.value,
-    //                 IAmBannerId: results[0].University_Banner_ID__c.value,
-    //             };
-    //
-    //             this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-    //             this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
-    //             this.paramUrl = this.searchParamsUrl.toString();
-    //             console.log("paramUrl: "+this.paramUrl)
-    //         }
-    //     }
-    //     this.errors = errors;
-    // }
-    // get variables() {
-    //     return {
-    //         salesforceId: this.paramsfId,
-    //         bannerId: this.paramBId,
-    //     }
-    // }
-
-    // @wire(graphql, {
-    //     query: gql`
-    //       query CaseRecordTypeId {
-    //         uiapi {
-    //           query
-    //           {
-    //             RecordType ( where: {
-    //                                   SobjectType: { eq: "Case" }
-    //                                   DeveloperName: { eq: "Community_Concern" }
-    //                                 },
-    //                       upperBound: 1
-    //                     )
-    //             {
-    //               edges {
-    //                 node {
-    //                   Id
-    //                   Name {value}
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     `,
-    // })
-    // graphqlRecordTypeResult({data, errors}) {
-    //     if (data) {
-    //         const results = data.uiapi.query.RecordType.edges.map((edge) => edge.node);
-    //         if (results.length > 0) {
-    //             this.caseRecordTypeId = {
-    //                 contactId: results[0].contactId,
-    //                 Name: results[0].Name.value,
-    //             };
-    //         }
-    //     }
-    //     this.errors = errors;
-    // }
+    }
 
     singleSelectHandler(event) {
         this.communityOfConcernCase.ConcernedWhatValue = "";

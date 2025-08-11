@@ -27,7 +27,9 @@
 .selection-width-wider {
     width: 65%;
 }
-
+.custom-textarea {
+    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
+}
 /*.input-text-label {*/
 /*    padding: 10px 0 0 0;*/
 /*    !*font-size: 1rem !important;*!*/
