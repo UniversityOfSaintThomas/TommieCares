@@ -107,6 +107,21 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
     }
 
+    // get showWhatMisconduct() {
+    //     let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
+    //     return {
+    //         text: requiredSelected,
+    //         anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
+    //         facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
+    //         student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
+    //         other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
+    //     }
+    // }
+
+    get showWhatMisconduct() {
+        return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
+    }
+
     get showWhatOther() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
         return {
@@ -134,17 +149,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return {
             student: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue === "Student",
             nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
-        }
-    }
-
-    get showWhatMisconduct() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
-        return {
-            text: requiredSelected,
-            anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
-            facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
-            student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
-            other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
         }
     }
 
@@ -179,7 +183,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     connectedCallback() {
-        console.log("Version 54");
+        console.log("Version 55");
 
         this.searchParamsUrl = new URL(this.paramUrl);
         this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);

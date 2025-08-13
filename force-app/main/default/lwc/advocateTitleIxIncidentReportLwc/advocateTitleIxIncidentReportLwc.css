@@ -1,0 +1,53 @@
+/**
+ * Created by nguy0092 on 8/12/2025.
+ */
+/*.regular-body-text {*/
+/*    width: 60%;*/
+/*    margin-left: 400px;*/
+/*}*/
+.regular-body-text p {
+    font-size: 1rem;
+}
+.selection-width {
+    width: 40%;
+}
+.selection-width-wider {
+    width: 65%;
+}
+.selection-labels {
+    font-size: 1rem !important;
+    font-weight: normal;
+    /*color: rebeccapurple;*/
+}
+.textarea-sublabel_1 {
+    font-size: .75rem !important;
+    color: black;
+    /*font-weight: lighter;*/
+    padding-bottom: 7px;
+}
+.textarea-sublabel_2 {
+    font-size: .85rem !important;
+    color: black;
+    /*font-weight: lighter;*/
+    padding-bottom: 7px;
+}
+.custom-textarea {
+    width: 65%;
+    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
+}
+.custom-textarea-2 {
+    width: 65%;
+    --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
+}
+lightning-button.submit_button {
+    --slds-c-button-success-text-color: white;
+    --slds-c-button-success-color-background: #510c76;
+    --slds-c-button-success-color-border: #510c76;
+
+    /*Has no effect in VisualForce template*/
+    --slds-c-button-success-color-border-hover: #8348ad;
+    --slds-c-button-success-color-background-hover: #8348ad;
+    --slds-c-button-success-color-background-active: #8348ad;
+    font-size: 1rem !important;
+    /*font-weight: bold;*/
+}

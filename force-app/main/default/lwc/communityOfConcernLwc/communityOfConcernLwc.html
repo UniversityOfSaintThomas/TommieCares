@@ -10,7 +10,7 @@
     <form lwc:else id="communityofconcernform" data-form="communityofconcernform">
         <p class="slds-m-bottom_medium heading-text">Tell Someone</p>
         <div class="regular_body_text">
-            <p class="slds-m-bottom_small"><b>Tell Someone</b> is a St. Thomas tool that
+            <p class="slds-m-bottom_small">2 <b>Tell Someone</b> is a St. Thomas tool that
                 allows you to report concerns about an undergraduate or graduate student or employee who may be
                 struggling with issues related to health, well-being, or threats of harm, or who may be navigating a
                 situation where they suspect discrimination, bias, or harassment are present.
@@ -101,14 +101,11 @@
             </div>
 
             <div lwc:if={showWhatDiscrimination} class="slds-m-top_large">
-<!--                <p class="slds-m-bottom_small"><i>This form should be used by anyone who believes they have witnessed or-->
-<!--                    been the target of an incident of discrimination, bias, or harassment based on a protected class (sex,-->
-<!--                    race, color, religion, national origin, ancestry, disability, age, sexual orientation, marital status,-->
-<!--                    military status, gender expression/identity, genetic information, pregnancy or any other protected-->
-<!--                    classes). These reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,-->
-<!--                    dependent on the status of the individual who caused harm.</i>-->
-<!--                </p>-->
                 <c-advocate-bias-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-bias-incident-report-lwc>
+            </div>
+
+            <div lwc:if={showWhatMisconduct} class="slds-m-top_large">
+                <c-advocate-title-ix-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwc>
             </div>
 
             <template lwc:if={showWhatOther.show}>
@@ -283,12 +280,12 @@
                     </div>
                 </div>
                 <div class="slds-m-vertical_x-large">
-                    <lightning-button variant="success"
+                    <lightning-button class="submit_button"
                                       type="button"
                                       label="SUBMIT"
+                                      variant="success"
                                       disabled={submitDisable}
                                       onclick={submitCase}
-                                      class="submit_button"
                                       disable-animation>
                     </lightning-button>
                 </div>
@@ -314,74 +311,6 @@
                 <p>
                     Who "Non Student" display this form: [need link to form]
                 </p>
-            </template>
-<!--            <template lwc:if={showWhatDiscrimination.text}>-->
-<!--                <p class="slds-m-bottom_small"><i>This form should be used by anyone who believes they have witnessed or-->
-<!--                    been the target of an incident of discrimination, bias, or harassment based on a protected class (sex,-->
-<!--                    race, color, religion, national origin, ancestry, disability, age, sexual orientation, marital status,-->
-<!--                    military status, gender expression/identity, genetic information, pregnancy or any other protected-->
-<!--                    classes). These reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,-->
-<!--                    dependent on the status of the individual who caused harm.</i>-->
-<!--                </p>-->
-<!--                <p>-->
-<!--                    <lightning-button variant="base"-->
-<!--                                      type="button"-->
-<!--                                      label="Submit a Bias Incident Report"-->
-<!--                                      data-formlink="bias"-->
-<!--                                      onclick={formLink}-->
-<!--                                      disable-animation>-->
-<!--                    </lightning-button>-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatDiscrimination.anon}>-->
-<!--                <p>-->
-<!--                    I am "all" display this form:-->
-<!--                    <lightning-formatted-url value="https://stthomas-advocate.symplicity.com/public_report/index.php/"-->
-<!--                                             tooltip="https://stthomas-advocate.symplicity.com/public_report/index.php/"-->
-<!--                                             label="Submit a Bias Incident Report"-->
-<!--                                             target="_blank"></lightning-formatted-url>-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatDiscrimination.facStaff}>-->
-<!--                    I am Faculty or Staff display this form: [need link to form]-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatDiscrimination.student}>-->
-<!--                    I am Student display this form: [need link to form]-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatDiscrimination.other}>-->
-<!--                    I am Other display this form: [need link to form]-->
-<!--                </p>-->
-<!--            </template>-->
-            <template lwc:if={showWhatMisconduct.text}>
-                <p class="slds-m-bottom_small"><i>Sexual misconduct, under our policy, includes sexual harassment, sexual
-                    assault, domestic or dating violence, stalking, and sexual exploitation). The Title IX Coordinator
-                    receives these reports and works to address incidents and connects individuals to resources and
-                    reporting options with the goals of support, safety, and security in an effort to reduce harm.</i>
-                </p>
-<!--                <p>-->
-<!--                    <lightning-button variant="base"-->
-<!--                                      type="button"-->
-<!--                                      label="Submit a Title IX (sexual misconduct) Report"-->
-<!--                                      data-formlink="misconduct"-->
-<!--                                      onclick={formLink}-->
-<!--                                      disable-animation>-->
-<!--                    </lightning-button>-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatMisconduct.anon}>-->
-<!--                <p>-->
-<!--                    I am "all" display this form:-->
-<!--                    <lightning-formatted-url value="https://stthomas-advocate.symplicity.com/titleix_report/index.php/"-->
-<!--                                             tooltip="https://stthomas-advocate.symplicity.com/titleix_report/index.php/"-->
-<!--                                             label="Submit a Title IX (sexual misconduct) Report"-->
-<!--                                             target="_blank"></lightning-formatted-url>-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatMisconduct.facStaff}>-->
-<!--                    I am Faculty or Staff display this form: [need link to form]-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatMisconduct.student}>-->
-<!--                    I am Student display this form: [need link to form]-->
-<!--                </p>-->
-<!--                <p lwc:if={showWhatMisconduct.other}>-->
-<!--                    I am Other display this form: [need link to form]-->
-<!--                </p>-->
             </template>
         </div>
     </form>
