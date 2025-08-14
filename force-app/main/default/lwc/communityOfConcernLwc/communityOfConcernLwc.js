@@ -19,6 +19,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     // @api paramCrn = "";
     @api paramUrl = "";
     // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sfid=003f200002qXsc4AAC&sbid=&crn=";
+    // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=100408312&sfid=&sbid=&crn="
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
@@ -88,7 +89,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
     get showConcernedWhatSelect() {
         // return this.showConcernedWhoInfo && !!this.communityOfConcernCase.ConcernedWhoFirstName && !!this.communityOfConcernCase.ConcernedWhoLastName;
-        return this.showConcernedWhoSelect;
+        return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
     }
 
     get showWhatTommieAlerts() {

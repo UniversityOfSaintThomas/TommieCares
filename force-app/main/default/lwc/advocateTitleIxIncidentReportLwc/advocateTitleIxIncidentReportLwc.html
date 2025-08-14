@@ -250,7 +250,7 @@
                 </lightning-input>
             </div>
         </div>
-        <div if:true={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
+        <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
             <p>Attached Files:</p>
             <template for:each={attachDocuments} for:item="file">
                 <div key={file.fileId} class="slds-p-left_xx-small">
@@ -266,7 +266,7 @@
                 </div>
             </template>
         </div>
-        <div if:true={showAttachDocumentExcludeName} class="excluded-file-list">
+        <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
             <p>Excluded Files:</p>
             <template for:each={attachDocumentsExclude} for:item="file">
                 <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB {file.fileWarning}</p>

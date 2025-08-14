@@ -10,7 +10,7 @@
     <form lwc:else id="communityofconcernform" data-form="communityofconcernform">
         <p class="slds-m-bottom_medium heading-text">Tell Someone</p>
         <div class="regular_body_text">
-            <p class="slds-m-bottom_small">2 <b>Tell Someone</b> is a St. Thomas tool that
+            <p class="slds-m-bottom_small">4 <b>Tell Someone</b> is a St. Thomas tool that
                 allows you to report concerns about an undergraduate or graduate student or employee who may be
                 struggling with issues related to health, well-being, or threats of harm, or who may be navigating a
                 situation where they suspect discrimination, bias, or harassment are present.
@@ -34,7 +34,6 @@
                 report will not be shared with you without the direct written consent of the student(s) involved.</p>
             <p class="slds-m-bottom_small">Reports about faculty/staff are private [add language on confidentiality and privacy].</p>
             <p class="slds-m-top_large slds-m-bottom_medium"><b>Tell Us About Your Concerns</b></p>
-
             <div class="slds-form-element slds-m-vertical_medium">
                 <label class="slds-form-element__label selection-labels" for="i-am-selection-id">
                     I am a:<abbr class="slds-required" title="Required">*</abbr></label>
@@ -51,50 +50,47 @@
                     </lightning-combobox>
                 </div>
             </div>
-
             <p lwc:if={iAmAnonymousCheck} class="slds-m-bottom_small"><i>Reports can be made anonymously
                 via this form. If you choose to submit this form anonymously, please understand our ability to take action may be limited,
                 as we may need additional information and will not have a way to ask follow-up questions</i>
             </p>
-
-<!--            <template lwc:if={showConcernedWhoSelect}>-->
-<!--                <p class="heading-text slds-m-vertical_medium">Tell Us Who You're Concerned About</p>-->
-            <div class="slds-form-element slds-m-vertical_medium">
-                <label class="slds-form-element__label selection-labels" for="concerned-who_select-id">
-                    Who are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control">
-                    <lightning-combobox class="selection-width"
-                                        id="concerned-who_select-id"
-                                        label=""
-                                        value={communityOfConcernCase.ConcernedWhoValue}
-                                        placeholder="Choose an item"
-                                        options={concernedWhoOptions}
-                                        data-selecttype="concernedwhoselect"
-                                        variant="label-hidden"
-                                        onchange={singleSelectHandler}>
-                    </lightning-combobox>
+            <template lwc:if={showConcernedWhoSelect}>
+                <!--                <p class="heading-text slds-m-vertical_medium">Tell Us Who You're Concerned About</p>-->
+                <div class="slds-form-element slds-m-vertical_medium">
+                    <label class="slds-form-element__label selection-labels" for="concerned-who_select-id">
+                        Who are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox class="selection-width"
+                                            id="concerned-who_select-id"
+                                            label=""
+                                            value={communityOfConcernCase.ConcernedWhoValue}
+                                            placeholder="Choose an item"
+                                            options={concernedWhoOptions}
+                                            data-selecttype="concernedwhoselect"
+                                            variant="label-hidden"
+                                            onchange={singleSelectHandler}>
+                        </lightning-combobox>
+                    </div>
                 </div>
-            </div>
-<!--            </template>-->
-
-<!--            <template lwc:if={showConcernedWhatSelect} class="slds-form-element slds-m-vertical_large">-->
-            <div class="slds-form-element slds-m-vertical_medium">
-                <label class="slds-form-element__label selection-labels" for="concerned-what-selection-id">
-                    What are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control">
-                    <lightning-combobox class="selection-width-wider"
-                                        id="concerned-what-selection-id"
-                                        label=""
-                                        value={communityOfConcernCase.ConcernedWhatValue}
-                                        placeholder="Choose an item"
-                                        options={concernedWhatOptions}
-                                        data-selecttype="concernedwhatselect"
-                                        variant="label-hidden"
-                                        onchange={singleSelectHandler}>
-                    </lightning-combobox>
+            </template>
+            <template lwc:if={showConcernedWhatSelect}>
+                <div class="slds-form-element slds-m-vertical_medium">
+                    <label class="slds-form-element__label selection-labels" for="concerned-what-selection-id">
+                        What are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox class="selection-width-wider"
+                                            id="concerned-what-selection-id"
+                                            label=""
+                                            value={communityOfConcernCase.ConcernedWhatValue}
+                                            placeholder="Choose an item"
+                                            options={concernedWhatOptions}
+                                            data-selecttype="concernedwhatselect"
+                                            variant="label-hidden"
+                                            onchange={singleSelectHandler}>
+                        </lightning-combobox>
+                    </div>
                 </div>
-            </div>
-<!--            </template>-->
+            </template>
 
             <div lwc:if={showWhatTommieAlerts} class="slds-m-top_large">
                 <c-tommie-cares-lwc param-url={paramUrl} community-of-concern-lwc="advisor_info_hide"></c-tommie-cares-lwc>

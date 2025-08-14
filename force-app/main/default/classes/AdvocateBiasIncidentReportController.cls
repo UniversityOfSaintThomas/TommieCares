@@ -130,12 +130,17 @@ public without sharing class AdvocateBiasIncidentReportController {
     }
 
     @AuraEnabled(Cacheable=false)
-    public static String saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
+    public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
+//        System.debug(JSON.serializePretty(attachedDocumentsList));
+        List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
         String recordUrl = '';
+        Map<String, String> returnStatusUrl = new Map<String, String>{
+                'Status' => '',
+                'Url' => ''
+        };
 
-        if (attachedDocumentsList.size() > 0 ) {
+        if (attachedDocumentsList.size() > 0) {
             String recordType;
-
             List<RecordType> recordTypeQuery = [
                     SELECT Id,
                             Name,
@@ -154,24 +159,81 @@ public without sharing class AdvocateBiasIncidentReportController {
                     Name = 'Advocate Bias Incident'
             );
 
-            insert supportingDocument;
+            try {
+                insert supportingDocument;
 
-            for (DocumentsWrapper d : attachedDocumentsList) {
-                Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
-                ContentVersion contentVersion = new ContentVersion(
-                        Title = d.fileName,
-                        PathOnClient = d.fileName,
-                        VersionData = fileBlob,
-//                        Supporting_Document_Id__c = supportingDocument.Id,
-                        Origin = 'C'
-                );
-                insert contentVersion;
+                for (DocumentsWrapper d : attachedDocumentsList) {
+                    Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
+                    ContentVersion contentVersion = new ContentVersion(
+                            Title = d.fileName,
+                            PathOnClient = d.fileName,
+                            VersionData = fileBlob,
+                            Supporting_Documents_Id_fileupload__c = supportingDocument.Id,
+                            Origin = 'C'
+                    );
+                    insertContentVersionList.add(contentVersion);
+                }
 
+                insert insertContentVersionList;
+
+                String baseUrl = Url.getOrgDomainUrl().toExternalForm();
+                recordUrl = baseUrl + '/' + supportingDocument.Id;
+                returnStatusUrl.put('Status','success');
+                returnStatusUrl.put('Url',recordUrl);
+
+            } catch (DmlException e) {
+                returnStatusUrl.put('Status','error');
+                returnStatusUrl.put('Url','There was an error attaching documents.');
+                System.debug('saveSupportingDocuments error: ' + e);
             }
-            String baseUrl = Url.getOrgDomainUrl().toExternalForm();
-            recordUrl = baseUrl + '/' + supportingDocument.Id;
         }
 
-        return recordUrl;
+        return returnStatusUrl;
     }
+
+//    @AuraEnabled(Cacheable=false)
+//    public static String saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
+//        String recordUrl = '';
+//
+//        if (attachedDocumentsList.size() > 0 ) {
+//            String recordType;
+//
+//            List<RecordType> recordTypeQuery = [
+//                    SELECT Id,
+//                            Name,
+//                            DeveloperName
+//                    FROM RecordType
+//                    WHERE SobjectType = 'Supporting_Document__c'
+//                    AND DeveloperName = 'Current_Student'
+//            ];
+//
+//            if (recordTypeQuery.size() > 0) {
+//                recordType = recordTypeQuery[0].Id;
+//            }
+//
+//            Supporting_Document__c supportingDocument = new Supporting_Document__c(
+//                    RecordTypeId = recordType,
+//                    Name = 'Advocate Bias Incident'
+//            );
+//
+//            insert supportingDocument;
+//
+//            for (DocumentsWrapper d : attachedDocumentsList) {
+//                Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
+//                ContentVersion contentVersion = new ContentVersion(
+//                        Title = d.fileName,
+//                        PathOnClient = d.fileName,
+//                        VersionData = fileBlob,
+//                        Supporting_Documents_Id_fileupload__c = supportingDocument.Id,
+//                        Origin = 'C'
+//                );
+//                insert contentVersion;
+//
+//            }
+//            String baseUrl = Url.getOrgDomainUrl().toExternalForm();
+//            recordUrl = baseUrl + '/' + supportingDocument.Id;
+//        }
+//
+//        return recordUrl;
+//    }
 }

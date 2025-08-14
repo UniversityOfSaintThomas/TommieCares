@@ -5,7 +5,7 @@
 <!-- Advocate Bias Incident Report Lwc -->
 <template>
     <div class="regular-body-text">
-        <p class="slds-m-bottom_small">3 The University of St. Thomas is committed to creating and maintaining an
+        <p class="slds-m-bottom_small">7 The University of St. Thomas is committed to creating and maintaining an
             environment in which all members of the St. Thomas community — students, faculty, and staff — are
             treated with respect and dignity, free from bias and harassment. Faculty, staff, and students are
             together responsible for maintaining an educational and working environment that is consistent with
@@ -271,7 +271,7 @@
                         </lightning-input>
                     </div>
                 </div>
-                <div if:true={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
+                <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
                     <p>Attached Files:</p>
                     <template for:each={attachDocuments} for:item="file">
                         <div key={file.fileId} class="slds-p-left_xx-small">
@@ -287,12 +287,16 @@
                         </div>
                     </template>
                 </div>
-                <div if:true={showAttachDocumentExcludeName} class="excluded-file-list">
+                <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
                     <p>Excluded Files:</p>
                     <template for:each={attachDocumentsExclude} for:item="file">
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB {file.fileWarning}</p>
                     </template>
                 </div>
+            </div>
+            <div lwc:if={showUrl} class="slds-m-vertical_small">
+                Salesforce Supporting Document:
+                <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
             </div>
             <div class="slds-m-vertical_x-large">
                 <lightning-button class="submit_button"

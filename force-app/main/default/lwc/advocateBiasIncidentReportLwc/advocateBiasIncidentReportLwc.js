@@ -333,9 +333,20 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     //     }
     // }
 
+    showUrl = false;
+    returnUrl;
     async submitCase() {
         this.biasIncidentFormValues.incidentDate = this.dateTime;
         console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
+
+        await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
+            console.log(JSON.stringify(result));
+            if (result.Status === 'success') {
+                this.returnUrl = result.Url;
+                this.showUrl = true;
+            }
+
+        })
 
         // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
         //     console.log(result);
