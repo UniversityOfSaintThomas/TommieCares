@@ -15,6 +15,9 @@
 .regular-body-text p {
     font-size: 1rem;
 }
+.textblock-width {
+    width: 80%;
+}
 .selection-width {
     width: 40%;
 }
@@ -35,22 +38,6 @@
     font-size: .75rem !important;
     color: red;
 }
-/*.input_text_label {*/
-/*    padding: 10px 0 0 0;*/
-/*    !*font-size: 1rem !important;*!*/
-/*    !*font-weight: normal;*!*/
-/*    !*color: rebeccapurple;*!*/
-/*}*/
-
-/*.slds-form-element * {*/
-/*    width: 80%;*/
-/*}*/
-/*.slds-form-element__label {*/
-/*    font-size: .90rem !important;*/
-/*    font-weight: normal;*/
-/*    !*color: rebeccapurple;*!*/
-/*}*/
-
 .selection-labels {
     font-size: 1rem !important;
     font-weight: normal;

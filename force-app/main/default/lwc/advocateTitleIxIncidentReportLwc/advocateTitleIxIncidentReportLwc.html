@@ -5,7 +5,7 @@
 <!-- Advocate Title Ix Incident Report Lwc -->
 <template>
     <div class="regular-body-text">
-        <p class="slds-m-bottom_small">1 Please complete this form with as much detail as possible. If we need
+        <p class="slds-m-bottom_small">Please complete this form with as much detail as possible. If we need
             additional information from you, we will contact you at the email/number you list on the form. All
             reports are confidential.</p>
         <p class="slds-m-bottom_small">If you select to report an incident as anonymous, St. Thomas will not be able
@@ -19,7 +19,7 @@
             information; however, without this information, we will likely be limited in what we can do to follow-up
             on the reported concern. Please note that to best support you, address the behavior of the person of
             concern and to protect our community, we typically need follow-up and clarifying information from the
-            reporting person.</p>
+            reporting person.4</p>
         <p class="textarea-sublabel_2">We encourage you to share your name and contact information.</p>
         <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
             <label class="slds-form-element__label selection-labels" for="titleix-reporter-type-selection-id">
@@ -29,7 +29,7 @@
                                     id="titleix-reporter-type-selection-id"
                                     label=""
                                     options={reporterTypeOptions}
-                                    value=""
+                                    value={titleIxIncidentFormValues.reporterType}
                                     data-selecttype="reportertype"
                                     variant="label-hidden"
                                     onchange={selectValueHandler}>
@@ -85,7 +85,7 @@
                                  id="titleix-reporter-name-id"
                                  type="text"
                                  label=""
-                                 value=""
+                                 value={titleIxIncidentFormValues.reporterName}
                                  data-inputtype="name"
                                  variant="label-hidden"
                                  onchange={inputValueHandler}>
@@ -99,7 +99,7 @@
                                  id="titleix-reporter-email-id"
                                  type="email"
                                  label=""
-                                 value=""
+                                 value={titleIxIncidentFormValues.reporterEmail}
                                  data-inputtype="email"
                                  variant="label-hidden"
                                  onchange={inputValueHandler}>

@@ -93,7 +93,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                     })
                 })
                 this.reporterTypeOptions = reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporterType.id) {
+                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporterType) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
                             this.biasIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;

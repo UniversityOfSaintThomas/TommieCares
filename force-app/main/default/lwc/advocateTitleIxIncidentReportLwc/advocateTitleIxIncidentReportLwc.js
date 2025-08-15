@@ -2,13 +2,16 @@
  * Created by nguy0092 on 8/12/2025.
  */
 
-import {api, LightningElement, track} from 'lwc';
+import {api, LightningElement, track, wire} from 'lwc';
+import titleIxReportingFormOptions from "@salesforce/apexContinuation/AdvocateTitleIxIncidentReportController.titleIxReportingFormOptions";
 
 export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     @api communityOfConcernReportType = "";
     @api communityOfConcernName = "";
     @api communityOfConcernEmail = "";
     @api paramUrl = "";
+
+    @track reporterTypeOptions = [];
 
     statusWhoCausedHarmOptions = [
         {label: "Student", value: "Student"},
@@ -21,6 +24,71 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         { label: 'Yes', value: 'yes' },
         { label: 'No', value: 'no' },
     ]
+
+    @track titleIxIncidentFormValues = {
+        reporterType: "", //I am a
+        status_of_individual_who_caused_harm: [], //Status of Individual Who Caused Harm
+        reporterName: "", //Reporter's Name
+        reporterEmail: "", //Reporter's EmailRequired
+        reporterPhone: "", //Reporter's Phone
+        description: "", //Incident / Concerning Behavior Description REQUIRED
+        person_who_was_harmed_complainants: "", //Name of the person who caused harm
+        additionalLocation: "", //Location of Incident
+        date_of_incidents: "", //Date of Incident(s)Required
+        person_who_did_harm_respondents: "", //Name of the person who caused harm
+        otherWitness: "", //Witness(es)
+        notification: "", //Notification Boolean
+        reporter_followup: "", //Reporter Follow-upRequired
+        hostileEnvironment: false, //REQUIRED
+        quidProQuo: false, //REQUIRED
+        genderDiscrimination: false, //REQUIRED
+        sexualViolence: false, //REQUIRED
+        maritalStatus: false, //REQUIRED
+        retaliation: false, //REQUIRED
+    }
+
+    rendered = false;
+    renderedCallback() {
+        if(!this.rendered) {
+            this.titleIxIncidentFormValues.reporterName = !!this.communityOfConcernName ? this.communityOfConcernName : "";
+            this.titleIxIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
+            this.rendered = !this.rendered;
+        }
+    }
+
+    @wire(titleIxReportingFormOptions, {})
+    biasReportingFormOptions1Wire({error, data}) {
+        let recordOptions = [];
+        let reporterTypeOptions = [];
+        if (data) {
+            data.forEach((o) => {
+                recordOptions.push(JSON.parse(o));
+            })
+
+            if (recordOptions[0]) {
+                recordOptions[0].forEach((options) => {
+                    reporterTypeOptions.push({
+                        label: options.value,
+                        value: options.id.toString(),
+                    })
+                })
+                this.reporterTypeOptions = reporterTypeOptions;
+                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporterType) {
+                    for (let i = 0; i < this.reporterTypeOptions.length; i++) {
+                        if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
+                            this.titleIxIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (error) {
+            console.log("titleIxReportingFormOptions error: "+JSON.stringify(error));
+        }
+    }
+
     acceptedFormats = [".txt", ".pdf", ".docx", ".doc", ".jpg", ".png", ".xlsx", ".csv"];
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;

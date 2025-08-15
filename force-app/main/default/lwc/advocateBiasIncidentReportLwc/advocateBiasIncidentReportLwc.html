@@ -5,25 +5,14 @@
 <!-- Advocate Bias Incident Report Lwc -->
 <template>
     <div class="regular-body-text">
-        <p class="slds-m-bottom_small">7 The University of St. Thomas is committed to creating and maintaining an
-            environment in which all members of the St. Thomas community — students, faculty, and staff — are
-            treated with respect and dignity, free from bias and harassment. Faculty, staff, and students are
-            together responsible for maintaining an educational and working environment that is consistent with
-            institutional values.</p>
-        <p class="slds-m-bottom_small">Incidents of bias, harassment, and hate crimes all include some form of
-            unwelcome conduct that is based on a person’s race, color, creed, religion, national origin, sex,
-            sexual orientation, gender identity or expression, disability, age, marital status, family status,
-            status with regard to public assistance, or any other protected characteristic.</p>
-        <p class="slds-m-bottom_small">Please use this form to report any behaviors of concern involving St.
-            Thomas students, faculty or staff, whether these behaviors occur on or off campus. Please note that
-            if you choose to report anonymously, the university’s ability to respond may be limited.</p>
-        <p class="slds-m-bottom_small">If you need to report an immediate emergency, call Public Safety at
-            (651)-962-5555, or dial 911. This form is NOT a police report. If you are a victim or are aware of
-            criminal conduct, you are encouraged to contact local law enforcement. The St. Thomas Department of
-            Public Safety can assist you in making such a report.</p>
-        <p class="slds-m-bottom_small">
-            Please note, if you make an anonymous report using this form, St. Thomas will not be able to respond
-            directly to you, but will assess the information submitted and consider response options.</p>
+<!--        <div class="textblock-width">-->
+            <p class="slds-m-bottom_small textblock-width"><i>This form should be used by anyone who believes they have witnessed or been the
+                target of an incident of discrimination, bias, or harassment based on a protected class (sex, race, color,
+                religion, national origin, ancestry, disability, age, sexual orientation, marital status, military status,
+                gender expression/identity, genetic information, pregnancy or any other protected classes). These reports
+                are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources, dependent on the status of
+                the individual who caused harm.4</i></p>
+<!--        </div>-->
         <p class="slds-m-top_large"><b>Reporter Type</b></p>
         <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
             <label class="slds-form-element__label selection-labels" for="bias-reporter_type-selection-id">
@@ -44,7 +33,7 @@
         <template lwc:if={showFormAll}>
             <div class="slds-m-top_x-large">
                 <p><b>Reporter Information</b></p>
-                <p class="textarea-sublabel_2">You may leave information about yourself, or you may remain anonymous. If
+                <p class="textarea-sublabel_2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
                     you do not provide your name and contact information, the university’s ability to respond may be
                     limited.</p>
             </div>
@@ -145,7 +134,7 @@
             <div class="slds-m-top_x-small slds-m-bottom_medium">
                 <div class="slds-form-element slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">Students Involved</label>
-                    <p class="textarea-sublabel_1">Please list the names (and emails or University ID numbers, if
+                    <p class="textarea-sublabel_1 textblock-width">Please list the names (and emails or University ID numbers, if
                         possible) of all the students and student groups that were involved in this incident.</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea class="custom-textarea"
@@ -215,34 +204,34 @@
                     </div>
                 </div>
             </div>
-            <p class="slds-m-top_x-large"><b>Discrimination</b></p>
-            <p class="textarea-sublabel_2">Discrimination is unfavorable or unfair treatment of an individual or
-                group based on or because of a protected characteristic by a St. Thomas employee, student, program
-                or club, involving any term or condition of employment or any term or condition of an educational
-                program or activity. Please select the area(s) below you believe discrimination was based upon.</p>
-            <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
-                <label class="slds-form-element__label selection-labels" for="bias-report-discrimination-protected-classes-id">Protected Classes</label>
-                <p class="textarea-sublabel_1">You can report any type of concerning behavior whether it falls into
-                    a protected class or not. This field is not required.</p>
-                <div class="slds-form-element__control">
-                    <lightning-checkbox-group class="check-box-text"
-                                              id="bias-report-discrimination-protected-classes-id"
-                                              name="Discrimination Protected Classes"
-                                              label=""
-                                              options={protectedClassesOptions}
-                                              value={biasIncidentFormValues.discrimination_protected_classes}
-                                              data-selecttype="protectedclass"
-                                              variant="label-hidden"
-                                              onchange={selectValueHandler}>
-                    </lightning-checkbox-group>
-                </div>
-            </div>
+<!--            <p class="slds-m-top_x-large"><b>Discrimination</b></p>-->
+<!--            <p class="textarea-sublabel_2">Discrimination is unfavorable or unfair treatment of an individual or-->
+<!--                group based on or because of a protected characteristic by a St. Thomas employee, student, program-->
+<!--                or club, involving any term or condition of employment or any term or condition of an educational-->
+<!--                program or activity. Please select the area(s) below you believe discrimination was based upon.</p>-->
+<!--            <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">-->
+<!--                <label class="slds-form-element__label selection-labels" for="bias-report-discrimination-protected-classes-id">Protected Classes</label>-->
+<!--                <p class="textarea-sublabel_1">You can report any type of concerning behavior whether it falls into-->
+<!--                    a protected class or not. This field is not required.</p>-->
+<!--                <div class="slds-form-element__control">-->
+<!--                    <lightning-checkbox-group class="check-box-text"-->
+<!--                                              id="bias-report-discrimination-protected-classes-id"-->
+<!--                                              name="Discrimination Protected Classes"-->
+<!--                                              label=""-->
+<!--                                              options={protectedClassesOptions}-->
+<!--                                              value={biasIncidentFormValues.discrimination_protected_classes}-->
+<!--                                              data-selecttype="protectedclass"-->
+<!--                                              variant="label-hidden"-->
+<!--                                              onchange={selectValueHandler}>-->
+<!--                    </lightning-checkbox-group>-->
+<!--                </div>-->
+<!--            </div>-->
             <p class="slds-m-top_x-large"><b>Descriptive Information</b></p>
             <div class="slds-m-top_x-small slds-m-bottom_x-large">
                 <div class="slds-form-element slds-m-bottom_medium">
                     <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
                         Description<abbr class="slds-required" title="Required">*</abbr></label>
-                    <p class="textarea-sublabel_1">Incident Description. Please describe the incident with as much
+                    <p class="textarea-sublabel_1 textblock-width">Incident Description. Please describe the incident with as much
                         factual detail as possible. Please include information about the nature of the incident
                         (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.),
                         and please be as specific as possible</p>

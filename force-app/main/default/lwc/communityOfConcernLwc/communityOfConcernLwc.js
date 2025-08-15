@@ -10,6 +10,7 @@ import COMMUNITY_CONCERN_WHO_TYPE from "@salesforce/schema/Case.Community_Concer
 import COMMUNITY_CONCERN_WHAT from "@salesforce/schema/Case.Community_Concern__c";
 import iAmContactInfo from "@salesforce/apex/CommunityOfConcernLwcController.iAmContactInfo";
 import saveCase from "@salesforce/apex/CommunityOfConcernLwcController.saveCase";
+import TELL_SOMEONE_LOGO from '@salesforce/resourceUrl/TellSomeoneLogoPng';
 
 export default class CommunityOfConcernLwc extends LightningElement {
 
@@ -24,6 +25,9 @@ export default class CommunityOfConcernLwc extends LightningElement {
     paramsString;
     caseSubmittedCheck = false;
 
+    get tellSomeoneLogo() {
+        return TELL_SOMEONE_LOGO;
+    }
     get communityOfConcernReportType() {
         return this.communityOfConcernCase?.IAmValue;
     };

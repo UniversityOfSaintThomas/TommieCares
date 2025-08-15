@@ -2,17 +2,14 @@
 /* * Created by nguy0092 on 7/18/2025.*/
 /* *!*/
 
-.regular_body_text p {
+.regular-body-text {
+    /*width: 90% !important;;*/
+}
+.regular-body-text p {
     font-size: 1rem !important;
 }
-
-/*.bold_text {*/
-/*    font-weight: bold;*/
-/*}*/
-
-
 .heading-text {
-    font-size: 1.50rem !important;
+    font-size: 1.15rem !important;
     font-weight: bold;
     color: rebeccapurple !important;
 }
@@ -29,6 +26,19 @@
 }
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
+}
+.logo-size {
+    width:125px;
+    /*height:auto;*/
+    margin-left: 20px;
+    /*float:left;*/
+    /*margin-right: 15px;*/
+}
+/*.link-text-size {*/
+/*    width: 100%;*/
+/*}*/
+.link-text-size p {
+    font-size: .85rem !important;
 }
 /*.input-text-label {*/
 /*    padding: 10px 0 0 0;*/

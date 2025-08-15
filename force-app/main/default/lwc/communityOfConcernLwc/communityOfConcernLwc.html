@@ -8,31 +8,62 @@
         <p class="slds-m-bottom_small">Thank you for your submission</p>
     </div>
     <form lwc:else id="communityofconcernform" data-form="communityofconcernform">
-        <p class="slds-m-bottom_medium heading-text">Tell Someone</p>
-        <div class="regular_body_text">
-            <p class="slds-m-bottom_small">4 <b>Tell Someone</b> is a St. Thomas tool that
-                allows you to report concerns about an undergraduate or graduate student or employee who may be
-                struggling with issues related to health, well-being, or threats of harm, or who may be navigating a
-                situation where they suspect discrimination, bias, or harassment are present.
-                The goal of <b>Tell Someone</b> is to help students and employees who may need
-                support and to enhance the well-being of our University community.</p>
-            <p class="slds-m-bottom_small"><b><i>Online reports are reviewed during regular business hours. If
-                you believe someone is at risk of immediate harm, call 911 or the Public Safety emergency line at 651-962-5555.</i></b></p>
-            <p class="slds-m-bottom_small">The University of St. Thomas is committed to a culture of care and respect
-                for one another. Because speaking up, advocating, and supporting others are foundational values at St. Thomas, we
-                encourage you to <b>Tell Someone</b> when you witness concerning behavior.
-                Each report is individually reviewed by designated staff and a team works to connect people of concern
-                to campus partners who can provide mental health support, basic needs, and a multitude of other resources.
-                <b>Tell Someone</b> also triages and refers any threats of violence to the appropriate campus authority.</p>
-            <p class="slds-m-bottom_small"><b>Tell Someone</b> is coordinated by the Dean of
-                Students Office. However, if the <b>Tell Someone</b> Report involves faculty or staff and no
-                students are involved, the report is automatically sent to Human Resources. Staff who receive reports are trained to identify concerns,
-                strategize pathways to resolution, and offer connection to university resources.</p>
-            <p class="slds-m-bottom_small"><b>Information on reporting party:</b></p>
-            <p class="slds-m-bottom_small">Student records, including incident reports, are protected by FERPA
-                (Family Educational Rights and Privacy Act), therefore any information regarding the outcome of this
-                report will not be shared with you without the direct written consent of the student(s) involved.</p>
-            <p class="slds-m-bottom_small">Reports about faculty/staff are private [add language on confidentiality and privacy].</p>
+<!--        <p class="slds-m-bottom_medium heading-text">Tell Someone</p>-->
+        <div class="regular-body-text">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12  slds-p-right_large">
+                    <div class="slds-m-bottom_small">
+<!--                        <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo">-->
+                        <p class="slds-m-bottom_small"><span class="heading-text">Tell Someone</span> is a St.
+                            Thomas tool that allows you to report concerns about an undergraduate or graduate student or an
+                            employee who may be struggling with issues related to health, well-being, or threats of harm, or who
+                            may be navigating a situation where they suspect discrimination, bias, sexual misconduct, or
+                            harassment are present. The goals of <b>Tell Someone</b> are to help students and employees who may need
+                            support and to enhance the well-being of our University community.</p>
+                    </div>
+                    <p class="slds-m-bottom_small"><b><i>Online reports are reviewed during regular business hours. If you
+                        believe someone is at risk of immediate harm, call 911 or the Public Safety emergency line at
+                        651-962-5555.</i></b></p>
+                    <p class="slds-m-bottom_small"><b><i>Students, faculty and staff also have the option to report a concern
+                        directly to <a href="https://www.stthomas.edu/public-safety/" target=_blank>Public Safety</a>,
+                        the <a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/" target=_blank>Dean of Students Office</a>,
+                        or <a href="https://one.stthomas.edu/sites/human-resources/SitePageModern/141920/home" target=_blank>Human Resources</a>.
+                        Dougherty Family College students also have the option to report directly to Brad Pulles, Associate Dean of DFC
+                        (brad.pulles@stthomas.edu).</i></b></p>
+                    <p class="slds-m-bottom_small">The University of St. Thomas is committed to a culture of care and respect
+                        for one another. Because speaking up, advocating, and supporting others are foundational values at St.
+                        Thomas, we encourage you to <b>Tell Someone</b> when you witness concerning behavior. Each report is
+                        individually reviewed by designated staff and a team works to connect people of concern to campus
+                        partners who can provide mental health support, basic needs, and a multitude of other resources. <b>Tell Someone</b>
+                        also triages and refers any threats of violence to the appropriate campus authority.</p>
+                    <p class="slds-m-bottom_small"><b>Tell Someone</b> is coordinated by the Dean of Students Office and Human
+                        Resources. Staff who receive reports are trained to identify concerns, strategize pathways to
+                        resolution, and offer connection to university resources.</p>
+                    <p class="slds-m-vertical_small"><b>Confidentiality</b></p>
+                    <p class="slds-m-bottom_small">Details of reports, investigations, and resolutions will be kept confidential
+                        to the extent practical, consistent with the need to investigate and address any adverse impact on the
+                        affected individual and broader community. Because of confidentiality restrictions, reporting parties
+                        generally will not receive details regarding the resolution of their report.</p>
+                    <p class="slds-m-bottom_small">St. Thomas prohibits retaliation against community members who report concerns in good faith.</p>
+                    <p class="slds-m-vertical_small"><b>What happens after I submit a report of concern?</b></p>
+                    <p class="slds-m-bottom_small">A staff member from the Dean of Students Office, Title IX, or Human Resources
+                        will reach out to the reporting party. Dougherty Family College students will be contacted by the
+                        Associate Dean of Students at DFC. Our goal is to better understand the incident, ensure that resources
+                        and support are offered, and determine the appropriate resolution options for the particular report.</p>
+                    <p class="slds-m-bottom_small">Reporting parties can generally expect a response to their report within one business day.
+                        If you need a more immediate response, please call <a href="https://www.stthomas.edu/public-safety/index.html" target=_blank>Public Safety</a>.</p>
+                    <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able
+                        to respond directly to you but will assess the information submitted and consider appropriate next
+                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party. 12</p>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12" style="border: #0a0a0a solid 0px;">
+                    <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">
+                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
+                        <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/about/departments/general-counsel/policy-pdfs/nondiscrimination-and-anti-harassment-policy.pdf" target=_blank>Non-Discrimination & Anti-Harassment Policy</a></p>
+                        <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/title-ix/sexual-misconduct/index.html" target=_blank>Sexual Misconduct Response</a></p>
+                    </div>
+                </div>
+            </div>
             <p class="slds-m-top_large slds-m-bottom_medium"><b>Tell Us About Your Concerns</b></p>
             <div class="slds-form-element slds-m-vertical_medium">
                 <label class="slds-form-element__label selection-labels" for="i-am-selection-id">
