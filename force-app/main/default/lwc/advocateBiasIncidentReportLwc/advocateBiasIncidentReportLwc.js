@@ -23,6 +23,10 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         return !!this.biasIncidentFormValues.reporterType;
     }
 
+    get isAnonymous() {
+        return !(this.communityOfConcernReportType === "Anonymous");
+    }
+
     @track biasIncidentFormValues = {
         reporterType: "", //I am a
         reporterName: "", //Your Name
@@ -35,7 +39,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         affiliation_of_target: "",  //Affiliation of Harmed Party - picklist
         who_engaged_in_the_behavior: "", //Who caused the harm
         affiliation_of_person_engaged_in_harm: "", //Affiliation of Person Who Caused Harm - picklist
-        discrimination_protected_classes: [], // Discrimination Protected Classes - multi-select
+        // discrimination_protected_classes: [], // Discrimination Protected Classes - multi-select
         description: "", //Incident Description
         // _attachDocuments: "", //Attach documents/Upload [“document” subform in Advocate]
         incidentType: "12", //required
@@ -45,25 +49,14 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         residentialHallStaffCalled: false, //required
         policeCalled: false, //required
         alcohol: false, //required
+        custom_field_1: "" //temporarily using this field for Supporting Documents record ID
     }
 
     _incidentDate = "";
     _incidentTime = ""
 
-    get dateTime() {
-        let date = "";
-        let time = "";
-        if (this._incidentDate) {
-            date = this._incidentDate+"T";
-            if (this._incidentTime) {
-                let findMilliseconds = this._incidentTime.search(/[.]/);
-                let newTime = this._incidentTime.slice(0, findMilliseconds);
-                time = newTime+"Z";
-            } else {
-                time = "Z";
-            }
-        }
-        return date+time;
+    get submitDisable() {
+        return !(!!this.biasIncidentFormValues.reporterType && !!this.biasIncidentFormValues.incidentDate && !!this.biasIncidentFormValues.description);
     }
 
     rendered = false;
@@ -98,6 +91,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
                             this.biasIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
                             break;
+                        } else {
+                            let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
+                            if (otherType) {
+                                this.biasIncidentFormValues.reporterType = otherType.value;
+                            }
                         }
                     }
                 }
@@ -195,6 +193,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                     this._incidentDate = "";
                 }
                 console.log("Date: "+this._incidentDate);
+                this.biasIncidentFormValues.incidentDate = this.dateTime();
                 break;
             case "time":
                 if (eventValue) {
@@ -203,13 +202,8 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                     this._incidentTime = "";
                 }
                 console.log("Time: "+this._incidentTime);
+                this.biasIncidentFormValues.incidentDate = this.dateTime();
                 break;
-            // case "datetime":
-            //     let findMilliseconds = eventValue.search(/[.]/);
-            //     let updateDateTime = eventValue.slice(0, findMilliseconds)+"Z";
-            //     this.biasIncidentFormValues.incidentDate = updateDateTime;
-            //     console.log("newDateTime: "+updateDateTime);
-            //     break;
             case "location":
                 this.biasIncidentFormValues.additionalInformation = eventValue;
                 break;
@@ -303,50 +297,46 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         }
     }
 
-    // attachDocumentName;
-    // attachDocumentContent;
-    // attachDocumentsHandler(event) {
-    //     // Get the list of uploaded files
-    //     const uploadedFiles = event.target.files;
-    //     console.log("Uploaded Files Length: "+event.target.files.length);
-    //
-    //     if (uploadedFiles.length > 0) {
-    //         const file = uploadedFiles[0];
-    //         this.attachDocumentName = file.name;
-    //
-    //         console.log("Uploaded Files Name: "+file.name);
-    //         console.log("Uploaded Files Size: "+file.size);
-    //         console.log("Uploaded Files Type: "+file.type);
-    //
-    //         // Read the file content
-    //         const reader = new FileReader();
-    //         // reader.readAsDataURL(file); // This Data URL string is a base64-encoded representation of the file's content
-    //         reader.readAsText(file);
-    //         // After reader.readAsText(file) is done reading the file an onload event is triggered so you can get results
-    //         reader.onload = () => {
-    //             this.attachDocumentContent = reader.result; // Results is content of read file so you can then send this content to an Apex method for server-side processing
-    //         };
-    //
-    //     } else {
-    //         this.attachDocumentName = '';
-    //         this.attachDocumentContent = '';
-    //     }
-    // }
+    dateTime() {
+        let date = "";
+        let time = "";
+        if (this._incidentDate) {
+            date = this._incidentDate+"T";
+            if (this._incidentTime) {
+                let findMilliseconds = this._incidentTime.search(/[.]/);
+                let newTime = this._incidentTime.slice(0, findMilliseconds);
+                time = newTime+"Z";
+            } else {
+                time = "Z";
+            }
+        }
+        return date+time;
+    }
 
     showUrl = false;
     returnUrl;
     async submitCase() {
-        this.biasIncidentFormValues.incidentDate = this.dateTime;
-        console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
-
+        // this.biasIncidentFormValues.incidentDate = this.dateTime;
         await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
             console.log(JSON.stringify(result));
             if (result.Status === 'success') {
+                this.biasIncidentFormValues.custom_field_1 = result.Url;
+
                 this.returnUrl = result.Url;
                 this.showUrl = true;
             }
-
         })
+        console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
+
+        try {
+            delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
+            let formValues = JSON.stringify(this.biasIncidentFormValues);
+            let postBiasReportResults = await submitForm({formValues: formValues});
+            console.log("imperativeContinuation results: "+JSON.stringify(postBiasReportResults));
+            this.error = undefined;
+        } catch (error) {
+            this.error = error;
+        }
 
         // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
         //     console.log(result);

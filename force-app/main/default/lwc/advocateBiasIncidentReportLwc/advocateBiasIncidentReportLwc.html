@@ -31,57 +31,59 @@
             </div>
         </div>
         <template lwc:if={showFormAll}>
-            <div class="slds-m-top_x-large">
-                <p><b>Reporter Information</b></p>
-                <p class="textarea-sublabel_2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
-                    you do not provide your name and contact information, the university’s ability to respond may be
-                    limited.</p>
-            </div>
-            <div class="slds-m-top_x-small slds-m-bottom_medium">
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="bias-reporter-name-id">Your Name:</label>
-                    <p class="textarea-sublabel_1">Please provide your full name.</p>
-                    <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="bias-reporter-name-id"
-                                         type="text"
-                                         label=""
-                                         value={biasIncidentFormValues.reporterName}
-                                         data-inputtype="name"
-                                         variant="label-hidden"
-                                         onchange={inputValueHandler}>
-                        </lightning-input>
+            <template lwc:if={isAnonymous}>
+                <div class="slds-m-top_x-large">
+                    <p><b>Reporter Information</b></p>
+                    <p class="textarea-sublabel_2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
+                        you do not provide your name and contact information, the university’s ability to respond may be
+                        limited.</p>
+                </div>
+                <div class="slds-m-top_x-small slds-m-bottom_medium">
+                    <div class="slds-form-element slds-m-bottom_small">
+                        <label class="slds-form-element__label selection-labels" for="bias-reporter-name-id">Your Name:</label>
+                        <p class="textarea-sublabel_1">Please provide your full name.</p>
+                        <div class="slds-form-element__control">
+                            <lightning-input class="selection-width"
+                                             id="bias-reporter-name-id"
+                                             type="text"
+                                             label=""
+                                             value={biasIncidentFormValues.reporterName}
+                                             data-inputtype="name"
+                                             variant="label-hidden"
+                                             onchange={inputValueHandler}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-form-element slds-m-bottom_small">
+                        <label class="slds-form-element__label selection-labels" for="bias-reporter-phone-id">Phone Number:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input class="selection-width"
+                                             id="bias-reporter-phone-id"
+                                             type="text"
+                                             label=""
+                                             value={biasIncidentFormValues.reporterPhone}
+                                             data-inputtype="phone"
+                                             variant="label-hidden"
+                                             onchange={inputValueHandler}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-form-element slds-m-bottom_small">
+                        <label class="slds-form-element__label selection-labels" for="bias-reporter-email-id">Your Email Address:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input class="selection-width"
+                                             id="bias-reporter-email-id"
+                                             type="email"
+                                             label=""
+                                             value={biasIncidentFormValues.reporterEmail}
+                                             data-inputtype="email"
+                                             variant="label-hidden"
+                                             onchange={inputValueHandler}>
+                            </lightning-input>
+                        </div>
                     </div>
                 </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="bias-reporter-phone-id">Phone Number:</label>
-                    <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="bias-reporter-phone-id"
-                                         type="text"
-                                         label=""
-                                         value={biasIncidentFormValues.reporterPhone}
-                                         data-inputtype="phone"
-                                         variant="label-hidden"
-                                         onchange={inputValueHandler}>
-                        </lightning-input>
-                    </div>
-                </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="bias-reporter-email-id">Your Email Address:</label>
-                    <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="bias-reporter-email-id"
-                                         type="email"
-                                         label=""
-                                         value={biasIncidentFormValues.reporterEmail}
-                                         data-inputtype="email"
-                                         variant="label-hidden"
-                                         onchange={inputValueHandler}>
-                        </lightning-input>
-                    </div>
-                </div>
-            </div>
+            </template>
             <p class="slds-m-top_x-large"><b>Time and Location</b></p>
             <p class="textarea-sublabel_2">Please provide the approximate date, time and location that this incident occurred.</p>
             <div class="slds-m-top_small slds-m-bottom_medium">
@@ -289,6 +291,7 @@
             </div>
             <div class="slds-m-vertical_x-large">
                 <lightning-button class="submit_button"
+                                  title="Please enter all required fields."
                                   type="button"
                                   label="SUBMIT"
                                   variant="success"

@@ -188,7 +188,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     connectedCallback() {
-        console.log("Version 55");
+        console.log("this.paramUrl:"+this.paramUrl);
 
         this.searchParamsUrl = new URL(this.paramUrl);
         this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);

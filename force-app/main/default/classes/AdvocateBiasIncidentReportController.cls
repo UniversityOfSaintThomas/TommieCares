@@ -13,16 +13,15 @@ public without sharing class AdvocateBiasIncidentReportController {
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/reporterType');
-//        req.setEndpoint('callout:Advocate_Symplicity_Incident_Reports/picklists/incidents/reporterType');
         req.setMethod('GET');
         req.setHeader('Authorization', api_token);
         con.addHttpRequest(req);
 
-        HttpRequest req2 = new HttpRequest();
-        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/discrimination_protected_classes');
-        req2.setMethod('GET');
-        req2.setHeader('Authorization', api_token);
-        con.addHttpRequest(req2);
+//        HttpRequest req2 = new HttpRequest();
+//        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/discrimination_protected_classes');
+//        req2.setMethod('GET');
+//        req2.setHeader('Authorization', api_token);
+//        con.addHttpRequest(req2);
 
         return con;
     }
@@ -33,13 +32,15 @@ public without sharing class AdvocateBiasIncidentReportController {
 
         // Get the response by using the unique label
         HttpResponse response1 = Continuation.getResponse(labels[0]);
-        HttpResponse response2 = Continuation.getResponse(labels[1]);
+//        HttpResponse response2 = Continuation.getResponse(labels[1]);
 
-        if (response1.getStatusCode() == 200 & response2.getStatusCode() == 200) {
+//        if (response1.getStatusCode() == 200 & response2.getStatusCode() == 200) {
+        if (response1.getStatusCode() == 200) {
             resultsObjects.add(response1.getBody());
-            resultsObjects.add(response2.getBody());
+//            resultsObjects.add(response2.getBody());
         } else {
-            System.debug('processGetResponse1 Error: '+response1.getStatusCode()+ ' '+response2.getStatusCode());
+//            System.debug('processGetResponse1 Error: '+response1.getStatusCode()+ ' '+response2.getStatusCode());
+            System.debug('processGetResponse1 Error: '+response1.getStatusCode());
         }
 
         return resultsObjects;
@@ -53,7 +54,6 @@ public without sharing class AdvocateBiasIncidentReportController {
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/affiliation_of_target');
-//        req.setEndpoint('callout:Advocate_Symplicity_Incident_Reports/picklists/incidents/affiliation_of_target');
         req.setMethod('GET');
         req.setHeader('Authorization', api_token);
         con.addHttpRequest(req);
@@ -91,16 +91,16 @@ public without sharing class AdvocateBiasIncidentReportController {
         System.debug('This form values: '+formValues);
 
         Continuation con = new Continuation(60);
-//        con.continuationMethod = 'processPostResponse';
-//        con.state='Form Submitted';
-//
-//        HttpRequest req = new HttpRequest();
-//        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/incidents');
-//        req.setMethod('POST');
-//        req.setHeader('Authorization', api_token);
-//        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-//        req.setBody(formValues);
-//        con.addHttpRequest(req);
+        con.continuationMethod = 'processPostResponse';
+        con.state='Form Submitted';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/incidents');
+        req.setMethod('POST');
+        req.setHeader('Authorization', api_token);
+        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.setBody(formValues);
+        con.addHttpRequest(req);
 
         return con;
     }
