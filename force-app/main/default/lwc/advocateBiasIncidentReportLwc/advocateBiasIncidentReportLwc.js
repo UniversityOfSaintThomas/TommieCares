@@ -41,9 +41,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         affiliation_of_person_engaged_in_harm: "", //Affiliation of Person Who Caused Harm - picklist
         // discrimination_protected_classes: [], // Discrimination Protected Classes - multi-select
         description: "", //Incident Description
-        // _attachDocuments: "", //Attach documents/Upload [“document” subform in Advocate]
         incidentType: "12", //required
-        // location: null, //required
         additionalLocation: "1", //required
         emsCalled: false, //required
         residentialHallStaffCalled: false, //required
@@ -52,13 +50,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         custom_field_1: "" //temporarily using this field for Supporting Documents record ID
     }
 
-    _incidentDate = "";
-    _incidentTime = ""
-
     get submitDisable() {
-        return !(!!this.biasIncidentFormValues.reporterType && !!this.biasIncidentFormValues.incidentDate && !!this.biasIncidentFormValues.description);
+        return !(!!this.biasIncidentFormValues.reporterType && this.validDateTime && !!this.biasIncidentFormValues.description && this.validEmail);
     }
-
+    dateFieldElement;
+    timeFieldElement;
     rendered = false;
     renderedCallback() {
         if(!this.rendered) {
@@ -66,6 +62,8 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
             this.biasIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
             this.rendered = !this.rendered;
         }
+        this.dateFieldElement = this.template.querySelector("[data-inputtype='date']");
+        this.timeFieldElement = this.template.querySelector("[data-inputtype='time']");
     }
 
     @wire(biasReportingFormOptions1, {})
@@ -85,6 +83,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                         value: options.id.toString(),
                     })
                 })
+
                 this.reporterTypeOptions = reporterTypeOptions;
                 if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporterType) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
@@ -170,11 +169,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 this.biasIncidentFormValues.discrimination_protected_classes = eventValue;
                 break;
         }
-
     }
 
     inputValueHandler(event) {
         console.log("input value: "+event.detail.value);
+        let eventField = event.target;
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -184,7 +183,12 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 this.biasIncidentFormValues.reporterPhone = eventValue;
                 break;
             case "email":
-                this.biasIncidentFormValues.reporterEmail = eventValue;
+                if (!eventValue) {
+                    this.validEmailWarning = false;
+                    this.validEmail = true;
+                } else {
+                    this.validEmail = false;
+                }
                 break;
             case "date":
                 if (eventValue) {
@@ -193,7 +197,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                     this._incidentDate = "";
                 }
                 console.log("Date: "+this._incidentDate);
-                this.biasIncidentFormValues.incidentDate = this.dateTime();
                 break;
             case "time":
                 if (eventValue) {
@@ -202,7 +205,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                     this._incidentTime = "";
                 }
                 console.log("Time: "+this._incidentTime);
-                this.biasIncidentFormValues.incidentDate = this.dateTime();
                 break;
             case "location":
                 this.biasIncidentFormValues.additionalInformation = eventValue;
@@ -297,46 +299,112 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         }
     }
 
-    dateTime() {
-        let date = "";
-        let time = "";
-        if (this._incidentDate) {
-            date = this._incidentDate+"T";
-            if (this._incidentTime) {
-                let findMilliseconds = this._incidentTime.search(/[.]/);
-                let newTime = this._incidentTime.slice(0, findMilliseconds);
-                time = newTime+"Z";
+    validEmail = true;
+    validEmailWarning = false;
+    emailValidationBlur(event) {
+        const emailField = event.target;
+        const emailAddress = event.target.value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (emailAddress && !(emailRegex.test(emailAddress))) {
+            // emailField.setCustomValidity("Invalid email address format");
+            this.validEmail = false;
+            this.validEmailWarning = true;
+        } else {
+            // emailField.setCustomValidity("");
+            this.biasIncidentFormValues.reporterEmail = emailAddress;
+            this.validEmail = true;
+            this.validEmailWarning = false;
+        }
+
+        // emailField.reportValidity();
+    }
+
+    _incidentDate = "";
+    _incidentTime = "";
+    validDateTime = false;
+    validDateWarning = false;
+    validTimeWarning = false;
+    dateWarningText = "";
+    timeWarningText = "";
+    dateValidationBlur(event) {
+        this.validDateTime = false;
+        const dateTimeField = event.target;
+        const dateTimeDataType = event.currentTarget.dataset.inputtype;
+        let inputDate = this._incidentDate;
+        let inputTime = "00:00:00";
+        const dateNow = new Date();
+        const dateTimeNow = dateNow.getTime();
+        if (this._incidentTime) {
+            const findMilliseconds = this._incidentTime.search(/[.]/);
+            inputTime  = this._incidentTime.slice(0, findMilliseconds);
+            this.validTimeWarning = false;
+        } else if (dateTimeDataType === "time" && !dateTimeField.checkValidity())  {
+            this.timeWarningText = "Invalid Time format";
+            this.validTimeWarning = true;
+        }
+
+        if (this.dateFieldElement) {this.dateFieldElement.classList.remove("slds-has-error");}
+        if (this.timeFieldElement) {this.timeFieldElement.classList.remove("slds-has-error");}
+
+        if (!this._incidentDate) {
+            if (this.dateFieldElement) {this.dateFieldElement.classList.add("slds-has-error");}
+            if (dateTimeDataType === "date" && !dateTimeField.checkValidity()) {
+                this.dateWarningText = "Invalid Date format";
             } else {
-                time = "Z";
+                this.dateWarningText = "Date cannot be blank";
+            }
+            this.validDateWarning = true;
+        } else if (dateTimeField.checkValidity()) {
+            const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
+            if (dateInputParse > dateTimeNow) {
+                if (dateTimeDataType === "date") {
+                    this.dateWarningText ="Cannot be future Date";
+                    this.validDateWarning = true;
+                    if (this.dateFieldElement) {this.dateFieldElement.classList.add("slds-has-error");}
+                } else if (dateTimeDataType === "time") {
+                    if (this._incidentTime) {
+                        this.timeWarningText = "Cannot be future Time";
+                        this.validTimeWarning = true;
+                        if (this.timeFieldElement) {this.timeFieldElement.classList.add("slds-has-error");}
+                    } else {
+                        this.validTimeWarning = false;
+                    }
+                }
+            } else {
+                this.biasIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
+                this.validDateTime = true;
+                this.validDateWarning = false;
+                this.validTimeWarning = false;
             }
         }
-        return date+time;
+        // console.log("Input Date: "+dateInputParse + " Date only now: "+dateOnly.getTime() + "Date Time Now: "+dateTimeNow.getTime());
     }
 
     showUrl = false;
     returnUrl;
     async submitCase() {
-        // this.biasIncidentFormValues.incidentDate = this.dateTime;
-        await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-            console.log(JSON.stringify(result));
-            if (result.Status === 'success') {
-                this.biasIncidentFormValues.custom_field_1 = result.Url;
 
-                this.returnUrl = result.Url;
-                this.showUrl = true;
-            }
-        })
+        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
+        //     console.log(JSON.stringify(result));
+        //     if (result.Status === 'success') {
+        //         this.biasIncidentFormValues.custom_field_1 = result.Url;
+        //
+        //         this.returnUrl = result.Url;
+        //         this.showUrl = true;
+        //     }
+        // })
         console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
 
-        try {
-            delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-            let formValues = JSON.stringify(this.biasIncidentFormValues);
-            let postBiasReportResults = await submitForm({formValues: formValues});
-            console.log("imperativeContinuation results: "+JSON.stringify(postBiasReportResults));
-            this.error = undefined;
-        } catch (error) {
-            this.error = error;
-        }
+        // try {
+        //     delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
+        //     let formValues = JSON.stringify(this.biasIncidentFormValues);
+        //     let postBiasReportResults = await submitForm({formValues: formValues});
+        //     console.log("imperativeContinuation results: "+JSON.stringify(postBiasReportResults));
+        //     this.error = undefined;
+        // } catch (error) {
+        //     this.error = error;
+        // }
 
         // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
         //     console.log(result);

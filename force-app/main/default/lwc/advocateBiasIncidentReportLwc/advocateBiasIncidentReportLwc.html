@@ -11,12 +11,12 @@
                 religion, national origin, ancestry, disability, age, sexual orientation, marital status, military status,
                 gender expression/identity, genetic information, pregnancy or any other protected classes). These reports
                 are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources, dependent on the status of
-                the individual who caused harm.4</i></p>
+                the individual who caused harm.33</i></p>
 <!--        </div>-->
         <p class="slds-m-top_large"><b>Reporter Type</b></p>
         <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
             <label class="slds-form-element__label selection-labels" for="bias-reporter_type-selection-id">
-                I am a:<abbr class="slds-required" title="Required">*</abbr></label>
+                I am a:<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
             <p class="textarea-sublabel_1">Are you a student, faculty, or staff member?</p>
             <div class="slds-form-element__control">
                 <lightning-combobox class="selection-width"
@@ -73,13 +73,15 @@
                         <div class="slds-form-element__control">
                             <lightning-input class="selection-width"
                                              id="bias-reporter-email-id"
-                                             type="email"
+                                             type="text"
                                              label=""
                                              value={biasIncidentFormValues.reporterEmail}
                                              data-inputtype="email"
                                              variant="label-hidden"
-                                             onchange={inputValueHandler}>
+                                             onchange={inputValueHandler}
+                                             onblur={emailValidationBlur}>
                             </lightning-input>
+                            <div lwc:if={validEmailWarning} class="validationText">Invalid email address format</div>
                         </div>
                     </div>
                 </div>
@@ -89,21 +91,23 @@
             <div class="slds-m-top_small slds-m-bottom_medium">
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
+                        <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
                         <div class="slds-form-element__control slds-p-right_small">
-                            <lightning-input
-                                    id="bias-report-date-id"
+                            <lightning-input id="bias-report-date-id"
                                     type="date"
                                     label=""
                                     value={_incidentDate}
                                     data-inputtype="date"
                                     variant="label-hidden"
-                                    onchange={inputValueHandler}>
+                                    onchange={inputValueHandler}
+                                    onblur={dateValidationBlur}>
                             </lightning-input>
+<!--                            <div lwc:if={validDateBlankWarning} class="validationText">Date cannot be blank</div>-->
+                            <div lwc:if={validDateWarning} class="validationText">{dateWarningText}</div>
                         </div>
                     </div>
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-time-id">Time<abbr class="slds-required" title="Required">*</abbr></label>
+                        <label class="slds-form-element__label selection-labels" for="bias-report-time-id">Time</label>
                         <div class="slds-form-element__control slds-p-right_small">
                             <lightning-input
                                     id="bias-report-time-id"
@@ -112,8 +116,10 @@
                                     value={_incidentTime}
                                     data-inputtype="time"
                                     variant="label-hidden"
-                                    onchange={inputValueHandler}>
+                                    onchange={inputValueHandler}
+                                    onblur={dateValidationBlur}>
                             </lightning-input>
+                            <div lwc:if={validTimeWarning} class="validationText">{timeWarningText}</div>
                         </div>
                     </div>
                 </div>
@@ -232,7 +238,7 @@
             <div class="slds-m-top_x-small slds-m-bottom_x-large">
                 <div class="slds-form-element slds-m-bottom_medium">
                     <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
-                        Description<abbr class="slds-required" title="Required">*</abbr></label>
+                        Description<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
                     <p class="textarea-sublabel_1 textblock-width">Incident Description. Please describe the incident with as much
                         factual detail as possible. Please include information about the nature of the incident
                         (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.),

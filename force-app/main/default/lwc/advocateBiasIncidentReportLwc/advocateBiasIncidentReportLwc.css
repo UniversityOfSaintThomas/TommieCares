@@ -12,6 +12,11 @@
 /*    width: 60%;*/
 /*    padding-left: 400px;*/
 /*}*/
+.validationText {
+    color: #ba0517;
+    font-size: 0.75rem;
+    margin-top: 0.125rem;
+}
 .regular-body-text p {
     font-size: 1rem;
 }
