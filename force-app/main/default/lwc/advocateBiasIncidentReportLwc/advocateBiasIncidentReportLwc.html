@@ -5,18 +5,11 @@
 <!-- Advocate Bias Incident Report Lwc -->
 <template>
     <div class="regular-body-text">
-<!--        <div class="textblock-width">-->
-            <p class="slds-m-bottom_small textblock-width"><i>This form should be used by anyone who believes they have witnessed or been the
-                target of an incident of discrimination, bias, or harassment based on a protected class (sex, race, color,
-                religion, national origin, ancestry, disability, age, sexual orientation, marital status, military status,
-                gender expression/identity, genetic information, pregnancy or any other protected classes). These reports
-                are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources, dependent on the status of
-                the individual who caused harm.33</i></p>
-<!--        </div>-->
-        <p class="slds-m-top_large"><b>Reporter Type</b></p>
+        <p class="slds-m-vertical_medium textarea-sublabel_2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+        <p class="slds-m-top_medium"><b>Reporter Type</b></p>
         <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
             <label class="slds-form-element__label selection-labels" for="bias-reporter_type-selection-id">
-                I am a:<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
+                I am a:<abbr class="slds-required" title="Required">*</abbr></label>
             <p class="textarea-sublabel_1">Are you a student, faculty, or staff member?</p>
             <div class="slds-form-element__control">
                 <lightning-combobox class="selection-width"
@@ -31,7 +24,7 @@
             </div>
         </div>
         <template lwc:if={showFormAll}>
-            <template lwc:if={isAnonymous}>
+            <template lwc:if={isNotAnonymous}>
                 <div class="slds-m-top_x-large">
                     <p><b>Reporter Information</b></p>
                     <p class="textarea-sublabel_2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
@@ -87,11 +80,11 @@
                 </div>
             </template>
             <p class="slds-m-top_x-large"><b>Time and Location</b></p>
-            <p class="textarea-sublabel_2">Please provide the approximate date, time and location that this incident occurred.</p>
+            <p class="slds-m-bottom_xx-small textarea-sublabel_2">Please provide the approximate date, time and location that this incident occurred.</p>
             <div class="slds-m-top_small slds-m-bottom_medium">
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_2-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
+                        <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control slds-p-right_small">
                             <lightning-input id="bias-report-date-id"
                                     type="date"
@@ -102,7 +95,6 @@
                                     onchange={inputValueHandler}
                                     onblur={dateValidationBlur}>
                             </lightning-input>
-<!--                            <div lwc:if={validDateBlankWarning} class="validationText">Date cannot be blank</div>-->
                             <div lwc:if={validDateWarning} class="validationText">{dateWarningText}</div>
                         </div>
                     </div>
@@ -125,7 +117,7 @@
                 </div>
                 <div class="slds-form-element slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-location-id">Location of Incident</label>
-                    <p class="textarea-sublabel_1">Please provide as much detail about the location of this incident as possible.</p>
+                    <p class="slds-m-bottom_xx-small textarea-sublabel_1">Please provide as much detail about the location of this incident as possible.</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea class="custom-textarea"
                                             id="bias-report-location-id"
@@ -142,7 +134,7 @@
             <div class="slds-m-top_x-small slds-m-bottom_medium">
                 <div class="slds-form-element slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">Students Involved</label>
-                    <p class="textarea-sublabel_1 textblock-width">Please list the names (and emails or University ID numbers, if
+                    <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">Please list the names (and emails or University ID numbers, if
                         possible) of all the students and student groups that were involved in this incident.</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea class="custom-textarea"
@@ -235,14 +227,13 @@
 <!--                </div>-->
 <!--            </div>-->
             <p class="slds-m-top_x-large"><b>Descriptive Information</b></p>
-            <div class="slds-m-top_x-small slds-m-bottom_x-large">
+            <div class="slds-m-top_x-small slds-m-bottom_xx-large">
                 <div class="slds-form-element slds-m-bottom_medium">
                     <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
-                        Description<abbr class="slds-required" title="Required"><b>*</b></abbr></label>
-                    <p class="textarea-sublabel_1 textblock-width">Incident Description. Please describe the incident with as much
-                        factual detail as possible. Please include information about the nature of the incident
-                        (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.),
-                        and please be as specific as possible</p>
+                        Description<abbr class="slds-required" title="Required">*</abbr></label>
+                    <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">Please describe and be as specific about the incident with as much
+                        factual details as possible.<br>Include information about the nature of the incident
+                        (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.).</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea class="custom-textarea"
                                             id="bias-report-incident-description-id"
@@ -256,20 +247,21 @@
                 </div>
                 <div class="slds-form-element slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
-                    <p class="textarea-sublabel_1">Please upload any supporting documentation that you have for this incident. (Max 3.5MB/file)</p>
+                    <p class="slds-m-bottom_xx-small textarea-sublabel_1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
+                    Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
                     <div class="slds-form-element__control" style="margin-top: -15px">
                         <lightning-input
                                 id="bias-report-attach-documents-id"
                                 type="file"
                                 label=""
-                                accept={acceptedFormats}
+                                accept={acceptedExtensionTypes}
                                 multiple="true"
                                 onchange={attachDocumentsUpload}>
                         </lightning-input>
                     </div>
                 </div>
                 <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
-                    <p>Attached Files:</p>
+                    <p>Attaching Documents:</p>
                     <template for:each={attachDocuments} for:item="file">
                         <div key={file.fileId} class="slds-p-left_xx-small">
                             {file.fileName}
@@ -285,17 +277,17 @@
                     </template>
                 </div>
                 <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
-                    <p>Excluded Files:</p>
+                    <p>Excluded Documents:</p>
                     <template for:each={attachDocumentsExclude} for:item="file">
-                        <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB {file.fileWarning}</p>
+                        <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
                     </template>
                 </div>
+                <div lwc:if={showUrl} class="slds-m-vertical_small">
+                    Salesforce Supporting Document:
+                    <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
+                </div>
             </div>
-            <div lwc:if={showUrl} class="slds-m-vertical_small">
-                Salesforce Supporting Document:
-                <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
-            </div>
-            <div class="slds-m-vertical_x-large">
+            <div class="slds-m-vertical_xx-large">
                 <lightning-button class="submit_button"
                                   title="Please enter all required fields."
                                   type="button"

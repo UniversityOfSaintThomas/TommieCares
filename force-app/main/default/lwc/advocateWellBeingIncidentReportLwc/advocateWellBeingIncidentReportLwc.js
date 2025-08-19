@@ -1,80 +1,50 @@
 /**
- * Created by nguy0092 on 8/12/2025.
+ * Created by nguy0092 on 8/18/2025.
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-import titleIxReportingFormOptions from "@salesforce/apexContinuation/AdvocateTitleIxIncidentReportController.titleIxReportingFormOptions";
-import saveSupportingDocuments from "@salesforce/apex/AdvocateTitleIxIncidentReportController.saveSupportingDocuments";
-import submitForm from "@salesforce/apexContinuation/AdvocateTitleIxIncidentReportController.submitForm";
+import wellBeingReportingFormOptions from "@salesforce/apexContinuation/AdvocateWellBeingIncidentReprtController.wellBeingReportingFormOptions";
+import saveSupportingDocuments from "@salesforce/apex/AdvocateWellBeingIncidentReprtController.saveSupportingDocuments";
 
-export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
+export default class AdvocateWellBeingIncidentReportLwc extends LightningElement {
     @api communityOfConcernReportType = "";
     @api communityOfConcernName = "";
     @api communityOfConcernEmail = "";
     @api paramUrl = "";
 
     @track reporterTypeOptions = [];
-    @track statusWhoCausedHarmOptions = []
-    @track notificationOptions = [
-        { label: "Yes", value: "true" },
-        { label: "No", value: "false" },
-    ]
-    @track anonymousReportingOptions = [
-        {label: "Yes", value: "true"}
-    ]
 
     get showFormAll() {
-        return !!this.titleIxIncidentFormValues.reporterType;
-    }
-
-    get isAnonymous() {
-        return this.communityOfConcernReportType === "Anonymous";
+        return !!this.wellBeingIncidentFormValues.reporterType;
     }
     get isNotAnonymous() {
-        return !this.isAnonymous;
+        return !(this.communityOfConcernReportType === "Anonymous");
     }
 
-    iUnderstandTheStatementAboutAnonymousSelect = []
-    notificationSelect = ""
-
-    @track titleIxIncidentFormValues = {
-        reporterType: "", //I am a
-        i_understand_the_statement_about_anonymous_r: false, //Anonymous Reporting
-        status_of_individual_who_caused_harm: [], //Status of Individual Who Caused Harm
-        reporterName: "", //Reporter's Name
-        reporterEmail: "", //Reporter's EmailRequired
-        reporterPhone: "", //Reporter's Phone
-        description: "", //Incident / Concerning Behavior Description REQUIRED
-        person_who_was_harmed_complainants: "", //Name of the person who caused harm
-        additionalLocation: "", //Location of Incident
-        date_of_incidents: "", //Date of Incident(s)Required
-        person_who_did_harm_respondents: "", //Name of the person who caused harm
-        otherWitness: "", //Witness(es)
-        notification: "", //Notification Boolean
-        reporter_followup: "", //Reporter Follow-up REQUIRED
-        hostileEnvironment: false, //REQUIRED
-        quidProQuo: false, //REQUIRED
-        sexDiscrimination: true, //REQUIRED
-        sexDiscriminationType: "1", //REQUIRED -Using first value as default
-        sexualViolence: false, //REQUIRED
-        maritalStatus: false, //REQUIRED
-        retaliation: false, //REQUIRED
+    @track wellBeingIncidentFormValues = {
+        reporterType: "",
+        reporterName: "",
+        reporterEmail: "",
+        reporterPhone: "",
+        otherStudent: "",
+        studentGroup: "",
+        DONOTKNOWFORKNOW: "",
+        witness: "",
+        otherWitness: "",
+        description: "",
+        incidentType: "14", //required
+        additionalLocation: "1", //required
+        emsCalled: false, //required
+        residentialHallStaffCalled: false, //required
+        policeCalled: false, //required
+        alcohol: false, //required
+        custom_field_1: "" //temporarily using this field for Supporting Documents record ID
     }
 
-    rendered = false;
-    renderedCallback() {
-        if(!this.rendered) {
-            this.titleIxIncidentFormValues.reporterName = !!this.communityOfConcernName ? this.communityOfConcernName : "";
-            this.titleIxIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
-            this.rendered = !this.rendered;
-        }
-    }
-
-    @wire(titleIxReportingFormOptions, {})
-    titleIxReportingFormOptions1Wire({error, data}) {
+    @wire(wellBeingReportingFormOptions, {})
+    wellBeingReportingFormOptionsWire({error, data}) {
         let recordOptions = [];
         let reporterTypeOptions = [];
-        let statusWhoCausedHarmOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -87,31 +57,26 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                         value: options.id.toString(),
                     })
                 })
+
                 this.reporterTypeOptions = reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporterType) {
+                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporterType) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
-                            this.titleIxIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            this.wellBeingIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
                             break;
+                        } else {
+                            let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
+                            if (otherType) {
+                                this.wellBeingIncidentFormValues.reporterType = otherType.value;
+                            }
                         }
                     }
                 }
             }
-
-            if (recordOptions[1]) {
-                recordOptions[1].forEach((options) => {
-                    statusWhoCausedHarmOptions.push({
-                        label: options.value,
-                        value: options.id.toString(),
-                    })
-                })
-                this.statusWhoCausedHarmOptions = statusWhoCausedHarmOptions;
-            }
-
         }
 
         if (error) {
-            console.log("titleIxReportingFormOptions1Wire error: "+JSON.stringify(error));
+            console.log("wellBeingReportingFormOptionsWire error: "+JSON.stringify(error));
         }
     }
 
@@ -120,59 +85,51 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
-                this.titleIxIncidentFormValues.reporterType = eventValue;
-                break;
-            case "anonymousreporting":
-                this.iUnderstandTheStatementAboutAnonymousSelect = eventValue;
-                this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValue.includes("true");
-                break;
-            case "statuswhocausedharm":
-                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
-                break;
-            case "notification":
-                this.notificationSelect = eventValue;
-                this.titleIxIncidentFormValues.notification = eventValue === "true";
+                this.wellBeingIncidentFormValues.reporterType = eventValue;
                 break;
         }
-        console.log("titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
+        console.log("wellBeingIncidentFormValues value: "+JSON.stringify(this.wellBeingIncidentFormValues));
     }
 
     inputValueHandler(event) {
-        console.log("select value: "+event.detail.value);
+        console.log("input value: "+event.detail.value);
+        let eventField = event.target;
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
-                this.titleIxIncidentFormValues.reporterName = eventValue;
+                this.wellBeingIncidentFormValues.reporterName = eventValue;
                 break;
             case "email":
-                this.titleIxIncidentFormValues.reporterEmail = eventValue;
+                if (!eventValue) {
+                    this.validEmailWarning = false;
+                    this.validEmail = true;
+                } else {
+                    this.validEmail = false;
+                }
                 break;
             case "phone":
-                this.titleIxIncidentFormValues.reporterPhone = eventValue;
+                this.wellBeingIncidentFormValues.reporterPhone = eventValue;
+                break;
+            case "studentsinvolved":
+                this.wellBeingIncidentFormValues.otherStudent = eventValue;
+                break;
+            case "studentgroupsinvolved":
+                this.wellBeingIncidentFormValues.studentGroup = eventValue;
+                break;
+            case "donotknowforknow":
+                this.wellBeingIncidentFormValues.DONOTKNOWFORKNOW = eventValue;
+                break;
+            case "witness":
+                this.wellBeingIncidentFormValues.witness = eventValue;
+                break;
+            case "otherwitness":
+                this.wellBeingIncidentFormValues.otherWitness = eventValue;
                 break;
             case "description":
-                this.titleIxIncidentFormValues.description = eventValue;
-                break;
-            case "whoharmed":
-                this.titleIxIncidentFormValues.person_who_was_harmed_complainants = eventValue;
-                break;
-            case "location":
-                this.titleIxIncidentFormValues.additionalLocation = eventValue;
-                break;
-            case "dates":
-                this.titleIxIncidentFormValues.date_of_incidents = eventValue;
-                break;
-            case "whocausedharm":
-                this.titleIxIncidentFormValues.person_who_did_harm_respondents = eventValue;
-                break;
-            case "witnesses":
-                this.titleIxIncidentFormValues.otherWitness = eventValue;
-                break;
-            case "followup":
-                this.titleIxIncidentFormValues.reporter_followup = eventValue;
+                this.wellBeingIncidentFormValues.description = eventValue;
                 break;
         }
-        console.log("titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
+        console.log("wellBeingIncidentFormValues2 value: "+JSON.stringify(this.wellBeingIncidentFormValues));
     }
 
     validEmail = true;
@@ -186,7 +143,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
             this.validEmail = false;
             this.validEmailWarning = true;
         } else {
-            this.titleIxIncidentFormValues.reporterEmail = emailAddress;
+            this.wellBeingIncidentFormValues.reporterEmail = emailAddress;
             this.validEmail = true;
             this.validEmailWarning = false;
         }
@@ -300,7 +257,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     showUrl = false;
     returnUrl;
     async submitCase() {
-        console.log("All File: " + JSON.stringify(this.titleIxIncidentFormValues));
+        console.log("All File: " + JSON.stringify(this.wellBeingIncidentFormValues));
         await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
             console.log(JSON.stringify(result));
             if (result.Status === 'success') {
@@ -320,26 +277,5 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         // } catch (error) {
         //     this.error = error;
         // }
-
-        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-        //     console.log(result);
-        // })
-
-        // console.log("initial biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
-        // delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-        // console.log("deleted property biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
-        //
-        // let formValues = JSON.stringify(this.biasIncidentFormValues);
-        // console.log("submitted stringify biasIncidentFormValues: "+formValues);
-        // console.log("Uploaded Files Content on Submit: ", this.attachDocumentContent );
-
-        // try {
-        //     let imperativeContinuation = await submitForm({formValues: formValues});
-        //     console.log("imperativeContinuation results: "+JSON.stringify(imperativeContinuation));
-        //     this.error = undefined;
-        // } catch (error) {
-        //     this.error = error;
-        // }
     }
-
 }

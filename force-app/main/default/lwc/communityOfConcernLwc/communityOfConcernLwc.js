@@ -100,6 +100,15 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.ConcernedWhoValue === "Student";
     }
 
+    get showWhatWellBeing() {
+        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
+        return {
+            show: requiredSelected,
+            student: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue === "Student",
+            nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
+        }
+    }
+
     get showWhatDiscrimination() {
         // let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
         // return {
@@ -147,15 +156,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
     // get showConcernedWhoInfo() {
     //     return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
     // }
-
-
-    get showWhatWellBeing() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
-        return {
-            student: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue === "Student",
-            nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
-        }
-    }
 
     get submitDisable() {
         return !!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo;

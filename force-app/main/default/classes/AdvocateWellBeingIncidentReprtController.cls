@@ -1,27 +1,21 @@
 /**
- * Created by nguy0092 on 8/14/2025.
+ * Created by nguy0092 on 8/18/2025.
  */
 
-public with sharing class AdvocateTitleIxIncidentReportController {
-    private static String api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Title_IX__c');
+public with sharing class AdvocateWellBeingIncidentReprtController {
+    private static String api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Bias_Incident__c');
 
     @AuraEnabled(Continuation=true Cacheable=true)
-    public static Object titleIxReportingFormOptions() {
+    public static Object wellBeingReportingFormOptions() {
         Continuation con = new Continuation(60);
         con.continuationMethod = 'processGetResponse1';
         con.state='Picklist Values';
 
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/titleix_reports/reporterType');
+        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/reporterType');
         req.setMethod('GET');
         req.setHeader('Authorization', api_token);
         con.addHttpRequest(req);
-
-        HttpRequest req2 = new HttpRequest();
-        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/titleix_reports/status_of_individual_who_caused_harm');
-        req2.setMethod('GET');
-        req2.setHeader('Authorization', api_token);
-        con.addHttpRequest(req2);
 
         return con;
     }
@@ -32,50 +26,12 @@ public with sharing class AdvocateTitleIxIncidentReportController {
 
         // Get the response by using the unique label
         HttpResponse response1 = Continuation.getResponse(labels[0]);
-        HttpResponse response2 = Continuation.getResponse(labels[1]);
 
-        if (response1.getStatusCode() == 200 & response2.getStatusCode() == 200)  {
+        if (response1.getStatusCode() == 200) {
             resultsObjects.add(response1.getBody());
-            resultsObjects.add(response2.getBody());
         } else {
-            System.debug('processGetResponse1 Error: '+response1.getStatusCode()+ ' '+response2.getStatusCode());
+            System.debug('processGetResponse1 Error: '+response1.getStatusCode());
         }
-
-        return resultsObjects;
-    }
-
-    @AuraEnabled(Continuation=true Cacheable=true)
-    public static Object submitForm(String formValues) {
-//        String con = formValues;
-        System.debug('This form values: '+formValues);
-
-        Continuation con = new Continuation(60);
-        con.continuationMethod = 'processPostResponse';
-        con.state='Form Submitted';
-
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/titleix_reports');
-        req.setMethod('POST');
-        req.setHeader('Authorization', api_token);
-        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.setBody(formValues);
-        con.addHttpRequest(req);
-
-        return con;
-    }
-
-    @AuraEnabled(Cacheable=true)
-    public static List<Object> processPostResponse(List<String> labels, Object state) {
-        List<Object> resultsObjects = new List<Object>();
-
-        // Get the response by using the unique label
-        HttpResponse response1 = Continuation.getResponse(labels[0]);
-        resultsObjects.add(response1.getBody());
-        resultsObjects.add(response1.getStatus());
-        resultsObjects.add(response1.getStatusCode());
-        System.debug('This result getBody: '+response1.getBody());
-        System.debug('This result getStatus: '+response1.getStatus());
-        System.debug('This result getStatusCode: '+response1.getStatusCode());
 
         return resultsObjects;
     }
@@ -90,7 +46,7 @@ public with sharing class AdvocateTitleIxIncidentReportController {
 
     @AuraEnabled(Cacheable=false)
     public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
-        System.debug(JSON.serializePretty(attachedDocumentsList));
+//        System.debug(JSON.serializePretty(attachedDocumentsList));
         List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
         String recordUrl = '';
         Map<String, String> returnStatusUrl = new Map<String, String>{
@@ -115,7 +71,7 @@ public with sharing class AdvocateTitleIxIncidentReportController {
 
             Supporting_Document__c supportingDocument = new Supporting_Document__c(
                     RecordTypeId = recordType,
-                    Name = 'Advocate TitleIX Incident'
+                    Name = 'Advocate Well Being Incident'
             );
 
             try {

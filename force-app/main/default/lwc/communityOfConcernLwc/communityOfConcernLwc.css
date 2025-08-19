@@ -1,6 +1,9 @@
 /*!***/
 /* * Created by nguy0092 on 7/18/2025.*/
 /* *!*/
+.textblock-width {
+    width: 80%;
+}
 .regular-body-text {
     /*width: 90% !important;;*/
 }
@@ -38,6 +41,7 @@
 /*}*/
 .link-text-size p {
     font-size: .85rem !important;
+    font-weight: 500 !important;
 }
 /*.input-text-label {*/
 /*    padding: 10px 0 0 0;*/
@@ -129,4 +133,3 @@ lightning-button.submit_button {
     font-size: 1rem !important;
     font-weight: bold;
 }
-

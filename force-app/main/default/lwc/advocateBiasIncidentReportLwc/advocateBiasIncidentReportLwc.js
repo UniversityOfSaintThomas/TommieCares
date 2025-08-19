@@ -23,7 +23,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         return !!this.biasIncidentFormValues.reporterType;
     }
 
-    get isAnonymous() {
+    get isNotAnonymous() {
         return !(this.communityOfConcernReportType === "Anonymous");
     }
 
@@ -224,7 +224,106 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         }
     }
 
-    acceptedFormats = [".txt", ".pdf", ".docx", ".doc", ".jpg", ".png", ".xlsx", ".csv"];
+    validEmail = true;
+    validEmailWarning = false;
+    emailValidationBlur(event) {
+        const emailField = event.currentTarget;
+        const emailAddress = event.target.value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (emailAddress && !(emailRegex.test(emailAddress))) {
+            this.validEmail = false;
+            this.validEmailWarning = true;
+        } else {
+            this.biasIncidentFormValues.reporterEmail = emailAddress;
+            this.validEmail = true;
+            this.validEmailWarning = false;
+        }
+
+        if (this.validEmailWarning) {
+            emailField.classList.add("slds-has-error");
+        } else {
+            emailField.classList.remove("slds-has-error");
+        }
+    }
+
+    _incidentDate = "";
+    _incidentTime = "";
+    validDateTime = false;
+    validDateWarning = false;
+    validTimeWarning = false;
+    dateWarningText = "";
+    timeWarningText = "";
+    dateValidationBlur(event) {
+        console.log("date validity: "+this.dateFieldElement.checkValidity());
+        console.log("time validity: "+this.timeFieldElement.checkValidity());
+        const dateTimeDataType = event.currentTarget.dataset.inputtype;
+        let inputDate = this._incidentDate;
+        let inputTime = "00:00:00";
+        const dateNow = new Date();
+        const dateTimeNow = dateNow.getTime();
+        this.validDateTime = false;
+        if (!this.dateFieldElement.checkValidity() || !this.timeFieldElement.checkValidity()) {
+            if (!this.dateFieldElement.checkValidity()) {
+                this.dateWarningText = "Invalid Date format";
+                this.validDateWarning = true;
+            } else {
+                this.validDateWarning = false;
+            }
+            if (!this.timeFieldElement.checkValidity()) {
+                this.timeWarningText = "Invalid Time format";
+                this.validTimeWarning = true;
+            } else {
+                this.validTimeWarning = false;
+            }
+        } else {
+            if (!this._incidentDate) {
+                this.dateWarningText = "Date cannot be blank";
+                this.validDateWarning = true;
+                this.validTimeWarning = false;
+            } else {
+                if (this._incidentTime) {
+                    const findMilliseconds = this._incidentTime.search(/[.]/);
+                    inputTime = this._incidentTime.slice(0, findMilliseconds);
+                }
+                const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
+                if (dateInputParse > dateTimeNow) {
+                    if (!this._incidentTime) {
+                        this.dateWarningText = "Cannot be future Date";
+                        this.validDateWarning = true;
+                        this.validTimeWarning = false;
+                    } else {
+                        this.timeWarningText = "Cannot be future Time";
+                        this.validTimeWarning = true;
+                        this.validDateWarning = true;
+                    }
+                } else {
+                    this.biasIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
+                    this.validDateTime = true;
+                    this.validDateWarning = false;
+                    this.validTimeWarning = false;
+                }
+            }
+
+            if (this.validDateWarning) {
+                this.dateFieldElement.classList.add("slds-has-error");
+            } else {
+                this.dateFieldElement.classList.remove("slds-has-error");
+            }
+
+            if (this.validTimeWarning) {
+                this.timeFieldElement.classList.add("slds-has-error");
+            } else {
+                this.timeFieldElement.classList.remove("slds-has-error");
+            }
+        }
+    }
+
+    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                  "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
+                                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
@@ -241,20 +340,40 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         this.attachDocumentsExclude = [];
         if (uploadedFiles.length > 0) {
             for (const file of uploadedFiles) {
+                let fileSize = file.size;
                 let fileSizeInMB = 0;
+                let fileName = file.name;
+                let fileExtension = "."+fileName.split('.').pop();
+                let fileType = file.type;
                 new Promise((resolve, reject) => {
-                    console.log("File name: " + file.name + ' ' + file.size);
-                    fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
-                    if (fileSizeInMB < 3.5) {
+                    fileSizeInMB = (fileSize / (1024 * 1024)).toFixed(2);
+                    console.log("File info: " + fileName + " " + fileSize + " " + fileSizeInMB + " " + fileExtension + " " + fileType);
+
+                    let fileSizeLimit = fileSizeInMB < 3;
+                    let fileExtensionIncludes = this.acceptedExtensionTypes.includes(fileExtension.toLowerCase());
+                    let fileTypeIncludes = this.acceptedMimeTypes.includes(fileType.toLowerCase());
+
+                    if (fileSizeLimit && fileExtensionIncludes && fileTypeIncludes) {
                         resolve(file);
                     } else {
+                        let fileWarningType = [];
+                        if (!fileSizeLimit) {
+                            fileWarningType.push("exceeds file size limit");
+                        }
+                        if (!fileExtensionIncludes || !fileType) {
+                            fileWarningType.push("document type not supported");
+                        }
+                        let fileWarningText = fileWarningType.join("/");
+
                         this.attachDocumentsExclude.push( {
                             fileId: this.fileIndex,
-                            fileName: file.name,
+                            fileName: fileName,
                             fileSize: fileSizeInMB,
-                            fileWarning: "exceeds file size limit"
+                            fileExtension: fileExtension,
+                            fileType: fileType,
+                            fileWarning: fileWarningText
                         } )
-                        reject("File size exceeded limit");
+                        reject("Incompatible file");
                     }
                 }).then((resolveFile) => {
                     const reader = new FileReader();
@@ -275,9 +394,9 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                         this.attachDocuments.push( {
                             fileId: this.fileIndex,
                             fileContent: resolveDocumentContent,
-                            fileName: file.name,
+                            fileName: fileName,
                             fileSize: fileSizeInMB,
-                            fileType: file.type
+                            fileType: fileType
                         } );
                     }
                     console.log("All File length: " + this.attachDocuments.length);
@@ -299,102 +418,19 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         }
     }
 
-    validEmail = true;
-    validEmailWarning = false;
-    emailValidationBlur(event) {
-        const emailField = event.target;
-        const emailAddress = event.target.value;
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (emailAddress && !(emailRegex.test(emailAddress))) {
-            // emailField.setCustomValidity("Invalid email address format");
-            this.validEmail = false;
-            this.validEmailWarning = true;
-        } else {
-            // emailField.setCustomValidity("");
-            this.biasIncidentFormValues.reporterEmail = emailAddress;
-            this.validEmail = true;
-            this.validEmailWarning = false;
-        }
-
-        // emailField.reportValidity();
-    }
-
-    _incidentDate = "";
-    _incidentTime = "";
-    validDateTime = false;
-    validDateWarning = false;
-    validTimeWarning = false;
-    dateWarningText = "";
-    timeWarningText = "";
-    dateValidationBlur(event) {
-        this.validDateTime = false;
-        const dateTimeField = event.target;
-        const dateTimeDataType = event.currentTarget.dataset.inputtype;
-        let inputDate = this._incidentDate;
-        let inputTime = "00:00:00";
-        const dateNow = new Date();
-        const dateTimeNow = dateNow.getTime();
-        if (this._incidentTime) {
-            const findMilliseconds = this._incidentTime.search(/[.]/);
-            inputTime  = this._incidentTime.slice(0, findMilliseconds);
-            this.validTimeWarning = false;
-        } else if (dateTimeDataType === "time" && !dateTimeField.checkValidity())  {
-            this.timeWarningText = "Invalid Time format";
-            this.validTimeWarning = true;
-        }
-
-        if (this.dateFieldElement) {this.dateFieldElement.classList.remove("slds-has-error");}
-        if (this.timeFieldElement) {this.timeFieldElement.classList.remove("slds-has-error");}
-
-        if (!this._incidentDate) {
-            if (this.dateFieldElement) {this.dateFieldElement.classList.add("slds-has-error");}
-            if (dateTimeDataType === "date" && !dateTimeField.checkValidity()) {
-                this.dateWarningText = "Invalid Date format";
-            } else {
-                this.dateWarningText = "Date cannot be blank";
-            }
-            this.validDateWarning = true;
-        } else if (dateTimeField.checkValidity()) {
-            const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
-            if (dateInputParse > dateTimeNow) {
-                if (dateTimeDataType === "date") {
-                    this.dateWarningText ="Cannot be future Date";
-                    this.validDateWarning = true;
-                    if (this.dateFieldElement) {this.dateFieldElement.classList.add("slds-has-error");}
-                } else if (dateTimeDataType === "time") {
-                    if (this._incidentTime) {
-                        this.timeWarningText = "Cannot be future Time";
-                        this.validTimeWarning = true;
-                        if (this.timeFieldElement) {this.timeFieldElement.classList.add("slds-has-error");}
-                    } else {
-                        this.validTimeWarning = false;
-                    }
-                }
-            } else {
-                this.biasIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
-                this.validDateTime = true;
-                this.validDateWarning = false;
-                this.validTimeWarning = false;
-            }
-        }
-        // console.log("Input Date: "+dateInputParse + " Date only now: "+dateOnly.getTime() + "Date Time Now: "+dateTimeNow.getTime());
-    }
-
     showUrl = false;
     returnUrl;
     async submitCase() {
-
-        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-        //     console.log(JSON.stringify(result));
-        //     if (result.Status === 'success') {
-        //         this.biasIncidentFormValues.custom_field_1 = result.Url;
-        //
-        //         this.returnUrl = result.Url;
-        //         this.showUrl = true;
-        //     }
-        // })
         console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
+        await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
+            console.log(JSON.stringify(result));
+            if (result.Status === 'success') {
+                this.biasIncidentFormValues.custom_field_1 = result.Url;
+
+                this.returnUrl = result.Url;
+                this.showUrl = true;
+            }
+        })
 
         // try {
         //     delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE

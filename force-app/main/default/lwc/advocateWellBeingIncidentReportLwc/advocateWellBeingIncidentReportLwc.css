@@ -1,4 +1,7 @@
 /**
+ * Created by nguy0092 on 8/18/2025.
+ */
+/**
  * Created by nguy0092 on 8/12/2025.
  */
 /*.regular-body-text {*/
@@ -44,12 +47,12 @@
     width: 80%;
 }
 .custom-textarea {
-    width: 65%;
-    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
+    width: 40%;
+    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
 }
 .custom-textarea-2 {
     width: 65%;
-    --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
+    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
 }
 .attached-file-list * {
     font-size: .75rem !important;

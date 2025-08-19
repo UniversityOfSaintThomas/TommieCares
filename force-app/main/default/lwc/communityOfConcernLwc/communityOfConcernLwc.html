@@ -11,16 +11,13 @@
 <!--        <p class="slds-m-bottom_medium heading-text">Tell Someone</p>-->
         <div class="regular-body-text">
             <div class="slds-grid slds-wrap">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12  slds-p-right_large">
-                    <div class="slds-m-bottom_small">
-<!--                        <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo">-->
-                        <p class="slds-m-bottom_small"><span class="heading-text">Tell Someone</span> is a St.
-                            Thomas tool that allows you to report concerns about an undergraduate or graduate student or an
-                            employee who may be struggling with issues related to health, well-being, or threats of harm, or who
-                            may be navigating a situation where they suspect discrimination, bias, sexual misconduct, or
-                            harassment are present. The goals of <b>Tell Someone</b> are to help students and employees who may need
-                            support and to enhance the well-being of our University community.</p>
-                    </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12  slds-p-right_x-large">
+                    <p class="slds-m-bottom_small"><span class="heading-text">Tell Someone</span> is a St.
+                        Thomas tool that allows you to report concerns about an undergraduate or graduate student or an
+                        employee who may be struggling with issues related to health, well-being, or threats of harm, or who
+                        may be navigating a situation where they suspect discrimination, bias, sexual misconduct, or
+                        harassment are present. The goals of <b>Tell Someone</b> are to help students and employees who may need
+                        support and to enhance the well-being of our University community.</p>
                     <p class="slds-m-bottom_small"><b><i>Online reports are reviewed during regular business hours. If you
                         believe someone is at risk of immediate harm, call 911 or the Public Safety emergency line at
                         651-962-5555.</i></b></p>
@@ -34,8 +31,8 @@
                         for one another. Because speaking up, advocating, and supporting others are foundational values at St.
                         Thomas, we encourage you to <b>Tell Someone</b> when you witness concerning behavior. Each report is
                         individually reviewed by designated staff and a team works to connect people of concern to campus
-                        partners who can provide mental health support, basic needs, and a multitude of other resources. <b>Tell Someone</b>
-                        also triages and refers any threats of violence to the appropriate campus authority.</p>
+                        partners who can provide mental health support, basic needs, and a multitude of other resources. <b>Tell Someone</b> also
+                        triages and refers any threats of violence to the appropriate campus authority.</p>
                     <p class="slds-m-bottom_small"><b>Tell Someone</b> is coordinated by the Dean of Students Office and Human
                         Resources. Staff who receive reports are trained to identify concerns, strategize pathways to
                         resolution, and offer connection to university resources.</p>
@@ -54,17 +51,30 @@
                         If you need a more immediate response, please call <a href="https://www.stthomas.edu/public-safety/index.html" target=_blank>Public Safety</a>.</p>
                     <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able
                         to respond directly to you but will assess the information submitted and consider appropriate next
-                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party. 14</p>
+                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party. 17</p>
                 </div>
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12" style="border: #0a0a0a solid 0px;">
                     <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">
                     <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
-                        <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/about/departments/general-counsel/policy-pdfs/nondiscrimination-and-anti-harassment-policy.pdf" target=_blank>Non-Discrimination & Anti-Harassment Policy</a></p>
+                        <p class="slds-m-bottom_x-small"><b>Policies:</b></p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/about/departments/general-counsel/policy-pdfs/nondiscrimination-and-anti-harassment-policy.pdf" target=_blank>Non-Discrimination & Anti-Harassment Policy</a></p>
                         <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/title-ix/sexual-misconduct/index.html" target=_blank>Sexual Misconduct Response</a></p>
+                    </div>
+                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
+                        <p class="slds-m-bottom_x-small"><b>Support Resources:</b></p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://one.stthomas.edu/sites/center-for-well-being/counseling-and-psychological-services/SitePageModern/29420/counseling-and-psychological-services" target=_blank>
+                            Counseling and Psychological Services</a></p>
+                        <p class="slds-m-bottom_xx-small">*24/7 phone counseling line: <br>651-962-6750; press option #4</p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/index.html" target=_blank>
+                            Dean of Students Office</a></p>
+                        <p class="slds-m-bottom_xx-small">Public Safety App</p>
+                        <p class="slds-m-bottom_xx-small">Suicide and Crisis Lifeline: 988</p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.ramseycounty.us/residents/health-medical/clinics-services/sos-sexual-violence-services" target=_blank>
+                            SOS Sexual Violence Services</a></p>
                     </div>
                 </div>
             </div>
-            <p class="slds-m-top_large slds-m-bottom_medium"><b>Tell Us About Your Concerns</b></p>
+            <p class="slds-m-top_medium slds-m-bottom_small"><b>Tell Us About Your Concerns</b></p>
             <div class="slds-form-element slds-m-vertical_medium">
                 <label class="slds-form-element__label selection-labels" for="i-am-selection-id">
                     I am a:<abbr class="slds-required" title="Required">*</abbr></label>
@@ -122,25 +132,41 @@
                     </div>
                 </div>
             </template>
-
             <div lwc:if={showWhatTommieAlerts} class="slds-m-top_large">
                 <c-tommie-cares-lwc param-url={paramUrl} community-of-concern-lwc="advisor_info_hide"></c-tommie-cares-lwc>
             </div>
-
-            <div lwc:if={showWhatDiscrimination} class="slds-m-top_large">
+            <template lwc:if={showWhatWellBeing.show}>
+                <p lwc:if={showWhatWellBeing.student} class="slds-m-top_medium textblock-width"><i>Concerns for students may include mental health, self-harm, substance
+                    misuse, food insecurity, financial hardship, threatening behaviors, and much more. Reports are reviewed by
+                    the Dean of Students in consultation with the Title IX Coordinator, Counseling and Psychological Services,
+                    Residence Life, and other relevant campus partners.</i></p>
+                <p lwc:if={showWhatWellBeing.nonStudent} class="slds-m-top_medium textblock-width"><i>Concerns for staff or faculty may include mental health, substance
+                    misuse, concerning workplace behaviors, and more. Reports are reviewed by Human Resources in consultation
+                    with Title IX and/or other campus partners when appropriate.</i></p>
+                <c-advocate-well-being-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-well-being-incident-report-lwc>
+            </template>
+            <div lwc:if={showWhatDiscrimination} class="slds-m-top_medium">
+                <p class="textblock-width"><i>This form should be used by anyone who believes they have witnessed or been the
+                    target of an incident of discrimination, bias, or harassment based on a protected class (sex, race, color,
+                    religion, national origin, ancestry, disability, age, sexual orientation, marital status, military status,
+                    gender expression/identity, genetic information, pregnancy or any other protected classes). These reports
+                    are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources, dependent on the status of
+                    the individual who caused harm.24</i></p>
                 <c-advocate-bias-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-bias-incident-report-lwc>
             </div>
-
-            <div lwc:if={showWhatMisconduct} class="slds-m-top_large">
+            <div lwc:if={showWhatMisconduct} class="slds-m-top_medium">
+                <p class="textblock-width"><i>This form should be used by anyone who believes they have witnessed or
+                    been the target of an incident of discrimination, bias, or harassment based on a protected class
+                    (sex, race, color, religion, national origin, ancestry, disability, age, sexual orientation, marital
+                    status, military status, gender expression/identity, genetic information, pregnancy or any other
+                    protected classes). These reports are reviewed by the Dean of Students, Title IX Coordinator, and
+                    Human Resources, dependent on the status of the individual who caused harm.</i></p>
                 <c-advocate-title-ix-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwc>
             </div>
-
             <template lwc:if={showWhatOther.show}>
                 <div lwc:if={showWhatOther.text} class="slds-m-bottom_small">
                     <p><i>If you have updates to provide on a concern regarding a faculty or staff, please contact Human Resources at askhr@stthomas.edu</i></p>
                 </div>
-
-                <!--            <template lwc:if={showIAmInfo}>-->
                 <div class="slds-m-vertical_medium">
                     <p class="slds-m-top_large slds-m-bottom_medium"><b>Your Information</b></p>
                     <div class="slds-grid slds-wrap">
@@ -215,9 +241,6 @@
                         </div>
                     </div>
                 </div>
-                <!--            </template>-->
-
-                <!--            <template lwc:if={showConcernedWhoInfo}>-->
                 <div class="slds-m-vertical_medium">
                     <p class="slds-m-top_large slds-m-bottom_medium"><b>Who You Are Concerned About Information</b></p>
                     <div class="slds-grid slds-wrap">
@@ -287,8 +310,6 @@
                         </div>
                     </div>
                 </div>
-                <!--            </template>-->
-
                 <div class="slds-m-vertical_small">
                     <div class="slds-form-element slds-m-bottom_x-small">
                         <label class="slds-form-element__label selection-labels" for="concerned-what-additional-info-id">
@@ -316,28 +337,6 @@
                                       disable-animation>
                     </lightning-button>
                 </div>
-            </template>
-        </div>
-
-        <div class="regular_body_text">
-            <template lwc:if={showWhatWellBeing.student}>
-                <p class="slds-m-bottom_small"><i>Concerns for students may include mental health, self-harm, substance
-                    misuse, food insecurity, financial hardship, threatening behaviors, and much more. Reports are reviewed by
-                    the Dean of Students in consultation with the Title IX Coordinator, Counseling and Psychological Services,
-                    Residence Life, and other relevant campus partners.</i>
-                </p>
-                <p>
-                    Who "Student" display this form: [need link to form]
-                </p>
-            </template>
-            <template lwc:if={showWhatWellBeing.nonStudent}>
-                <p class="slds-m-bottom_small"><i>Concerns for staff or faculty may include mental health, substance
-                    misuse, concerning workplace behaviors, and more. Reports are reviewed by Human Resources in consultation
-                    with Title IX and/or other campus partners when appropriate.</i>
-                </p>
-                <p>
-                    Who "Non Student" display this form: [need link to form]
-                </p>
             </template>
         </div>
     </form>
