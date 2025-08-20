@@ -2,7 +2,7 @@
  * Created by nguy0092 on 7/31/2025.
  */
 
-public without sharing class AdvocateBiasIncidentReportController {
+public with sharing class AdvocateBiasIncidentReportController {
     private static String api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Bias_Incident__c');
 
     @AuraEnabled(Continuation=true Cacheable=true)

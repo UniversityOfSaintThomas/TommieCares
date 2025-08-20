@@ -65,11 +65,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
         if (data) {
             this.whatPicklist = JSON.parse(JSON.stringify(data.values));
             this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
-            // this.whatNoStudentPicklist = JSON.parse(JSON.stringify(data.values));
-            // const index = this.whatNoStudentPicklist.findIndex((obj) => obj.label === "I would like to report a concern about a student in one of my classes");
-            // if (index !== -1) {
-            //     this.whatNoStudentPicklist.splice(index, 1);
-            // }
         } else if (error) {
             console.log("pickListConcern Error: " + error);
         }
@@ -82,24 +77,22 @@ export default class CommunityOfConcernLwc extends LightningElement {
             return this.whatNoStudentPicklist;
         }
     }
-
     get iAmAnonymousCheck() {
         return this.communityOfConcernCase.IAmValue === "Anonymous";
     }
-
+    get iAmNotAnonymousCheck() {
+        return !this.iAmAnonymousCheck;
+    }
     get showConcernedWhoSelect() {
-        // return !!(!!this.communityOfConcernCase.IAmValue && ((!!this.communityOfConcernCase.IAmFirstName && !!this.communityOfConcernCase.IAmLastName && !!this.communityOfConcernCase.IAmEmail) || this.communityOfConcernCase.IAmValue === "Anonymous"));
         return !!this.communityOfConcernCase.IAmValue;
     }
     get showConcernedWhatSelect() {
         // return this.showConcernedWhoInfo && !!this.communityOfConcernCase.ConcernedWhoFirstName && !!this.communityOfConcernCase.ConcernedWhoLastName;
         return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
     }
-
     get showWhatTommieAlerts() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.ConcernedWhoValue === "Student";
     }
-
     get showWhatWellBeing() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
         return {
@@ -108,34 +101,12 @@ export default class CommunityOfConcernLwc extends LightningElement {
             nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
         }
     }
-
     get showWhatDiscrimination() {
-        // let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
-        // return {
-        //     text: requiredSelected,
-        //     anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
-        //     facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
-        //     student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
-        //     other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
-        // }
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
     }
-
-    // get showWhatMisconduct() {
-    //     let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
-    //     return {
-    //         text: requiredSelected,
-    //         anon: requiredSelected && this.communityOfConcernCase.IAmValue === "Anonymous",
-    //         facStaff: requiredSelected && (this.communityOfConcernCase.IAmValue === "Faculty" || this.communityOfConcernCase.IAmValue === "Staff"),
-    //         student: requiredSelected && this.communityOfConcernCase.IAmValue === "Student",
-    //         other: requiredSelected && this.communityOfConcernCase.IAmValue === "Other"
-    //     }
-    // }
-
     get showWhatMisconduct() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
     }
-
     get showWhatOther() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
         return {
@@ -143,22 +114,8 @@ export default class CommunityOfConcernLwc extends LightningElement {
             text: this.communityOfConcernCase.ConcernedWhoValue !== "Student"
         }
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // get showIAmInfo() {
-    //     const matchValue = /\b(faculty)\b|\b(staff)\b|\b(student)\b|\b(other)\b/ig;
-    //     if (!!this.communityOfConcernCase.IAmValue) {
-    //         return !!this.communityOfConcernCase?.IAmValue.match(matchValue);
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    // get showConcernedWhoInfo() {
-    //     return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
-    // }
-
     get submitDisable() {
-        return !!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo;
+        return !(!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
     }
 
     @track initialContactInfo = {};
@@ -259,11 +216,12 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     singleSelectHandler(event) {
+        let eventValue = event.detail.value;
         this.communityOfConcernCase.ConcernedWhatValue = "";
         this.communityOfConcernCase.ConcernedWhatAdditionalInfo = "";
         switch (event.currentTarget.dataset.selecttype) {
             case "iamselect":
-                this.communityOfConcernCase.IAmValue = event.detail.value;
+                this.communityOfConcernCase.IAmValue = eventValue;
                 if (this.communityOfConcernCase.IAmValue === "Anonymous") {
                     this.communityOfConcernCase.IAmContactId = "";
                     this.communityOfConcernCase.IAmFirstName = "";
@@ -285,64 +243,104 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 }
                 break;
             case "concernedwhoselect":
-                this.communityOfConcernCase.ConcernedWhoValue = event.detail.value;
+                this.communityOfConcernCase.ConcernedWhoValue = eventValue;
                 break;
             case "concernedwhatselect":
-                this.communityOfConcernCase.ConcernedWhatValue = event.detail.value;
+                this.communityOfConcernCase.ConcernedWhatValue = eventValue;
                 break;
         }
     }
 
     inputTextHandler(event) {
+        let eventField = event.target;
+        let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.communityOfConcernCase.IAmFirstName = event.detail.value.trim();
+                        this.communityOfConcernCase.IAmFirstName = eventValue.trim();
                         break;
                     case "lastname":
-                        this.communityOfConcernCase.IAmLastName = event.detail.value.trim();
+                        this.communityOfConcernCase.IAmLastName = eventValue.trim();
                         break;
                     case "email":
-                        this.communityOfConcernCase.IAmEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
+                        if (!eventValue) {
+                            this.validEmailWarning = false;
+                            this.validEmail = true;
+                        } else {
+                            this.validEmail = false;
+                        }
+                        // this.communityOfConcernCase.IAmEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
                         break;
                     case "phone":
-                        this.communityOfConcernCase.IAmPhone = event.detail.value.trim();
+                        this.communityOfConcernCase.IAmPhone = eventValue.trim();
                         break;
                 }
                 break;
             case "concernedwhoinfo":
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.communityOfConcernCase.ConcernedWhoFirstName = event.detail.value.trim();
+                        this.communityOfConcernCase.ConcernedWhoFirstName = eventValue.trim();
                         break;
                     case "lastname":
-                        this.communityOfConcernCase.ConcernedWhoLastName = event.detail.value.trim();
+                        this.communityOfConcernCase.ConcernedWhoLastName = eventValue.trim();
                         break;
                     case "email":
-                        this.communityOfConcernCase.ConcernedWhoEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
+                        if (!eventValue) {
+                            this.validEmailWarningWho = false;
+                            this.validEmailWho = true;
+                        } else {
+                            this.validEmailWho = false;
+                        }
+                        // this.communityOfConcernCase.ConcernedWhoEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
                         break;
                     case "phone":
-                        this.communityOfConcernCase.ConcernedWhoPhone = event.detail.value.trim();
+                        this.communityOfConcernCase.ConcernedWhoPhone = eventValue.trim();
                         break;
                 }
                 break;
             case "concernedwhatadditionalinfo":
-                this.communityOfConcernCase.ConcernedWhatAdditionalInfo = event.detail.value.trim();
+                this.communityOfConcernCase.ConcernedWhatAdditionalInfo = eventValue.trim();
                 break;
         }
     }
 
-    formLink(event) {
-        switch (event.currentTarget.dataset.formlink) {
-            case "bias":
-                window.open('https://stthomas-advocate.symplicity.com/public_report/index.php/', '_blank');
+    validEmail = true;
+    validEmailWarning = false;
+    validEmailWho = true;
+    validEmailWarningWho = false;
+    emailValidationBlur(event) {
+        const emailField = event.currentTarget;
+        const emailAddress = event.target.value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        let emailTestFail = !!emailAddress && !(emailRegex.test(emailAddress));
+
+        switch (event.currentTarget.dataset.inputgroup) {
+            case "iaminfo":
+                if (emailTestFail) {
+                    this.validEmail = false;
+                    this.validEmailWarning = true;
+                    emailField.classList.add("slds-has-error");
+                } else {
+                    this.communityOfConcernCase.IAmEmail = emailAddress;
+                    this.validEmail = true;
+                    this.validEmailWarning = false;
+                    emailField.classList.remove("slds-has-error");
+                }
                 break;
-            case "misconduct":
-                window.open('https://stthomas-advocate.symplicity.com/titleix_report/index.php/', '_blank');
+            case "concernedwhoinfo":
+                if (emailTestFail) {
+                    this.validEmailWho = false;
+                    this.validEmailWarningWho = true;
+                    emailField.classList.add("slds-has-error");
+                } else {
+                    this.communityOfConcernCase.ConcernedWhoEmail = emailAddress;
+                    this.validEmailWho = true;
+                    this.validEmailWarningWho = false;
+                    emailField.classList.remove("slds-has-error");
+                }
                 break;
         }
-        location.replace(this.submittedUrl());
     }
 
     submittedUrl() {
@@ -354,18 +352,31 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return this.searchParamsUrl;
     }
 
-    async submitCase() {
-        console.log("We good 3");
+    submitFail = false;
+    async submitCase(event) {
         console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
+        const eventField = event.currentTarget;
+
         try {
-            window.scrollTo(0, 0);
+            window.scrollTo(0,0);
             this.submitCaseSpinner = true;
-            await saveCase({formSelections: this.communityOfConcernCase});
-            this.submitCaseSpinner = false;
-            location.replace(this.submittedUrl());
+            await saveCase({formSelections: this.communityOfConcernCase}).then( (result) => {
+                if (result) {
+                    this.submitFail = true;
+                }
+            });
         } catch (e) {
             console.log("Submission Error: " + JSON.stringify(e));
+            this.submitFail = true;
+        }
+
+        if (this.submitFail) {
             this.submitCaseSpinner = false;
+            eventField.scrollIntoView({
+                behavior: 'smooth',
+            });
+        } else {
+            location.replace(this.submittedUrl());
         }
     }
 

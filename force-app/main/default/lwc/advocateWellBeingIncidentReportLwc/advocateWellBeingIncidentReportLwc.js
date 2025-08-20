@@ -41,6 +41,15 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         custom_field_1: "" //temporarily using this field for Supporting Documents record ID
     }
 
+    rendered = false;
+    renderedCallback() {
+        if(!this.rendered) {
+            this.wellBeingIncidentFormValues.reporterName = !!this.communityOfConcernName ? this.communityOfConcernName : "";
+            this.wellBeingIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
+            this.rendered = !this.rendered;
+        }
+    }
+
     @wire(wellBeingReportingFormOptions, {})
     wellBeingReportingFormOptionsWire({error, data}) {
         let recordOptions = [];

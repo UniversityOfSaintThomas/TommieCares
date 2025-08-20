@@ -13,7 +13,7 @@
                 to contact you. Reporting anonymously limits the university's ability to respond.</p>
             <p>Thank you for keeping our campus healthy and safe by informing us of this
                 incident. For additional information including resources and university policy and processes, please
-                visit www.stthomas.edu/title-ix. 4</p>
+                visit www.stthomas.edu/title-ix.</p>
         </div>
         <p class="slds-m-vertical_medium textarea-sublabel_2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
         <p class="slds-m-top_medium"><b>Reporter Type</b></p>
@@ -23,7 +23,7 @@
                 information; however, without this information, we will likely be limited in what we can do to follow-up
                 on the reported concern. Please note that to best support you, address the behavior of the person of
                 concern and to protect our community, we typically need follow-up and clarifying information from the
-                reporting person.4</p>
+                reporting person.</p>
         </div>
         <p class="textarea-sublabel_2">We encourage you to share your name and contact information.</p>
         <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
@@ -67,37 +67,36 @@
             </template>
             <p class="slds-m-top_large"><b>Form Overview</b></p>
             <div class="textblock-width">
-                <p class="textarea-sublabel_2">By submitting a Title IX Public Report, you are demonstrating care to promote and
+                <p class="textarea-sublabel-2">By submitting a Title IX Public Report, you are demonstrating care to promote and
                     protect the personal dignity and well-being of the St. Thomas community. Thank you, and we will likewise
                     take care to respect your privacy and offer you support and resources.</p>
-                <p class="textarea-sublabel_2">We will respond promptly to your concern. The Title IX Coordinator (or her
+                <p class="textarea-sublabel-2">We will respond promptly to your concern. The Title IX Coordinator (or her
                     designee) will follow up with you within one business day- if you have chosen to leave your contact
                     information- to make sure that we understand your concern and can discuss any next steps and possible
                     support options for those involved.</p>
-                <p class="textarea-sublabel_2">Submitting a Title IX Report does not start emergency or crisis response or the
+                <p class="textarea-sublabel-2">Submitting a Title IX Report does not start emergency or crisis response or the
                     sexual misconduct complaint process. If this is an emergency, contact the Police or Public Safety for
                     immediate intervention. However, based on the information you share, the University may take some immediate
                     action to ensure that our community members are safe and supported.</p>
             </div>
             <div class="slds-form-element slds-m-vertical_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-status-who-caused-harm-id">Status of Individual Who Caused Harm<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-m-bottom_xx-small textblock-width">
-                    <p class="textarea-sublabel_2">By sharing the status of the person who caused harm, this report will be
+                <div class="slds-m-bottom_x-small textblock-width">
+                    <p class="textarea-sublabel-2">By sharing the status of the person who caused harm, this report will be
                         routed appropriately. In nearly all instances, the Title IX Coordinator (or their designee) will
                         follow-up within one business day of receipt of this report.</p>
-                    <p class="textarea-sublabel_2">If the person who caused harm is a <b>student</b>, the Title IX Coordinator and Dean
+                    <p class="textarea-sublabel-2">If the person who caused harm is a <b>student</b>, the Title IX Coordinator and Dean
                         of Students will be alerted.</p>
-                    <p class="textarea-sublabel_2">If this is about an <b>employee</b> and that their actions or behavior caused harm,
+                    <p class="textarea-sublabel-2">If this is about an <b>employee</b> and that their actions or behavior caused harm,
                         the Title IX Coordinator and the Chief Human Resources Officer will be alerted.</p>
-                    <p class="textarea-sublabel_2">If you are <b>unsure</b> of the status of the individual or if they are a
+                    <p class="textarea-sublabel-2">If you are <b>unsure</b> of the status of the individual or if they are a
                         <b>visitor/guest</b> to the University, the Title IX Coordinator, Dean of Students and Public Safety will be
                         alerted.</p>
-                    <p class="textarea-sublabel_2">If you are concerned about the notifications outlined above, please select
+                    <p class="textarea-sublabel-2">If you are concerned about the notifications outlined above, please select
                         other, and only the Title IX Coordinator will be alerted.</p>
                 </div>
                 <div class="slds-form-element__control">
-                    <lightning-checkbox-group class="check-box-text"
-                                              id="titleix-report-status-who-caused-harm-id"
+                    <lightning-checkbox-group id="titleix-report-status-who-caused-harm-id"
                                               name="Status Who Caused Harm"
                                               label=""
                                               options={statusWhoCausedHarmOptions}
@@ -136,7 +135,7 @@
                                          onchange={inputValueHandler}
                                          onblur={emailValidationBlur}>
                         </lightning-input>
-                        <div lwc:if={validEmailWarning} class="validationText">Invalid email address format</div>
+                        <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
                     </div>
                 </div>
                 <div class="slds-form-element slds-m-bottom_medium">
@@ -156,9 +155,9 @@
             </template>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-incident-description-id">Incident / Concerning Behavior Description<abbr class="slds-required" title="Required">*</abbr></label>
-                <p class="slds-m-bottom_xx-small textarea-sublabel_1">Please provide a brief, concise narrative of the incident or behavior(s) of concern.</p>
+                <p class="textarea-sublabel-1">Please provide a brief, concise narrative of the incident or behavior(s) of concern.</p>
                 <div class="slds-form-element__control">
-                    <lightning-textarea class="custom-textarea"
+                    <lightning-textarea class="custom-textarea-tall"
                                         id="titleix-report-incident-description-id"
                                         label=""
                                         value={titleIxIncidentFormValues.description}
@@ -184,10 +183,10 @@
             </div>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-location-id">Location of Incident</label>
-                <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">Did this occur on-campus, off-campus, in a specific residence hall, out of
+                <p class="textarea-sublabel-1 textblock-width">Did this occur on-campus, off-campus, in a specific residence hall, out of
                     the country, or unknown? Please be as specific as possible.</p>
                 <div class="slds-form-element__control">
-                    <lightning-textarea class="custom-textarea-2"
+                    <lightning-textarea class="custom-textarea"
                                         id="titleix-report-location-id"
                                         label=""
                                         value={titleIxIncidentFormValues.additionalLocation}
@@ -213,7 +212,7 @@
             </div>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-who-caused-harm-id">Name of the person who caused harm</label>
-                <p class="textarea-sublabel_1 textblock-width">Adding the name of the person who caused harm is not required in order to share concern for another individual.</p>
+                <p class="textarea-sublabel-1 textblock-width">Adding the name of the person who caused harm is not required in order to share concern for another individual.</p>
                 <div class="slds-form-element__control">
                     <lightning-input class="selection-width"
                                      id="titleix-report-who-caused-harm-id"
@@ -228,9 +227,9 @@
             </div>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-witnesses-id">Witness(es)</label>
-                <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">Are there other students, staff, faculty, family or visitors who may have witnessed any of the concerns outlined above?</p>
+                <p class="textarea-sublabel-1 textblock-width">Are there other students, staff, faculty, family or visitors who may have witnessed any of the concerns outlined above?</p>
                 <div class="slds-form-element__control">
-                    <lightning-textarea class="custom-textarea-2"
+                    <lightning-textarea class="custom-textarea"
                                         id="titleix-report-witnesses-id"
                                         label=""
                                         value={titleIxIncidentFormValues.otherWitness}
@@ -242,7 +241,7 @@
             </div>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-notification-id">Notification<abbr class="slds-required" title="Required">*</abbr></label>
-                <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">If you are not the impacted/harmed party, and you are reporting on their behalf, do they know you are submitting this report?</p>
+                <p class="slds-m-bottom_xx-small textarea-sublabel-1 textblock-width">If you are not the impacted/harmed party, and you are reporting on their behalf, do they know you are submitting this report?</p>
                 <div class="slds-form-element__control">
                     <lightning-radio-group id="titleix-report-notification-id"
                                            type="radio"
@@ -257,10 +256,10 @@
             </div>
             <div class="slds-form-element slds-m-bottom_medium">
                 <label class="slds-form-element__label selection-labels" for="titleix-report-follow-up-id">Reporter Follow-up<abbr class="slds-required" title="Required">*</abbr></label>
-                <p class="slds-m-bottom_xx-small textarea-sublabel_1 textblock-width">Let us know the kind of follow-up you'd like to receive once you have
+                <p class="textarea-sublabel-1 textblock-width">Let us know the kind of follow-up you'd like to receive once you have
                     submitted this report (advice, self-care, resources, no follow-up requested, etc.)</p>
                 <div class="slds-form-element__control">
-                    <lightning-textarea class="custom-textarea-2"
+                    <lightning-textarea class="custom-textarea-tall"
                                         id="titleix-report-follow-up-id"
                                         label=""
                                         value={titleIxIncidentFormValues.reporter_followup}
@@ -273,7 +272,7 @@
             <div class="slds-m-bottom_xx-large">
                 <div class="slds-form-element slds-m-bottom_medium">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
-                    <p class="slds-m-bottom_xx-small textarea-sublabel_1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
+                    <p class="slds-m-bottom_xx-small textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
                     <div class="slds-form-element__control" style="margin-top: -15px">
                         <lightning-input

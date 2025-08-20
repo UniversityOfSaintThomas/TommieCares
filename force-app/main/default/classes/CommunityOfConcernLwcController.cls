@@ -2,7 +2,7 @@
  * Created by nguy0092 on 7/27/2025.
  */
 
-public with sharing class CommunityOfConcernLwcController {
+public without sharing class CommunityOfConcernLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static List<Contact> iAmContactInfo(String salesforceId, String bannerId) {
@@ -22,7 +22,8 @@ public with sharing class CommunityOfConcernLwcController {
     }
 
     @AuraEnabled(Cacheable=false)
-    public static void saveCase(Map<String, String> formSelections) {
+    public static String saveCase(Map<String, String> formSelections) {
+        String insertStatus = '';
         Case communityOfConcernCase = new Case();
 
         List<RecordType> recordId = [
@@ -53,6 +54,13 @@ public with sharing class CommunityOfConcernLwcController {
         communityOfConcernCase.Community_Concern__c = formSelections.get('ConcernedWhatValue');
         communityOfConcernCase.Restricted_Access_Notes__c = formSelections.get('ConcernedWhatAdditionalInfo');
 
-        insert communityOfConcernCase;
+        try {
+            insert communityOfConcernCase;
+        } catch (DmlException e) {
+            insertStatus = 'fail';
+            System.debug('Insert Case error: '+e);
+        }
+
+        return insertStatus;
     }
 }

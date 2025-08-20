@@ -1,135 +1,61 @@
 /*!***/
 /* * Created by nguy0092 on 7/18/2025.*/
 /* *!*/
-.textblock-width {
-    width: 80%;
-}
-.regular-body-text {
-    /*width: 90% !important;;*/
-}
-.regular-body-text p {
-    font-size: 1rem !important;
-}
-.heading-text {
-    font-size: 1.15rem !important;
-    font-weight: bold;
-    color: rebeccapurple !important;
-}
-.selection-labels {
-    font-size: 1rem !important;
-    font-weight: normal;
-    /*color: rebeccapurple;*/
-}
-.selection-width {
-    width: 40%;
-}
-.selection-width-wider {
+.custom-textarea-tall {
     width: 65%;
-}
-.custom-textarea {
     --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
 }
-.logo-size {
-    width:125px;
-    /*height:auto;*/
-    margin-left: 20px;
-    /*float:left;*/
-    /*margin-right: 15px;*/
-}
-/*.link-text-size {*/
-/*    width: 100%;*/
-/*}*/
 .link-text-size p {
     font-size: .85rem !important;
     font-weight: 500 !important;
 }
-/*.input-text-label {*/
-/*    padding: 10px 0 0 0;*/
-/*    !*font-size: 1rem !important;*!*/
-/*    !*font-weight: normal;*!*/
-/*    !*color: rebeccapurple;*!*/
-/*}*/
-
-/*.advisor_info_text_hide {*/
-/*    display: none;*/
-/*}*/
-
-/*.slds-input {*/
-/*    padding-left: 100px !important;*/
-/*}*/
-
-/*.slds-theme_success {*/
-/*    background: #672D85 !important;*/
-/*}*/
-
-/*.notification_text p {*/
-/*    font-size: 1rem !important;*/
-/*    color: white;*/
-/*}*/
-
-/*abbr.slds-required {*/
-/*    font-weight: bold;*/
-/*}*/
-
-/*.advisor_info p {*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: bold;*/
-/*    color: rebeccapurple;*/
-/*}*/
-
-/*.footer_info p {*/
-/*    font-size: 1rem !important;*/
-/*}*/
-
-/*.additional_info p {*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: bold;*/
-/*}*/
-
-/*.additional_info p.no_bold_text {*/
-/*    font-weight: normal !important;*/
-/*}*/
-
-/*.picklist_checkbox_options {*/
-/*    display: inline-block;*/
-/*    position: relative;*/
-/*    float: left;*/
-/*    border: solid 1px rebeccapurple;*/
-/*}*/
-
-/*.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: normal;*/
-/*    color: rebeccapurple;*/
-/*}*/
-
-/*.textarea_sublabel {*/
-/*    font-size: 1rem !important;*/
-/*    color: black;*/
-/*}*/
-
-/*.slds-form-element .picklist_checkbox_text {*/
-/*    font-size: 1rem !important;*/
-/*    text-transform: capitalize;*/
-/*    color: black;*/
-/*}*/
-
-/*.picklist_checkbox_check {*/
-/*    box-shadow: none;*/
-/*}*/
-
-/*.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,*/
-/*.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {*/
-/*    background-color: rebeccapurple;*/
-/*    border: none;*/
-/*    content: none;*/
-/*    box-shadow: none;*/
-/*}*/
-
 lightning-button.submit_button {
     --slds-c-button-success-text-color: white;
     --slds-c-button-success-color-background: #510c76;
     --slds-c-button-success-color-border: #510c76;
     font-size: 1rem !important;
     font-weight: bold;
+}
+.logo-size {
+    width:125px;
+    margin-left: 20px;
+}
+.regular-body-text p {
+    font-size: 1rem;
+}
+.selection-labels {
+    font-size: 1rem !important;
+    font-weight: normal;
+}
+.selection-width {
+    width: 40%;
+}
+.selection-width-wide {
+    width: 65%;
+}
+.submit-error-message {
+    color: #ba0517;
+    --slds-c-icon-color-foreground-default: #ba0517;
+    padding-left: 0 !important;
+}
+.submit-error-message p{
+    margin-left: -5px !important;
+}
+.text-larger {
+    font-size: 1.15rem !important;
+    font-weight: bold;
+    color: rebeccapurple !important;
+}
+.textblock-width-wide {
+    width: 80%;
+}
+.textarea-sublabel-2 {
+    font-size: .90rem !important;
+    color: black;
+    padding-bottom: 5px;
+}
+.validation-text {
+    color: #ba0517;
+    font-size: 0.75rem;
+    margin-top: 0.125rem;
 }

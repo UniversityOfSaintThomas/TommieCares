@@ -1,59 +1,17 @@
 /**
  * Created by nguy0092 on 8/12/2025.
  */
-/*.regular-body-text {*/
-/*    width: 60%;*/
-/*    margin-left: 400px;*/
-/*}*/
-.validationText {
-    color: #ba0517;
-    font-size: 0.75rem;
-    margin-top: 0.125rem;
-}
-.checkbox-text {
-    --slds-c-checkbox-color-background: red;
-    --slds-c-checkbox-font-size-label: 2rem !important;
-}
-.regular-body-text p {
-    font-size: 1rem;
-}
-.selection-width {
-    width: 40%;
-}
-.selection-width-wider {
-    width: 65%;
-}
-.selection-labels {
-    font-size: 1rem !important;
-    font-weight: normal;
-    /*color: rebeccapurple;*/
-}
-.textarea-sublabel_1 {
-    font-size: .75rem !important;
-    color: black;
-    /*font-weight: lighter;*/
-    padding-bottom: 7px;
-}
-.textarea-sublabel_2 {
-    font-size: .90rem !important;
-    color: black;
-    /*font-weight: lighter;*/
-    padding-bottom: 7px;
-}
-.textblock-width {
-    width: 80%;
-}
-.custom-textarea {
-    width: 65%;
-    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
-}
-.custom-textarea-2 {
-    width: 65%;
-    --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
-}
 .attached-file-list * {
     font-size: .75rem !important;
     color: black;
+}
+.custom-textarea {
+    width: 40%;
+    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
+}
+.custom-textarea-tall {
+    width: 65%;
+    --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
 }
 .excluded-file-list p {
     font-size: .75rem !important;
@@ -70,4 +28,39 @@ lightning-button.submit_button {
     --slds-c-button-success-color-background-active: #8348ad;
     font-size: 1rem !important;
     /*font-weight: bold;*/
+}
+.regular-body-text p {
+    font-size: 1rem;
+}
+.selection-labels {
+    font-size: 1rem !important;
+    font-weight: normal;
+    /*color: rebeccapurple;*/
+}
+.selection-width {
+    width: 40%;
+}
+.selection-width-wide {
+    width: 65%;
+}
+.textarea-sublabel-1 {
+    font-size: .75rem !important;
+    color: black;
+    padding-bottom: 5px;
+}
+.textarea-sublabel-2 {
+    font-size: .90rem !important;
+    color: black;
+    padding-bottom: 5px;
+}
+.textblock-width {
+    width: 65%;
+}
+.textblock-width-wide {
+    width: 80%;
+}
+.validation-text {
+    color: #ba0517;
+    font-size: 0.75rem;
+    margin-top: 0.125rem;
 }

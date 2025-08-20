@@ -8,16 +8,35 @@
         <p class="slds-m-bottom_small">Thank you for your submission</p>
     </div>
     <form lwc:else id="communityofconcernform" data-form="communityofconcernform">
-<!--        <p class="slds-m-bottom_medium heading-text">Tell Someone</p>-->
         <div class="regular-body-text">
-            <div class="slds-grid slds-wrap">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12  slds-p-right_x-large">
-                    <p class="slds-m-bottom_small"><span class="heading-text">Tell Someone</span> is a St.
+            <div class="slds-grid slds-wrap slds-grid_reverse">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-m-bottom_medium" style="border: #0a0a0a solid 0px;">
+                    <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">
+                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
+                        <p class="slds-m-bottom_x-small"><b>Policies:</b></p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/about/departments/general-counsel/policy-pdfs/nondiscrimination-and-anti-harassment-policy.pdf" target=_blank>Non-Discrimination & Anti-Harassment Policy</a></p>
+                        <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/title-ix/sexual-misconduct/index.html" target=_blank>Sexual Misconduct Response</a></p>
+                    </div>
+                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
+                        <p class="slds-m-bottom_x-small"><b>Support Resources:</b></p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://one.stthomas.edu/sites/center-for-well-being/counseling-and-psychological-services/SitePageModern/29420/counseling-and-psychological-services" target=_blank>
+                            Counseling and Psychological Services</a></p>
+                        <p class="slds-m-bottom_xx-small">*24/7 phone counseling line: <br>651-962-6750; press option #4</p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/index.html" target=_blank>
+                            Dean of Students Office</a></p>
+                        <p class="slds-m-bottom_xx-small">Public Safety App</p>
+                        <p class="slds-m-bottom_xx-small">Suicide and Crisis Lifeline: 988</p>
+                        <p class="slds-m-bottom_xx-small"><a href="https://www.ramseycounty.us/residents/health-medical/clinics-services/sos-sexual-violence-services" target=_blank>
+                            SOS Sexual Violence Services</a></p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-p-right_x-large">
+                    <p class="slds-m-bottom_small"><span class="text-larger">Tell Someone</span> is a St.
                         Thomas tool that allows you to report concerns about an undergraduate or graduate student or an
                         employee who may be struggling with issues related to health, well-being, or threats of harm, or who
                         may be navigating a situation where they suspect discrimination, bias, sexual misconduct, or
                         harassment are present. The goals of <b>Tell Someone</b> are to help students and employees who may need
-                        support and to enhance the well-being of our University community.</p>
+                        support and to enhance the well-being of our University community. 3</p>
                     <p class="slds-m-bottom_small"><b><i>Online reports are reviewed during regular business hours. If you
                         believe someone is at risk of immediate harm, call 911 or the Public Safety emergency line at
                         651-962-5555.</i></b></p>
@@ -51,27 +70,7 @@
                         If you need a more immediate response, please call <a href="https://www.stthomas.edu/public-safety/index.html" target=_blank>Public Safety</a>.</p>
                     <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able
                         to respond directly to you but will assess the information submitted and consider appropriate next
-                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party. 17</p>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12" style="border: #0a0a0a solid 0px;">
-                    <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">
-                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
-                        <p class="slds-m-bottom_x-small"><b>Policies:</b></p>
-                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/about/departments/general-counsel/policy-pdfs/nondiscrimination-and-anti-harassment-policy.pdf" target=_blank>Non-Discrimination & Anti-Harassment Policy</a></p>
-                        <p class="slds-m-bottom_x-small"><a href="https://www.stthomas.edu/title-ix/sexual-misconduct/index.html" target=_blank>Sexual Misconduct Response</a></p>
-                    </div>
-                    <div class="slds-m-top_medium link-text-size" style="border: #0a0a0a solid 0px;">
-                        <p class="slds-m-bottom_x-small"><b>Support Resources:</b></p>
-                        <p class="slds-m-bottom_xx-small"><a href="https://one.stthomas.edu/sites/center-for-well-being/counseling-and-psychological-services/SitePageModern/29420/counseling-and-psychological-services" target=_blank>
-                            Counseling and Psychological Services</a></p>
-                        <p class="slds-m-bottom_xx-small">*24/7 phone counseling line: <br>651-962-6750; press option #4</p>
-                        <p class="slds-m-bottom_xx-small"><a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/index.html" target=_blank>
-                            Dean of Students Office</a></p>
-                        <p class="slds-m-bottom_xx-small">Public Safety App</p>
-                        <p class="slds-m-bottom_xx-small">Suicide and Crisis Lifeline: 988</p>
-                        <p class="slds-m-bottom_xx-small"><a href="https://www.ramseycounty.us/residents/health-medical/clinics-services/sos-sexual-violence-services" target=_blank>
-                            SOS Sexual Violence Services</a></p>
-                    </div>
+                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party.</p>
                 </div>
             </div>
             <p class="slds-m-top_medium slds-m-bottom_small"><b>Tell Us About Your Concerns</b></p>
@@ -91,12 +90,11 @@
                     </lightning-combobox>
                 </div>
             </div>
-            <p lwc:if={iAmAnonymousCheck} class="slds-m-bottom_small"><i>Reports can be made anonymously
+            <p lwc:if={iAmAnonymousCheck} class="slds-m-bottom_small textblock-width-wide"><i>Reports can be made anonymously
                 via this form. If you choose to submit this form anonymously, please understand our ability to take action may be limited,
                 as we may need additional information and will not have a way to ask follow-up questions</i>
             </p>
             <template lwc:if={showConcernedWhoSelect}>
-                <!--                <p class="heading-text slds-m-vertical_medium">Tell Us Who You're Concerned About</p>-->
                 <div class="slds-form-element slds-m-vertical_medium">
                     <label class="slds-form-element__label selection-labels" for="concerned-who_select-id">
                         Who are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
@@ -119,7 +117,7 @@
                     <label class="slds-form-element__label selection-labels" for="concerned-what-selection-id">
                         What are you concerned about?<abbr class="slds-required" title="Required">*</abbr></label>
                     <div class="slds-form-element__control">
-                        <lightning-combobox class="selection-width-wider"
+                        <lightning-combobox class="selection-width-wide"
                                             id="concerned-what-selection-id"
                                             label=""
                                             value={communityOfConcernCase.ConcernedWhatValue}
@@ -136,26 +134,26 @@
                 <c-tommie-cares-lwc param-url={paramUrl} community-of-concern-lwc="advisor_info_hide"></c-tommie-cares-lwc>
             </div>
             <template lwc:if={showWhatWellBeing.show}>
-                <p lwc:if={showWhatWellBeing.student} class="slds-m-top_medium textblock-width"><i>Concerns for students may include mental health, self-harm, substance
+                <p lwc:if={showWhatWellBeing.student} class="slds-m-top_medium textblock-width-wide"><i>Concerns for students may include mental health, self-harm, substance
                     misuse, food insecurity, financial hardship, threatening behaviors, and much more. Reports are reviewed by
                     the Dean of Students in consultation with the Title IX Coordinator, Counseling and Psychological Services,
                     Residence Life, and other relevant campus partners.</i></p>
-                <p lwc:if={showWhatWellBeing.nonStudent} class="slds-m-top_medium textblock-width"><i>Concerns for staff or faculty may include mental health, substance
+                <p lwc:if={showWhatWellBeing.nonStudent} class="slds-m-top_medium textblock-width-wide"><i>Concerns for staff or faculty may include mental health, substance
                     misuse, concerning workplace behaviors, and more. Reports are reviewed by Human Resources in consultation
                     with Title IX and/or other campus partners when appropriate.</i></p>
                 <c-advocate-well-being-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-well-being-incident-report-lwc>
             </template>
             <div lwc:if={showWhatDiscrimination} class="slds-m-top_medium">
-                <p class="textblock-width"><i>This form should be used by anyone who believes they have witnessed or been the
+                <p class="textblock-width-wide"><i>This form should be used by anyone who believes they have witnessed or been the
                     target of an incident of discrimination, bias, or harassment based on a protected class (sex, race, color,
                     religion, national origin, ancestry, disability, age, sexual orientation, marital status, military status,
                     gender expression/identity, genetic information, pregnancy or any other protected classes). These reports
                     are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources, dependent on the status of
-                    the individual who caused harm.24</i></p>
+                    the individual who caused harm.</i></p>
                 <c-advocate-bias-incident-report-lwc param-url={paramUrl} community-of-concern-report-type={communityOfConcernReportType} lwc:spread={childProps}></c-advocate-bias-incident-report-lwc>
             </div>
             <div lwc:if={showWhatMisconduct} class="slds-m-top_medium">
-                <p class="textblock-width"><i>This form should be used by anyone who believes they have witnessed or
+                <p class="textblock-width-wide"><i>This form should be used by anyone who believes they have witnessed or
                     been the target of an incident of discrimination, bias, or harassment based on a protected class
                     (sex, race, color, religion, national origin, ancestry, disability, age, sexual orientation, marital
                     status, military status, gender expression/identity, genetic information, pregnancy or any other
@@ -167,80 +165,84 @@
                 <div lwc:if={showWhatOther.text} class="slds-m-bottom_small">
                     <p><i>If you have updates to provide on a concern regarding a faculty or staff, please contact Human Resources at askhr@stthomas.edu</i></p>
                 </div>
-                <div class="slds-m-vertical_medium">
-                    <p class="slds-m-top_large slds-m-bottom_medium"><b>Your Information</b></p>
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="i-am-first-name-id">
-                                Your First Name:<abbr class="slds-required" title="Required">*</abbr></label>
-                            <div class="slds-form-element__control">
-                                <lightning-input id="i-am-first-name-id"
-                                                 type="text"
-                                                 label=""
-                                                 value={communityOfConcernCase.IAmFirstName}
-                                                 data-inputgroup="iaminfo"
-                                                 data-inputtype="firstname"
-                                                 placeholder="First Name"
-                                                 variant="label-hidden"
-                                                 disabled={iAmInfoInputDisabled}
-                                                 onchange={inputTextHandler}>
-                                </lightning-input>
+                <p class="slds-m-top_large slds-m-bottom_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+                <template lwc:if={iAmNotAnonymousCheck}>
+                    <div class="slds-m-vertical_medium">
+                        <p class="slds-m-top_large slds-m-bottom_medium"><b>Your Information</b></p>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
+                                <label class="slds-form-element__label selection-labels" for="i-am-first-name-id">
+                                    Your First Name:<abbr class="slds-required" title="Required">*</abbr></label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input id="i-am-first-name-id"
+                                                     type="text"
+                                                     label=""
+                                                     value={communityOfConcernCase.IAmFirstName}
+                                                     data-inputgroup="iaminfo"
+                                                     data-inputtype="firstname"
+                                                     placeholder="First Name"
+                                                     variant="label-hidden"
+                                                     disabled={iAmInfoInputDisabled}
+                                                     onchange={inputTextHandler}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                            <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
+                                <label class="slds-form-element__label selection-labels" for="i-am-last-name-id">
+                                    Your Last Name:<abbr class="slds-required" title="Required">*</abbr></label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input id="i-am-last-name-id"
+                                                     type="text"
+                                                     label="Last Name:"
+                                                     value={communityOfConcernCase.IAmLastName}
+                                                     data-inputgroup="iaminfo"
+                                                     data-inputtype="lastname"
+                                                     placeholder="Last Name"
+                                                     variant="label-hidden"
+                                                     disabled={iAmInfoInputDisabled}
+                                                     onchange={inputTextHandler}>
+                                    </lightning-input>
+                                </div>
                             </div>
                         </div>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="i-am-last-name-id">
-                                Your Last Name:<abbr class="slds-required" title="Required">*</abbr></label>
-                            <div class="slds-form-element__control">
-                                <lightning-input id="i-am-last-name-id"
-                                                 type="text"
-                                                 label="Last Name:"
-                                                 value={communityOfConcernCase.IAmLastName}
-                                                 data-inputgroup="iaminfo"
-                                                 data-inputtype="lastname"
-                                                 placeholder="Last Name"
-                                                 variant="label-hidden"
-                                                 disabled={iAmInfoInputDisabled}
-                                                 onchange={inputTextHandler}>
-                                </lightning-input>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
+                                <label class="slds-form-element__label selection-labels" for="i-am-email-id">
+                                    Your Email:</label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input id="i-am-email-id"
+                                                     type="text"
+                                                     label="Email:"
+                                                     value={communityOfConcernCase.IAmEmail}
+                                                     data-inputgroup="iaminfo"
+                                                     data-inputtype="email"
+                                                     placeholder="Email"
+                                                     variant="label-hidden"
+                                                     disabled={iAmInfoInputDisabled}
+                                                     onchange={inputTextHandler}
+                                                     onblur={emailValidationBlur}>
+                                    </lightning-input>
+                                    <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
+                                </div>
+                            </div>
+                            <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
+                                <label class="slds-form-element__label selection-labels" for="i-am-phone-id">Your Phone#:</label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input id="i-am-phone-id"
+                                                     type="text"
+                                                     label="Phone:"
+                                                     value={communityOfConcernCase.IAmPhone}
+                                                     data-inputgroup="iaminfo"
+                                                     data-inputtype="phone"
+                                                     placeholder="Phone"
+                                                     variant="label-hidden"
+                                                     onchange={inputTextHandler}>
+                                    </lightning-input>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="i-am-email-id">
-                                Your Email:<abbr class="slds-required" title="Required">*</abbr></label>
-                            <div class="slds-form-element__control">
-                                <lightning-input id="i-am-email-id"
-                                                 type="email"
-                                                 label="Email:"
-                                                 value={communityOfConcernCase.IAmEmail}
-                                                 data-inputgroup="iaminfo"
-                                                 data-inputtype="email"
-                                                 placeholder="Email"
-                                                 variant="label-hidden"
-                                                 disabled={iAmInfoInputDisabled}
-                                                 onchange={inputTextHandler}>
-                                </lightning-input>
-                            </div>
-                        </div>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="i-am-phone-id">Your Phone#:</label>
-                            <div class="slds-form-element__control">
-                                <lightning-input id="i-am-phone-id"
-                                                 type="text"
-                                                 label="Phone:"
-                                                 value={communityOfConcernCase.IAmPhone}
-                                                 data-inputgroup="iaminfo"
-                                                 data-inputtype="phone"
-                                                 placeholder="Phone"
-                                                 variant="label-hidden"
-                                                 onchange={inputTextHandler}>
-                                </lightning-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </template>
                 <div class="slds-m-vertical_medium">
                     <p class="slds-m-top_large slds-m-bottom_medium"><b>Who You Are Concerned About Information</b></p>
                     <div class="slds-grid slds-wrap">
@@ -282,15 +284,18 @@
                             <label class="slds-form-element__label selection-labels" for="concerned-who-email-id">{communityOfConcernCase.ConcernedWhoValue} Email:</label>
                             <div class="slds-form-element__control">
                                 <lightning-input id="concerned-who-email-id"
-                                                 type="email"
+                                                 type="text"
                                                  label="Email:"
                                                  value={communityOfConcernCase.ConcernedWhoEmail}
                                                  data-inputgroup="concernedwhoinfo"
                                                  data-inputtype="email"
                                                  placeholder="Email"
                                                  variant="label-hidden"
-                                                 onchange={inputTextHandler}>
+                                                 onchange={inputTextHandler}
+                                                 onblur={emailValidationBlur}>
                                 </lightning-input>
+                                <div lwc:if={validEmailWarningWho} class="validation-text">Invalid email address format</div>
+
                             </div>
                         </div>
                         <div class="slds-form-element slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-right_medium slds-m-bottom_small">
@@ -310,12 +315,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-m-vertical_small">
+                <div class="slds-m-top_small slds-m-bottom_xx-large">
                     <div class="slds-form-element slds-m-bottom_x-small">
-                        <label class="slds-form-element__label selection-labels" for="concerned-what-additional-info-id">
+                        <label class="slds-form-element__label selection-labels slds-m-bottom_xx-small " for="concerned-what-additional-info-id">
                             <abbr class="slds-required" title="Required">*</abbr>Please provide additional information about your concern:</label>
                         <div class="slds-form-element__control">
-                            <lightning-textarea class="custom-textarea selection-width-wider"
+                            <lightning-textarea class="custom-textarea-tall"
                                                 id="concerned-what-additional-info-id"
                                                 label=""
                                                 value={communityOfConcernCase.ConcernedWhatAdditionalInfo}
@@ -327,7 +332,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-m-vertical_x-large">
+                <div class="slds-m-top_xx-large slds-m-bottom_medium">
                     <lightning-button class="submit_button"
                                       type="button"
                                       label="SUBMIT"
@@ -336,6 +341,20 @@
                                       onclick={submitCase}
                                       disable-animation>
                     </lightning-button>
+                </div>
+            </template>
+            <template lwc:if={submitFail}>
+                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:error"
+                                        alternative-text="submit case error"
+                                        title="submit case error"
+                                        size="small">
+                        </lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
+                    </div>
                 </div>
             </template>
         </div>

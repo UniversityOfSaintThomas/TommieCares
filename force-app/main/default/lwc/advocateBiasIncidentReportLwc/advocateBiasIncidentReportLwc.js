@@ -421,7 +421,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     showUrl = false;
     returnUrl;
     async submitCase() {
-        console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
+        console.log("biasIncidentFormValues 1: " + JSON.stringify(this.biasIncidentFormValues));
         await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
             console.log(JSON.stringify(result));
             if (result.Status === 'success') {
