@@ -2,7 +2,7 @@
  * Created by nguy0092 on 7/31/2025.
  */
 
-public with sharing class AdvocateBiasIncidentReportController {
+public without sharing class AdvocateBiasIncidentReportController {
     private static String api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Bias_Incident__c');
 
     @AuraEnabled(Continuation=true Cacheable=true)
@@ -85,9 +85,80 @@ public with sharing class AdvocateBiasIncidentReportController {
         return resultsObjects;
     }
 
+//    public class DocumentsWrapper {
+//        @AuraEnabled public String fileId { get; set; }
+//        @AuraEnabled public String fileContent { get; set; }
+//        @AuraEnabled public String fileName { get; set; }
+//        @AuraEnabled public String fileSize { get; set; }
+//        @AuraEnabled public String fileType { get; set; }
+//    }
+//
+//    @AuraEnabled(Cacheable=false)
+//    public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
+//        System.debug(JSON.serializePretty(attachedDocumentsList));
+//        List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
+//        String recordUrl = '';
+//        Map<String, String> returnStatusUrl = new Map<String, String>{
+//                'Status' => '',
+////                'Status' => 'error',
+//                'Url' => ''
+//        };
+//
+//        if (attachedDocumentsList.size() > 0) {
+//            String recordType;
+//            List<RecordType> recordTypeQuery = [
+//                    SELECT Id,
+//                            Name,
+//                            DeveloperName
+//                    FROM RecordType
+//                    WHERE SobjectType = 'Supporting_Document__c'
+//                    AND DeveloperName = 'Current_Student_Restricted'
+//            ];
+//
+//            if (recordTypeQuery.size() > 0) {
+//                recordType = recordTypeQuery[0].Id;
+//            }
+//
+//            Supporting_Document__c supportingDocument = new Supporting_Document__c(
+//                    RecordTypeId = recordType,
+//                    Name = 'Advocate Bias Incident',
+//                    Source__c = 'Community of Concern',
+//                    Document_Load_Date__c = Date.today()
+//            );
+//
+//            try {
+//                insert supportingDocument;
+//
+//                for (DocumentsWrapper d : attachedDocumentsList) {
+//                    Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
+//                    ContentVersion contentVersion = new ContentVersion(
+//                            Title = d.fileName,
+//                            PathOnClient = d.fileName,
+//                            VersionData = fileBlob,
+//                            Supporting_Documents_Id_fileupload__c = supportingDocument.Id,
+//                            Origin = 'C'
+//                    );
+//                    insertContentVersionList.add(contentVersion);
+//                }
+//
+//                insert insertContentVersionList;
+//
+//                String baseUrl = Url.getOrgDomainUrl().toExternalForm();
+//                recordUrl = baseUrl + '/' + supportingDocument.Id;
+//                returnStatusUrl.put('Url',recordUrl);
+//
+//            } catch (DmlException e) {
+//                returnStatusUrl.put('Status','error');
+//                returnStatusUrl.put('Url','There was an error attaching documents.');
+//                System.debug('saveSupportingDocuments error: ' + e);
+//            }
+//        }
+//
+//        return returnStatusUrl;
+//    }
+
     @AuraEnabled(Continuation=true Cacheable=true)
     public static Object submitForm(String formValues) {
-//        String con = formValues;
         System.debug('This form values: '+formValues);
 
         Continuation con = new Continuation(60);
@@ -111,129 +182,14 @@ public with sharing class AdvocateBiasIncidentReportController {
 
         // Get the response by using the unique label
         HttpResponse response1 = Continuation.getResponse(labels[0]);
-        resultsObjects.add(response1.getBody());
-        resultsObjects.add(response1.getStatus());
         resultsObjects.add(response1.getStatusCode());
-        System.debug('This result getBody: '+response1.getBody());
-        System.debug('This result getStatus: '+response1.getStatus());
+        resultsObjects.add(response1.getStatus());
+        resultsObjects.add(response1.getBody());
         System.debug('This result getStatusCode: '+response1.getStatusCode());
+        System.debug('This result getStatus: '+response1.getStatus());
+        System.debug('This result getBody: '+response1.getBody());
 
         return resultsObjects;
     }
 
-    public class DocumentsWrapper {
-        @AuraEnabled public String fileId { get; set; }
-        @AuraEnabled public String fileContent { get; set; }
-        @AuraEnabled public String fileName { get; set; }
-        @AuraEnabled public String fileSize { get; set; }
-        @AuraEnabled public String fileType { get; set; }
-    }
-
-    @AuraEnabled(Cacheable=false)
-    public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
-//        System.debug(JSON.serializePretty(attachedDocumentsList));
-        List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
-        String recordUrl = '';
-        Map<String, String> returnStatusUrl = new Map<String, String>{
-                'Status' => '',
-                'Url' => ''
-        };
-
-        if (attachedDocumentsList.size() > 0) {
-            String recordType;
-            List<RecordType> recordTypeQuery = [
-                    SELECT Id,
-                            Name,
-                            DeveloperName
-                    FROM RecordType
-                    WHERE SobjectType = 'Supporting_Document__c'
-                    AND DeveloperName = 'Current_Student'
-            ];
-
-            if (recordTypeQuery.size() > 0) {
-                recordType = recordTypeQuery[0].Id;
-            }
-
-            Supporting_Document__c supportingDocument = new Supporting_Document__c(
-                    RecordTypeId = recordType,
-                    Name = 'Advocate Bias Incident'
-            );
-
-            try {
-                insert supportingDocument;
-
-                for (DocumentsWrapper d : attachedDocumentsList) {
-                    Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
-                    ContentVersion contentVersion = new ContentVersion(
-                            Title = d.fileName,
-                            PathOnClient = d.fileName,
-                            VersionData = fileBlob,
-                            Supporting_Documents_Id_fileupload__c = supportingDocument.Id,
-                            Origin = 'C'
-                    );
-                    insertContentVersionList.add(contentVersion);
-                }
-
-                insert insertContentVersionList;
-
-                String baseUrl = Url.getOrgDomainUrl().toExternalForm();
-                recordUrl = baseUrl + '/' + supportingDocument.Id;
-                returnStatusUrl.put('Status','success');
-                returnStatusUrl.put('Url',recordUrl);
-
-            } catch (DmlException e) {
-                returnStatusUrl.put('Status','error');
-                returnStatusUrl.put('Url','There was an error attaching documents.');
-                System.debug('saveSupportingDocuments error: ' + e);
-            }
-        }
-
-        return returnStatusUrl;
-    }
-
-//    @AuraEnabled(Cacheable=false)
-//    public static String saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList) {
-//        String recordUrl = '';
-//
-//        if (attachedDocumentsList.size() > 0 ) {
-//            String recordType;
-//
-//            List<RecordType> recordTypeQuery = [
-//                    SELECT Id,
-//                            Name,
-//                            DeveloperName
-//                    FROM RecordType
-//                    WHERE SobjectType = 'Supporting_Document__c'
-//                    AND DeveloperName = 'Current_Student'
-//            ];
-//
-//            if (recordTypeQuery.size() > 0) {
-//                recordType = recordTypeQuery[0].Id;
-//            }
-//
-//            Supporting_Document__c supportingDocument = new Supporting_Document__c(
-//                    RecordTypeId = recordType,
-//                    Name = 'Advocate Bias Incident'
-//            );
-//
-//            insert supportingDocument;
-//
-//            for (DocumentsWrapper d : attachedDocumentsList) {
-//                Blob fileBlob = EncodingUtil.base64Decode(d.fileContent);
-//                ContentVersion contentVersion = new ContentVersion(
-//                        Title = d.fileName,
-//                        PathOnClient = d.fileName,
-//                        VersionData = fileBlob,
-//                        Supporting_Documents_Id_fileupload__c = supportingDocument.Id,
-//                        Origin = 'C'
-//                );
-//                insert contentVersion;
-//
-//            }
-//            String baseUrl = Url.getOrgDomainUrl().toExternalForm();
-//            recordUrl = baseUrl + '/' + supportingDocument.Id;
-//        }
-//
-//        return recordUrl;
-//    }
 }

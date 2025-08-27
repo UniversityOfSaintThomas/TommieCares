@@ -6,11 +6,9 @@
     color: black;
 }
 .custom-textarea {
-    width: 40%;
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
 }
 .custom-textarea-tall {
-    width: 65%;
     --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
 }
 .excluded-file-list p {
@@ -42,6 +40,14 @@ lightning-button.submit_button {
 }
 .selection-width-wide {
     width: 65%;
+}
+.submit-error-message {
+    color: #ba0517;
+    --slds-c-icon-color-foreground-default: #ba0517;
+    padding-left: 0 !important;
+}
+.submit-error-message p{
+    margin-left: -5px !important;
 }
 .textarea-sublabel-1 {
     font-size: .75rem !important;

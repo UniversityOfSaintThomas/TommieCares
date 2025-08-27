@@ -87,6 +87,11 @@ export default class TommieCaresLwc extends LightningElement {
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     };
+    get showAdditionalConcerns() {
+        return this.selectionsCheck.attendanceCheck || this.selectionsCheck.academicCheck || this.selectionsCheck.behaviorCheck ||
+            this.selectionsCheck.financialConcernsCheck || this.selectionsCheck.mentalHealthCheck || this.selectionsCheck.relationshipCheck ||
+            this.selectionsCheck.belongingCheck;
+    }
     @track selectionsCheck = {
         high5Check: false,
         attendanceCheck: false,

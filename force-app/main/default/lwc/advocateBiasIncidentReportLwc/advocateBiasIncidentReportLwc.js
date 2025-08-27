@@ -5,28 +5,22 @@
 import {api, LightningElement, track, wire} from 'lwc';
 import biasReportingFormOptions1 from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.biasReportingFormOptions1";
 import biasReportingFormOptions2 from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.biasReportingFormOptions2";
-import saveSupportingDocuments from "@salesforce/apex/AdvocateBiasIncidentReportController.saveSupportingDocuments";
+import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
+// import saveSupportingDocuments from "@salesforce/apex/AdvocateBiasIncidentReportController.saveSupportingDocuments";
 import submitForm from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.submitForm";
+import {emailValidation, attachDocumentsUpload} from "c/communityOfConcernUtilJs";
 
 export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     @api communityOfConcernReportType = "";
-    @api communityOfConcernName = "";
-    @api communityOfConcernEmail = "";
-    @api paramUrl = "";
+    @api communityOfConcernReporterFirstName = "";
+    @api communityOfConcernReporterLastName = "";
+    @api communityOfConcernReporterEmail = "";
+    @api communityOfConcernParamsUrl = "";
 
     @track reporterTypeOptions = [];
     @track protectedClassesOptions = [];
     @track affiliationOfTargetOptions = [];
     @track affiliationOfPersonEngagedInHarmOptions = [];
-
-    get showFormAll() {
-        return !!this.biasIncidentFormValues.reporterType;
-    }
-
-    get isNotAnonymous() {
-        return !(this.communityOfConcernReportType === "Anonymous");
-    }
-
     @track biasIncidentFormValues = {
         reporterType: "", //I am a
         reporterName: "", //Your Name
@@ -49,17 +43,32 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         alcohol: false, //required
         custom_field_1: "" //temporarily using this field for Supporting Documents record ID
     }
-
-    get submitDisable() {
-        return !(!!this.biasIncidentFormValues.reporterType && this.validDateTime && !!this.biasIncidentFormValues.description && this.validEmail);
+    get showFormAll() {
+        return !!this.biasIncidentFormValues.reporterType;
     }
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
+    get isNotAnonymous() {
+        return !this.isAnonymous;
+    }
+    get submitDisable() {
+        return !(!!this.biasIncidentFormValues.reporterType && this.validDateTime && !!this.biasIncidentFormValues.description &&
+            !!this.biasIncidentFormValues.additionalInformation && !!this.biasIncidentFormValues.otherStudent && !!this.biasIncidentFormValues.who_was_the_target_of_the_behavior &&
+            !!this.biasIncidentFormValues.affiliation_of_target && !!this.biasIncidentFormValues.who_engaged_in_the_behavior && !!this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm &&
+            (this.isAnonymous || (!!this.biasIncidentFormValues.reporterName && this.validEmail && !!this.biasIncidentFormValues.reporterEmail)));
+    }
+
+    rendered = false;
     dateFieldElement;
     timeFieldElement;
-    rendered = false;
     renderedCallback() {
         if(!this.rendered) {
-            this.biasIncidentFormValues.reporterName = !!this.communityOfConcernName ? this.communityOfConcernName : "";
-            this.biasIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
+            this.biasIncidentFormValues.reporterName = !!this.communityOfConcernReporterFirstName ? this.communityOfConcernReporterFirstName + " " + this.communityOfConcernReporterLastName : "";
+            if (this.communityOfConcernReporterEmail) {
+                let emailValidationResults = emailValidation(this.communityOfConcernReporterEmail);
+                this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+            }
             this.rendered = !this.rendered;
         }
         this.dateFieldElement = this.template.querySelector("[data-inputtype='date']");
@@ -229,16 +238,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        let emailValidationResults = emailValidation(emailAddress);
 
-        if (emailAddress && !(emailRegex.test(emailAddress))) {
-            this.validEmail = false;
-            this.validEmailWarning = true;
-        } else {
-            this.biasIncidentFormValues.reporterEmail = emailAddress;
-            this.validEmail = true;
-            this.validEmailWarning = false;
-        }
+        this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+        this.validEmail = emailValidationResults.validEmail;
+        this.validEmailWarning = emailValidationResults.validEmailWarning;
 
         if (this.validEmailWarning) {
             emailField.classList.add("slds-has-error");
@@ -319,148 +323,108 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         }
     }
 
-    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
-    acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                  "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
-                                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
-
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
+    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
-
-    attachDocumentsUpload(event) {
+    async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
-        console.log("Uploaded Files Length: " + uploadedFiles.length);
-        this.attachDocumentsExclude = [];
-        if (uploadedFiles.length > 0) {
-            for (const file of uploadedFiles) {
-                let fileSize = file.size;
-                let fileSizeInMB = 0;
-                let fileName = file.name;
-                let fileExtension = "."+fileName.split('.').pop();
-                let fileType = file.type;
-                new Promise((resolve, reject) => {
-                    fileSizeInMB = (fileSize / (1024 * 1024)).toFixed(2);
-                    console.log("File info: " + fileName + " " + fileSize + " " + fileSizeInMB + " " + fileExtension + " " + fileType);
-
-                    let fileSizeLimit = fileSizeInMB < 3;
-                    let fileExtensionIncludes = this.acceptedExtensionTypes.includes(fileExtension.toLowerCase());
-                    let fileTypeIncludes = this.acceptedMimeTypes.includes(fileType.toLowerCase());
-
-                    if (fileSizeLimit && fileExtensionIncludes && fileTypeIncludes) {
-                        resolve(file);
-                    } else {
-                        let fileWarningType = [];
-                        if (!fileSizeLimit) {
-                            fileWarningType.push("exceeds file size limit");
-                        }
-                        if (!fileExtensionIncludes || !fileType) {
-                            fileWarningType.push("document type not supported");
-                        }
-                        let fileWarningText = fileWarningType.join("/");
-
-                        this.attachDocumentsExclude.push( {
-                            fileId: this.fileIndex,
-                            fileName: fileName,
-                            fileSize: fileSizeInMB,
-                            fileExtension: fileExtension,
-                            fileType: fileType,
-                            fileWarning: fileWarningText
-                        } )
-                        reject("Incompatible file");
-                    }
-                }).then((resolveFile) => {
-                    const reader = new FileReader();
-                    return new Promise((resolve, reject) => {
-                        reader.readAsDataURL(resolveFile); //This Data URL string is a base64-encoded representation of the file's content
-                        reader.onload = () => {
-                            let documentContent = reader.result.split(',')[1]; //Extract the base64 part of the data URL (remove the data:contentType;base64, prefix) to pass to Apex
-                            if (documentContent.length > 0) {
-                                resolve(documentContent);
-                            } else {
-                                reject("No documentContent");
-                            }
-                        }
-                    })
-                }).then((resolveDocumentContent) => {
-                    console.log("what is resolvedDocument size: " + resolveDocumentContent.length);
-                    if (resolveDocumentContent.length > 0) {
-                        this.attachDocuments.push( {
-                            fileId: this.fileIndex,
-                            fileContent: resolveDocumentContent,
-                            fileName: fileName,
-                            fileSize: fileSizeInMB,
-                            fileType: fileType
-                        } );
-                    }
-                    console.log("All File length: " + this.attachDocuments.length);
-                    this.fileIndex++;
-                }).catch((rejectMsg) => {
-                    console.log(rejectMsg);
-                })
-            }
-        }
+        let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
+        attachDocumentsUploadResults.attachDocuments.forEach((document) => {
+            this.attachDocuments.push(document);
+        })
+        this.attachDocumentsExclude = attachDocumentsUploadResults.attachDocumentsExclude;
+        this.fileIndex = attachDocumentsUploadResults.fileIndex;
     }
 
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        // this.attachDocumentContent = this.attachDocumentContent.filter( obj => obj.fileId.toString() !== removeFileId.toString());
         console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
     }
 
+    submittedUrl() {
+        console.log("Updated communityOfConcernParamsUrl: "+this.communityOfConcernParamsUrl);
+        this.searchParamsUrl = new URL(this.communityOfConcernParamsUrl);
+        this.searchParamsUrl.searchParams.set("submitted", "true");
+        return this.searchParamsUrl;
+    }
+
+    submitFormSpinner = false;
+    saveDocumentsFail = false;
+    submitBiasIncidentFormFail = false;
     showUrl = false;
     returnUrl;
-    async submitCase() {
+    async submitFormHandler(event) {
+        const eventField = event.currentTarget;
+        this.saveDocumentsFail = false;
+        this.submitBiasIncidentFormFail = false;
         console.log("biasIncidentFormValues 1: " + JSON.stringify(this.biasIncidentFormValues));
-        await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-            console.log(JSON.stringify(result));
-            if (result.Status === 'success') {
-                this.biasIncidentFormValues.custom_field_1 = result.Url;
+        let formValues = JSON.stringify(this.biasIncidentFormValues);
 
-                this.returnUrl = result.Url;
-                this.showUrl = true;
+        // window.scrollTo(0,0);
+        // this.submitFormSpinner = true;
+
+        if (this.attachDocuments.length > 0) {
+            const supportingDocumentName = 'Advocate Bias Incident';
+            try {
+                await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+                // await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments}).then((result) => {
+                    console.log(JSON.stringify(result));
+
+                    if (result.Status === 'success') {
+                        // this.biasIncidentFormValues.custom_field_1 = result.Url;
+
+                        //Used for testing
+                        this.returnUrl = result.Url;
+                        this.showUrl = true;
+                    } else if (result.Status === 'error') {
+                        this.saveDocumentsFail = true;
+                    }
+                })
+            } catch (e) {
+                console.log("Save documents error: " + JSON.stringify(e));
+                this.saveDocumentsFail = true;
             }
-        })
+        }
 
-        // try {
-        //     delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-        //     let formValues = JSON.stringify(this.biasIncidentFormValues);
-        //     let postBiasReportResults = await submitForm({formValues: formValues});
-        //     console.log("imperativeContinuation results: "+JSON.stringify(postBiasReportResults));
-        //     this.error = undefined;
-        // } catch (error) {
-        //     this.error = error;
+        // if (!this.saveDocumentsFail) {
+        //     try {
+        //         // delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
+        //         await submitForm({formValues: formValues}).then((result) => {
+        //             if (result[0] !== '201') {
+        //                 this.submitBiasIncidentFormFail = true;
+        //             }
+        //         });
+        //     } catch (error) {
+        //         this.submitBiasIncidentFormFail = true;
+        //     }
         // }
 
-        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-        //     console.log(result);
-        // })
-
-        // console.log("initial biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
-        // delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-        // console.log("deleted property biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
-        //
-        // let formValues = JSON.stringify(this.biasIncidentFormValues);
-        // console.log("submitted stringify biasIncidentFormValues: "+formValues);
-        // console.log("Uploaded Files Content on Submit: ", this.attachDocumentContent );
-
-        // try {
-        //     let imperativeContinuation = await submitForm({formValues: formValues});
-        //     console.log("imperativeContinuation results: "+JSON.stringify(imperativeContinuation));
-        //     this.error = undefined;
-        // } catch (error) {
-        //     this.error = error;
+        // if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
+        //     this.submitFormSpinner = false;
+        //     eventField.scrollIntoView({
+        //         behavior: 'smooth',
+        //     });
+        // } else {
+        //     this.submitFormSpinner = false;
+        //     console.log("Update submittedUrl: "+this.submittedUrl());
+        //     location.replace(this.submittedUrl());
         // }
+
     }
 
 }

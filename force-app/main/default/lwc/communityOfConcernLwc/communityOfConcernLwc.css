@@ -2,7 +2,6 @@
 /* * Created by nguy0092 on 7/18/2025.*/
 /* *!*/
 .custom-textarea-tall {
-    width: 65%;
     --sds-c-textarea-sizing-min-height: 200px; /* Set your desired height */
 }
 .link-text-size p {

@@ -4,232 +4,262 @@
 
 <!-- Advocate Well Being Incident Report Lwc -->
 <template>
-        <div class="regular-body-text">
-            <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
-            <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
-                <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">
-                    I am a:<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control">
-                    <lightning-combobox class="selection-width"
-                                        id="well-being-reporter_type-selection-id"
-                                        label=""
-                                        placeholder="Select one"
-                                        options={reporterTypeOptions}
-                                        value={wellBeingIncidentFormValues.reporterType}
-                                        data-selecttype="reportertype"
-                                        variant="label-hidden"
-                                        onchange={selectValueHandler}>
-                    </lightning-combobox>
-                </div>
+    <div class="regular-body-text">
+        <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+        <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
+            <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">
+                I am a:<abbr class="slds-required" title="Required">*</abbr></label>
+            <div class="slds-form-element__control">
+                <lightning-combobox class="selection-width"
+                                    id="well-being-reporter_type-selection-id"
+                                    label=""
+                                    placeholder="Select one"
+                                    options={reporterTypeOptions}
+                                    value={wellBeingIncidentFormValues.reporterType}
+                                    data-selecttype="reportertype"
+                                    variant="label-hidden"
+                                    onchange={selectValueHandler}>
+                </lightning-combobox>
             </div>
-            <template lwc:if={showFormAll}>
-                <template lwc:if={isNotAnonymous}>
-                    <div class="slds-m-top_x-large">
-                        <p><b>Reporter Information</b></p>
-                        <p class="textarea-sublabel-2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
-                            you do not provide your name and contact information, the university’s ability to respond may be
-                            limited.</p>
-                    </div>
-                    <div class="slds-m-top_x-small slds-m-bottom_medium">
-                        <div class="slds-form-element slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">Your Name:</label>
-                            <p class="textarea-sublabel-1">Please provide your full name.</p>
-                            <div class="slds-form-element__control">
-                                <lightning-input class="selection-width"
-                                                 id="well-being-reporter-name-id"
-                                                 type="text"
-                                                 label=""
-                                                 value={wellBeingIncidentFormValues.reporterName}
-                                                 data-inputtype="name"
-                                                 variant="label-hidden"
-                                                 onchange={inputValueHandler}>
-                                </lightning-input>
-                            </div>
-                        </div>
-                        <div class="slds-form-element slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-email-id">Your Email Address:</label>
-                            <div class="slds-form-element__control">
-                                <lightning-input class="selection-width"
-                                                 id="well-being-reporter-email-id"
-                                                 type="text"
-                                                 label=""
-                                                 value={wellBeingIncidentFormValues.reporterEmail}
-                                                 data-inputtype="email"
-                                                 variant="label-hidden"
-                                                 onchange={inputValueHandler}
-                                                 onblur={emailValidationBlur}>
-                                </lightning-input>
-                                <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
-                            </div>
-                        </div>
-                        <div class="slds-form-element slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">Phone Number:</label>
-                            <div class="slds-form-element__control">
-                                <lightning-input class="selection-width"
-                                                 id="well-being-reporter-phone-id"
-                                                 type="text"
-                                                 label=""
-                                                 value={wellBeingIncidentFormValues.reporterPhone}
-                                                 data-inputtype="phone"
-                                                 variant="label-hidden"
-                                                 onchange={inputValueHandler}>
-                                </lightning-input>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <p class="slds-m-top_x-large"><b>Parties Involved</b></p>
+        </div>
+        <template lwc:if={showFormAll}>
+<!--                <template lwc:if={isNotAnonymous}>-->
+                <div class="slds-m-top_x-large">
+                    <p><b>Reporter Information</b></p>
+                    <p class="textarea-sublabel-2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
+                        you do not provide your name and contact information, the university’s ability to respond may be
+                        limited.</p>
+                </div>
                 <div class="slds-m-top_x-small slds-m-bottom_medium">
                     <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-involved-id">Students Involved</label>
-                        <p class="textarea-sublabel-1 textblock-width-2">Please list all students involved in this incident.</p>
+                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">Your Name:</label>
+                        <p class="textarea-sublabel-1">Please provide your full name.</p>
                         <div class="slds-form-element__control">
                             <lightning-input class="selection-width"
-                                             id="well-being-reporter-students-involved-id"
+                                             id="well-being-reporter-name-id"
                                              type="text"
                                              label=""
-                                             value={wellBeingIncidentFormValues.otherStudent}
-                                             data-inputtype="studentsinvolved"
+                                             value={wellBeingIncidentFormValues.reporterName}
+                                             data-inputtype="name"
                                              variant="label-hidden"
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
                     </div>
                     <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-groups-involved-id">Student Groups Involved</label>
-                        <p class="textarea-sublabel-1 textblock-width">Please list all Students Groups involved in this incident.</p>
+                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-email-id">Your Email Address:</label>
                         <div class="slds-form-element__control">
                             <lightning-input class="selection-width"
-                                             id="well-being-reporter-students-groups-involved-id"
+                                             id="well-being-reporter-email-id"
                                              type="text"
                                              label=""
-                                             value={wellBeingIncidentFormValues.studentGroup}
-                                             data-inputtype="studentgroupsinvolved"
+                                             value={wellBeingIncidentFormValues.reporterEmail}
+                                             data-inputtype="email"
+                                             variant="label-hidden"
+                                             onchange={inputValueHandler}
+                                             onblur={emailValidationBlur}>
+                            </lightning-input>
+                            <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
+                        </div>
+                    </div>
+                    <div class="slds-form-element slds-m-bottom_small">
+                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">Phone Number:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input class="selection-width"
+                                             id="well-being-reporter-phone-id"
+                                             type="text"
+                                             label=""
+                                             value={wellBeingIncidentFormValues.reporterPhone}
+                                             data-inputtype="phone"
                                              variant="label-hidden"
                                              onchange={inputValueHandler}>
                             </lightning-input>
-                        </div>
-                    </div>
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-donotknowforknow-id">Other Involved Individual(s)</label>
-                        <p class="textarea-sublabel-1 textblock-width">Please list all
-                            non-students involved in this incident (if possible, please provide DL#, email, or phone
-                            number). If you know that an individual is a student at a neighboring institution please
-                            include that information as well.</p>
-                        <div class="slds-form-element__control">
-                            <lightning-textarea class="custom-textarea"
-                                                id="well-being-donotknowforknow-id"
-                                                label=""
-                                                value={wellBeingIncidentFormValues.DONOTKNOWFORKNOW}
-                                                data-inputtype="donotknowforknow"
-                                                variant="label-hidden"
-                                                onchange={inputValueHandler}>
-                            </lightning-textarea>
-                        </div>
-                    </div>
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-witness-id">Student Witness(es)</label>
-                        <p class="textarea-sublabel-1 textblock-width">Please list all students who witnessed this incident.</p>
-                        <div class="slds-form-element__control">
-                            <lightning-input class="selection-width"
-                                             id="well-being-reporter-witness-id"
-                                             type="text"
-                                             label=""
-                                             value={wellBeingIncidentFormValues.witness}
-                                             data-inputtype="witness"
-                                             variant="label-hidden"
-                                             onchange={inputValueHandler}>
-                            </lightning-input>
-                        </div>
-                    </div>
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-other-witness-id">Other Witness(es)</label>
-                        <p class="textarea-sublabel-1 textblock-width">Please list any
-                            non-student witnesses, including police officers, Campus Security officers, University
-                            employees, etc.</p>
-                        <div class="slds-form-element__control">
-                            <lightning-textarea class="custom-textarea"
-                                                id="well-being-reporter-other-witness-id"
-                                                label=""
-                                                value={wellBeingIncidentFormValues.otherWitness}
-                                                data-inputtype="otherwitness"
-                                                variant="label-hidden"
-                                                onchange={inputValueHandler}>
-                            </lightning-textarea>
                         </div>
                     </div>
                 </div>
-                <p class="slds-m-top_x-large"><b>Descriptive Information</b></p>
-                <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
-                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-incident-description-id">Incident
-                        Description<abbr class="slds-required" title="Required">*</abbr></label>
-                    <p class="textarea-sublabel-1 textblock-width">Please provide as much detailed information as possible about the incident.</p>
+<!--                </template>-->
+            <p class="slds-m-top_x-large"><b>Parties Involved</b></p>
+            <div class="slds-m-top_x-small slds-m-bottom_medium">
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-involved-id">Students Involved</label>
+                    <p class="textarea-sublabel-1 textblock-width-2">Please list all students involved in this incident.</p>
                     <div class="slds-form-element__control">
-                        <lightning-textarea class="custom-textarea-tall"
-                                            id="well-being-reporter-incident-description-id"
+                        <lightning-input class="selection-width"
+                                         id="well-being-reporter-students-involved-id"
+                                         type="text"
+                                         label=""
+                                         value={wellBeingIncidentFormValues.student}
+                                         data-inputtype="studentsinvolved"
+                                         variant="label-hidden"
+                                         onchange={inputValueHandler}>
+                        </lightning-input>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-groups-involved-id">Student Groups Involved</label>
+                    <p class="textarea-sublabel-1 textblock-width">Please list all Students Groups involved in this incident.</p>
+                    <div class="slds-form-element__control">
+                        <lightning-input class="selection-width"
+                                         id="well-being-reporter-students-groups-involved-id"
+                                         type="text"
+                                         label=""
+                                         value={wellBeingIncidentFormValues.studentGroup}
+                                         data-inputtype="studentgroupsinvolved"
+                                         variant="label-hidden"
+                                         onchange={inputValueHandler}>
+                        </lightning-input>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="well-being-other-student-id">Other Involved Individual(s)</label>
+                    <p class="textarea-sublabel-1 textblock-width">Please list all
+                        non-students involved in this incident (if possible, please provide DL#, email, or phone
+                        number). If you know that an individual is a student at a neighboring institution please
+                        include that information as well.</p>
+                    <div class="slds-form-element__control">
+                        <lightning-textarea class="custom-textarea"
+                                            id="well-being-other-student-id"
                                             label=""
-                                            value={wellBeingIncidentFormValues.description}
-                                            data-inputtype="description"
+                                            value={wellBeingIncidentFormValues.otherStudent}
+                                            data-inputtype="otherstudent"
                                             variant="label-hidden"
                                             onchange={inputValueHandler}>
                         </lightning-textarea>
                     </div>
                 </div>
-                <div class="slds-m-top_x-large slds-m-bottom_xx-large">
-                    <p><b>Documentation</b></p>
-                    <div class="slds-form-element slds-m-top_x-small slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
-                        <p class="textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
-                            Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
-                        <div class="slds-form-element__control" style="margin-top: -15px">
-                            <lightning-input
-                                    id="bias-report-attach-documents-id"
-                                    type="file"
-                                    label=""
-                                    accept={acceptedExtensionTypes}
-                                    multiple="true"
-                                    onchange={attachDocumentsUpload}>
-                            </lightning-input>
-                        </div>
-                    </div>
-                    <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
-                        <p>Attached Files:</p>
-                        <template for:each={attachDocuments} for:item="file">
-                            <div key={file.fileId} class="slds-p-left_xx-small">
-                                {file.fileName}
-                                <lightning-button-icon class="slds-m-left_x-small"
-                                                       icon-name="utility:clear"
-                                                       variant="bare"
-                                                       alternative-text="Delete File"
-                                                       title="Delete File"
-                                                       data-fileid={file.fileId}
-                                                       onclick={attachDocumentsDelete}>
-                                </lightning-button-icon>
-                            </div>
-                        </template>
-                    </div>
-                    <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
-                        <p>Excluded Files:</p>
-                        <template for:each={attachDocumentsExclude} for:item="file">
-                            <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
-                        </template>
-                    </div>
-                    <div lwc:if={showUrl} class="slds-m-vertical_small">
-                        Salesforce Supporting Document:
-                        <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-witness-id">Student Witness(es)</label>
+                    <p class="textarea-sublabel-1 textblock-width">Please list all students who witnessed this incident.</p>
+                    <div class="slds-form-element__control">
+                        <lightning-input class="selection-width"
+                                         id="well-being-reporter-witness-id"
+                                         type="text"
+                                         label=""
+                                         value={wellBeingIncidentFormValues.witness}
+                                         data-inputtype="witness"
+                                         variant="label-hidden"
+                                         onchange={inputValueHandler}>
+                        </lightning-input>
                     </div>
                 </div>
-                <div class="slds-m-vertical_x-large">
-                    <lightning-button class="submit_button"
-                                      title="Please enter all required fields."
-                                      type="button"
-                                      label="SUBMIT"
-                                      variant="success"
-                                      disabled={submitDisable}
-                                      onclick={submitCase}
-                                      disable-animation>
-                    </lightning-button>
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-other-witness-id">Other Witness(es)</label>
+                    <p class="textarea-sublabel-1 textblock-width">Please list any
+                        non-student witnesses, including police officers, Campus Security officers, University
+                        employees, etc.</p>
+                    <div class="slds-form-element__control">
+                        <lightning-textarea class="custom-textarea"
+                                            id="well-being-reporter-other-witness-id"
+                                            label=""
+                                            value={wellBeingIncidentFormValues.otherWitness}
+                                            data-inputtype="otherwitness"
+                                            variant="label-hidden"
+                                            onchange={inputValueHandler}>
+                        </lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <p class="slds-m-top_x-large"><b>Descriptive Information</b></p>
+            <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
+                <label class="slds-form-element__label selection-labels" for="well-being-reporter-incident-description-id">Incident
+                    Description<abbr class="slds-required" title="Required">*</abbr></label>
+                <p class="textarea-sublabel-1 textblock-width">Please provide as much detailed information as possible about the incident.</p>
+                <div class="slds-form-element__control">
+                    <lightning-textarea class="custom-textarea-tall"
+                                        id="well-being-reporter-incident-description-id"
+                                        label=""
+                                        value={wellBeingIncidentFormValues.description}
+                                        data-inputtype="description"
+                                        variant="label-hidden"
+                                        onchange={inputValueHandler}>
+                    </lightning-textarea>
+                </div>
+            </div>
+            <div class="slds-m-top_x-large slds-m-bottom_xx-large">
+                <p><b>Documentation</b></p>
+                <div class="slds-form-element slds-m-top_x-small slds-m-bottom_small">
+                    <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
+                    <p class="textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
+                        Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
+                    <div class="slds-form-element__control">
+                        <lightning-input
+                                id="bias-report-attach-documents-id"
+                                type="file"
+                                label=""
+                                accept={acceptedExtensionTypes}
+                                multiple="true"
+                                onchange={attachDocumentsHandler}>
+                        </lightning-input>
+                    </div>
+                </div>
+                <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
+                    <p>Attached Files:</p>
+                    <template for:each={attachDocuments} for:item="file">
+                        <div key={file.fileId} class="slds-p-left_xx-small">
+                            {file.fileName}
+                            <lightning-button-icon class="slds-m-left_x-small"
+                                                   icon-name="utility:clear"
+                                                   variant="bare"
+                                                   alternative-text="Delete File"
+                                                   title="Delete File"
+                                                   data-fileid={file.fileId}
+                                                   onclick={attachDocumentsDelete}>
+                            </lightning-button-icon>
+                        </div>
+                    </template>
+                </div>
+                <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
+                    <p>Excluded Files:</p>
+                    <template for:each={attachDocumentsExclude} for:item="file">
+                        <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
+                    </template>
+                </div>
+                <div lwc:if={showUrl} class="slds-m-vertical_small">
+                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
+                </div>
+            </div>
+            <div class="slds-m-vertical_x-large">
+                <lightning-button class="submit_button"
+                                  title="Please enter all required fields."
+                                  type="button"
+                                  label="SUBMIT"
+                                  variant="success"
+                                  disabled={submitDisable}
+                                  onclick={submitFormHandler}
+                                  disable-animation>
+                </lightning-button>
+            </div>
+            <template lwc:if={saveDocumentsFail}>
+                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:warning"
+                                        alternative-text="save documents error"
+                                        title="save documents error"
+                                        size="small">
+                        </lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>
+                    </div>
                 </div>
             </template>
-        </div>
+            <template lwc:if={submitBiasIncidentFormFail}>
+                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:warning"
+                                        alternative-text="submit bias incident form error"
+                                        title="submit bias incident form error"
+                                        size="small">
+                        </lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p>There was a problem submitting your form. Please contact salesforce@stthomas.edu to report this error.</p>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+    <template lwc:if={submitFormSpinner}>
+        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+    </template>
 </template>

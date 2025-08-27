@@ -11,6 +11,7 @@ import COMMUNITY_CONCERN_WHAT from "@salesforce/schema/Case.Community_Concern__c
 import iAmContactInfo from "@salesforce/apex/CommunityOfConcernLwcController.iAmContactInfo";
 import saveCase from "@salesforce/apex/CommunityOfConcernLwcController.saveCase";
 import TELL_SOMEONE_LOGO from '@salesforce/resourceUrl/TellSomeoneLogoPng';
+import {emailValidation} from "c/communityOfConcernUtilJs";
 
 export default class CommunityOfConcernLwc extends LightningElement {
 
@@ -21,55 +22,45 @@ export default class CommunityOfConcernLwc extends LightningElement {
     @api paramUrl = "";
     // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sfid=003f200002qXsc4AAC&sbid=&crn=";
     // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=100408312&sfid=&sbid=&crn="
+
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
+    @track iAmOptions = [];
+    @track concernedWhoOptions = [];
+    @track whatPicklist = [];
+    @track whatNoStudentPicklist = [];
+    @track initialContactInfo = {};
+    @track communityOfConcernCase = {
+        IAmValue: "",
+        IAmContactId: "",
+        IAmFirstName: "",
+        IAmLastName: "",
+        IAmStThomasConnection: "",
+        IAmEmail: "",
+        IAmPhone: "",
+        IAmBannerId: "",
+        ConcernedWhoValue: "",
+        ConcernedWhoFirstName: "",
+        ConcernedWhoLastName: "",
+        ConcernedWhoEmail: "",
+        ConcernedWhoPhone: "",
+        ConcernedWhatValue: "",
+        ConcernedWhatAdditionalInfo: "",
+    }
 
     get tellSomeoneLogo() {
         return TELL_SOMEONE_LOGO;
     }
-    get communityOfConcernReportType() {
-        return this.communityOfConcernCase?.IAmValue;
-    };
-    @track childProps = {
-        communityOfConcernName: "",
-        communityOfConcernEmail: ""
-    }
-
-    @track iAmOptions = [];
-    @track concernedWhoOptions = [];
-    whatPicklist = [];
-    whatNoStudentPicklist = [];
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE })
-    pickListReporterType({ error, data }) {
-        if (data) {
-            this.iAmOptions = JSON.parse(JSON.stringify(data.values));
-            // this.iAmOptions.push( {label: "Anonymous", value: "Anonymous"} );
-        } else if (error) {
-            console.log("pickListReporterType Error: " + error);
+    get childProps() {
+        return {
+            communityOfConcernReportType: this.communityOfConcernCase?.IAmValue,
+            communityOfConcernReporterFirstName: this.communityOfConcernCase?.IAmFirstName,
+            communityOfConcernReporterLastName: this.communityOfConcernCase?.IAmLastName,
+            communityOfConcernReporterEmail: this.communityOfConcernCase?.IAmEmail,
+            communityOfConcernParamsUrl: this.paramUrl,
         }
     }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHO_TYPE })
-    pickListWhoTypes({ error, data }) {
-        if (data) {
-            this.concernedWhoOptions = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("pickListWhoTypes Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHAT })
-    pickListConcern({ error, data }) {
-        if (data) {
-            this.whatPicklist = JSON.parse(JSON.stringify(data.values));
-            this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
-        } else if (error) {
-            console.log("pickListConcern Error: " + error);
-        }
-    }
-
     get concernedWhatOptions() {
         if (this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty") && this.communityOfConcernCase.ConcernedWhoValue === "Student") {
             return this.whatPicklist;
@@ -87,7 +78,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
         return !!this.communityOfConcernCase.IAmValue;
     }
     get showConcernedWhatSelect() {
-        // return this.showConcernedWhoInfo && !!this.communityOfConcernCase.ConcernedWhoFirstName && !!this.communityOfConcernCase.ConcernedWhoLastName;
         return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
     }
     get showWhatTommieAlerts() {
@@ -117,61 +107,60 @@ export default class CommunityOfConcernLwc extends LightningElement {
     get submitDisable() {
         return !(!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
     }
-
-    @track initialContactInfo = {};
-
-    @track communityOfConcernCase = {
-        IAmValue: "",
-        IAmContactId: "",
-        IAmFirstName: "",
-        IAmLastName: "",
-        IAmStThomasConnection: "",
-        IAmEmail: "",
-        IAmPhone: "",
-        IAmBannerId: "",
-        ConcernedWhoValue: "",
-        ConcernedWhoFirstName: "",
-        ConcernedWhoLastName: "",
-        ConcernedWhoEmail: "",
-        ConcernedWhoPhone: "",
-        ConcernedWhatValue: "",
-        ConcernedWhatAdditionalInfo: "",
-    }
-
-    submitCaseSpinner = false;
-
     get iAmInfoInputDisabled() {
         return !!this.communityOfConcernCase.IAmContactId;
     }
 
     connectedCallback() {
         console.log("this.paramUrl:"+this.paramUrl);
-
         this.searchParamsUrl = new URL(this.paramUrl);
         this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
 
         for (let keyValue of this.paramsString.entries()) {
             switch (keyValue[0]) {
-                case "sfid":
-                    if (!this.paramSfId) {
-                        this.paramSfId = keyValue[1];
-                    }
-                    break;
                 case "bid":
                     if (!this.paramBId) {
                         this.paramBId = keyValue[1];
                     }
                     break;
-                // case "crn":
-                //     if (!this.paramCrn) {
-                //         this.paramCrn = keyValue[1];
-                //     }
-                //     break;
+                case "sfid":
+                    if (!this.paramSfId) {
+                        this.paramSfId = keyValue[1];
+                    }
+                    break;
                 case "submitted":
                     if (keyValue[1] === "true") {
                         this.caseSubmittedCheck = true;
                     }
             }
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE })
+    pickListReporterType({ error, data }) {
+        if (data) {
+            this.iAmOptions = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("pickListReporterType Error: " + error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHO_TYPE })
+    pickListWhoTypes({ error, data }) {
+        if (data) {
+            this.concernedWhoOptions = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("pickListWhoTypes Error: " + error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHAT })
+    pickListConcern({ error, data }) {
+        if (data) {
+            this.whatPicklist = JSON.parse(JSON.stringify(data.values));
+            this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
+        } else if (error) {
+            console.log("pickListConcern Error: " + error);
         }
     }
 
@@ -186,27 +175,21 @@ export default class CommunityOfConcernLwc extends LightningElement {
                     IAmFirstName: this.initialContactInfo.FirstName,
                     IAmLastName: this.initialContactInfo.LastName,
                     IAmStThomasConnection: this.initialContactInfo.St_Thomas_Connection__c,
-                    IAmEmail: this.initialContactInfo.hed__UniversityEmail__c,
                     IAmBannerId: this.initialContactInfo.University_Banner_ID__c,
                 }
-
-                this.childProps = {
-                    communityOfConcernName: this.initialContactInfo.FirstName + ' ' + this.initialContactInfo.LastName,
-                    communityOfConcernEmail: this.initialContactInfo.hed__UniversityEmail__c,
-                };
-
-                if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty")) {
-                    this.communityOfConcernCase.IAmValue = "Faculty"
-                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Staff")) {
-                    this.communityOfConcernCase.IAmValue = "Staff"
-                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Student")) {
-                    this.communityOfConcernCase.IAmValue = "Student"
+                if (this.initialContactInfo.hed__UniversityEmail__c) {
+                    let emailValidationResults = emailValidation(this.initialContactInfo.hed__UniversityEmail__c);
+                    this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                    this.validEmail = emailValidationResults.validEmail;
                 }
 
-                this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-                this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
-                this.paramUrl = this.searchParamsUrl.toString();
-                console.log("paramUrl: " + this.paramUrl)
+                if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty")) {
+                    this.communityOfConcernCase.IAmValue = "Faculty";
+                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Staff")) {
+                    this.communityOfConcernCase.IAmValue = "Staff";
+                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Student")) {
+                    this.communityOfConcernCase.IAmValue = "Student";
+                }
             }
         }
 
@@ -215,7 +198,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    singleSelectHandler(event) {
+    selectValueHandler(event) {
         let eventValue = event.detail.value;
         this.communityOfConcernCase.ConcernedWhatValue = "";
         this.communityOfConcernCase.ConcernedWhatAdditionalInfo = "";
@@ -241,6 +224,9 @@ export default class CommunityOfConcernLwc extends LightningElement {
                         this.communityOfConcernCase.IAmBannerId = this.initialContactInfo.University_Banner_ID__c;
                     }
                 }
+                let emailValidationResults = emailValidation(this.communityOfConcernCase.IAmEmail);
+                this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                this.validEmail = emailValidationResults.validEmail;
                 break;
             case "concernedwhoselect":
                 this.communityOfConcernCase.ConcernedWhoValue = eventValue;
@@ -251,8 +237,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    inputTextHandler(event) {
-        let eventField = event.target;
+    inputValueHandler(event) {
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
@@ -270,7 +255,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
                         } else {
                             this.validEmail = false;
                         }
-                        // this.communityOfConcernCase.IAmEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
                         break;
                     case "phone":
                         this.communityOfConcernCase.IAmPhone = eventValue.trim();
@@ -292,7 +276,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
                         } else {
                             this.validEmailWho = false;
                         }
-                        // this.communityOfConcernCase.ConcernedWhoEmail = event.target.checkValidity() ? event.detail.value.trim() : "";
                         break;
                     case "phone":
                         this.communityOfConcernCase.ConcernedWhoPhone = eventValue.trim();
@@ -312,65 +295,89 @@ export default class CommunityOfConcernLwc extends LightningElement {
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        let emailTestFail = !!emailAddress && !(emailRegex.test(emailAddress));
+        let emailValidationResults = emailValidation(emailAddress);
 
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
-                if (emailTestFail) {
-                    this.validEmail = false;
-                    this.validEmailWarning = true;
+                this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                this.validEmail = emailValidationResults.validEmail;
+                this.validEmailWarning = emailValidationResults.validEmailWarning;
+                if (this.validEmailWarning) {
                     emailField.classList.add("slds-has-error");
                 } else {
-                    this.communityOfConcernCase.IAmEmail = emailAddress;
-                    this.validEmail = true;
-                    this.validEmailWarning = false;
                     emailField.classList.remove("slds-has-error");
                 }
                 break;
             case "concernedwhoinfo":
-                if (emailTestFail) {
-                    this.validEmailWho = false;
-                    this.validEmailWarningWho = true;
+                this.communityOfConcernCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
+                this.validEmailWho = emailValidationResults.validEmail;
+                this.validEmailWarningWho = emailValidationResults.validEmailWarning;
+                if (this.validEmailWarningWho) {
                     emailField.classList.add("slds-has-error");
                 } else {
-                    this.communityOfConcernCase.ConcernedWhoEmail = emailAddress;
-                    this.validEmailWho = true;
-                    this.validEmailWarningWho = false;
                     emailField.classList.remove("slds-has-error");
                 }
                 break;
         }
+
     }
+    // emailValidationBlur(event) {
+    //     const emailField = event.currentTarget;
+    //     const emailAddress = event.target.value;
+    //     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //     let emailTestFail = !!emailAddress && !(emailRegex.test(emailAddress));
+    //
+    //     switch (event.currentTarget.dataset.inputgroup) {
+    //         case "iaminfo":
+    //             if (emailTestFail) {
+    //                 this.validEmail = false;
+    //                 this.validEmailWarning = true;
+    //                 emailField.classList.add("slds-has-error");
+    //             } else {
+    //                 this.communityOfConcernCase.IAmEmail = emailAddress;
+    //                 this.validEmail = true;
+    //                 this.validEmailWarning = false;
+    //                 emailField.classList.remove("slds-has-error");
+    //             }
+    //             break;
+    //         case "concernedwhoinfo":
+    //             if (emailTestFail) {
+    //                 this.validEmailWho = false;
+    //                 this.validEmailWarningWho = true;
+    //                 emailField.classList.add("slds-has-error");
+    //             } else {
+    //                 this.communityOfConcernCase.ConcernedWhoEmail = emailAddress;
+    //                 this.validEmailWho = true;
+    //                 this.validEmailWarningWho = false;
+    //                 emailField.classList.remove("slds-has-error");
+    //             }
+    //             break;
+    //     }
+    // }
 
     submittedUrl() {
-        // this.searchParamsUrl.searchParams.set("bid", this.paramBId);
-        // this.searchParamsUrl.searchParams.set("sbid", "");
-        // this.searchParamsUrl.searchParams.set("crn", "");
         this.searchParamsUrl.searchParams.set("submitted", "true");
-
         return this.searchParamsUrl;
     }
 
-    submitFail = false;
+    submitCaseSpinner = false;
+    submitCaseFail = false;
     async submitCase(event) {
         console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
         const eventField = event.currentTarget;
-
+        this.submitCaseFail = false;
         try {
             window.scrollTo(0,0);
             this.submitCaseSpinner = true;
             await saveCase({formSelections: this.communityOfConcernCase}).then( (result) => {
-                if (result) {
-                    this.submitFail = true;
-                }
+                this.submitCaseFail = !!result;
             });
         } catch (e) {
             console.log("Submission Error: " + JSON.stringify(e));
-            this.submitFail = true;
+            this.submitCaseFail = true;
         }
 
-        if (this.submitFail) {
+        if (this.submitCaseFail) {
             this.submitCaseSpinner = false;
             eventField.scrollIntoView({
                 behavior: 'smooth',

@@ -148,11 +148,11 @@
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.attendanceCheck}>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</p>
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.academicCheck}>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student’s advisor(s).</p>
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.behaviorCheck}>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
-                    The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                    The Dean of Students Office will address the concern with the student. The advisor and student will NOT be copied on the email or notified.</p>
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.financialConcernsCheck}>Financial concerns will be sent directly to the Financial Aid office.
                     The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</p>
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.mentalHealthCheck}>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
-                    The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                    The Dean of Students Office will address the concern with the student. The advisor and student will NOT be copied on the email or notified.</p>
                 <div lwc:if={selectionsCheck.relationshipCheck}>
                     <p class="slds-text-body_regular slds-m-vertical_medium">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter).
                         No advisors will be copied or notified.</p>
@@ -160,7 +160,7 @@
                         <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
                 </div>
                 <p class="slds-text-body_regular slds-m-vertical_medium" lwc:if={selectionsCheck.belongingCheck} >Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
-                    No advisors will be copied or notified.</p>
+                    The advisor and student will NOT be copied on the email or notified.</p>
             </div>
             <div class="slds-m-vertical_large" lwc:if={selectionsCheck.high5Check}>
                 <fieldset class="slds-form-element slds-is-required">
@@ -290,7 +290,7 @@
                     </lightning-textarea>
                 </div>
             </div>
-            <div class="slds-form-element slds-m-vertical_large">
+            <div class="slds-form-element slds-m-vertical_large" lwc:if={showAdditionalConcerns}>
                 <label class="slds-form-element__label textarea_label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
                 <p class="textarea_sublabel"><i>The information provided below <b><u>will not</u></b> be shared with the student.</i></p>
                 <div class="slds-form-element__control">
@@ -315,7 +315,7 @@
             </lightning-button>
         </div>
         <div class="slds-m-vertical_medium footer_info">
-            <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto: retention@stthomas.edu">retention@stthomas.edu</a></p>
+            <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
             <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at (651)962-6230.</p>
         </div>
     </form>

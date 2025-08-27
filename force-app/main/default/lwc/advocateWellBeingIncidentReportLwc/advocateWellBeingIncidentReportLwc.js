@@ -4,13 +4,16 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import wellBeingReportingFormOptions from "@salesforce/apexContinuation/AdvocateWellBeingIncidentReprtController.wellBeingReportingFormOptions";
-import saveSupportingDocuments from "@salesforce/apex/AdvocateWellBeingIncidentReprtController.saveSupportingDocuments";
+import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
+// import saveSupportingDocuments from "@salesforce/apex/AdvocateWellBeingIncidentReprtController.saveSupportingDocuments";
+import {emailValidation, attachDocumentsUpload} from "c/communityOfConcernUtilJs";
 
 export default class AdvocateWellBeingIncidentReportLwc extends LightningElement {
     @api communityOfConcernReportType = "";
-    @api communityOfConcernName = "";
-    @api communityOfConcernEmail = "";
-    @api paramUrl = "";
+    @api communityOfConcernReporterFirstName = "";
+    @api communityOfConcernReporterLastName = "";
+    @api communityOfConcernReporterEmail = "";
+    @api communityOfConcernParamsUrl = "";
 
     @track reporterTypeOptions = [];
 
@@ -26,9 +29,9 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         reporterName: "",
         reporterEmail: "",
         reporterPhone: "",
-        otherStudent: "",
+        student: "",
         studentGroup: "",
-        DONOTKNOWFORKNOW: "",
+        otherStudent: "",
         witness: "",
         otherWitness: "",
         description: "",
@@ -44,8 +47,11 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     rendered = false;
     renderedCallback() {
         if(!this.rendered) {
-            this.wellBeingIncidentFormValues.reporterName = !!this.communityOfConcernName ? this.communityOfConcernName : "";
-            this.wellBeingIncidentFormValues.reporterEmail = !!this.communityOfConcernEmail ? this.communityOfConcernEmail : "";
+            this.wellBeingIncidentFormValues.reporterName = !!this.communityOfConcernReporterFirstName ? this.communityOfConcernReporterFirstName + " " + this.communityOfConcernReporterLastName : "";
+            if (this.communityOfConcernReporterEmail) {
+                let emailValidationResults = emailValidation(this.communityOfConcernReporterEmail);
+                this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+            }
             this.rendered = !this.rendered;
         }
     }
@@ -120,13 +126,13 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 this.wellBeingIncidentFormValues.reporterPhone = eventValue;
                 break;
             case "studentsinvolved":
-                this.wellBeingIncidentFormValues.otherStudent = eventValue;
+                this.wellBeingIncidentFormValues.student = eventValue;
                 break;
             case "studentgroupsinvolved":
                 this.wellBeingIncidentFormValues.studentGroup = eventValue;
                 break;
-            case "donotknowforknow":
-                this.wellBeingIncidentFormValues.DONOTKNOWFORKNOW = eventValue;
+            case "otherstudent":
+                this.wellBeingIncidentFormValues.otherStudent = eventValue;
                 break;
             case "witness":
                 this.wellBeingIncidentFormValues.witness = eventValue;
@@ -146,16 +152,11 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        let emailValidationResults = emailValidation(emailAddress);
 
-        if (emailAddress && !(emailRegex.test(emailAddress))) {
-            this.validEmail = false;
-            this.validEmailWarning = true;
-        } else {
-            this.wellBeingIncidentFormValues.reporterEmail = emailAddress;
-            this.validEmail = true;
-            this.validEmailWarning = false;
-        }
+        this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+        this.validEmail = emailValidationResults.validEmail;
+        this.validEmailWarning = emailValidationResults.validEmailWarning;
 
         if (this.validEmailWarning) {
             emailField.classList.add("slds-has-error");
@@ -164,118 +165,75 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         }
     }
 
-    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
-    acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
-
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
+    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
-
-    attachDocumentsUpload(event) {
+    async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
-        console.log("Uploaded Files Length: " + uploadedFiles.length);
-        this.attachDocumentsExclude = [];
-        if (uploadedFiles.length > 0) {
-            for (const file of uploadedFiles) {
-                let fileSize = file.size;
-                let fileSizeInMB = 0;
-                let fileName = file.name;
-                let fileExtension = "."+fileName.split('.').pop();
-                let fileType = file.type;
-                new Promise((resolve, reject) => {
-                    fileSizeInMB = (fileSize / (1024 * 1024)).toFixed(2);
-                    console.log("File info: " + fileName + " " + fileSize + " " + fileSizeInMB + " " + fileExtension + " " + fileType);
-
-                    let fileSizeLimit = fileSizeInMB < 3;
-                    let fileExtensionIncludes = this.acceptedExtensionTypes.includes(fileExtension.toLowerCase());
-                    let fileTypeIncludes = this.acceptedMimeTypes.includes(fileType.toLowerCase());
-
-                    if (fileSizeLimit && fileExtensionIncludes && fileTypeIncludes) {
-                        resolve(file);
-                    } else {
-                        let fileWarningType = [];
-                        if (!fileSizeLimit) {
-                            fileWarningType.push("exceeds file size limit");
-                        }
-                        if (!fileExtensionIncludes || !fileType) {
-                            fileWarningType.push("document type not supported");
-                        }
-                        let fileWarningText = fileWarningType.join("/");
-
-                        this.attachDocumentsExclude.push( {
-                            fileId: this.fileIndex,
-                            fileName: fileName,
-                            fileSize: fileSizeInMB,
-                            fileExtension: fileExtension,
-                            fileType: fileType,
-                            fileWarning: fileWarningText
-                        } )
-                        reject("Incompatible file");
-                    }
-                }).then((resolveFile) => {
-                    const reader = new FileReader();
-                    return new Promise((resolve, reject) => {
-                        reader.readAsDataURL(resolveFile); //This Data URL string is a base64-encoded representation of the file's content
-                        reader.onload = () => {
-                            let documentContent = reader.result.split(',')[1]; //Extract the base64 part of the data URL (remove the data:contentType;base64, prefix) to pass to Apex
-                            if (documentContent.length > 0) {
-                                resolve(documentContent);
-                            } else {
-                                reject("No documentContent");
-                            }
-                        }
-                    })
-                }).then((resolveDocumentContent) => {
-                    console.log("what is resolvedDocument size: " + resolveDocumentContent.length);
-                    if (resolveDocumentContent.length > 0) {
-                        this.attachDocuments.push( {
-                            fileId: this.fileIndex,
-                            fileContent: resolveDocumentContent,
-                            fileName: fileName,
-                            fileSize: fileSizeInMB,
-                            fileType: fileType
-                        } );
-                    }
-                    console.log("All File length: " + this.attachDocuments.length);
-                    this.fileIndex++;
-                }).catch((rejectMsg) => {
-                    console.log(rejectMsg);
-                })
-            }
-        }
+        let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
+        attachDocumentsUploadResults.attachDocuments.forEach((document) => {
+            this.attachDocuments.push(document);
+        })
+        this.attachDocumentsExclude = attachDocumentsUploadResults.attachDocumentsExclude;
+        this.fileIndex = attachDocumentsUploadResults.fileIndex;
     }
 
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        // this.attachDocumentContent = this.attachDocumentContent.filter( obj => obj.fileId.toString() !== removeFileId.toString());
         console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
     }
 
+    submitFormSpinner = false;
+    saveDocumentsFail = false;
+    submitBiasIncidentFormFail = false;
     showUrl = false;
     returnUrl;
-    async submitCase() {
+    async submitFormHandler(event) {
+        const eventField = event.currentTarget;
+        this.saveDocumentsFail = false;
+        this.submitBiasIncidentFormFail = false;
+        console.log("This Time: "+JSON.stringify(this.attachDocuments))
         console.log("All File: " + JSON.stringify(this.wellBeingIncidentFormValues));
-        await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
+        let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+
+        // window.scrollTo(0,0);
+        // this.submitFormSpinner = true;
+
+        try {
+        const supportingDocumentName = 'Advocate Well Being Incident';
+        await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
             console.log(JSON.stringify(result));
+
             if (result.Status === 'success') {
                 // this.biasIncidentFormValues.custom_field_1 = result.Url;
 
+                //Used for testing
                 this.returnUrl = result.Url;
                 this.showUrl = true;
+            } else if (result.Status === 'error') {
+                this.saveDocumentsFail = true;
             }
         })
+        } catch (e) {
+            console.log("Save documents error: " + JSON.stringify(e));
+            this.saveDocumentsFail = true;
+        }
 
         // try {
         //     delete this.titleIxIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE

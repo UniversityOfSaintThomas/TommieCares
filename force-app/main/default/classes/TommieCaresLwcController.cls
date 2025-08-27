@@ -37,6 +37,7 @@ public without sharing class TommieCaresLwcController {
                             University_Banner_ID__c
                     FROM Contact
                     WHERE University_Banner_ID__c = :urlBid
+                    WITH SECURITY_ENFORCED
             ];
         }
 
@@ -118,6 +119,7 @@ public without sharing class TommieCaresLwcController {
                 ' OR Registration_Code__c = \'RE\')';
 
         String allStudentQuery = allStudentsCriteria + '\n' +
+                ' WITH SECURITY_ENFORCED\n' +
                 ' ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC';
 
         if (String.isNotBlank(studentBannerId)) {
@@ -125,6 +127,7 @@ public without sharing class TommieCaresLwcController {
 
             String singleStudentQuery = allStudentsCriteria + '\n' +
                     singleStudentCriteria + '\n' +
+                    ' WITH SECURITY_ENFORCED\n' +
                     ' ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC';
 
             students = Database.query(singleStudentQuery);
@@ -175,6 +178,7 @@ public without sharing class TommieCaresLwcController {
                 FROM hed__Course_Enrollment__c
                 WHERE Course_Offering_ID__c = :tommieCaresCase.Course_Offering__c
                 AND hed__Contact__c = :tommieCaresCase.ContactId
+                WITH SECURITY_ENFORCED
         ];
 
         if (studentCourseEnrollmentList.size() > 0) {
@@ -199,7 +203,8 @@ public without sharing class TommieCaresLwcController {
                         hed__Contact__r.Id,
                         hed__Contact__r.Name,
                         hed__Contact__r.Email,
-                        Name, hed__Type__c,
+                        Name,
+                        hed__Type__c,
                         hed__Status__c,
                         hed__RelatedContact__r.Id,
                         hed__RelatedContact__r.Name,
@@ -208,7 +213,9 @@ public without sharing class TommieCaresLwcController {
                 WHERE hed__Type__c IN :relationshipTypes
                 AND hed__Contact__c = :tommieCaresCase.ContactId
                 AND hed__Status__c = 'Current'
+                WITH SECURITY_ENFORCED
                 ORDER BY CreatedDate DESC NULLS LAST
+
         ];
 
         Map<String, hed__Relationship__c> advisorContactsMap = new Map<String, hed__Relationship__c>();
@@ -244,6 +251,7 @@ public without sharing class TommieCaresLwcController {
                 FROM hed__Course_Enrollment__c
                 WHERE hed__Contact__r.Id = :tommieCaresCase.ContactId
                 AND hed__Course_Offering__c = :formSelections.get('CourseSelectionId')
+                WITH SECURITY_ENFORCED
         ];
 
         if (courseConnection.size() > 0) {
