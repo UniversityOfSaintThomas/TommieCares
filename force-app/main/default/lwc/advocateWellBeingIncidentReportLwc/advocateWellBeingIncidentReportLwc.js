@@ -20,8 +20,11 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     get showFormAll() {
         return !!this.wellBeingIncidentFormValues.reporterType;
     }
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
     get isNotAnonymous() {
-        return !(this.communityOfConcernReportType === "Anonymous");
+        return !this.isAnonymous;
     }
 
     @track wellBeingIncidentFormValues = {
@@ -29,11 +32,13 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         reporterName: "",
         reporterEmail: "",
         reporterPhone: "",
-        student: "",
-        studentGroup: "",
-        otherStudent: "",
-        witness: "",
-        otherWitness: "",
+        student: "", //This is lookup field so check on actual Symplicity field
+        student_email: "", //This is a temp field so check on actual Symplicity field
+        student_phone: "", //This is a temp field so check on actual Symplicity field
+        // studentGroup: "",
+        // otherStudent: "",
+        // witness: "",
+        // otherWitness: "",
         description: "",
         incidentType: "14", //required
         additionalLocation: "1", //required
@@ -125,20 +130,28 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
             case "phone":
                 this.wellBeingIncidentFormValues.reporterPhone = eventValue;
                 break;
-            case "studentsinvolved":
+            case "involvedname":
                 this.wellBeingIncidentFormValues.student = eventValue;
                 break;
-            case "studentgroupsinvolved":
-                this.wellBeingIncidentFormValues.studentGroup = eventValue;
+            case "involvedemail":
+                this.wellBeingIncidentFormValues.student_email = eventValue;
+                if (!eventValue) {
+                    this.validEmailWarningIndividual = false;
+                    this.validEmailIndividual = true;
+                } else {
+                    this.validEmailIndividual = false;
+                }
                 break;
-            case "otherstudent":
-                this.wellBeingIncidentFormValues.otherStudent = eventValue;
+            case "involvedphone":
+                this.wellBeingIncidentFormValues.student_phone = eventValue;
                 break;
-            case "witness":
-                this.wellBeingIncidentFormValues.witness = eventValue;
-                break;
-            case "otherwitness":
-                this.wellBeingIncidentFormValues.otherWitness = eventValue;
+            case "date":
+                if (eventValue) {
+                    this._incidentDate = eventValue;
+                } else {
+                    this._incidentDate = "";
+                }
+                console.log("Date: "+this._incidentDate);
                 break;
             case "description":
                 this.wellBeingIncidentFormValues.description = eventValue;
@@ -149,19 +162,70 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
 
     validEmail = true;
     validEmailWarning = false;
+    validEmailIndividual = true;
+    validEmailWarningIndividual = false;
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
         let emailValidationResults = emailValidation(emailAddress);
 
-        this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-        this.validEmail = emailValidationResults.validEmail;
-        this.validEmailWarning = emailValidationResults.validEmailWarning;
+        switch (event.currentTarget.dataset.inputtype) {
+            case "email":
+                this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+                this.validEmail = emailValidationResults.validEmail;
+                this.validEmailWarning = emailValidationResults.validEmailWarning;
+                if (this.validEmailWarning) {
+                    emailField.classList.add("slds-has-error");
+                } else {
+                    emailField.classList.remove("slds-has-error");
+                }
+                break;
+            case "involvedemail":
+                this.wellBeingIncidentFormValues.student_email = emailValidationResults.emailAddress;
+                this.validEmailIndividual = emailValidationResults.validEmail;
+                this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
+                if (this.validEmailWarningIndividual) {
+                    emailField.classList.add("slds-has-error");
+                } else {
+                    emailField.classList.remove("slds-has-error");
+                }
+                break;
+        }
+    }
 
-        if (this.validEmailWarning) {
-            emailField.classList.add("slds-has-error");
+    _incidentDate = "";
+    validDate = false;
+    validDateWarning = false;
+    dateWarningText = "";
+    dateValidationBlur(event) {
+        const eventField = event.currentTarget;
+        console.log("date validity: "+eventField.checkValidity());
+        let inputDate = this._incidentDate;
+        let inputTime = "00:00:00";
+        const dateNow = new Date();
+        const dateTimeNow = dateNow.getTime();
+        this.validDate = false;
+        if (!eventField.checkValidity()) {
+            this.dateWarningText = "Invalid Date format";
+            this.validDateWarning = true;
         } else {
-            emailField.classList.remove("slds-has-error");
+            this.validDateWarning = false;
+            const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
+            if (dateInputParse > dateTimeNow) {
+                this.dateWarningText = "Cannot be future Date";
+                this.validDateWarning = true;
+                this.validTimeWarning = false;
+            } else {
+                this.wellBeingIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
+                this.validDate = true;
+                this.validDateWarning = false;
+            }
+        }
+
+        if (this.validDateWarning) {
+            eventField.classList.add("slds-has-error");
+        } else {
+            eventField.classList.remove("slds-has-error");
         }
     }
 

@@ -6,177 +6,164 @@
 <template>
     <div class="regular-body-text">
         <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
-        <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
-            <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">
-                I am a:<abbr class="slds-required" title="Required">*</abbr></label>
-            <div class="slds-form-element__control">
-                <lightning-combobox class="selection-width"
-                                    id="well-being-reporter_type-selection-id"
-                                    label=""
-                                    placeholder="Select one"
-                                    options={reporterTypeOptions}
-                                    value={wellBeingIncidentFormValues.reporterType}
-                                    data-selecttype="reportertype"
-                                    variant="label-hidden"
-                                    onchange={selectValueHandler}>
-                </lightning-combobox>
+        <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">
+            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">I am a:
+                    <abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-form-element__control">
+                    <lightning-combobox id="well-being-reporter_type-selection-id"
+                                        label=""
+                                        placeholder="Select one"
+                                        options={reporterTypeOptions}
+                                        value={wellBeingIncidentFormValues.reporterType}
+                                        data-selecttype="reportertype"
+                                        variant="label-hidden"
+                                        onchange={selectValueHandler}>
+                    </lightning-combobox>
+                </div>
             </div>
         </div>
         <template lwc:if={showFormAll}>
-<!--                <template lwc:if={isNotAnonymous}>-->
-                <div class="slds-m-top_x-large">
-                    <p><b>Reporter Information</b></p>
-                    <p class="textarea-sublabel-2 textblock-width">You may leave information about yourself, or you may remain anonymous. If
-                        you do not provide your name and contact information, the university’s ability to respond may be
-                        limited.</p>
+<!--            <template lwc:if={isAnonymous}>-->
+<!--                <p class="textarea-sublabel-2">You may remain anonymous. If you do not provide your name and contact-->
+<!--                    information, the university’s ability to respond may be limited.</p>-->
+<!--            </template>-->
+            <template lwc:if={isNotAnonymous}>
+                <div class="slds-grid slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">Your Name:
+                                <abbr class="slds-required" title="Required">*</abbr></label>
+                            <p class="textarea-sublabel-1">Enter YOUR name.</p>
+                            <div class="slds-form-element__control">
+                                <lightning-input id="well-being-reporter-name-id"
+                                                 type="text"
+                                                 label=""
+                                                 value={wellBeingIncidentFormValues.reporterName}
+                                                 data-inputtype="name"
+                                                 variant="label-hidden"
+                                                 onchange={inputValueHandler}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-email-id">Your Email Address:
+                                <abbr class="slds-required" title="Required">*</abbr></label>
+                            <p class="textarea-sublabel-1">Enter YOUR St. Thomas email address.</p>
+                            <div class="slds-form-element__control">
+                                <lightning-input id="well-being-reporter-email-id"
+                                                 type="text"
+                                                 label=""
+                                                 value={wellBeingIncidentFormValues.reporterEmail}
+                                                 data-inputtype="email"
+                                                 variant="label-hidden"
+                                                 onchange={inputValueHandler}
+                                                 onblur={emailValidationBlur}>
+                                </lightning-input>
+                                <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">Phone Number:
+                                <abbr class="slds-required" title="Required">*</abbr></label>
+                            <p class="textarea-sublabel-1">Enter YOUR phone number.</p>
+                            <div class="slds-form-element__control">
+                                <lightning-input id="well-being-reporter-phone-id"
+                                                 type="text"
+                                                 label=""
+                                                 value={wellBeingIncidentFormValues.reporterPhone}
+                                                 data-inputtype="phone"
+                                                 variant="label-hidden"
+                                                 onchange={inputValueHandler}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="slds-m-top_x-small slds-m-bottom_medium">
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">Your Name:</label>
-                        <p class="textarea-sublabel-1">Please provide your full name.</p>
-                        <div class="slds-form-element__control">
-                            <lightning-input class="selection-width"
-                                             id="well-being-reporter-name-id"
-                                             type="text"
-                                             label=""
-                                             value={wellBeingIncidentFormValues.reporterName}
-                                             data-inputtype="name"
-                                             variant="label-hidden"
-                                             onchange={inputValueHandler}>
-                            </lightning-input>
-                        </div>
-                    </div>
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-email-id">Your Email Address:</label>
-                        <div class="slds-form-element__control">
-                            <lightning-input class="selection-width"
-                                             id="well-being-reporter-email-id"
-                                             type="text"
-                                             label=""
-                                             value={wellBeingIncidentFormValues.reporterEmail}
-                                             data-inputtype="email"
-                                             variant="label-hidden"
-                                             onchange={inputValueHandler}
-                                             onblur={emailValidationBlur}>
-                            </lightning-input>
-                            <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
-                        </div>
-                    </div>
-                    <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">Phone Number:</label>
-                        <div class="slds-form-element__control">
-                            <lightning-input class="selection-width"
-                                             id="well-being-reporter-phone-id"
-                                             type="text"
-                                             label=""
-                                             value={wellBeingIncidentFormValues.reporterPhone}
-                                             data-inputtype="phone"
-                                             variant="label-hidden"
-                                             onchange={inputValueHandler}>
-                            </lightning-input>
-                        </div>
-                    </div>
+            </template>
+            <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-col slds-size_1-of-1 selection-labels" for="well-being-individual-name-id">Individual of Concern
+                    <abbr class="slds-required" title="Required">*</abbr></label>
+                <p class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12 textarea-sublabel-1">
+                    Enter the first and last name of the individual you are concerned about.</p>
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                    <lightning-input id="well-being-individual-name-id"
+                                     type="text"
+                                     label=""
+                                     value={wellBeingIncidentFormValues.student}
+                                     data-inputtype="involvedname"
+                                     variant="label-hidden"
+                                     onchange={inputValueHandler}>
+                    </lightning-input>
                 </div>
-<!--                </template>-->
-            <p class="slds-m-top_x-large"><b>Parties Involved</b></p>
-            <div class="slds-m-top_x-small slds-m-bottom_medium">
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-involved-id">Students Involved</label>
-                    <p class="textarea-sublabel-1 textblock-width-2">Please list all students involved in this incident.</p>
+            </div>
+            <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-col slds-size_1-of-1 selection-labels" for="well-being-individual-email-id">Individual's Email Address</label>
+                <p class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12 textarea-sublabel-1">
+                    Enter the St. Thomas email address (if known) of the individual you are concerned about.</p>
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                    <lightning-input id="well-being-individual-email-id"
+                                     type="text"
+                                     label=""
+                                     value={wellBeingIncidentFormValues.student_email}
+                                     data-inputtype="involvedemail"
+                                     variant="label-hidden"
+                                     onchange={inputValueHandler}
+                                     onblur={emailValidationBlur}>
+                    </lightning-input>
+                    <div lwc:if={validEmailWarningIndividual} class="validation-text">Invalid email address format</div>
+                </div>
+            </div>
+            <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-col slds-size_1-of-1 selection-labels" for="well-being-individual-phone-id">Individual's Phone Number</label>
+                <p class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12 textarea-sublabel-1">
+                    Enter the phone number (if known) of the individual's you are concerned about.</p>
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                    <lightning-input id="well-being-individual-phone-id"
+                                     type="text"
+                                     label=""
+                                     value={wellBeingIncidentFormValues.student_phone}
+                                     data-inputtype="involvedphone"
+                                     variant="label-hidden"
+                                     onchange={inputValueHandler}>
+                    </lightning-input>
+                </div>
+            </div>
+            <div class="slds-grid slds-m-bottom_medium">
+                <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_5-of-12 slds-medium-size_3-of-12">
+                    <label class="slds-form-element__label selection-labels" for="well-being-incident-date-id">Concerned Date<abbr class="slds-required" title="Required">*</abbr></label>
                     <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="well-being-reporter-students-involved-id"
-                                         type="text"
+                        <lightning-input id="well-being-incident-date-id"
+                                         type="date"
                                          label=""
-                                         value={wellBeingIncidentFormValues.student}
-                                         data-inputtype="studentsinvolved"
+                                         value={_incidentDate}
+                                         data-inputtype="date"
                                          variant="label-hidden"
-                                         onchange={inputValueHandler}>
+                                         onchange={inputValueHandler}
+                                         onblur={dateValidationBlur}>>
                         </lightning-input>
+                        <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>
                     </div>
                 </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-students-groups-involved-id">Student Groups Involved</label>
-                    <p class="textarea-sublabel-1 textblock-width">Please list all Students Groups involved in this incident.</p>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                    <label class="slds-form-element__label selection-labels" for="well-being-incident-description-id">Concern Description
+                        <abbr class="slds-required" title="Required">*</abbr></label>
+                    <p class="textarea-sublabel-1">Provide a detailed description of your concern for the individual indicated above.</p>
                     <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="well-being-reporter-students-groups-involved-id"
-                                         type="text"
-                                         label=""
-                                         value={wellBeingIncidentFormValues.studentGroup}
-                                         data-inputtype="studentgroupsinvolved"
-                                         variant="label-hidden"
-                                         onchange={inputValueHandler}>
-                        </lightning-input>
-                    </div>
-                </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-other-student-id">Other Involved Individual(s)</label>
-                    <p class="textarea-sublabel-1 textblock-width">Please list all
-                        non-students involved in this incident (if possible, please provide DL#, email, or phone
-                        number). If you know that an individual is a student at a neighboring institution please
-                        include that information as well.</p>
-                    <div class="slds-form-element__control">
-                        <lightning-textarea class="custom-textarea"
-                                            id="well-being-other-student-id"
+                        <lightning-textarea class="custom-textarea-tall"
+                                            id="well-being-incident-description-id"
                                             label=""
-                                            value={wellBeingIncidentFormValues.otherStudent}
-                                            data-inputtype="otherstudent"
-                                            variant="label-hidden"
-                                            onchange={inputValueHandler}>
-                        </lightning-textarea>
-                    </div>
-                </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-witness-id">Student Witness(es)</label>
-                    <p class="textarea-sublabel-1 textblock-width">Please list all students who witnessed this incident.</p>
-                    <div class="slds-form-element__control">
-                        <lightning-input class="selection-width"
-                                         id="well-being-reporter-witness-id"
-                                         type="text"
-                                         label=""
-                                         value={wellBeingIncidentFormValues.witness}
-                                         data-inputtype="witness"
-                                         variant="label-hidden"
-                                         onchange={inputValueHandler}>
-                        </lightning-input>
-                    </div>
-                </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-reporter-other-witness-id">Other Witness(es)</label>
-                    <p class="textarea-sublabel-1 textblock-width">Please list any
-                        non-student witnesses, including police officers, Campus Security officers, University
-                        employees, etc.</p>
-                    <div class="slds-form-element__control">
-                        <lightning-textarea class="custom-textarea"
-                                            id="well-being-reporter-other-witness-id"
-                                            label=""
-                                            value={wellBeingIncidentFormValues.otherWitness}
-                                            data-inputtype="otherwitness"
+                                            value={wellBeingIncidentFormValues.description}
+                                            data-inputtype="description"
                                             variant="label-hidden"
                                             onchange={inputValueHandler}>
                         </lightning-textarea>
                     </div>
                 </div>
             </div>
-            <p class="slds-m-top_x-large"><b>Descriptive Information</b></p>
-            <div class="slds-form-element slds-m-top_x-small slds-m-bottom_medium">
-                <label class="slds-form-element__label selection-labels" for="well-being-reporter-incident-description-id">Incident
-                    Description<abbr class="slds-required" title="Required">*</abbr></label>
-                <p class="textarea-sublabel-1 textblock-width">Please provide as much detailed information as possible about the incident.</p>
-                <div class="slds-form-element__control">
-                    <lightning-textarea class="custom-textarea-tall"
-                                        id="well-being-reporter-incident-description-id"
-                                        label=""
-                                        value={wellBeingIncidentFormValues.description}
-                                        data-inputtype="description"
-                                        variant="label-hidden"
-                                        onchange={inputValueHandler}>
-                    </lightning-textarea>
-                </div>
-            </div>
-            <div class="slds-m-top_x-large slds-m-bottom_xx-large">
-                <p><b>Documentation</b></p>
+            <div class="slds-m-top_large slds-m-bottom_xx-large">
                 <div class="slds-form-element slds-m-top_x-small slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
                     <p class="textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
