@@ -3,11 +3,11 @@
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-import biasReportingFormOptions1 from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.biasReportingFormOptions1";
-import biasReportingFormOptions2 from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.biasReportingFormOptions2";
+import biasReportingFormOptions1 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions1";
+import biasReportingFormOptions2 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions2";
 import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
-// import saveSupportingDocuments from "@salesforce/apex/AdvocateBiasIncidentReportController.saveSupportingDocuments";
-import submitForm from "@salesforce/apexContinuation/AdvocateBiasIncidentReportController.submitForm";
+import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
+import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
 import {emailValidation, attachDocumentsUpload} from "c/communityOfConcernUtilJs";
 
 export default class AdvocateBiasIncidentReportLwc extends LightningElement {
@@ -21,8 +21,28 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     @track protectedClassesOptions = [];
     @track affiliationOfTargetOptions = [];
     @track affiliationOfPersonEngagedInHarmOptions = [];
+
+    get showFormAll() {
+        // return !!this.biasIncidentFormValues.reporterType;
+        return !!this.biasIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
+    }
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
+    get isNotAnonymous() {
+        return !this.isAnonymous;
+    }
+    get submitDisable() {
+        return !(!!this.biasIncidentFormValues.reporter_type_custom && this.validDateTime && !!this.biasIncidentFormValues.description &&
+            !!this.biasIncidentFormValues.additionalInformation && !!this.biasIncidentFormValues.otherStudent && !!this.biasIncidentFormValues.who_was_the_target_of_the_behavior &&
+            !!this.biasIncidentFormValues.affiliation_of_target && !!this.biasIncidentFormValues.who_engaged_in_the_behavior && !!this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm &&
+            (this.isAnonymous || (!!this.biasIncidentFormValues.reporterName && this.validEmail && !!this.biasIncidentFormValues.reporterEmail)));
+    }
+
+    reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track biasIncidentFormValues = {
-        reporterType: "", //I am a
+        // reporterType: "", //I am a
+        reporter_type_custom: "", //Using because can't pass to API reporterType
         reporterName: "", //Your Name
         reporterPhone: "", //Phone Number
         reporterEmail: "", //Your Email Address
@@ -41,22 +61,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         residentialHallStaffCalled: false, //required
         policeCalled: false, //required
         alcohol: false, //required
-        custom_field_1: "" //temporarily using this field for Supporting Documents record ID
-    }
-    get showFormAll() {
-        return !!this.biasIncidentFormValues.reporterType;
-    }
-    get isAnonymous() {
-        return this.communityOfConcernReportType === "Anonymous";
-    }
-    get isNotAnonymous() {
-        return !this.isAnonymous;
-    }
-    get submitDisable() {
-        return !(!!this.biasIncidentFormValues.reporterType && this.validDateTime && !!this.biasIncidentFormValues.description &&
-            !!this.biasIncidentFormValues.additionalInformation && !!this.biasIncidentFormValues.otherStudent && !!this.biasIncidentFormValues.who_was_the_target_of_the_behavior &&
-            !!this.biasIncidentFormValues.affiliation_of_target && !!this.biasIncidentFormValues.who_engaged_in_the_behavior && !!this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm &&
-            (this.isAnonymous || (!!this.biasIncidentFormValues.reporterName && this.validEmail && !!this.biasIncidentFormValues.reporterEmail)));
+        salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
     }
 
     rendered = false;
@@ -79,7 +84,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     biasReportingFormOptions1Wire({error, data}) {
         let recordOptions = [];
         let reporterTypeOptions = [];
-        let protectedClassesOptions = [];
+        // let protectedClassesOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -94,30 +99,35 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 })
 
                 this.reporterTypeOptions = reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporterType) {
+                // if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporterType) {
+                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.biasIncidentFormValues.reporter_type_custom) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
-                            this.biasIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            // this.biasIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            this.reporterType = this.reporterTypeOptions[i].value; //Using because can't pass to API reporterType
+                            this.biasIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label; //Using because can't pass to API reporterType
                             break;
                         } else {
                             let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
-                                this.biasIncidentFormValues.reporterType = otherType.value;
+                                // this.biasIncidentFormValues.reporterType = otherType.value;
+                                this.reporterType = otherType.value; //Using because can't pass to API reporterType
+                                this.biasIncidentFormValues.reporter_type_custom = otherType.label; //Using because can't pass to API reporterType
                             }
                         }
                     }
                 }
             }
 
-            if (recordOptions[1]) {
-                recordOptions[1].forEach((options) => {
-                    protectedClassesOptions.push({
-                        label: options.value,
-                        value: options.id.toString(),
-                    })
-                })
-                this.protectedClassesOptions = protectedClassesOptions;
-            }
+            // if (recordOptions[1]) {
+            //     recordOptions[1].forEach((options) => {
+            //         protectedClassesOptions.push({
+            //             label: options.value,
+            //             value: options.id.toString(),
+            //         })
+            //     })
+            //     this.protectedClassesOptions = protectedClassesOptions;
+            // }
         }
 
         if (error) {
@@ -166,7 +176,10 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
-                this.biasIncidentFormValues.reporterType = eventValue;
+                // this.biasIncidentFormValues.reporterType = eventValue;
+                this.reporterType = eventValue;
+                let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
+                this.biasIncidentFormValues.reporter_type_custom = reporterTypeLabel.label; //Using because can't pass to API reporterType
                 break;
             case "affiliationharmed":
                 this.biasIncidentFormValues.affiliation_of_target = eventValue;
@@ -174,10 +187,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
             case "affiliationcausedharm":
                 this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm = eventValue;
                 break;
-            case "protectedclass":
-                this.biasIncidentFormValues.discrimination_protected_classes = eventValue;
-                break;
+            // case "protectedclass":
+            //     this.biasIncidentFormValues.discrimination_protected_classes = eventValue;
+            //     break;
         }
+        console.log("biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
     }
 
     inputValueHandler(event) {
@@ -231,6 +245,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 this.biasIncidentFormValues.description = eventValue;
                 break;
         }
+        console.log("biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
     }
 
     validEmail = true;
@@ -363,34 +378,46 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         return this.searchParamsUrl;
     }
 
-    submitFormSpinner = false;
     saveDocumentsFail = false;
     submitBiasIncidentFormFail = false;
-    showUrl = false;
-    returnUrl;
+    // get showUrl() {
+    //     return !!this.attachDocumentResponse.SupportingDocumentUrl;
+    // }
+    // returnUrl;
+    attachDocumentResponse = {
+        Status: "",
+        SupportingDocumentUrl: "",
+        SupportingDocumentId: ""
+    }
+    formReportNumber = "";
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitBiasIncidentFormFail = false;
-        console.log("biasIncidentFormValues 1: " + JSON.stringify(this.biasIncidentFormValues));
-        let formValues = JSON.stringify(this.biasIncidentFormValues);
 
-        // window.scrollTo(0,0);
-        // this.submitFormSpinner = true;
+        const showSpinnerEvent = new CustomEvent('showspinner');
+        this.dispatchEvent(showSpinnerEvent);
+        window.scrollTo(0,0);
 
         if (this.attachDocuments.length > 0) {
             const supportingDocumentName = 'Advocate Bias Incident';
             try {
                 await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
-                // await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments}).then((result) => {
-                    console.log(JSON.stringify(result));
+                    console.log("Initial Attach Document results: "+JSON.stringify(result) + "Length: "+result.length);
 
                     if (result.Status === 'success') {
-                        // this.biasIncidentFormValues.custom_field_1 = result.Url;
+                        this.attachDocumentResponse = {
+                            Status: result.Status,
+                            SupportingDocumentUrl: result.Url,
+                            SupportingDocumentId: result.SupportingDocumentId
+                        }
+                        console.log("Attach Document object: "+JSON.stringify(this.attachDocumentResponse));
+
+                        this.biasIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
 
                         //Used for testing
-                        this.returnUrl = result.Url;
-                        this.showUrl = true;
+                        // this.returnUrl = this.attachDocumentResponse.SupportingDocumentUrl;
+
                     } else if (result.Status === 'error') {
                         this.saveDocumentsFail = true;
                     }
@@ -401,29 +428,51 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
             }
         }
 
-        // if (!this.saveDocumentsFail) {
-        //     try {
-        //         // delete this.biasIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-        //         await submitForm({formValues: formValues}).then((result) => {
-        //             if (result[0] !== '201') {
-        //                 this.submitBiasIncidentFormFail = true;
-        //             }
-        //         });
-        //     } catch (error) {
-        //         this.submitBiasIncidentFormFail = true;
-        //     }
-        // }
+        console.log("All File: " + JSON.stringify(this.biasIncidentFormValues));
 
-        // if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
-        //     this.submitFormSpinner = false;
-        //     eventField.scrollIntoView({
-        //         behavior: 'smooth',
-        //     });
-        // } else {
-        //     this.submitFormSpinner = false;
-        //     console.log("Update submittedUrl: "+this.submittedUrl());
-        //     location.replace(this.submittedUrl());
-        // }
+        if (!this.saveDocumentsFail) {
+            try {
+                let formValues = JSON.stringify(this.biasIncidentFormValues);
+                let formType = 'bias';
+                await submitForm({formValues: formValues, formType: formType}).then((result) => {
+                    console.log('This all result: '+JSON.stringify(result));
+                    console.log('This all result no stringify: '+result);
+
+                    if (result[0] !== 201) {
+                        this.submitBiasIncidentFormFail = true;
+                        console.log('This result ERROR getStatusCode: '+result[0]);
+                    }
+
+                    this.formReportNumber = result[1].reportNumber;
+                    console.log('Report Number: '+this.formReportNumber);
+                });
+
+            } catch (error) {
+                this.submitBiasIncidentFormFail = true;
+            }
+        }
+
+        if (!this.saveDocumentsFail && !this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
+                    console.log("Update Status: "+result);
+                });
+            } catch (e) {
+                console.log("updateSupportingDocument error: " + JSON.stringify(e));
+            }
+        }
+
+        const hideSpinnerEvent = new CustomEvent('hidespinner');
+        if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
+            this.dispatchEvent(hideSpinnerEvent);
+            eventField.scrollIntoView({
+                behavior: 'smooth',
+            });
+        } else {
+            this.dispatchEvent(hideSpinnerEvent);
+            console.log("Update submittedUrl: "+this.submittedUrl());
+            location.replace(this.submittedUrl());
+        }
 
     }
 

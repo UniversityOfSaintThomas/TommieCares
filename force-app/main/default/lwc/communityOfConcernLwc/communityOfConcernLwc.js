@@ -191,6 +191,11 @@ export default class CommunityOfConcernLwc extends LightningElement {
                     this.communityOfConcernCase.IAmValue = "Student";
                 }
             }
+
+            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
+            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+            this.paramUrl = this.searchParamsUrl.toString();
+            console.log("paramUrl: " + this.paramUrl)
         }
 
         if (error) {
@@ -321,54 +326,27 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
 
     }
-    // emailValidationBlur(event) {
-    //     const emailField = event.currentTarget;
-    //     const emailAddress = event.target.value;
-    //     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     let emailTestFail = !!emailAddress && !(emailRegex.test(emailAddress));
-    //
-    //     switch (event.currentTarget.dataset.inputgroup) {
-    //         case "iaminfo":
-    //             if (emailTestFail) {
-    //                 this.validEmail = false;
-    //                 this.validEmailWarning = true;
-    //                 emailField.classList.add("slds-has-error");
-    //             } else {
-    //                 this.communityOfConcernCase.IAmEmail = emailAddress;
-    //                 this.validEmail = true;
-    //                 this.validEmailWarning = false;
-    //                 emailField.classList.remove("slds-has-error");
-    //             }
-    //             break;
-    //         case "concernedwhoinfo":
-    //             if (emailTestFail) {
-    //                 this.validEmailWho = false;
-    //                 this.validEmailWarningWho = true;
-    //                 emailField.classList.add("slds-has-error");
-    //             } else {
-    //                 this.communityOfConcernCase.ConcernedWhoEmail = emailAddress;
-    //                 this.validEmailWho = true;
-    //                 this.validEmailWarningWho = false;
-    //                 emailField.classList.remove("slds-has-error");
-    //             }
-    //             break;
-    //     }
-    // }
+
+    showSpinner = false;
+    handleShowSpinner() {
+        this.showSpinner = true;
+    }
+    handleHideSpinner() {
+        this.showSpinner = false;
+    }
 
     submittedUrl() {
         this.searchParamsUrl.searchParams.set("submitted", "true");
         return this.searchParamsUrl;
     }
-
-    submitCaseSpinner = false;
     submitCaseFail = false;
     async submitCase(event) {
         console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
         const eventField = event.currentTarget;
         this.submitCaseFail = false;
         try {
+            this.handleShowSpinner();
             window.scrollTo(0,0);
-            this.submitCaseSpinner = true;
             await saveCase({formSelections: this.communityOfConcernCase}).then( (result) => {
                 this.submitCaseFail = !!result;
             });
@@ -378,7 +356,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
 
         if (this.submitCaseFail) {
-            this.submitCaseSpinner = false;
+            this.handleHideSpinner();
             eventField.scrollIntoView({
                 behavior: 'smooth',
             });

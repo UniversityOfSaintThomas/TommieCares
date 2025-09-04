@@ -16,7 +16,7 @@
                     <lightning-combobox id="bias-reporter_type-selection-id"
                                         label=""
                                         options={reporterTypeOptions}
-                                        value={biasIncidentFormValues.reporterType}
+                                        value={reporterType}
                                         data-selecttype="reportertype"
                                         variant="label-hidden"
                                         onchange={selectValueHandler}>
@@ -89,7 +89,7 @@
             </div>
             <div class="slds-m-top_xx-small slds-m-bottom_medium">
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_5-of-12 slds-medium-size_3-of-12 slds-m-right_medium">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_2-of-12 slds-m-right_medium">
                         <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control">
                             <lightning-input id="bias-report-date-id"
@@ -104,7 +104,7 @@
                             <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_5-of-12 slds-medium-size_3-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_2-of-12">
                         <label class="slds-form-element__label selection-labels" for="bias-report-time-id">Time</label>
                         <div class="slds-form-element__control">
                             <lightning-input
@@ -247,7 +247,7 @@
 <!--                </div>-->
 <!--            </div>-->
             <p class="slds-m-top_large"><b>Descriptive Information</b></p>
-            <div class="slds-m-top_x-small slds-m-bottom_xx-large">
+            <div class="slds-m-top_x-small slds-m-bottom_x-large">
                 <div class="slds-grid slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
                         <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
@@ -304,11 +304,11 @@
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
                     </template>
                 </div>
-                <div lwc:if={showUrl} class="slds-m-vertical_small">
-                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
-                </div>
+<!--                <div lwc:if={showUrl} class="slds-m-vertical_small">-->
+<!--                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>-->
+<!--                </div>-->
             </div>
-            <div class="slds-m-top_xx-large slds-m-bottom_medium">
+            <div class="slds-m-top_x-large slds-m-bottom_medium">
                 <lightning-button class="submit_button"
                                   title="Please enter all required fields."
                                   type="button"
@@ -349,7 +349,4 @@
             </template>
         </template>
     </div>
-    <template lwc:if={submitFormSpinner}>
-        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-    </template>
 </template>

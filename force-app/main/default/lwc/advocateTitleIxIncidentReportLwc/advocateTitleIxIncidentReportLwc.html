@@ -4,7 +4,7 @@
 
 <!-- Advocate Title Ix Incident Report Lwc -->
 <template>
-    <div class="regular-body-text">
+    <div class="slds-m-top_small regular-body-text">
         <div class="slds-grid slds-m-bottom_xx-small">
             <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
                 <p class="slds-m-bottom_small">Please complete this form with as much detail as possible. If we need
@@ -14,7 +14,7 @@
                     to contact you. Reporting anonymously limits the university's ability to respond.</p>
                 <p>Thank you for keeping our campus healthy and safe by informing us of this
                     incident. For additional information including resources and university policy and processes, please
-                    visit www.stthomas.edu/title-ix. 4</p>
+                    visit www.stthomas.edu/title-ix.</p>
                 <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
                 <p class="slds-m-top_medium"><b>Reporter Type</b></p>
                 <p class="textarea-sublabel-2">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
@@ -34,7 +34,7 @@
                     <lightning-combobox id="titleix-reporter-type-selection-id"
                                         label=""
                                         options={reporterTypeOptions}
-                                        value={titleIxIncidentFormValues.reporterType}
+                                        value={reporterType}
                                         data-selecttype="reportertype"
                                         variant="label-hidden"
                                         onchange={selectValueHandler}>
@@ -290,8 +290,8 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-m-bottom_xx-large">
-                <div class="slds-form-element slds-m-bottom_medium">
+            <div class="slds-m-bottom_x-large">
+                <div class="slds-form-element slds-m-bottom_small">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
                     <p class="slds-m-bottom_xx-small textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
@@ -328,11 +328,11 @@
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
                     </template>
                 </div>
-                <div lwc:if={showUrl} class="slds-m-vertical_small">
-                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
-                </div>
+<!--                <div lwc:if={showUrl} class="slds-m-vertical_small">-->
+<!--                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>-->
+<!--                </div>-->
             </div>
-            <div class="slds-m-top_xx-large slds-m-bottom_medium">
+            <div class="slds-m-top_x-large slds-m-bottom_medium">
                 <lightning-button class="submit_button"
                                   title='Please enter all required fields.'
                                   type="button"

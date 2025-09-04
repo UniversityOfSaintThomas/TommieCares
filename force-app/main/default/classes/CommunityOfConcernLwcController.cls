@@ -3,6 +3,185 @@
  */
 
 public without sharing class CommunityOfConcernLwcController {
+    private static String incident_api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Bias_Incident__c');
+    private static String titleix_api_token = (String) Advocate_Symplicity_API_Token__mdt.getInstance('Api_Token').get('Title_IX__c');
+
+    @AuraEnabled(Continuation=true Cacheable=true)
+    public static Object submitForm(String formValues, String formType) {
+        System.debug('This form values: '+formValues);
+        Continuation con = new Continuation(60);
+        con.continuationMethod = 'submitFormProcessPostResponse';
+        con.state = 'Form Submitted';
+
+        HttpRequest req = new HttpRequest();
+
+        if (formType == 'titleix') {
+            req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/titleix_reports');
+            req.setHeader('Authorization', titleix_api_token);
+        } else if (formType == 'bias' || formType == 'wellbeing') {
+            req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/incidents');
+            req.setHeader('Authorization', incident_api_token);
+        }
+
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.setBody(formValues);
+        con.addHttpRequest(req);
+
+        return con;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> submitFormProcessPostResponse(List<String> labels, Object state) {
+        List<Object> resultsObjects = new List<Object>();
+
+        // Get the response by using the unique label
+        HttpResponse response = Continuation.getResponse(labels[0]);
+        resultsObjects.add(response.getStatusCode());
+
+        // Get Incident or TitleIX submitted form report number to update on Supporting Document
+        Map<String, String> reportNumber = new Map<String, String>{
+                'reportNumber' => ''
+        };
+        String formResponseReportNumber = '';
+        Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+        String incidentReportNumber = (String) responseBody.get('reportNumber');
+        String titleIxReportNumber = (String) responseBody.get('reportNo');
+        formResponseReportNumber = String.isNotBlank(incidentReportNumber) ? incidentReportNumber : titleIxReportNumber;
+        reportNumber.put('reportNumber', formResponseReportNumber);
+        resultsObjects.add(reportNumber);
+
+        System.debug('This result getStatusCode: '+response.getStatusCode());
+        System.debug('This result getBody: '+response.getBody());
+
+        return resultsObjects;
+    }
+
+    @AuraEnabled(Cacheable=false)
+    public static String updateSupportingDocument(String supportingDocumentId, String advocateReportNumber) {
+        String updateStatus = '';
+
+        Supporting_Document__c supportingDocument = new Supporting_Document__c(
+                Id = supportingDocumentId,
+                Supporting_Document_Unique_External_ID__c = advocateReportNumber
+        );
+
+        try {
+            update supportingDocument;
+            updateStatus = 'success';
+        } catch (DmlException e) {
+            updateStatus = 'failed';
+            System.debug('updateSupportingDocument error: '+e);
+        }
+
+        return updateStatus;
+    }
+
+    @AuraEnabled(Continuation=true Cacheable=true)
+    public static Object incidentReportingFormOptions1() {
+        Continuation con = new Continuation(60);
+        con.continuationMethod = 'incidentProcessGetResponse1';
+        con.state = 'Picklist Values';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/reporterType');
+        req.setMethod('GET');
+        req.setHeader('Authorization', incident_api_token);
+        con.addHttpRequest(req);
+
+        return con;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> incidentProcessGetResponse1(List<String> labels, Object state) {
+        List<Object> resultsObjects = new List<Object>();
+        // Get the response by using the unique label
+        HttpResponse response1 = Continuation.getResponse(labels[0]);
+
+        if (response1.getStatusCode() == 200) {
+            resultsObjects.add(response1.getBody());
+        } else {
+            System.debug('incidentProcessGetResponse1 Error: '+response1.getStatusCode());
+        }
+
+        return resultsObjects;
+    }
+
+    @AuraEnabled(Continuation=true Cacheable=true)
+    public static Object incidentReportingFormOptions2() {
+        Continuation con = new Continuation(60);
+        con.continuationMethod = 'incidentProcessGetResponse2';
+        con.state='Picklist Values';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/affiliation_of_target');
+        req.setMethod('GET');
+        req.setHeader('Authorization', incident_api_token);
+        con.addHttpRequest(req);
+
+        HttpRequest req2 = new HttpRequest();
+        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/affiliation_of_person_engaged_in_harm');
+        req2.setMethod('GET');
+        req2.setHeader('Authorization', incident_api_token);
+        con.addHttpRequest(req2);
+
+        return con;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> incidentProcessGetResponse2(List<String> labels, Object state) {
+        List<Object> resultsObjects = new List<Object>();
+        // Get the response by using the unique label
+        HttpResponse response1 = Continuation.getResponse(labels[0]);
+        HttpResponse response2 = Continuation.getResponse(labels[1]);
+
+        if (response1.getStatusCode() == 200 & response2.getStatusCode() == 200) {
+            resultsObjects.add(response1.getBody());
+            resultsObjects.add(response2.getBody());
+        } else {
+            System.debug('incidentProcessGetResponse2 Error: '+response1.getStatusCode()+ ' '+response2.getStatusCode());
+        }
+
+        return resultsObjects;
+    }
+
+    @AuraEnabled(Continuation=true Cacheable=true)
+    public static Object titleIxReportingFormOptions1() {
+        Continuation con = new Continuation(60);
+        con.continuationMethod = 'titleIxProcessGetResponse1';
+        con.state='Picklist Values';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/titleix_reports/reporterType');
+        req.setMethod('GET');
+        req.setHeader('Authorization', titleix_api_token);
+        con.addHttpRequest(req);
+
+        HttpRequest req2 = new HttpRequest();
+        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/titleix_reports/status_of_individual_who_caused_harm');
+        req2.setMethod('GET');
+        req2.setHeader('Authorization', titleix_api_token);
+        con.addHttpRequest(req2);
+
+        return con;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> titleIxProcessGetResponse1(List<String> labels, Object state) {
+        List<Object> resultsObjects = new List<Object>();
+        // Get the response by using the unique label
+        HttpResponse response1 = Continuation.getResponse(labels[0]);
+        HttpResponse response2 = Continuation.getResponse(labels[1]);
+
+        if (response1.getStatusCode() == 200 & response2.getStatusCode() == 200)  {
+            resultsObjects.add(response1.getBody());
+            resultsObjects.add(response2.getBody());
+        } else {
+            System.debug('titleIxProcessGetResponse1 Error: '+response1.getStatusCode()+ ' '+response2.getStatusCode());
+        }
+
+        return resultsObjects;
+    }
 
     public class DocumentsWrapper {
         @AuraEnabled public String fileId { get; set; }
@@ -14,7 +193,7 @@ public without sharing class CommunityOfConcernLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static List<Contact> iAmContactInfo(String salesforceId, String bannerId) {
-        return [SELECT Id,
+        List<Contact> iAmContact = [SELECT Id,
                         FirstName,
                         LastName,
                         St_Thomas_Connection__c,
@@ -27,7 +206,22 @@ public without sharing class CommunityOfConcernLwcController {
                 WITH SECURITY_ENFORCED
                 LIMIT 1
         ];
-//        return contactInfo;
+
+        if (iAmContact.size() > 0 && iAmContact[0]?.St_Thomas_Connection__c != 'Faculty') {
+            List<hed__Course_Offering__c> facultyCheck = [
+                    SELECT Id
+                    FROM hed__Course_Offering__c
+                    WHERE Current_Term__c = TRUE
+                    AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
+                    WITH SECURITY_ENFORCED
+            ];
+
+            if (facultyCheck.size() > 0) {
+                iAmContact[0].St_Thomas_Connection__c = 'Faculty';
+            }
+        }
+
+        return iAmContact;
     }
 
     @AuraEnabled(Cacheable=false)
@@ -80,7 +274,8 @@ public without sharing class CommunityOfConcernLwcController {
         String recordUrl = '';
         Map<String, String> returnStatusUrl = new Map<String, String>{
                 'Status' => '',
-                'Url' => ''
+                'Url' => '',
+                'SupportingDocumentId'  => ''
         };
 
         if (attachedDocumentsList.size() > 0) {
@@ -125,7 +320,8 @@ public without sharing class CommunityOfConcernLwcController {
                 String baseUrl = Url.getOrgDomainUrl().toExternalForm();
                 recordUrl = baseUrl + '/' + supportingDocument.Id;
                 returnStatusUrl.put('Status','success');
-                returnStatusUrl.put('Url',recordUrl);
+                returnStatusUrl.put('Url', recordUrl);
+                returnStatusUrl.put('SupportingDocumentId', supportingDocument.Id);
 
             } catch (DmlException e) {
                 returnStatusUrl.put('Status','error');

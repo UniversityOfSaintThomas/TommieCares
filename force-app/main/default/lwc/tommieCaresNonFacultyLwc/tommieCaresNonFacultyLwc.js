@@ -29,7 +29,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     ];
 
     get studentSelectionCheck() {
-        return !!this.formSubmitSelections.StudentContactId;
+        // return !!this.formSubmitSelections.StudentContactId;
+        return true; //Temporary until we get reusable lookup working
     };
 
     get caresSelectionCheck() {

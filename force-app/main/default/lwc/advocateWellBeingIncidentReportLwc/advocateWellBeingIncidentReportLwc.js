@@ -3,9 +3,10 @@
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-import wellBeingReportingFormOptions from "@salesforce/apexContinuation/AdvocateWellBeingIncidentReprtController.wellBeingReportingFormOptions";
+import wellBeingReportingFormOptions from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions1";
 import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
-// import saveSupportingDocuments from "@salesforce/apex/AdvocateWellBeingIncidentReprtController.saveSupportingDocuments";
+import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
+import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
 import {emailValidation, attachDocumentsUpload} from "c/communityOfConcernUtilJs";
 
 export default class AdvocateWellBeingIncidentReportLwc extends LightningElement {
@@ -18,7 +19,8 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     @track reporterTypeOptions = [];
 
     get showFormAll() {
-        return !!this.wellBeingIncidentFormValues.reporterType;
+        // return !!this.wellBeingIncidentFormValues.reporterType;
+        return !!this.wellBeingIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
     }
     get isAnonymous() {
         return this.communityOfConcernReportType === "Anonymous";
@@ -26,19 +28,22 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     get isNotAnonymous() {
         return !this.isAnonymous;
     }
+    get submitDisable() {
+        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.individual_of_concern &&
+            (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
+    }
 
+    reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track wellBeingIncidentFormValues = {
-        reporterType: "",
+        // reporterType: "",
+        reporter_type_custom: "", //Using because can't pass to API reporterType
         reporterName: "",
         reporterEmail: "",
         reporterPhone: "",
-        student: "", //This is lookup field so check on actual Symplicity field
-        student_email: "", //This is a temp field so check on actual Symplicity field
-        student_phone: "", //This is a temp field so check on actual Symplicity field
-        // studentGroup: "",
-        // otherStudent: "",
-        // witness: "",
-        // otherWitness: "",
+        individual_of_concern: "", //This is lookup field so check on actual Symplicity field
+        individuals_email_address: "", //This is a temp field so check on actual Symplicity field
+        individuals_phone_number: "", //This is a temp field so check on actual Symplicity field
+        incidentDate: "",
         description: "",
         incidentType: "14", //required
         additionalLocation: "1", //required
@@ -46,7 +51,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         residentialHallStaffCalled: false, //required
         policeCalled: false, //required
         alcohol: false, //required
-        custom_field_1: "" //temporarily using this field for Supporting Documents record ID
+        salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
     }
 
     rendered = false;
@@ -79,15 +84,21 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 })
 
                 this.reporterTypeOptions = reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporterType) {
+                // if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporterType) {
+                if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporter_type_custom) { //Using because can't pass to API reporterType
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
-                            this.wellBeingIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            // this.wellBeingIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
+                            this.reporterType = this.reporterTypeOptions[i].value; //Using because can't pass to API reporterType
+                            this.wellBeingIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label; //Using because can't pass to API reporterType
                             break;
                         } else {
                             let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
-                                this.wellBeingIncidentFormValues.reporterType = otherType.value;
+                                // this.wellBeingIncidentFormValues.reporterType = otherType.value;
+                                this.reporterType = otherType.value; //Using because can't pass to API reporterType
+                                this.wellBeingIncidentFormValues.reporter_type_custom = otherType.label; //Using because can't pass to API reporterType
+
                             }
                         }
                     }
@@ -105,7 +116,10 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
-                this.wellBeingIncidentFormValues.reporterType = eventValue;
+                // this.wellBeingIncidentFormValues.reporterType = eventValue;
+                this.reporterType = eventValue; //Using because can't pass to API reporterType
+                let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
+                this.wellBeingIncidentFormValues.reporter_type_custom = reporterTypeLabel.label; //Using because can't pass to API reporterType
                 break;
         }
         console.log("wellBeingIncidentFormValues value: "+JSON.stringify(this.wellBeingIncidentFormValues));
@@ -131,10 +145,10 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 this.wellBeingIncidentFormValues.reporterPhone = eventValue;
                 break;
             case "involvedname":
-                this.wellBeingIncidentFormValues.student = eventValue;
+                this.wellBeingIncidentFormValues.individual_of_concern = eventValue;
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.student_email = eventValue;
+                this.wellBeingIncidentFormValues.individuals_email_address = eventValue;
                 if (!eventValue) {
                     this.validEmailWarningIndividual = false;
                     this.validEmailIndividual = true;
@@ -143,7 +157,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 }
                 break;
             case "involvedphone":
-                this.wellBeingIncidentFormValues.student_phone = eventValue;
+                this.wellBeingIncidentFormValues.individuals_phone_number = eventValue;
                 break;
             case "date":
                 if (eventValue) {
@@ -181,7 +195,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 }
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.student_email = emailValidationResults.emailAddress;
+                this.wellBeingIncidentFormValues.individuals_email_address = emailValidationResults.emailAddress;
                 this.validEmailIndividual = emailValidationResults.validEmail;
                 this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
                 if (this.validEmailWarningIndividual) {
@@ -262,51 +276,111 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         }
     }
 
-    submitFormSpinner = false;
+    submittedUrl() {
+        console.log("Updated communityOfConcernParamsUrl: "+this.communityOfConcernParamsUrl);
+        this.searchParamsUrl = new URL(this.communityOfConcernParamsUrl);
+        this.searchParamsUrl.searchParams.set("submitted", "true");
+        return this.searchParamsUrl;
+    }
+
     saveDocumentsFail = false;
-    submitBiasIncidentFormFail = false;
-    showUrl = false;
+    submitWellBeingFormFail = false;
+    get showUrl() {
+        return !!this.attachDocumentResponse.SupportingDocumentUrl;
+    }
     returnUrl;
+    attachDocumentResponse = {
+        Status: "",
+        SupportingDocumentUrl: "",
+        SupportingDocumentId: ""
+    }
+    formReportNumber = "";
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
-        this.submitBiasIncidentFormFail = false;
-        console.log("This Time: "+JSON.stringify(this.attachDocuments))
-        console.log("All File: " + JSON.stringify(this.wellBeingIncidentFormValues));
-        let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+        this.submitWellBeingFormFail = false;
 
-        // window.scrollTo(0,0);
-        // this.submitFormSpinner = true;
+        const showSpinnerEvent = new CustomEvent('showspinner');
+        this.dispatchEvent(showSpinnerEvent);
+        window.scrollTo(0,0);
 
-        try {
-        const supportingDocumentName = 'Advocate Well Being Incident';
-        await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
-        // await saveSupportingDocuments( {attachedDocumentsList: this.attachDocuments}).then((result) => {
-            console.log(JSON.stringify(result));
+        if (this.attachDocuments.length > 0) {
+            const supportingDocumentName = 'Advocate Well Being Incident';
+            try {
+                await saveSupportingDocuments({ attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+                    console.log("Initial Attach Document results: " + JSON.stringify(result) + "Length: " + result.length);
 
-            if (result.Status === 'success') {
-                // this.biasIncidentFormValues.custom_field_1 = result.Url;
+                    if (result.Status === 'success') {
+                        if (result.Status === 'success') {
+                            this.attachDocumentResponse = {
+                                Status: result.Status,
+                                SupportingDocumentUrl: result.Url,
+                                SupportingDocumentId: result.SupportingDocumentId
+                            }
+                            console.log("Attach Document object: " + JSON.stringify(this.attachDocumentResponse));
 
-                //Used for testing
-                this.returnUrl = result.Url;
-                this.showUrl = true;
-            } else if (result.Status === 'error') {
+                            this.wellBeingIncidentFormValues.salesforce_support_documents = result.Url;
+
+                            //Used for testing
+                            this.returnUrl = this.attachDocumentResponse.SupportingDocumentUrl;
+
+                        } else if (result.Status === 'error') {
+                            this.saveDocumentsFail = true;
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log("Save documents error: " + JSON.stringify(e));
                 this.saveDocumentsFail = true;
             }
-        })
-        } catch (e) {
-            console.log("Save documents error: " + JSON.stringify(e));
-            this.saveDocumentsFail = true;
         }
 
-        // try {
-        //     delete this.titleIxIncidentFormValues.reporterType //USED JUST FOR TESTING BECAUSE GETTING reporteType FIELD DOES NOT EXIST ON POST RESPONSE
-        //     let formValues = JSON.stringify(this.titleIxIncidentFormValues);
-        //     let postTitleIxReportResults = await submitForm({formValues: formValues});
-        //     console.log("imperativeContinuation results: "+JSON.stringify(postTitleIxReportResults));
-        //     this.error = undefined;
-        // } catch (error) {
-        //     this.error = error;
-        // }
+        console.log("All File: " + JSON.stringify(this.wellBeingIncidentFormValues));
+
+        if (!this.saveDocumentsFail) {
+            try {
+                let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+                let formType = 'wellbeing'
+                await submitForm({formValues: formValues, formType: formType}).then((result) => {
+                    console.log('This all result: '+JSON.stringify(result));
+                    console.log('This all result no stringify: '+result);
+
+                    if (result[0] !== 201) {
+                        this.submitWellBeingFormFail = true;
+                        console.log('This result ERROR getStatusCode: '+result[0]);
+                    }
+
+                    this.formReportNumber = result[1].reportNumber;
+                    console.log('Report Number: '+this.formReportNumber);
+                });
+
+            } catch (error) {
+                this.submitWellBeingFormFail = true;
+            }
+        }
+
+        if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
+                    console.log("Update Status: "+result);
+                });
+            } catch (e) {
+                console.log("updateSupportingDocument error: " + JSON.stringify(e));
+            }
+        }
+
+        const hideSpinnerEvent = new CustomEvent('hidespinner');
+        if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
+            this.dispatchEvent(hideSpinnerEvent);
+            eventField.scrollIntoView({
+                behavior: 'smooth',
+            });
+        } else {
+            this.dispatchEvent(hideSpinnerEvent);
+            console.log("Update submittedUrl: "+this.submittedUrl());
+            location.replace(this.submittedUrl());
+        }
+
     }
+
 }
