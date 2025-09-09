@@ -19,6 +19,7 @@ public without sharing class tommieCaresNonFacultyLwcController {
                             St_Thomas_Connection__c
                     FROM Contact
                     WHERE Id = :studentContactId
+                    WITH SECURITY_ENFORCED
             ];
         }
 
@@ -42,6 +43,7 @@ public without sharing class tommieCaresNonFacultyLwcController {
                     FROM Contact
                     WHERE University_Banner_ID__c = :advisorBannerId
                     AND St_Thomas_Connection__c INCLUDES ('Faculty', 'Staff')
+                    WITH SECURITY_ENFORCED
             ];
         }
 
@@ -123,6 +125,7 @@ public without sharing class tommieCaresNonFacultyLwcController {
                 WHERE hed__Type__c IN :relationshipTypes
                 AND hed__Contact__c = :tommieCaresCase.ContactId
                 AND hed__Status__c = 'Current'
+                WITH SECURITY_ENFORCED
                 ORDER BY CreatedDate DESC NULLS LAST
         ];
 

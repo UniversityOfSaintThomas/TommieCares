@@ -6,26 +6,26 @@
 <template>
     <div class="regular-body-text">
         <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
-        <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">
-            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
-                <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">I am a:
-                    <abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control">
-                    <lightning-combobox id="well-being-reporter_type-selection-id"
-                                        label=""
-                                        placeholder="Select one"
-                                        options={reporterTypeOptions}
-                                        value={reporterType}
-                                        data-selecttype="reportertype"
-                                        variant="label-hidden"
-                                        onchange={selectValueHandler}>
-                    </lightning-combobox>
-                </div>
-            </div>
-        </div>
+<!--        <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
+<!--            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">-->
+<!--                <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">I am a:-->
+<!--                    <abbr class="slds-required" title="Required">*</abbr></label>-->
+<!--                <div class="slds-form-element__control">-->
+<!--                    <lightning-combobox id="well-being-reporter_type-selection-id"-->
+<!--                                        label=""-->
+<!--                                        placeholder="Select one"-->
+<!--                                        options={reporterTypeOptions}-->
+<!--                                        value={reporterType}-->
+<!--                                        data-selecttype="reportertype"-->
+<!--                                        variant="label-hidden"-->
+<!--                                        onchange={selectValueHandler}>-->
+<!--                    </lightning-combobox>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <template lwc:if={showFormAll}>
             <template lwc:if={isNotAnonymous}>
-                <div class="slds-grid slds-m-top_small">
+                <div class="slds-grid">
                     <div class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
                         <div class="slds-form-element slds-m-bottom_medium">
                             <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">Your Name:
@@ -85,7 +85,7 @@
                     <lightning-input id="well-being-individual-name-id"
                                      type="text"
                                      label=""
-                                     value={wellBeingIncidentFormValues.student}
+                                     value={wellBeingIncidentFormValues.otherStudent}
                                      data-inputtype="involvedname"
                                      variant="label-hidden"
                                      onchange={inputValueHandler}>
@@ -99,7 +99,7 @@
                     <lightning-input id="well-being-individual-email-id"
                                      type="text"
                                      label=""
-                                     value={wellBeingIncidentFormValues.student_email}
+                                     value={wellBeingIncidentFormValues.individuals_email_address}
                                      data-inputtype="involvedemail"
                                      variant="label-hidden"
                                      onchange={inputValueHandler}
@@ -115,7 +115,7 @@
                     <lightning-input id="well-being-individual-phone-id"
                                      type="text"
                                      label=""
-                                     value={wellBeingIncidentFormValues.student_phone}
+                                     value={wellBeingIncidentFormValues.individuals_phone_number}
                                      data-inputtype="involvedphone"
                                      variant="label-hidden"
                                      onchange={inputValueHandler}>

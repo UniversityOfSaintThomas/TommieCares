@@ -29,7 +29,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         return !this.isAnonymous;
     }
     get submitDisable() {
-        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.individual_of_concern &&
+        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.otherStudent &&
             (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
     }
 
@@ -40,9 +40,9 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         reporterName: "",
         reporterEmail: "",
         reporterPhone: "",
-        individual_of_concern: "", //This is lookup field so check on actual Symplicity field
-        individuals_email_address: "", //This is a temp field so check on actual Symplicity field
-        individuals_phone_number: "", //This is a temp field so check on actual Symplicity field
+        otherStudent: "",
+        individuals_email_address: "", //This is a custom field
+        individuals_phone_number: "", //This is a custom field
         incidentDate: "",
         description: "",
         incidentType: "14", //required
@@ -112,7 +112,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     }
 
     selectValueHandler(event) {
-        console.log("select value: "+event.detail.value);
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
@@ -126,7 +125,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     }
 
     inputValueHandler(event) {
-        console.log("input value: "+event.detail.value);
         let eventField = event.target;
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputtype) {
@@ -145,7 +143,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 this.wellBeingIncidentFormValues.reporterPhone = eventValue;
                 break;
             case "involvedname":
-                this.wellBeingIncidentFormValues.individual_of_concern = eventValue;
+                this.wellBeingIncidentFormValues.otherStudent = eventValue;
                 break;
             case "involvedemail":
                 this.wellBeingIncidentFormValues.individuals_email_address = eventValue;
@@ -165,13 +163,12 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 } else {
                     this._incidentDate = "";
                 }
-                console.log("Date: "+this._incidentDate);
                 break;
             case "description":
                 this.wellBeingIncidentFormValues.description = eventValue;
                 break;
         }
-        console.log("wellBeingIncidentFormValues2 value: "+JSON.stringify(this.wellBeingIncidentFormValues));
+        console.log("wellBeingIncidentFormValues value: "+JSON.stringify(this.wellBeingIncidentFormValues));
     }
 
     validEmail = true;
@@ -213,7 +210,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     dateWarningText = "";
     dateValidationBlur(event) {
         const eventField = event.currentTarget;
-        console.log("date validity: "+eventField.checkValidity());
         let inputDate = this._incidentDate;
         let inputTime = "00:00:00";
         const dateNow = new Date();
@@ -277,7 +273,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     }
 
     submittedUrl() {
-        console.log("Updated communityOfConcernParamsUrl: "+this.communityOfConcernParamsUrl);
         this.searchParamsUrl = new URL(this.communityOfConcernParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
         return this.searchParamsUrl;
@@ -308,7 +303,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
             const supportingDocumentName = 'Advocate Well Being Incident';
             try {
                 await saveSupportingDocuments({ attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
-                    console.log("Initial Attach Document results: " + JSON.stringify(result) + "Length: " + result.length);
 
                     if (result.Status === 'success') {
                         if (result.Status === 'success') {
@@ -343,7 +337,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                 let formType = 'wellbeing'
                 await submitForm({formValues: formValues, formType: formType}).then((result) => {
                     console.log('This all result: '+JSON.stringify(result));
-                    console.log('This all result no stringify: '+result);
 
                     if (result[0] !== 201) {
                         this.submitWellBeingFormFail = true;

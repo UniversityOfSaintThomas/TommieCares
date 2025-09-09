@@ -172,7 +172,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     }
 
     selectValueHandler(event) {
-        console.log("select value: "+event.detail.value);
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
@@ -195,7 +194,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     }
 
     inputValueHandler(event) {
-        console.log("input value: "+event.detail.value);
         let eventField = event.target;
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputtype) {
@@ -219,7 +217,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 } else {
                     this._incidentDate = "";
                 }
-                console.log("Date: "+this._incidentDate);
                 break;
             case "time":
                 if (eventValue) {
@@ -227,7 +224,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 } else {
                     this._incidentTime = "";
                 }
-                console.log("Time: "+this._incidentTime);
                 break;
             case "location":
                 this.biasIncidentFormValues.additionalInformation = eventValue;
@@ -274,8 +270,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     dateWarningText = "";
     timeWarningText = "";
     dateValidationBlur(event) {
-        console.log("date validity: "+this.dateFieldElement.checkValidity());
-        console.log("time validity: "+this.timeFieldElement.checkValidity());
         const dateTimeDataType = event.currentTarget.dataset.inputtype;
         let inputDate = this._incidentDate;
         let inputTime = "00:00:00";
@@ -372,7 +366,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     }
 
     submittedUrl() {
-        console.log("Updated communityOfConcernParamsUrl: "+this.communityOfConcernParamsUrl);
         this.searchParamsUrl = new URL(this.communityOfConcernParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
         return this.searchParamsUrl;
@@ -403,7 +396,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
             const supportingDocumentName = 'Advocate Bias Incident';
             try {
                 await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
-                    console.log("Initial Attach Document results: "+JSON.stringify(result) + "Length: "+result.length);
 
                     if (result.Status === 'success') {
                         this.attachDocumentResponse = {
@@ -436,7 +428,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 let formType = 'bias';
                 await submitForm({formValues: formValues, formType: formType}).then((result) => {
                     console.log('This all result: '+JSON.stringify(result));
-                    console.log('This all result no stringify: '+result);
 
                     if (result[0] !== 201) {
                         this.submitBiasIncidentFormFail = true;

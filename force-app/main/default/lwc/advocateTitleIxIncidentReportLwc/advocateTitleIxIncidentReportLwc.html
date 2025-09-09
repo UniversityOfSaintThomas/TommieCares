@@ -10,41 +10,41 @@
                 <p class="slds-m-bottom_small">Please complete this form with as much detail as possible. If we need
                     additional information from you, we will contact you at the email/number you list on the form. All
                     reports are confidential.</p>
+                <p class="slds-m-bottom_small">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
                 <p class="slds-m-bottom_small">If you select to report an incident as anonymous, St. Thomas will not be able
                     to contact you. Reporting anonymously limits the university's ability to respond.</p>
+                <p class="slds-m-bottom_small">We encourage you to share your name and contact information.</p>
                 <p>Thank you for keeping our campus healthy and safe by informing us of this
                     incident. For additional information including resources and university policy and processes, please
                     visit www.stthomas.edu/title-ix.</p>
-                <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
-                <p class="slds-m-top_medium"><b>Reporter Type</b></p>
-                <p class="textarea-sublabel-2">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
-                <p class="textarea-sublabel-2">For others, we do not require that you share your name and contact
-                    information; however, without this information, we will likely be limited in what we can do to follow-up
-                    on the reported concern. Please note that to best support you, address the behavior of the person of
-                    concern and to protect our community, we typically need follow-up and clarifying information from the
-                    reporting person.</p>
-                <p class="textarea-sublabel-2">We encourage you to share your name and contact information.</p>
+<!--                <p class="slds-m-top_medium"><b>Reporter Type</b></p>-->
+<!--                <p class="textarea-sublabel-2">For others, we do not require that you share your name and contact-->
+<!--                    information; however, without this information, we will likely be limited in what we can do to follow-up-->
+<!--                    on the reported concern. Please note that to best support you, address the behavior of the person of-->
+<!--                    concern and to protect our community, we typically need follow-up and clarifying information from the-->
+<!--                    reporting person.</p>-->
             </div>
         </div>
-        <div class="slds-grid slds-m-bottom_medium">
-            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
-                <label class="slds-form-element__label selection-labels" for="titleix-reporter-type-selection-id">
-                    I am a:<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control">
-                    <lightning-combobox id="titleix-reporter-type-selection-id"
-                                        label=""
-                                        options={reporterTypeOptions}
-                                        value={reporterType}
-                                        data-selecttype="reportertype"
-                                        variant="label-hidden"
-                                        onchange={selectValueHandler}>
-                    </lightning-combobox>
-                </div>
-            </div>
-        </div>
+<!--        <div class="slds-grid slds-m-bottom_medium">-->
+<!--            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">-->
+<!--                <label class="slds-form-element__label selection-labels" for="titleix-reporter-type-selection-id">-->
+<!--                    I am a:<abbr class="slds-required" title="Required">*</abbr></label>-->
+<!--                <div class="slds-form-element__control">-->
+<!--                    <lightning-combobox id="titleix-reporter-type-selection-id"-->
+<!--                                        label=""-->
+<!--                                        options={reporterTypeOptions}-->
+<!--                                        value={reporterType}-->
+<!--                                        data-selecttype="reportertype"-->
+<!--                                        variant="label-hidden"-->
+<!--                                        onchange={selectValueHandler}>-->
+<!--                    </lightning-combobox>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <template lwc:if={showFormAll}>
+            <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
             <template lwc:if={isAnonymous}>
-                <p class="slds-m-top_large"><b>Anonymous Reporting</b></p>
+                <p><b>Anonymous Reporting</b></p>
                 <div class="slds-grid slds-m-bottom_x-small">
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
                         <p class="textarea-sublabel-2">All reports are confidential. If you select to report an incident as
@@ -54,7 +54,9 @@
                             processes, please visit <a href="https://www.stthomas.edu/title-ix/" target=_blank>stthomas.edu/title-ix.</a></p>
                     </div>
                 </div>
-                <div class="slds-form-element slds-m-bottom_medium">
+                <div class="slds-form-element slds-m-bottom_large">
+                    <label class="slds-form-element__label selection-labels" for="titleix-report-anonymous-reporting-id">I understand the statement about Anonymous Reporting
+                        <abbr class="slds-required" title="Required">*</abbr></label>
                     <div class="slds-form-element__control">
                         <lightning-checkbox-group id="titleix-report-anonymous-reporting-id"
                                                   name="Anonymous Reporting Select"
@@ -68,7 +70,7 @@
                     </div>
                 </div>
             </template>
-            <p class="slds-m-top_large"><b>Form Overview</b></p>
+            <p><b>Form Overview</b></p>
             <div class="slds-grid">
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
                     <p class="textarea-sublabel-2">By submitting a Title IX Public Report, you are demonstrating care to promote and

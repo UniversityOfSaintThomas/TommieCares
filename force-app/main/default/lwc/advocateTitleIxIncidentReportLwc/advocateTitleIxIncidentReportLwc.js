@@ -139,7 +139,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     }
 
     selectValueHandler(event) {
-        console.log("select value: "+event.detail.value);
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
@@ -164,7 +163,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     }
 
     inputValueHandler(event) {
-        console.log("select value: "+event.detail.value);
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -253,7 +251,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     }
 
     submittedUrl() {
-        console.log("Updated communityOfConcernParamsUrl: "+this.communityOfConcernParamsUrl);
         this.searchParamsUrl = new URL(this.communityOfConcernParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
         return this.searchParamsUrl;
@@ -284,7 +281,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
             const supportingDocumentName = 'Advocate Title IX Incident';
             try {
                 await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
-                    console.log("Initial Attach Document results: "+JSON.stringify(result) + "Length: "+result.length);
 
                     if (result.Status === 'success') {
                         this.attachDocumentResponse = {
@@ -315,7 +311,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                 let formType = 'titleix';
                 await submitForm({formValues: formValues, formType: formType}).then((result) => {
                     console.log('This all result: '+JSON.stringify(result));
-                    console.log('This all result no stringify: '+result);
 
                     if (result[0] !== 201) {
                         this.submitTitleIxIncidentFormFail = true;
