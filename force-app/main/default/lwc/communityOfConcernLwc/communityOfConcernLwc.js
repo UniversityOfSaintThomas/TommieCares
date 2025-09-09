@@ -1,5 +1,10 @@
 /**
  * Created by nguy0092 on 7/18/2025.
+ * Utilize child components:
+ * -AdvocateBiasIncidentReportLwc
+ * -AdvocateTitleIxIncidentReportLwc
+ * -AdvocateWellBeingIncidentReportLwc
+ * -TommieCaresLwc
  */
 
 import {api, LightningElement, track, wire} from 'lwc';

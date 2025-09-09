@@ -40,7 +40,6 @@ public without sharing class ContentVersionTriggersHandler {
         List<ContentDocumentLink> contentDocumentLinkList = new List<ContentDocumentLink>();
         for (ContentVersion cv : filteredContentVersions) {
 //            System.debug('Trigger files: ' +JSON.serializePretty(cv));
-//            System.debug('What is cv.Id: ' +cv.Id);
 
             ContentDocumentLink contentDocumentLink = new ContentDocumentLink(
                     ContentDocumentId = cv.ContentDocumentId,

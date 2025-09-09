@@ -5,27 +5,27 @@
 <!-- Advocate Title Ix Incident Report Lwc -->
 <template>
     <div class="slds-m-top_small regular-body-text">
-        <div class="slds-grid slds-m-bottom_xx-small">
+        <div class="slds-grid slds-m-bottom_medium">
             <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
                 <p class="slds-m-bottom_small">Please complete this form with as much detail as possible. If we need
                     additional information from you, we will contact you at the email/number you list on the form. All
                     reports are confidential.</p>
-                <p class="slds-m-bottom_small">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
-                <p class="slds-m-bottom_small">If you select to report an incident as anonymous, St. Thomas will not be able
-                    to contact you. Reporting anonymously limits the university's ability to respond.</p>
-                <p class="slds-m-bottom_small">We encourage you to share your name and contact information.</p>
-                <p>Thank you for keeping our campus healthy and safe by informing us of this
+                <p class="slds-m-bottom_small">If you select to report an incident as anonymous, St. Thomas will not be
+                    able to contact you. Reporting anonymously limits the university's ability to respond.</p>
+                <p class="slds-m-bottom_medium">Thank you for keeping our campus healthy and safe by informing us of this
                     incident. For additional information including resources and university policy and processes, please
-                    visit www.stthomas.edu/title-ix.</p>
-<!--                <p class="slds-m-top_medium"><b>Reporter Type</b></p>-->
-<!--                <p class="textarea-sublabel-2">For others, we do not require that you share your name and contact-->
-<!--                    information; however, without this information, we will likely be limited in what we can do to follow-up-->
-<!--                    on the reported concern. Please note that to best support you, address the behavior of the person of-->
-<!--                    concern and to protect our community, we typically need follow-up and clarifying information from the-->
-<!--                    reporting person.</p>-->
+                    visit <a href="https://www.stthomas.edu/title-ix" target=_blank>https://www.stthomas.edu/title-ix</a>.</p>
+                <p class="slds-m-bottom_small"><b>Reporter Type</b></p>
+                <p class="slds-m-bottom_small">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
+                <p class="slds-m-bottom_small">For others, we do not require that you share your name and contact
+                    information; however, without this information, we will likely be limited in what we can do to
+                    follow-up on the reported concern. Please note that to best support you, address the behavior of the
+                    person of concern and to protect our community, we typically need follow-up and clarifying
+                    information from the reporting person.</p>
+                <p>We encourage you to share your name and contact information.</p>
             </div>
         </div>
-<!--        <div class="slds-grid slds-m-bottom_medium">-->
+<!--        <div class="slds-grid slds-m-vertical_medium">-->
 <!--            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">-->
 <!--                <label class="slds-form-element__label selection-labels" for="titleix-reporter-type-selection-id">-->
 <!--                    I am a:<abbr class="slds-required" title="Required">*</abbr></label>-->
@@ -42,16 +42,31 @@
 <!--            </div>-->
 <!--        </div>-->
         <template lwc:if={showFormAll}>
+            <p class="slds-m-bottom_small"><b>Form Overview</b></p>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
+                    <p class="slds-m-bottom_small">By submitting a Title IX Public Report, you are demonstrating care to
+                        promote and protect the personal dignity and well-being of the St. Thomas community. Thank you,
+                        and we will likewise take care to respect your privacy and offer you support and resources.</p>
+                    <p class="slds-m-bottom_small">We will respond promptly to your concern. The Title IX Coordinator
+                        (or her designee) will follow up with you within one business day- if you have chosen to leave
+                        your contact information- to make sure that we understand your concern and can discuss any next
+                        steps and possible support options for those involved.</p>
+                    <p class="slds-m-bottom_small">Submitting a Title IX Report does not start emergency or crisis
+                        response or the sexual misconduct complaint process. If this is an emergency, contact the Police
+                        or Public Safety for immediate intervention. However, based on the information you share, the
+                        University may take some immediate action to ensure that our community members are safe and
+                        supported.</p>
+                </div>
+            </div>
             <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
             <template lwc:if={isAnonymous}>
-                <p><b>Anonymous Reporting</b></p>
-                <div class="slds-grid slds-m-bottom_x-small">
+                <p class="slds-m-bottom_small"><b>Anonymous Reporting</b></p>
+                <div class="slds-grid slds-m-bottom_xx-small">
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
-                        <p class="textarea-sublabel-2">All reports are confidential. If you select to report an incident as
+                        <p>All reports are confidential. If you select to report an incident as
                             anonymous, St. Thomas will not be able to contact you. Reporting anonymously limits the university's
                             ability to respond.</p>
-                        <p class="textarea-sublabel-2">For additional information including resources and university policy and
-                            processes, please visit <a href="https://www.stthomas.edu/title-ix/" target=_blank>stthomas.edu/title-ix.</a></p>
                     </div>
                 </div>
                 <div class="slds-form-element slds-m-bottom_large">
@@ -70,38 +85,23 @@
                     </div>
                 </div>
             </template>
-            <p><b>Form Overview</b></p>
-            <div class="slds-grid">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
-                    <p class="textarea-sublabel-2">By submitting a Title IX Public Report, you are demonstrating care to promote and
-                        protect the personal dignity and well-being of the St. Thomas community. Thank you, and we will likewise
-                        take care to respect your privacy and offer you support and resources.</p>
-                    <p class="textarea-sublabel-2">We will respond promptly to your concern. The Title IX Coordinator (or her
-                        designee) will follow up with you within one business day- if you have chosen to leave your contact
-                        information- to make sure that we understand your concern and can discuss any next steps and possible
-                        support options for those involved.</p>
-                    <p class="textarea-sublabel-2">Submitting a Title IX Report does not start emergency or crisis response or the
-                        sexual misconduct complaint process. If this is an emergency, contact the Police or Public Safety for
-                        immediate intervention. However, based on the information you share, the University may take some immediate
-                        action to ensure that our community members are safe and supported.</p>
-                </div>
-            </div>
             <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">
                 <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
                     <label class="slds-form-element__label selection-labels" for="titleix-report-status-who-caused-harm-id">Status of Individual Who Caused Harm<abbr class="slds-required" title="Required">*</abbr></label>
                     <div class="slds-m-bottom_x-small">
-                        <p class="textarea-sublabel-2">By sharing the status of the person who caused harm, this report will be
-                            routed appropriately. In nearly all instances, the Title IX Coordinator (or their designee) will
-                            follow-up within one business day of receipt of this report.</p>
-                        <p class="textarea-sublabel-2">If the person who caused harm is a <b>student</b>, the Title IX Coordinator and Dean
-                            of Students will be alerted.</p>
-                        <p class="textarea-sublabel-2">If this is about an <b>employee</b> and that their actions or behavior caused harm,
-                            the Title IX Coordinator and the Chief Human Resources Officer will be alerted.</p>
-                        <p class="textarea-sublabel-2">If you are <b>unsure</b> of the status of the individual or if they are a
-                            <b>visitor/guest</b> to the University, the Title IX Coordinator, Dean of Students and Public Safety will be
-                            alerted.</p>
-                        <p class="textarea-sublabel-2">If you are concerned about the notifications outlined above, please select
-                            other, and only the Title IX Coordinator will be alerted.</p>
+                        <p class="textarea-sublabel-2">By sharing the status of the person who caused harm, this report
+                            will be routed appropriately. In nearly all instances, the Title IX Coordinator (or their
+                            designee) will follow-up within one business day of receipt of this report.</p>
+                        <p class="textarea-sublabel-2">If the person who caused harm is a <b>student</b>, the Title IX
+                            Coordinator, Director of Public Safety, and Dean of Students will be alerted.</p>
+                        <p class="textarea-sublabel-2">If this is about an <b>employee</b> and their actions or behavior caused
+                            harm, the Title IX Coordinator, Public Safety Director, and the Chief Human Resources
+                            Officer will be alerted.</p>
+                        <p class="textarea-sublabel-2">If you are <b>unsure</b> of the status of the individual or if they are
+                            a <b>visitor/guest</b> to the University, the Title IX Coordinator, Dean of Students and Public
+                            Safety will be alerted.</p>
+<!--                        <p class="textarea-sublabel-2">If you are concerned about the notifications outlined above, please select-->
+<!--                            other, and only the Title IX Coordinator will be alerted.</p>-->
                     </div>
                     <div class="slds-form-element__control">
                         <lightning-checkbox-group id="titleix-report-status-who-caused-harm-id"
