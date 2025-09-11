@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Community_Concern__c</fullName>
+    <externalId>false</externalId>
+    <label>Community Concern</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>I would like to report a concern about a student in one of my classes</fullName>
+                <default>false</default>
+                <label>I would like to report a concern about a student in one of my classes</label>
+            </value>
+            <value>
+                <fullName>I would like to report a behavior or well-being concern</fullName>
+                <default>false</default>
+                <label>I would like to report a behavior or well-being concern</label>
+            </value>
+            <value>
+                <fullName>I want to report an incident of possible discrimination, bias, or harassment</fullName>
+                <default>false</default>
+                <label>I want to report an incident of possible discrimination, bias, or harassment</label>
+            </value>
+            <value>
+                <fullName>I would like to report a concern related to possible sexual misconduct (including Title IX)</fullName>
+                <default>false</default>
+                <label>I would like to report a concern related to possible sexual misconduct (including Title IX)</label>
+            </value>
+            <value>
+                <fullName>I would like to submit an information report that does not fit the criteria of any of the above reports</fullName>
+                <default>false</default>
+                <label>I would like to submit an information report that does not fit the criteria of any of the above reports</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,1049 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Community_Concern</fullName>
+    <active>true</active>
+    <businessProcess>Retention</businessProcess>
+    <description>Used to capture Community of Concern reports</description>
+    <label>Community Concern</label>
+    <picklistValues>
+        <picklist>Academic_Counseling_Appeal_Recommend__c</picklist>
+        <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Academic_Performance_Reason_s__c</picklist>
+        <values>
+            <fullName>Missing assignments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missing tests or other major assessments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Performance on assignments or papers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Performance on tests</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Academic_Record_Review__c</picklist>
+        <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Action_Types__c</picklist>
+        <values>
+            <fullName>Contact Advisor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refer to Faculty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refer to Tutoring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral to Counseling Center</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Additional_Outreach_Outcome_s__c</picklist>
+        <values>
+            <fullName>Awaiting Study Abroad Transcripts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Core Issue%3A WAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Department Assessments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs 1-Credit Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Business 200</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Core Substitution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Course Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Language Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Major%2FMinor Substitution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs additional courses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to amend AQU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to amend NR or I grade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to change registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to drop major%2Fminor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to meet GPA requirement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to submit transcripts or AP scores</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Now pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Taking time off</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Technical Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transferred%2Fgraduating from another institution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to reach student</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Appeal_Meeting_Recommendation__c</picklist>
+        <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Attendance_Concerns_Reason_s__c</picklist>
+        <values>
+            <fullName>Missing excessively</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missing periodically</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Never attended</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stopped attending</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Can_this_student_pass_course__c</picklist>
+        <values>
+            <fullName>Maybe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Follow_Up__c</picklist>
+        <values>
+            <fullName>Student did not respond</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student met with advisor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student returned to class</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student withdrew from the class</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Resolution_Reason__c</picklist>
+        <values>
+            <fullName>Age 21 or older</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agreed to Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Class Withdrawal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Did Not Agree to Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Faculty Response</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Burden</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lack of proof of Financial Burden</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Living with Parent%2FGuardian%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Married%2FCaring for Dependant%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical Concerns can be accommodated by existing measures</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Case Created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non UST Contact</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Living with Parent%2FGuardian%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Married%2FCaring for Dependant%28s%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request Withdrawn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention Concern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Special requirements %28ie%2E SJV%2C IY1%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student Response</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Term Withdrawal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer student</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transitioned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under 21</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Chat Complete</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Community_Concern_Reporter_Type__c</picklist>
+        <values>
+            <fullName>Faculty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staff</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Community_Concern_Who_Type__c</picklist>
+        <values>
+            <fullName>Faculty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staff</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Community_Concern__c</picklist>
+        <values>
+            <fullName>I want to report an incident of possible discrimination%2C bias%2C or harassment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I would like to report a behavior or well-being concern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I would like to report a concern about a student in one of my classes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I would like to report a concern related to possible sexual misconduct %28including Title IX%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I would like to submit an information report that does not fit the criteria of any of the above reports</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Consent_to_Contact_Tracing__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Has_this_student_returned_to_class__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Have_you_connected_with_this_student__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Live_on_Campus__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Marital_Status__c</picklist>
+        <values>
+            <fullName>Divorced</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Married</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Single</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Widowed</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Origin</picklist>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Outreach_Campaign__c</picklist>
+        <values>
+            <fullName>COVID-19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commuters</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Continuing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Declare Major</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Degree Completion</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exceptions Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>First Generation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Job%2FInternship Survey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missed FY Group Advising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Enrolled Not Graduated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Graduating Spring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Registered for Fall</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Registered for Spring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out of State</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration%2FGrad Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention Risk Outreach</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Outreach_Outcome__c</picklist>
+        <values>
+            <fullName>Awaiting Study Abroad Transcripts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Core Issue%3A WAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delay Grad for Athletics Eligibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Department Assessments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fall Study Abroad courses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>J-term Study Abroad course</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missing more than 1 requirement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs 1-Credit Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Business 200</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Core Substitution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Course Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Language Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs Major%2FMinor Substitution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs additional courses</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to amend AQU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to amend NR or I grade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to change registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to drop major%2Fminor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to meet GPA requirement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to submit transcripts or AP scores</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Now pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Taking time off</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Technical Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transferred%2Fgraduating from another institution</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Outreach_Population__c</picklist>
+        <values>
+            <fullName>All Undergraduate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Continuing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>First Year</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Graduation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Juniors %26 Seniors</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Primary_Campus__c</picklist>
+        <values>
+            <fullName>Minneapolis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Only</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>St%2E Paul</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Primary_Relationship__c</picklist>
+        <values>
+            <fullName>Faculty%2FProfessor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Family Member</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Friend</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staff</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason</picklist>
+        <values>
+            <fullName>Complex functionality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instructions not clear</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User didn%27t attend training</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Secondary_Reason__c</picklist>
+        <values>
+            <fullName>Cultural</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Family Obligation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Religious</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Student_s_Written_Appeal__c</picklist>
+        <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Students_Appeal_Complete__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Study_Abroad_Term__c</picklist>
+        <values>
+            <fullName>Fall</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>J-Term</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Summer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Taking_Time_Off_Reasons__c</picklist>
+        <values>
+            <fullName>1-Credit Waived</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto-Close</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GPA Improvement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Health Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete Class</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Military</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needed Business 200</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needed Language Waiver</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Petition on Studies</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Substitution%2FAmendment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transferred In Final Course</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tested_Positive__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tommie_Alert_Primary_Reason__c</picklist>
+        <values>
+            <fullName>Academic performance concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Attendance concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Behavior concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mental health concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relationship violence%2Fstalking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sense of belonging</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tommie High 5</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tommie_High_5__c</picklist>
+        <values>
+            <fullName>Keep Up the Good Work</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Showing Improvement</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Feature Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information Update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invitation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Question</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UDAR Nomination Form</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Vaccinated__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Work_on_Campus__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>hed__Category__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>School Code of Conduct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>School Violation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Offense</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>hed__Location__c</picklist>
+        <values>
+            <fullName>Off Campus</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Campus</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
