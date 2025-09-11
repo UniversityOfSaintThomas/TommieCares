@@ -85,8 +85,6 @@
                         will reach out to the reporting party. Dougherty Family College students will be contacted by the
                         Associate Dean of Students at DFC. Our goal is to better understand the incident, ensure that resources
                         and support are offered, and determine the appropriate resolution options for the particular report.</p>
-<!--                    <p class="slds-m-bottom_small">Reporting parties can generally expect a response to their report within one business day.-->
-<!--                        If you need a more immediate response, please call <a href="https://www.stthomas.edu/public-safety/index.html" target=_blank>Public Safety</a>.</p>-->
                     <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able
                         to respond directly to you but will assess the information submitted and consider appropriate next
                         steps. St. Thomas is limited in steps it can take in the absence of a reporting party.</p>
@@ -175,32 +173,15 @@
                     <c-advocate-well-being-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-well-being-incident-report-lwc>
                 </template>
                 <div lwc:if={showWhatDiscrimination} class="slds-m-top_medium">
-<!--                    <div class="slds-grid">-->
-<!--                        <p class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-m-bottom_x-small">This form should be used by anyone-->
-<!--                            who believes they have witnessed or been the target of an incident of discrimination, bias, or-->
-<!--                            harassment based on a protected class (sex, race, color, religion, national origin, ancestry,-->
-<!--                            disability, age, sexual orientation, marital status, military status, gender-->
-<!--                            expression/identity, genetic information, pregnancy or any other protected classes). These-->
-<!--                            reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,-->
-<!--                            dependent on the status of the individual who caused harm.</p>-->
-<!--                    </div>-->
                     <c-advocate-bias-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-bias-incident-report-lwc>
                 </div>
                 <div lwc:if={showWhatMisconduct} class="slds-m-top_medium">
-<!--                    <div class="slds-grid">-->
-<!--                        <p class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12"><i>Sexual misconduct, under our-->
-<!--                            policy, includes sexual harassment, sexual assault, domestic or dating violence, stalking,-->
-<!--                            and sexual exploitation). The Title IX Coordinator receives these reports and works to-->
-<!--                            address incidents and connects individuals to resources and reporting options with the goals-->
-<!--                            of support, safety, and security in an effort to reduce harm.</i></p>-->
-<!--                    </div>-->
                     <c-advocate-title-ix-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-title-ix-incident-report-lwc>
                 </div>
                 <template lwc:if={showWhatOther.show}>
                     <div lwc:if={showWhatOther.text} class="slds-grid slds-wrap slds-m-bottom_small">
                         <p class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">If you have updates to provide on a
-                            concern regarding a faculty or staff, please contact Human Resources at askhr@stthomas.edu.
-                        </p>
+                            concern regarding a faculty or staff, please contact Human Resources at askhr@stthomas.edu.</p>
                     </div>
                     <p class="slds-m-top_large textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
                     <template lwc:if={iAmNotAnonymousCheck}>
@@ -280,7 +261,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="slds-m-top_large slds-m-bottom_medium">
+                    <div class="slds-m-top_large slds-m-bottom_x-small">
                         <p class="slds-m-bottom_small"><b>Who You Are Concerned About Information</b></p>
                         <div class="slds-grid slds-wrap">
                             <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_5-of-12 slds-large-size_4-of-12 slds-m-right_medium">

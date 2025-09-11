@@ -258,10 +258,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
 
     saveDocumentsFail = false;
     submitTitleIxIncidentFormFail = false;
-    // get showUrl() {
-    //     return !!this.attachDocumentResponse.SupportingDocumentUrl;
-    // }
-    // returnUrl;
     attachDocumentResponse = {
         Status: "",
         SupportingDocumentUrl: "",
@@ -291,10 +287,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                         console.log("Attach Document object: "+JSON.stringify(this.attachDocumentResponse));
 
                         this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-
-                        //Used for testing
-                        // this.returnUrl = result.Url;
-
                     } else if (result.Status === 'error') {
                         this.saveDocumentsFail = true;
                     }

@@ -53,7 +53,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         affiliation_of_target: "",  //Affiliation of Harmed Party - picklist
         who_engaged_in_the_behavior: "", //Who caused the harm
         affiliation_of_person_engaged_in_harm: "", //Affiliation of Person Who Caused Harm - picklist
-        // discrimination_protected_classes: [], // Discrimination Protected Classes - multi-select
         description: "", //Incident Description
         incidentType: "12", //required
         additionalLocation: "1", //required
@@ -84,7 +83,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     biasReportingFormOptions1Wire({error, data}) {
         let recordOptions = [];
         let reporterTypeOptions = [];
-        // let protectedClassesOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -119,15 +117,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                 }
             }
 
-            // if (recordOptions[1]) {
-            //     recordOptions[1].forEach((options) => {
-            //         protectedClassesOptions.push({
-            //             label: options.value,
-            //             value: options.id.toString(),
-            //         })
-            //     })
-            //     this.protectedClassesOptions = protectedClassesOptions;
-            // }
         }
 
         if (error) {
@@ -186,9 +175,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
             case "affiliationcausedharm":
                 this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm = eventValue;
                 break;
-            // case "protectedclass":
-            //     this.biasIncidentFormValues.discrimination_protected_classes = eventValue;
-            //     break;
         }
         console.log("biasIncidentFormValues: "+JSON.stringify(this.biasIncidentFormValues));
     }
@@ -373,10 +359,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
 
     saveDocumentsFail = false;
     submitBiasIncidentFormFail = false;
-    // get showUrl() {
-    //     return !!this.attachDocumentResponse.SupportingDocumentUrl;
-    // }
-    // returnUrl;
     attachDocumentResponse = {
         Status: "",
         SupportingDocumentUrl: "",
@@ -406,10 +388,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
                         console.log("Attach Document object: "+JSON.stringify(this.attachDocumentResponse));
 
                         this.biasIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-
-                        //Used for testing
-                        // this.returnUrl = this.attachDocumentResponse.SupportingDocumentUrl;
-
                     } else if (result.Status === 'error') {
                         this.saveDocumentsFail = true;
                     }

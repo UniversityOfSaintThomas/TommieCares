@@ -59,7 +59,7 @@
                         supported.</p>
                 </div>
             </div>
-            <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+            <p class="slds-m-vertical_small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
             <template lwc:if={isAnonymous}>
                 <p class="slds-m-bottom_small"><b>Anonymous Reporting</b></p>
                 <div class="slds-grid slds-m-bottom_xx-small">
@@ -100,8 +100,6 @@
                         <p class="textarea-sublabel-2">If you are <b>unsure</b> of the status of the individual or if they are
                             a <b>visitor/guest</b> to the University, the Title IX Coordinator, Dean of Students and Public
                             Safety will be alerted.</p>
-<!--                        <p class="textarea-sublabel-2">If you are concerned about the notifications outlined above, please select-->
-<!--                            other, and only the Title IX Coordinator will be alerted.</p>-->
                     </div>
                     <div class="slds-form-element__control">
                         <lightning-checkbox-group id="titleix-report-status-who-caused-harm-id"
@@ -330,9 +328,6 @@
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
                     </template>
                 </div>
-<!--                <div lwc:if={showUrl} class="slds-m-vertical_small">-->
-<!--                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>-->
-<!--                </div>-->
             </div>
             <div class="slds-m-top_x-large slds-m-bottom_medium">
                 <lightning-button class="submit_button"

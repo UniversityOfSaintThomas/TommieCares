@@ -280,10 +280,10 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
 
     saveDocumentsFail = false;
     submitWellBeingFormFail = false;
-    get showUrl() {
-        return !!this.attachDocumentResponse.SupportingDocumentUrl;
-    }
-    returnUrl;
+    // get showUrl() {
+    //     return !!this.attachDocumentResponse.SupportingDocumentUrl;
+    // }
+    // returnUrl;
     attachDocumentResponse = {
         Status: "",
         SupportingDocumentUrl: "",
@@ -316,7 +316,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                             this.wellBeingIncidentFormValues.salesforce_support_documents = result.Url;
 
                             //Used for testing
-                            this.returnUrl = this.attachDocumentResponse.SupportingDocumentUrl;
+                            // this.returnUrl = this.attachDocumentResponse.SupportingDocumentUrl;
 
                         } else if (result.Status === 'error') {
                             this.saveDocumentsFail = true;

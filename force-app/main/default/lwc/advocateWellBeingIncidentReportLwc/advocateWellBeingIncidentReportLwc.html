@@ -5,7 +5,7 @@
 <!-- Advocate Well Being Incident Report Lwc -->
 <template>
     <div class="regular-body-text">
-        <p class="slds-m-vertical_medium textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+        <p class="slds-m-vertical_small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
 <!--        <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
 <!--            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">-->
 <!--                <label class="slds-form-element__label selection-labels" for="well-being-reporter_type-selection-id">I am a:-->
@@ -62,7 +62,6 @@
                         <div class="slds-form-element slds-m-bottom_medium">
                             <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">Your Phone Number:
                                 <abbr class="slds-required" title="Required">*</abbr></label>
-<!--                            <p class="textarea-sublabel-1">Enter YOUR phone number.</p>-->
                             <div class="slds-form-element__control">
                                 <lightning-input id="well-being-reporter-phone-id"
                                                  type="text"
@@ -80,7 +79,7 @@
             <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
                 <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_5-of-12 selection-labels" for="well-being-individual-name-id">Individual of Concern
                     <abbr class="slds-required" title="Required">*</abbr></label>
-                <p class="textarea-sublabel-1">The first and last name of the individual you are concerned about.</p>
+                <p class="textarea-sublabel-1">First and last name of the individual you are concerned about.</p>
                 <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
                     <lightning-input id="well-being-individual-name-id"
                                      type="text"
@@ -94,7 +93,7 @@
             </div>
             <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
                 <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_5-of-12 selection-labels" for="well-being-individual-email-id">Individual's Email Address</label>
-                <p class="textarea-sublabel-1">The St. Thomas email address of the individual you are concerned about.</p>
+                <p class="textarea-sublabel-1">St. Thomas email address of the individual you are concerned about.</p>
                 <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
                     <lightning-input id="well-being-individual-email-id"
                                      type="text"
@@ -110,7 +109,7 @@
             </div>
             <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
                 <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_5-of-12 selection-labels" for="well-being-individual-phone-id">Individual's Phone Number</label>
-                <p class="textarea-sublabel-1">The phone number of the individual you are concerned about.</p>
+                <p class="textarea-sublabel-1">Phone number of the individual you are concerned about.</p>
                 <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
                     <lightning-input id="well-being-individual-phone-id"
                                      type="text"
@@ -194,9 +193,9 @@
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
                     </template>
                 </div>
-                <div lwc:if={showUrl} class="slds-m-vertical_small">
-                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>
-                </div>
+<!--                <div lwc:if={showUrl} class="slds-m-vertical_small">-->
+<!--                    Salesforce Supporting Document: <lightning-formatted-url value={returnUrl} tooltip="" target="_blank"></lightning-formatted-url>-->
+<!--                </div>-->
             </div>
             <div class="slds-m-top_x-large slds-m-bottom_medium">
                 <lightning-button class="submit_button"
