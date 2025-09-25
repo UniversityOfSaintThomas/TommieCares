@@ -4,9 +4,9 @@
 
 <!-- Advocate Bias Incident Report Lwc -->
 <template>
-    <div class="slds-m-top_small regular-body-text">
+    <div class="regular-body-text">
         <div class="slds-grid">
-            <p class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-m-bottom_x-small">This form should be used by anyone
+            <p class="slds-col slds-size_1-of-1 slds-m-bottom_x-small">This form should be used by anyone
                 who believes they have witnessed or been the target of an incident of discrimination, bias, or
                 harassment based on a protected class (sex, race, color, religion, national origin, ancestry,
                 disability, age, sexual orientation, marital status, military status, gender
@@ -14,7 +14,7 @@
                 reports are reviewed by the Dean of Students, Title IX Coordinator, and Human Resources,
                 dependent on the status of the individual who caused harm.</p>
         </div>
-        <p class="slds-m-vertical_small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
+        <p class="slds-m-vertical_x-small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>
 <!--        <p class="slds-m-top_medium"><b>Reporter Type</b></p>-->
 <!--        <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
 <!--            <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">-->
@@ -37,12 +37,12 @@
             <template lwc:if={isNotAnonymous}>
                 <p><b>Reporter Information</b></p>
                 <div class="slds-grid">
-                    <p class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 textarea-sublabel-2">You may leave information about yourself, or you may remain anonymous. If
+                    <p class="slds-col slds-size_1-of-1 textarea-sublabel-2">You may leave information about yourself, or you may remain anonymous. If
                         you do not provide your name and contact information, the university’s ability to respond may be
                         limited.</p>
                 </div>
                 <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">
-                    <div class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                    <div class="slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-large-size_5-of-12">
                         <div class="slds-form-element slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="bias-reporter-name-id">Your
                                 Name:<abbr class="slds-required" title="Required">*</abbr></label>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="slds-form-element slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="bias-reporter-phone-id">Phone Number:</label>
+                            <label class="slds-form-element__label selection-labels" for="bias-reporter-phone-id">Your Phone Number:</label>
                             <div class="slds-form-element__control">
                                 <lightning-input id="bias-reporter-phone-id"
                                                  type="text"
@@ -92,11 +92,11 @@
             </template>
             <p><b>Time and Location</b></p>
             <div class="slds-grid">
-                <p class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 textarea-sublabel-2">Please provide the approximate date, time and location that this incident occurred.</p>
+                <p class="slds-col slds-size_1-of-1 textarea-sublabel-2">Please provide the approximate date, time and location that this incident occurred.</p>
             </div>
             <div class="slds-m-top_xx-small slds-m-bottom_medium">
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_2-of-12 slds-m-right_medium">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12 slds-m-right_medium">
                         <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control">
                             <lightning-input id="bias-report-date-id"
@@ -111,7 +111,7 @@
                             <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_2-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
                         <label class="slds-form-element__label selection-labels" for="bias-report-time-id">Time</label>
                         <div class="slds-form-element__control">
                             <lightning-input
@@ -129,7 +129,7 @@
                     </div>
                 </div>
                 <div class="slds-grid slds-m-bottom_small">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
                         <label class="slds-form-element__label selection-labels" for="bias-report-location-id">Location
                             of Incident<abbr class="slds-required" title="Required">*</abbr></label>
                         <p class="textarea-sublabel-1">Please provide as much detail about the location of this incident as possible.</p>
@@ -149,11 +149,10 @@
             <p class="slds-m-top_x-large"><b>Parties Involved</b></p>
             <div class="slds-m-top_x-small slds-m-bottom_medium">
                 <div class="slds-grid slds-m-bottom_small">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">Students
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
+                        <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">Individuals
                             Involved<abbr class="slds-required" title="Required">*</abbr></label>
-                        <p class="textarea-sublabel-1">Please list the names (and emails or University ID numbers, if
-                            possible) of all the students and student groups that were involved in this incident.</p>
+                        <p class="textarea-sublabel-1">Please list the names of all the individuals involved in this incident.</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea"
                                                 id="bias-report-students-involved-id"
@@ -167,7 +166,7 @@
                     </div>
                 </div>
                 <div class="slds-grid">
-                    <div class="slds-col slds-size_1-of-1 slds-small-size_7-of-12 slds-medium-size_5-of-12 slds-large-size_4-of-12">
+                    <div class="slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-large-size_5-of-12">
                         <div class="slds-form-element slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="bias-report-who-harmed-id">Who was harmed?
                                 <abbr class="slds-required" title="Required">*</abbr></label>
@@ -233,7 +232,7 @@
             <p class="slds-m-top_large"><b>Descriptive Information</b></p>
             <div class="slds-m-top_x-small slds-m-bottom_x-large">
                 <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
                         <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
                             Description<abbr class="slds-required" title="Required">*</abbr></label>
                         <p class="textarea-sublabel-1">Please describe and be as specific about the incident with as much

@@ -4,27 +4,27 @@
 
 public without sharing class tommieCaresNonFacultyLwcController {
 
-    @AuraEnabled(Cacheable=true)
-    public static Contact studentInformation(String studentContactId) {
-
-        Contact studentContact = new Contact();
-
-        if (String.isNotBlank(studentContactId)) {
-            studentContact = [
-                    SELECT Id,
-                            Name,
-                            Last_Name_First_Name__c,
-                            hed__UniversityEmail__c,
-                            University_Banner_ID__c,
-                            St_Thomas_Connection__c
-                    FROM Contact
-                    WHERE Id = :studentContactId
-                    WITH SECURITY_ENFORCED
-            ];
-        }
-
-        return studentContact;
-    }
+//    @AuraEnabled(Cacheable=true)
+//    public static Contact studentInformation(String studentContactId) {
+//
+//        Contact studentContact = new Contact();
+//
+//        if (String.isNotBlank(studentContactId)) {
+//            studentContact = [
+//                    SELECT Id,
+//                            Name,
+//                            Last_Name_First_Name__c,
+//                            hed__UniversityEmail__c,
+//                            University_Banner_ID__c,
+//                            St_Thomas_Connection__c
+//                    FROM Contact
+//                    WHERE Id = :studentContactId
+//                    WITH SECURITY_ENFORCED
+//            ];
+//        }
+//
+//        return studentContact;
+//    }
 
     @AuraEnabled(Cacheable=true)
     public static Contact advisorInformation(String advisorBannerId) {

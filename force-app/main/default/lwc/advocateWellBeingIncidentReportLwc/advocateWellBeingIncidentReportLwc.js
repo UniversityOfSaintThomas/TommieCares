@@ -18,21 +18,6 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
 
     @track reporterTypeOptions = [];
 
-    get showFormAll() {
-        // return !!this.wellBeingIncidentFormValues.reporterType;
-        return !!this.wellBeingIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
-    }
-    get isAnonymous() {
-        return this.communityOfConcernReportType === "Anonymous";
-    }
-    get isNotAnonymous() {
-        return !this.isAnonymous;
-    }
-    get submitDisable() {
-        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.otherStudent &&
-            (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
-    }
-
     reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track wellBeingIncidentFormValues = {
         // reporterType: "",
@@ -52,6 +37,24 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         policeCalled: false, //required
         alcohol: false, //required
         salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
+    }
+
+    get showFormAll() {
+        // return !!this.wellBeingIncidentFormValues.reporterType;
+        return !!this.wellBeingIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
+    }
+
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
+
+    get isNotAnonymous() {
+        return !this.isAnonymous;
+    }
+
+    get submitDisable() {
+        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.otherStudent &&
+            (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
     }
 
     rendered = false;
@@ -242,9 +245,11 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
+
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
+
     acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
     acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
@@ -253,6 +258,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
+
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
         let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
@@ -290,6 +296,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         SupportingDocumentId: ""
     }
     formReportNumber = "";
+
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;

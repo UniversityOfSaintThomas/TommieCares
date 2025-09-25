@@ -22,27 +22,9 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         { label: "Yes", value: "true" },
         { label: "No", value: "false" },
     ]
-    notificationSelect = ""
     @track anonymousReportingOptions = [
         {label: "Yes", value: "true"}
     ]
-    iUnderstandTheStatementAboutAnonymousSelect = []
-    get showFormAll() {
-        // return !!this.titleIxIncidentFormValues.reporterType;
-        return !!this.titleIxIncidentFormValues.reporter_type_custom;
-    }
-    get isAnonymous() {
-        return this.communityOfConcernReportType === "Anonymous";
-    }
-    get isNotAnonymous() {
-        return !this.isAnonymous;
-    }
-    get submitDisable() {
-        return !(!!this.titleIxIncidentFormValues.reporter_type_custom && !!this.titleIxIncidentFormValues.description &&
-            this.titleIxIncidentFormValues.status_of_individual_who_caused_harm.length > 0 && !!this.titleIxIncidentFormValues.date_of_incidents &&
-            this.titleIxIncidentFormValues.notification != null && this.titleIxIncidentFormValues.reporter_followup &&
-            (this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r || (this.validEmail && !!this.titleIxIncidentFormValues.reporterEmail)));
-    }
 
     reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track titleIxIncidentFormValues = {
@@ -69,6 +51,29 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         maritalStatus: false, //REQUIRED
         retaliation: false, //REQUIRED
         salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
+    }
+
+    notificationSelect = ""
+    iUnderstandTheStatementAboutAnonymousSelect = []
+
+    get showFormAll() {
+        // return !!this.titleIxIncidentFormValues.reporterType;
+        return !!this.titleIxIncidentFormValues.reporter_type_custom;
+    }
+
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
+
+    get isNotAnonymous() {
+        return !this.isAnonymous;
+    }
+
+    get submitDisable() {
+        return !(!!this.titleIxIncidentFormValues.reporter_type_custom && !!this.titleIxIncidentFormValues.description &&
+            this.titleIxIncidentFormValues.status_of_individual_who_caused_harm.length > 0 && !!this.titleIxIncidentFormValues.date_of_incidents &&
+            this.titleIxIncidentFormValues.notification != null && this.titleIxIncidentFormValues.reporter_followup &&
+            (this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r || (this.validEmail && !!this.titleIxIncidentFormValues.reporterEmail)));
     }
 
     rendered = false;
@@ -220,6 +225,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
+
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
@@ -231,6 +237,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
+
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
         let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
@@ -264,6 +271,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         SupportingDocumentId: ""
     }
     formReportNumber = "";
+
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;

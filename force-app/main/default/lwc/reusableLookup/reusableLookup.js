@@ -144,6 +144,11 @@ export default class ReusableLookup extends LightningElement {
             subField: event.currentTarget.dataset.subfield,
             id: event.currentTarget.dataset.id
         };
+
+        console.log("What is Reusable Student Contact Id: "+event.currentTarget.dataset.id);
+        console.log("What is Reusable Student Contact mainfield: "+event.currentTarget.dataset.mainfield);
+        console.log("What is Reusable Student Contact subfield: "+event.currentTarget.dataset.subfield);
+
         this.selectedRecordId = selectedRecord.id;
         if (selectedRecord.subField) {
             this.selectedRecordName = selectedRecord.mainField + ' - ' + selectedRecord.subField;

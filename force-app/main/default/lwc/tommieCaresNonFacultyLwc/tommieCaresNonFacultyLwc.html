@@ -70,12 +70,12 @@
                                object-label=""
                                object-api-name="Contact"
                                field-api-name="Name"
-                               other-field-api-name="hed__UniversityEmail__c"
+                               other-field-api-name="hed__UniversityEmail__c,St_Thomas_Connection__c"
                                record-type-name=""
                                placeholder="Name or Email"
                                type=""
                                onvalueselected={selectStudentContactId}
-                               and-criteria=" AND St_Thomas_Connection__c INCLUDES ('Student')"
+                               and-criteria=" AND St_Thomas_Connection__c INCLUDES ('Graduate Student','Student')"
                                order-by-criteria=" ORDER BY Name, Email"
             ></c-reusable-lookup>
         </div>

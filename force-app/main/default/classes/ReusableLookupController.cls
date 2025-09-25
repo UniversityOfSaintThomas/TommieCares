@@ -3,7 +3,7 @@
  */
 
 
-public with sharing class ReusableLookupController {
+public without sharing class ReusableLookupController {
     @AuraEnabled
     public static List<ResultWrapper> fetchRecords(SearchWrapper inputWrapper) {
         List<ResultWrapper> returnWrapperList = new List<ResultWrapper>();
@@ -103,6 +103,8 @@ public with sharing class ReusableLookupController {
                         if (String.isNotBlank(inputWrapper.andCriteria)) {
                             query += ' '+inputWrapper.andCriteria.trim();
                         }
+
+                        query += ' WITH SECURITY_ENFORCED';
 
                         if (String.isNotBlank(inputWrapper.orderByCriteria)) {
                             query += ' '+inputWrapper.orderByCriteria.trim();

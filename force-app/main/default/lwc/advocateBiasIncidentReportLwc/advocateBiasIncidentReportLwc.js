@@ -22,23 +22,6 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     @track affiliationOfTargetOptions = [];
     @track affiliationOfPersonEngagedInHarmOptions = [];
 
-    get showFormAll() {
-        // return !!this.biasIncidentFormValues.reporterType;
-        return !!this.biasIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
-    }
-    get isAnonymous() {
-        return this.communityOfConcernReportType === "Anonymous";
-    }
-    get isNotAnonymous() {
-        return !this.isAnonymous;
-    }
-    get submitDisable() {
-        return !(!!this.biasIncidentFormValues.reporter_type_custom && this.validDateTime && !!this.biasIncidentFormValues.description &&
-            !!this.biasIncidentFormValues.additionalInformation && !!this.biasIncidentFormValues.otherStudent && !!this.biasIncidentFormValues.who_was_the_target_of_the_behavior &&
-            !!this.biasIncidentFormValues.affiliation_of_target && !!this.biasIncidentFormValues.who_engaged_in_the_behavior && !!this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm &&
-            (this.isAnonymous || (!!this.biasIncidentFormValues.reporterName && this.validEmail && !!this.biasIncidentFormValues.reporterEmail)));
-    }
-
     reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track biasIncidentFormValues = {
         // reporterType: "", //I am a
@@ -61,6 +44,26 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         policeCalled: false, //required
         alcohol: false, //required
         salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
+    }
+
+    get showFormAll() {
+        // return !!this.biasIncidentFormValues.reporterType;
+        return !!this.biasIncidentFormValues.reporter_type_custom; //Using because can't pass to API reporterType
+    }
+
+    get isAnonymous() {
+        return this.communityOfConcernReportType === "Anonymous";
+    }
+
+    get isNotAnonymous() {
+        return !this.isAnonymous;
+    }
+
+    get submitDisable() {
+        return !(!!this.biasIncidentFormValues.reporter_type_custom && this.validDateTime && !!this.biasIncidentFormValues.description &&
+            !!this.biasIncidentFormValues.additionalInformation && !!this.biasIncidentFormValues.otherStudent && !!this.biasIncidentFormValues.who_was_the_target_of_the_behavior &&
+            !!this.biasIncidentFormValues.affiliation_of_target && !!this.biasIncidentFormValues.who_engaged_in_the_behavior && !!this.biasIncidentFormValues.affiliation_of_person_engaged_in_harm &&
+            (this.isAnonymous || (!!this.biasIncidentFormValues.reporterName && this.validEmail && !!this.biasIncidentFormValues.reporterEmail)));
     }
 
     rendered = false;
@@ -321,9 +324,11 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
     }
+
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
+
     acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
     acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
@@ -332,6 +337,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
+
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
         let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
@@ -365,6 +371,7 @@ export default class AdvocateBiasIncidentReportLwc extends LightningElement {
         SupportingDocumentId: ""
     }
     formReportNumber = "";
+
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;

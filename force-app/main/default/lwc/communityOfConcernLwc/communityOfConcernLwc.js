@@ -31,6 +31,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
+
     @track iAmOptions = [];
     @track concernedWhoOptions = [];
     @track whatPicklist = [];
@@ -57,6 +58,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     get tellSomeoneLogo() {
         return TELL_SOMEONE_LOGO;
     }
+
     get childProps() {
         return {
             communityOfConcernReportType: this.communityOfConcernCase?.IAmValue,
@@ -66,6 +68,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
             communityOfConcernParamsUrl: this.paramUrl,
         }
     }
+
     get concernedWhatOptions() {
         if (this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty") && this.communityOfConcernCase.ConcernedWhoValue === "Student") {
             return this.whatPicklist;
@@ -73,21 +76,27 @@ export default class CommunityOfConcernLwc extends LightningElement {
             return this.whatNoStudentPicklist;
         }
     }
+
     get iAmAnonymousCheck() {
         return this.communityOfConcernCase.IAmValue === "Anonymous";
     }
+
     get iAmNotAnonymousCheck() {
         return !this.iAmAnonymousCheck;
     }
+
     get showConcernedWhoSelect() {
         return !!this.communityOfConcernCase.IAmValue;
     }
+
     get showConcernedWhatSelect() {
         return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
     }
+
     get showWhatTommieAlerts() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.ConcernedWhoValue === "Student";
     }
+
     get showWhatWellBeing() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
         return {
@@ -96,12 +105,15 @@ export default class CommunityOfConcernLwc extends LightningElement {
             nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
         }
     }
+
     get showWhatDiscrimination() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
     }
+
     get showWhatMisconduct() {
         return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
     }
+
     get showWhatOther() {
         let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
         return {
@@ -109,40 +121,45 @@ export default class CommunityOfConcernLwc extends LightningElement {
             text: this.communityOfConcernCase.ConcernedWhoValue !== "Student"
         }
     }
+
     get submitDisable() {
         return !(!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
     }
+
     get iAmInfoInputDisabled() {
         return !!this.communityOfConcernCase.IAmContactId;
     }
 
     connectedCallback() {
         // console.log("this.paramUrl:"+this.paramUrl);
-        this.searchParamsUrl = new URL(this.paramUrl);
-        this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
-
-        for (let keyValue of this.paramsString.entries()) {
-            switch (keyValue[0]) {
-                case "bid":
-                    if (!this.paramBId) {
-                        this.paramBId = keyValue[1];
-                    }
-                    break;
-                case "sfid":
-                    if (!this.paramSfId) {
-                        this.paramSfId = keyValue[1];
-                    }
-                    break;
-                case "submitted":
-                    if (keyValue[1] === "true") {
-                        this.caseSubmittedCheck = true;
-                    }
+        if (window.location && window.location.search) {
+            this.searchParamsUrl = new URL(this.paramUrl);
+            this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
+            for (let keyValue of this.paramsString.entries()) {
+                switch (keyValue[0]) {
+                    case "bid":
+                        if (!this.paramBId) {
+                            this.paramBId = keyValue[1];
+                        }
+                        break;
+                    case "sfid":
+                        if (!this.paramSfId) {
+                            this.paramSfId = keyValue[1];
+                        }
+                        break;
+                    case "submitted":
+                        if (keyValue[1] === "true") {
+                            this.caseSubmittedCheck = true;
+                        }
+                }
             }
+        } else {
+            console.log('window.location or searchParams not available.');
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE })
-    pickListReporterType({ error, data }) {
+    @wire(getPicklistValues, {recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE})
+    pickListReporterType({error, data}) {
         if (data) {
             this.iAmOptions = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
@@ -150,8 +167,8 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHO_TYPE })
-    pickListWhoTypes({ error, data }) {
+    @wire(getPicklistValues, {recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHO_TYPE})
+    pickListWhoTypes({error, data}) {
         if (data) {
             this.concernedWhoOptions = JSON.parse(JSON.stringify(data.values));
         } else if (error) {
@@ -159,8 +176,8 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHAT })
-    pickListConcern({ error, data }) {
+    @wire(getPicklistValues, {recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_WHAT})
+    pickListConcern({error, data}) {
         if (data) {
             this.whatPicklist = JSON.parse(JSON.stringify(data.values));
             this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
@@ -169,7 +186,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         }
     }
 
-    @wire(iAmContactInfo,{salesforceId: "$paramSfId", bannerId: "$paramBId"})
+    @wire(iAmContactInfo, {salesforceId: "$paramSfId", bannerId: "$paramBId"})
     iAmContactInfoWire({error, data}) {
         if (data) {
             let wireContactInfo = JSON.parse(JSON.stringify(data));
@@ -196,11 +213,12 @@ export default class CommunityOfConcernLwc extends LightningElement {
                     this.communityOfConcernCase.IAmValue = "Student";
                 }
             }
-
-            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
-            this.paramUrl = this.searchParamsUrl.toString();
-            console.log("paramUrl: " + this.paramUrl)
+            if (window.location && window.location.search) {
+                this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
+                this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+                this.paramUrl = this.searchParamsUrl.toString();
+                console.log("paramUrl: " + this.paramUrl)
+            }
         }
 
         if (error) {
@@ -245,6 +263,15 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 this.communityOfConcernCase.ConcernedWhatValue = eventValue;
                 break;
         }
+    }
+
+    openNewForm() {
+        if (window.location && window.location.search) {
+            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
+            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+            this.searchParamsUrl.searchParams.delete("submitted");
+        }
+        location.replace(this.searchParamsUrl.toString());
     }
 
     inputValueHandler(event) {
@@ -333,26 +360,32 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     showSpinner = false;
+
     handleShowSpinner() {
         this.showSpinner = true;
     }
+
     handleHideSpinner() {
         this.showSpinner = false;
     }
 
     submittedUrl() {
-        this.searchParamsUrl.searchParams.set("submitted", "true");
-        return this.searchParamsUrl;
+        if (window.location && window.location.search) {
+            this.searchParamsUrl.searchParams.set("submitted", "true");
+            return this.searchParamsUrl;
+        }
     }
+
     submitCaseFail = false;
+
     async submitCase(event) {
         console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
         const eventField = event.currentTarget;
         this.submitCaseFail = false;
         try {
             this.handleShowSpinner();
-            window.scrollTo(0,0);
-            await saveCase({formSelections: this.communityOfConcernCase}).then( (result) => {
+            window.scrollTo(0, 0);
+            await saveCase({formSelections: this.communityOfConcernCase}).then((result) => {
                 this.submitCaseFail = !!result;
             });
         } catch (e) {
