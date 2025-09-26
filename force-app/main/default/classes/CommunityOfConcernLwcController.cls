@@ -52,6 +52,12 @@ public without sharing class CommunityOfConcernLwcController {
         req.setHeader('Authorization', incident_api_token);
         con.addHttpRequest(req);
 
+        HttpRequest req2 = new HttpRequest();
+        req2.setEndpoint('https://stthomas-advocate.symplicity.com/api/public/v1/picklists/incidents/who_are_you_concerned_about');
+        req2.setMethod('GET');
+        req2.setHeader('Authorization', incident_api_token);
+        con.addHttpRequest(req2);
+
         return con;
     }
 
@@ -60,11 +66,13 @@ public without sharing class CommunityOfConcernLwcController {
         List<Object> resultsObjects = new List<Object>();
         // Get the response by using the unique label
         HttpResponse response1 = Continuation.getResponse(labels[0]);
+        HttpResponse response2 = Continuation.getResponse(labels[1]);
 
-        if (response1.getStatusCode() == 200) {
+        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200) {
             resultsObjects.add(response1.getBody());
+            resultsObjects.add(response2.getBody());
         } else {
-            System.debug('incidentProcessGetResponse1 Error: response1.getStatusCode()');
+            System.debug('incidentProcessGetResponse1 Error: response1.getStatusCode() or response2.getStatusCode()');
         }
 
         return resultsObjects;

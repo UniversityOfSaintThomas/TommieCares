@@ -14,9 +14,11 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     @api communityOfConcernReporterFirstName = "";
     @api communityOfConcernReporterLastName = "";
     @api communityOfConcernReporterEmail = "";
+    @api communityOfConcernWhoValue = "";
     @api communityOfConcernParamsUrl = "";
 
     @track reporterTypeOptions = [];
+    @track whoAreYouConcernedAboutOptions = [];
 
     reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track wellBeingIncidentFormValues = {
@@ -25,6 +27,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         reporterName: "",
         reporterEmail: "",
         reporterPhone: "",
+        who_are_you_concerned_about: "", //This is a custom field
         otherStudent: "",
         individuals_email_address: "", //This is a custom field
         individuals_phone_number: "", //This is a custom field
@@ -72,7 +75,8 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
     @wire(wellBeingReportingFormOptions, {})
     wellBeingReportingFormOptionsWire({error, data}) {
         let recordOptions = [];
-        let reporterTypeOptions = [];
+        let _reporterTypeOptions = [];
+        let _whoAreYouConcernedAboutOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -80,13 +84,13 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
 
             if (recordOptions[0]) {
                 recordOptions[0].forEach((options) => {
-                    reporterTypeOptions.push({
+                    _reporterTypeOptions.push({
                         label: options.value,
                         value: options.id.toString(),
                     })
                 })
 
-                this.reporterTypeOptions = reporterTypeOptions;
+                this.reporterTypeOptions = _reporterTypeOptions;
                 // if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporterType) {
                 if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.wellBeingIncidentFormValues.reporter_type_custom) { //Using because can't pass to API reporterType
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
@@ -96,7 +100,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                             this.wellBeingIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label; //Using because can't pass to API reporterType
                             break;
                         } else {
-                            let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
+                            let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
                                 // this.wellBeingIncidentFormValues.reporterType = otherType.value;
                                 this.reporterType = otherType.value; //Using because can't pass to API reporterType
@@ -107,6 +111,26 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
                     }
                 }
             }
+
+            if (recordOptions[1]) {
+                recordOptions[1].forEach((options) => {
+                    _whoAreYouConcernedAboutOptions.push({
+                        label: options.value,
+                        value: options.id.toString(),
+                    })
+                })
+
+                this.whoAreYouConcernedAboutOptions = _whoAreYouConcernedAboutOptions;
+                if (this.whoAreYouConcernedAboutOptions.length > 0 && this.communityOfConcernWhoValue) {
+                    for (let i = 0; i < this.whoAreYouConcernedAboutOptions.length; i++) {
+                        if (this.whoAreYouConcernedAboutOptions[i].label.toLowerCase().includes(this.communityOfConcernWhoValue.toLowerCase())) {
+                            this.wellBeingIncidentFormValues.who_are_you_concerned_about = this.whoAreYouConcernedAboutOptions[i].value;
+                            break;
+                        }
+                    }
+                }
+            }
+            console.log("who_are_you_concerned_about value: "+this.wellBeingIncidentFormValues.who_are_you_concerned_about)
         }
 
         if (error) {
@@ -370,7 +394,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
         }
 
         const hideSpinnerEvent = new CustomEvent('hidespinner');
-        if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
+        if (this.saveDocumentsFail || this.submitWellBeingFormFail) {
             this.dispatchEvent(hideSpinnerEvent);
             eventField.scrollIntoView({
                 behavior: 'smooth',

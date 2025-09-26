@@ -65,6 +65,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
             communityOfConcernReporterFirstName: this.communityOfConcernCase?.IAmFirstName,
             communityOfConcernReporterLastName: this.communityOfConcernCase?.IAmLastName,
             communityOfConcernReporterEmail: this.communityOfConcernCase?.IAmEmail,
+            communityOfConcernWhoValue: this.communityOfConcernCase?.ConcernedWhoValue,
             communityOfConcernParamsUrl: this.paramUrl,
         }
     }

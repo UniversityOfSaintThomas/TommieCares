@@ -91,8 +91,8 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     @wire(titleIxReportingFormOptions, {})
     titleIxReportingFormOptions1Wire({error, data}) {
         let recordOptions = [];
-        let reporterTypeOptions = [];
-        let statusWhoCausedHarmOptions = [];
+        let _reporterTypeOptions = [];
+        let _statusWhoCausedHarmOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -100,12 +100,12 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
 
             if (recordOptions[0]) {
                 recordOptions[0].forEach((options) => {
-                    reporterTypeOptions.push({
+                    _reporterTypeOptions.push({
                         label: options.value,
                         value: options.id.toString(),
                     })
                 })
-                this.reporterTypeOptions = reporterTypeOptions;
+                this.reporterTypeOptions = _reporterTypeOptions;
                 // if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporterType) {
                 if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporter_type_custom) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
@@ -115,7 +115,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                             this.titleIxIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label; //Using because can't pass to API reporterType
                             break;
                         } else {
-                            let otherType = reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
+                            let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
                                 // this.titleIxIncidentFormValues.reporterType = otherType.value;
                                 this.reporterType = otherType.value; //Using because can't pass to API reporterType
@@ -128,12 +128,12 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
 
             if (recordOptions[1]) {
                 recordOptions[1].forEach((options) => {
-                    statusWhoCausedHarmOptions.push({
+                    _statusWhoCausedHarmOptions.push({
                         label: options.value,
                         value: options.id.toString(),
                     })
                 })
-                this.statusWhoCausedHarmOptions = statusWhoCausedHarmOptions;
+                this.statusWhoCausedHarmOptions = _statusWhoCausedHarmOptions;
             }
 
         }
