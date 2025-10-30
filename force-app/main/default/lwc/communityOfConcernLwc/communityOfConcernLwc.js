@@ -132,9 +132,11 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     connectedCallback() {
-        // console.log("this.paramUrl:"+this.paramUrl);
+        console.log("this.paramUrl:"+this.paramUrl);
+        this.searchParamsUrl = new URL(this.paramUrl);
+        console.log("this.searchParamsUrl:"+this.searchParamsUrl);
         if (window.location && window.location.search) {
-            this.searchParamsUrl = new URL(this.paramUrl);
+            // this.searchParamsUrl = new URL(this.paramUrl);
             this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
             for (let keyValue of this.paramsString.entries()) {
                 switch (keyValue[0]) {
@@ -371,10 +373,14 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     submittedUrl() {
-        if (window.location && window.location.search) {
+        if (window.location) {
             this.searchParamsUrl.searchParams.set("submitted", "true");
             return this.searchParamsUrl;
         }
+        // if (window.location && window.location.search) {
+        //     this.searchParamsUrl.searchParams.set("submitted", "true");
+        //     return this.searchParamsUrl;
+        // }
     }
 
     submitCaseFail = false;
@@ -385,7 +391,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
         this.submitCaseFail = false;
         try {
             this.handleShowSpinner();
-            window.scrollTo(0, 0);
+            // window.scrollTo(0, 0);
             await saveCase({formSelections: this.communityOfConcernCase}).then((result) => {
                 this.submitCaseFail = !!result;
             });

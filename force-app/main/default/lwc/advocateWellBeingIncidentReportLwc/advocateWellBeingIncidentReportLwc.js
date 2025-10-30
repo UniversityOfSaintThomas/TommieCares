@@ -328,7 +328,7 @@ export default class AdvocateWellBeingIncidentReportLwc extends LightningElement
 
         const showSpinnerEvent = new CustomEvent('showspinner');
         this.dispatchEvent(showSpinnerEvent);
-        window.scrollTo(0,0);
+        // window.scrollTo(0,0);
 
         if (this.attachDocuments.length > 0) {
             const supportingDocumentName = 'Advocate Well Being Incident';
