@@ -22,6 +22,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
 
     @api paramSfId = "";
     @api paramBId = "";
+    @api paramPageType = "";
     // @api paramSBid = "";
     // @api paramCrn = "";
     @api paramUrl = "";
@@ -163,8 +164,20 @@ export default class CommunityOfConcernLwc extends LightningElement {
 
     @wire(getPicklistValues, {recordTypeId: "012000000000000AAA", fieldApiName: COMMUNITY_CONCERN_REPORTER_TYPE})
     pickListReporterType({error, data}) {
+        const removeTypes = ["Faculty", "Staff", "Student"];
+
         if (data) {
             this.iAmOptions = JSON.parse(JSON.stringify(data.values));
+
+            if (this.paramPageType === "public") {
+                for (const types of removeTypes) {
+                    const index = this.iAmOptions.findIndex(option => option.label === types);
+
+                    if (index !== -1) {
+                        this.iAmOptions.splice(index, 1);
+                    }
+                }
+            }
         } else if (error) {
             console.log("pickListReporterType Error: " + error);
         }
