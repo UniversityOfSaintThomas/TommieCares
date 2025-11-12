@@ -8,7 +8,6 @@
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-import {gql, graphql} from "lightning/uiGraphQLApi";
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
 import COMMUNITY_CONCERN_REPORTER_TYPE from "@salesforce/schema/Case.Community_Concern_Reporter_Type__c";
 import COMMUNITY_CONCERN_WHO_TYPE from "@salesforce/schema/Case.Community_Concern_Who_Type__c";
@@ -26,8 +25,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
     // @api paramSBid = "";
     // @api paramCrn = "";
     @api paramUrl = "";
-    // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=101218824&sfid=003f200002qXsc4AAC&sbid=&crn=";
-    // testUrl = "https://uofstthomasmn--edastaging.sandbox.my.salesforce-sites.com/CommunityOfConcern?bid=100408312&sfid=&sbid=&crn="
 
     searchParamsUrl;
     paramsString;
@@ -133,11 +130,9 @@ export default class CommunityOfConcernLwc extends LightningElement {
     }
 
     connectedCallback() {
-        console.log("this.paramUrl:"+this.paramUrl);
         this.searchParamsUrl = new URL(this.paramUrl);
-        console.log("this.searchParamsUrl:"+this.searchParamsUrl);
+        // console.log("this.searchParamsUrl:"+this.searchParamsUrl);
         if (window.location && window.location.search) {
-            // this.searchParamsUrl = new URL(this.paramUrl);
             this.paramsString = new URLSearchParams(this.searchParamsUrl.searchParams);
             for (let keyValue of this.paramsString.entries()) {
                 switch (keyValue[0]) {
@@ -155,10 +150,27 @@ export default class CommunityOfConcernLwc extends LightningElement {
                         if (keyValue[1] === "true") {
                             this.caseSubmittedCheck = true;
                         }
+                        break;
                 }
             }
         } else {
             console.log('window.location or searchParams not available.');
+        }
+    }
+
+    rendered = false;
+    renderedCallback() {
+        if (!this.rendered) {
+            if (this.caseSubmittedCheck) {
+                const caseSubmittedElement = this.template.querySelector(".case-submitted");
+                if (caseSubmittedElement) {
+                    caseSubmittedElement.scrollIntoView({
+                        behavior: "instant",
+                        block: "center"
+                    });
+                }
+            }
+            this.rendered = !this.rendered;
         }
     }
 
@@ -233,7 +245,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
                 this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
                 this.paramUrl = this.searchParamsUrl.toString();
-                console.log("paramUrl: " + this.paramUrl)
+                // console.log("paramUrl: " + this.paramUrl)
             }
         }
 
@@ -279,15 +291,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 this.communityOfConcernCase.ConcernedWhatValue = eventValue;
                 break;
         }
-    }
-
-    openNewForm() {
-        if (window.location && window.location.search) {
-            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
-            this.searchParamsUrl.searchParams.delete("submitted");
-        }
-        location.replace(this.searchParamsUrl.toString());
     }
 
     inputValueHandler(event) {
@@ -390,10 +393,15 @@ export default class CommunityOfConcernLwc extends LightningElement {
             this.searchParamsUrl.searchParams.set("submitted", "true");
             return this.searchParamsUrl;
         }
-        // if (window.location && window.location.search) {
-        //     this.searchParamsUrl.searchParams.set("submitted", "true");
-        //     return this.searchParamsUrl;
-        // }
+    }
+
+    openNewForm() {
+        if (window.location && window.location.search) {
+            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
+            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+            this.searchParamsUrl.searchParams.delete("submitted");
+        }
+        location.replace(this.searchParamsUrl.toString());
     }
 
     submitCaseFail = false;
@@ -404,7 +412,6 @@ export default class CommunityOfConcernLwc extends LightningElement {
         this.submitCaseFail = false;
         try {
             this.handleShowSpinner();
-            // window.scrollTo(0, 0);
             await saveCase({formSelections: this.communityOfConcernCase}).then((result) => {
                 this.submitCaseFail = !!result;
             });
@@ -419,6 +426,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
                 behavior: 'smooth',
             });
         } else {
+            this.handleHideSpinner();
             location.replace(this.submittedUrl());
         }
     }

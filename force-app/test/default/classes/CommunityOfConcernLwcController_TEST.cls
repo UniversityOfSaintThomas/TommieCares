@@ -109,7 +109,7 @@ public class CommunityOfConcernLwcController_TEST {
         // Verify that the continuation has the proper requests
         Map<String, HttpRequest> allRequests = conti.getRequests();
         List<String> keys = new List<String>(allRequests.keySet());
-        System.assert(allRequests.size() == 1);
+        System.assert(allRequests.size() == 2);
         System.assert(allRequests.get(keys[0]) != null);
 
         // Perform mock callout

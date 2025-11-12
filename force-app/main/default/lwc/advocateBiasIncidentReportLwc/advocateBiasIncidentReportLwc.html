@@ -288,7 +288,7 @@
                     </template>
                 </div>
             </div>
-            <div class="slds-m-top_x-large slds-m-bottom_medium">
+            <div class="slds-m-top_x-large slds-m-bottom_medium slds-is-relative">
                 <lightning-button class="submit_button"
                                   title="Please enter all required fields."
                                   type="button"
@@ -298,6 +298,9 @@
                                   onclick={submitFormHandler}
                                   disable-animation>
                 </lightning-button>
+                <template lwc:if={showSpinner}>
+                    <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+                </template>
             </div>
             <template lwc:if={saveDocumentsFail}>
                 <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">

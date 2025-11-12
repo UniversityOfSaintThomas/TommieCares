@@ -27,7 +27,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
         attachDocumentsExclude: [],
         fileIndex: initialFileIndex,
     }
-    console.log("Uploaded Files Length: " + uploadedFiles.length);
+    // console.log("Uploaded Files Length: " + uploadedFiles.length);
     if (uploadedFiles.length > 0) {
         for (const file of uploadedFiles) {
             let fileSize = file.size;
@@ -38,7 +38,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
 
             await new Promise((resolve, reject) => {
                 fileSizeInMB = (fileSize / (1024 * 1024)).toFixed(2);
-                console.log("File info: " + fileName + " " + fileSize + " " + fileSizeInMB + " " + fileExtension + " " + fileType);
+                // console.log("File info: " + fileName + " " + fileSize + " " + fileSizeInMB + " " + fileExtension + " " + fileType);
 
                 let fileSizeLimit = fileSizeInMB < 3;
                 let fileExtensionIncludes = acceptedExtensionTypes.includes(fileExtension.toLowerCase());
@@ -80,7 +80,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
                     }
                 })
             }).then((resolveDocumentContent) => {
-                console.log("what is resolvedDocument size: " + resolveDocumentContent.length);
+                // console.log("what is resolvedDocument size: " + resolveDocumentContent.length);
                 if (resolveDocumentContent.length > 0) {
                     attachDocumentResults.attachDocuments.push( {
                         fileId: initialFileIndex,
@@ -90,7 +90,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
                         fileType: fileType
                     } );
                 }
-                console.log("All File length: " + attachDocumentResults.attachDocuments.length);
+                // console.log("All File length: " + attachDocumentResults.attachDocuments.length);
                 initialFileIndex++;
             }).catch((rejectMsg) => {
                 console.log(rejectMsg);

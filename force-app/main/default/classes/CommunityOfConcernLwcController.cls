@@ -156,7 +156,7 @@ public without sharing class CommunityOfConcernLwcController {
 
     @AuraEnabled(Continuation=true Cacheable=true)
     public static Object submitForm(String formValues, String formType) {
-        System.debug('This form values: '+formValues);
+//        System.debug('This form values: '+formValues);
         Continuation con = new Continuation(60);
         con.continuationMethod = 'submitFormProcessPostResponse';
         con.state = 'Form Submitted';
@@ -278,7 +278,7 @@ public without sharing class CommunityOfConcernLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList, String supportingDocumentName) {
-        System.debug(JSON.serializePretty(attachedDocumentsList));
+//        System.debug(JSON.serializePretty(attachedDocumentsList));
         List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
         String recordUrl = '';
         Map<String, String> returnStatusUrl = new Map<String, String>{

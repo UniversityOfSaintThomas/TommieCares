@@ -4,11 +4,8 @@
 
 <!-- Community Of Concern Lwc -->
 <template>
-    <template lwc:if={showSpinner}>
-        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-    </template>
     <form id="communityofconcernform" data-form="communityofconcernform">
-        <div class="regular-body-text">
+        <div class="regular-body-text case-submitted">
             <div class="slds-grid slds-wrap">
                 <div lwc:if={caseSubmittedCheck} class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-p-right_x-large slds-m-bottom_large">
                     <p class="slds-m-bottom_large">
@@ -32,12 +29,6 @@
                     </p>
                 </div>
                 <div lwc:else class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-p-right_x-large slds-m-bottom_large">
-<!--                    <p class="slds-m-bottom_small"><span class="text-larger">Tell Someone</span> is a St.-->
-<!--                        Thomas tool that allows you to report concerns about an undergraduate or graduate student or an-->
-<!--                        employee who may be struggling with issues related to health, well-being, or threats of harm, or who-->
-<!--                        may be navigating a situation where they suspect discrimination, bias, sexual misconduct, or-->
-<!--                        harassment are present. The goals of <b>Tell Someone</b> are to help students and employees who may need-->
-<!--                        support and to enhance the well-being of our University community.</p>-->
                     <p class="slds-m-bottom_small"><b><i>Online reports are reviewed during regular business hours. If you
                         believe someone is at risk of immediate harm, call <a href="tel:+911">911</a> or the Public Safety emergency line
                         at <a href="tel:+16519625555">(651) 962-5555</a>.</i></b></p>
@@ -47,15 +38,6 @@
                         href="https://one.stthomas.edu/sites/human-resources/SitePageModern/141920/home" target=_blank>Human Resources</a> or <a
                         href="https://secure.ethicspoint.com/domain/media/en/gui/21998/index.html" target=_blank>Ethicspoint</a>. Dougherty Family
                         College students also have the option to report directly to Brad Pulles, Associate Dean of DFC (<a href="mailto:brad.pulles@stthomas.edu">brad.pulles@stthomas.edu</a>).</i></b></p>
-<!--                    <p class="slds-m-bottom_small">The University of St. Thomas is committed to a culture of care and respect-->
-<!--                        for one another. Because speaking up, advocating, and supporting others are foundational values at St.-->
-<!--                        Thomas, we encourage you to <b>Tell Someone</b> when you witness concerning behavior. Each report is-->
-<!--                        individually reviewed by designated staff and a team works to connect people of concern to campus-->
-<!--                        partners who can provide mental health support, basic needs, and a multitude of other resources. <b>Tell Someone</b> also-->
-<!--                        triages and refers any threats of violence to the appropriate campus authority.</p>-->
-<!--                    <p class="slds-m-bottom_small"><b>Tell Someone</b> is coordinated by the Dean of Students Office and Human-->
-<!--                        Resources. Staff who receive reports are trained to identify concerns, strategize pathways to-->
-<!--                        resolution, and offer connection to university resources.</p>-->
                     <p class="slds-m-vertical_small"><b>Confidentiality</b></p>
                     <p class="slds-m-bottom_small">Details of reports, investigations, and resolutions will be kept confidential
                         to the extent practical, consistent with the need to investigate and address any adverse impact on the
@@ -148,13 +130,13 @@
                                     campus partners when appropriate.</p>
                             </div>
                         </div>
-                        <c-advocate-well-being-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-well-being-incident-report-lwc>
+                        <c-advocate-well-being-incident-report-lwc lwc:spread={childProps}></c-advocate-well-being-incident-report-lwc>
                     </template>
                     <div lwc:if={showWhatDiscrimination}>
-                        <c-advocate-bias-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-bias-incident-report-lwc>
+                        <c-advocate-bias-incident-report-lwc lwc:spread={childProps}></c-advocate-bias-incident-report-lwc>
                     </div>
                     <div lwc:if={showWhatMisconduct}>
-                        <c-advocate-title-ix-incident-report-lwc lwc:spread={childProps} onshowspinner={handleShowSpinner} onhidespinner={handleHideSpinner}></c-advocate-title-ix-incident-report-lwc>
+                        <c-advocate-title-ix-incident-report-lwc lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwc>
                     </div>
                     <template lwc:if={showWhatOther.show}>
                         <div lwc:if={showWhatOther.text} class="slds-grid slds-wrap slds-m-bottom_small">
@@ -328,7 +310,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="slds-m-top_large slds-m-bottom_medium">
+                        <div class="slds-m-top_large slds-m-bottom_medium slds-is-relative">
                             <lightning-button class="submit_button"
                                               type="button"
                                               label="SUBMIT"
@@ -337,6 +319,9 @@
                                               onclick={submitCase}
                                               disable-animation>
                             </lightning-button>
+                            <template lwc:if={showSpinner}>
+                                <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+                            </template>
                         </div>
                     </template>
                     <template lwc:if={submitCaseFail}>

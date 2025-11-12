@@ -12,7 +12,6 @@
             <div id="communityOfConcernLwc"></div>
         </apex:define>
 
-        <!--    <script type="text/javascript" src="https://uofstthomasmn&#45;&#45;edastaging.sandbox.my.salesforce.com/lightning/lightning.out.js"></script>-->
         <apex:define name="scriptsHead">
             <script type="text/javascript">
 
@@ -29,7 +28,7 @@
                             }
                         );
                     },
-                    // 'https://uofstthomasmn--edastaging.sandbox.my.site.com/Admissions'
+
                 );
             </script>
         </apex:define>

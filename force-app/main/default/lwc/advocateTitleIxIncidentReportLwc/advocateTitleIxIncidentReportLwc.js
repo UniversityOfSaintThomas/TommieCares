@@ -50,14 +50,13 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         sexualViolence: false, //REQUIRED
         maritalStatus: false, //REQUIRED
         retaliation: false, //REQUIRED
-        salesforce_support_documents: "" //temporarily using this field for Supporting Documents record ID
+        salesforce_support_documents: "" //For Supporting Documents record ID
     }
 
     notificationSelect = ""
     iUnderstandTheStatementAboutAnonymousSelect = []
 
     get showFormAll() {
-        // return !!this.titleIxIncidentFormValues.reporterType;
         return !!this.titleIxIncidentFormValues.reporter_type_custom;
     }
 
@@ -106,20 +105,17 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                     })
                 })
                 this.reporterTypeOptions = _reporterTypeOptions;
-                // if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporterType) {
                 if (this.reporterTypeOptions.length > 0 && this.communityOfConcernReportType && !this.titleIxIncidentFormValues.reporter_type_custom) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.communityOfConcernReportType.toLowerCase())) {
-                            // this.titleIxIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
-                            this.reporterType = this.reporterTypeOptions[i].value; //Using because can't pass to API reporterType
-                            this.titleIxIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label; //Using because can't pass to API reporterType
+                            this.reporterType = this.reporterTypeOptions[i].value;
+                            this.titleIxIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label;
                             break;
                         } else {
                             let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
-                                // this.titleIxIncidentFormValues.reporterType = otherType.value;
-                                this.reporterType = otherType.value; //Using because can't pass to API reporterType
-                                this.titleIxIncidentFormValues.reporter_type_custom = otherType.label; //Using because can't pass to API reporterType
+                                this.reporterType = otherType.value;
+                                this.titleIxIncidentFormValues.reporter_type_custom = otherType.label;
                             }
                         }
                     }
@@ -147,10 +143,9 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         let eventValue = event.detail.value;
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
-                // this.titleIxIncidentFormValues.reporterType = eventValue;
                 this.reporterType = eventValue;
                 let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
-                this.titleIxIncidentFormValues.reporter_type_custom = reporterTypeLabel.label; //Using because can't pass to API reporterType
+                this.titleIxIncidentFormValues.reporter_type_custom = reporterTypeLabel.label;
                 break;
             case "anonymousreporting":
                 this.iUnderstandTheStatementAboutAnonymousSelect = eventValue;
@@ -164,7 +159,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                 this.titleIxIncidentFormValues.notification = eventValue === "true";
                 break;
         }
-        console.log("titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
     }
 
     inputValueHandler(event) {
@@ -201,7 +195,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                 this.titleIxIncidentFormValues.reporter_followup = eventValue;
                 break;
         }
-        console.log("titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
     }
 
     validEmail = true;
@@ -251,10 +244,20 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        console.log("After remove file length: "+this.attachDocuments.length);
+        // console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
+    }
+
+    showSpinner = false;
+
+    handleShowSpinner() {
+        this.showSpinner = true;
+    }
+
+    handleHideSpinner() {
+        this.showSpinner = false;
     }
 
     submittedUrl() {
@@ -277,9 +280,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         this.saveDocumentsFail = false;
         this.submitTitleIxIncidentFormFail = false;
 
-        const showSpinnerEvent = new CustomEvent('showspinner');
-        this.dispatchEvent(showSpinnerEvent);
-        // window.scrollTo(0,0);
+        this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
             const supportingDocumentName = 'Advocate Title IX Incident';
@@ -292,7 +293,6 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                             SupportingDocumentUrl: result.Url,
                             SupportingDocumentId: result.SupportingDocumentId
                         }
-                        console.log("Attach Document object: "+JSON.stringify(this.attachDocumentResponse));
 
                         this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
                     } else if (result.Status === 'error') {
@@ -310,7 +310,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                 let formValues = JSON.stringify(this.titleIxIncidentFormValues);
                 let formType = 'titleix';
                 await submitForm({formValues: formValues, formType: formType}).then((result) => {
-                    console.log('This all result: '+JSON.stringify(result));
+                    // console.log('This all result: '+JSON.stringify(result));
 
                     if (result[0] !== 201) {
                         this.submitTitleIxIncidentFormFail = true;
@@ -318,7 +318,7 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
                     }
 
                     this.formReportNumber = result[1].reportNumber;
-                    console.log('Report Number: '+this.formReportNumber);
+                    // console.log('Report Number: '+this.formReportNumber);
                 });
             } catch (error) {
                 this.submitTitleIxIncidentFormFail = true;
@@ -328,22 +328,21 @@ export default class AdvocateTitleIxIncidentReportLwc extends LightningElement {
         if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
             try {
                 await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
-                console.log("Update Status: "+result);
+                // console.log("Update Status: "+result);
                 });
             } catch (e) {
                 console.log("updateSupportingDocument error: " + JSON.stringify(e));
             }
         }
 
-        const hideSpinnerEvent = new CustomEvent('hidespinner');
         if (this.saveDocumentsFail || this.submitTitleIxIncidentFormFail) {
-            this.dispatchEvent(hideSpinnerEvent);
+            this.handleHideSpinner();
             eventField.scrollIntoView({
                 behavior: 'smooth',
             });
         } else {
-            this.dispatchEvent(hideSpinnerEvent);
-            console.log("Update submittedUrl: "+this.submittedUrl());
+            this.handleHideSpinner();
+            // console.log("Update submittedUrl: "+this.submittedUrl());
             location.replace(this.submittedUrl());
         }
     }
