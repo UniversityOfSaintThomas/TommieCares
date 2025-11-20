@@ -24,6 +24,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
     @track tommieHigh5Options = [];
+
+    tommieCaresStaffExclusions = [
+        "Academic performance concerns",
+        "Attendance concerns"
+    ];
+
     tommieCaresGraduateExclusions = [
         "Behavior concerns",
         "Financial concerns",
@@ -31,10 +37,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         "Relationship violence/stalking",
         "Sense of belonging",
         "Other",
-    ];
-    tommieCaresExclusions = [
-        "Academic performance concerns",
-        "Attendance concerns"
     ];
 
     get studentSelectionCheck() {
@@ -151,16 +153,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     pickListTommieCares({ error, data }) {
         if (data) {
             this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
-            // this.tommieCaresOptions = JSON.parse(JSON.stringify(data.values));
-
-            for (const exclusion of this.tommieCaresExclusions) {
-                const index = this.tommieCaresOptions.findIndex((obj) => obj.label === exclusion);
-
-                if (index !== -1) {
-                    this.tommieCaresOptions.splice(index, 1);
-                }
-            }
-            // console.log("Cares List: "+JSON.stringify(data.values));
         } else if (error) {
             console.log("tommieCaresPicklist Error: " + error);
         }
@@ -190,14 +182,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         console.log("What is Student Contact subField: "+event.detail.subField);
 
         let subField = event.detail.subField;
-        let gradStudentStThomasConnection = false;
-
-        if(!!subField) {
-            let subFieldList = subField.split(",").map(item => item.trim());
-            gradStudentStThomasConnection = subFieldList.includes("Graduate Student");
-        }
-
-        console.log("What is stThomasConnection: "+gradStudentStThomasConnection);
 
         function removeTommieCaresOptions(exclusionList, optionsList) {
             for (const exclusion of exclusionList) {
@@ -209,14 +193,21 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             }
         }
 
-        if(gradStudentStThomasConnection) {
-            removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+        if (this.advisorContactInfo.St_Thomas_Connection__c) {
+            console.log("What is advisorContactInfo.St_Thomas_Connection__c: "+this.advisorContactInfo.St_Thomas_Connection__c);
+            if (!this.advisorContactInfo.St_Thomas_Connection__c?.toLowerCase().includes("faculty")) {
+                removeTommieCaresOptions(this.tommieCaresStaffExclusions, this.tommieCaresOptions);
+            }
         }
-    }
 
-    // clickMeValue(event) {
-    //     console.log("formSubmitSelections: "+JSON.stringify(this.formSubmitSelections));
-    // }
+        if (subField) {
+            console.log("What is subField: "+subField);
+            if (subField?.toLowerCase().includes("graduate student")) {
+                removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+            }
+        }
+
+    }
 
     reasonsCheckbox(event) {
         switch (event.currentTarget.dataset.checkboxtype) {
@@ -339,6 +330,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.Email;
         // this.formSubmitSelections.CourseSelectionId = this.courseSelection;
 
+        console.log("I am being submitted");
+
         try {
             this.caseSubmittedErrorCheck = false;
             window.scrollTo(0, 0);
@@ -352,22 +345,5 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             this.submitCaseSpinner = false;
         }
     }
-
-    // @wire (studentCourseList, {studentContactId: "$studentContactId"})
-    // coursesListWire({error, data}) {
-    //     if (data) {
-    //         this.courseListInfo = JSON.parse(JSON.stringify(data));
-    //     }
-    //
-    //     if (error) {
-    //         console.log("coursesListWire error!");
-    //     }
-    // }
-
-    // showId(event) {
-    //
-    //     this.studentContactId = event.detail.recordId;
-    //     console.log("What is ID: "+event.detail.recordId);
-    // }
 
 }

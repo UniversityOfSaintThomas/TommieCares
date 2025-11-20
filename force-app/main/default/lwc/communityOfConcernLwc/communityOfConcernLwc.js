@@ -407,7 +407,7 @@ export default class CommunityOfConcernLwc extends LightningElement {
     submitCaseFail = false;
 
     async submitCase(event) {
-        console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
+        // console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
         const eventField = event.currentTarget;
         this.submitCaseFail = false;
         try {

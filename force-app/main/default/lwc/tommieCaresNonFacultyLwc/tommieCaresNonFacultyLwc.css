@@ -85,3 +85,7 @@ lightning-button.submit_button {
     font-size: 1rem !important;
     font-weight: bold;
 }
+
+.label-margin {
+    margin-top: -18px;
+}

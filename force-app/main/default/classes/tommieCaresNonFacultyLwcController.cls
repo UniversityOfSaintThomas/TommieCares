@@ -39,7 +39,8 @@ public without sharing class tommieCaresNonFacultyLwcController {
                             Email,
                             Last_Name_First_Name__c,
                             hed__UniversityEmail__c,
-                            University_Banner_ID__c
+                            University_Banner_ID__c,
+                            St_Thomas_Connection__c
                     FROM Contact
                     WHERE University_Banner_ID__c = :advisorBannerId
                     AND St_Thomas_Connection__c INCLUDES ('Faculty', 'Staff')
