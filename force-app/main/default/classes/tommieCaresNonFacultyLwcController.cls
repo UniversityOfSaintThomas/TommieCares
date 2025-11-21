@@ -4,28 +4,6 @@
 
 public without sharing class tommieCaresNonFacultyLwcController {
 
-//    @AuraEnabled(Cacheable=true)
-//    public static Contact studentInformation(String studentContactId) {
-//
-//        Contact studentContact = new Contact();
-//
-//        if (String.isNotBlank(studentContactId)) {
-//            studentContact = [
-//                    SELECT Id,
-//                            Name,
-//                            Last_Name_First_Name__c,
-//                            hed__UniversityEmail__c,
-//                            University_Banner_ID__c,
-//                            St_Thomas_Connection__c
-//                    FROM Contact
-//                    WHERE Id = :studentContactId
-//                    WITH SECURITY_ENFORCED
-//            ];
-//        }
-//
-//        return studentContact;
-//    }
-
     @AuraEnabled(Cacheable=true)
     public static Contact advisorInformation(String advisorBannerId) {
 
@@ -75,8 +53,6 @@ public without sharing class tommieCaresNonFacultyLwcController {
         tommieCaresCase.Origin = 'Web';
         tommieCaresCase.Reporter_University_Email__c = formSelections.get('AdvisorEmail');
         tommieCaresCase.ContactId = formSelections.get('StudentContactId');
-//        tommieCaresCase.Course_Offering__c = formSelections.get('CourseSelectionId');
-//        tommieCaresCase.Alert_Term_lookup__c = formSelections.get('currentTermId');
         tommieCaresCase.Tommie_Alert_Primary_Reason__c = formSelections.get('TommieCares_Reasons');
         tommieCaresCase.Tommie_High_5__c = formSelections.get('High5_Reasons');
         tommieCaresCase.Attendance_Concerns_Reason_s__c = formSelections.get('Attendance_Reasons');
@@ -86,18 +62,6 @@ public without sharing class tommieCaresNonFacultyLwcController {
         tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = formSelections.get('Other_Details');
         tommieCaresCase.Case_Reporter_Notes_to_Student__c = formSelections.get('Personal_Message');
         tommieCaresCase.Shared_Case_Notes__c = formSelections.get('Additional_Concerns');
-
-        //Get Course Connection for student selected
-//        List<hed__Course_Enrollment__c> studentCourseEnrollmentList = [
-//                SELECT Id
-//                FROM hed__Course_Enrollment__c
-//                WHERE Course_Offering_ID__c = :tommieCaresCase.Course_Offering__c
-//                AND hed__Contact__c = :tommieCaresCase.ContactId
-//        ];
-//
-//        if (studentCourseEnrollmentList.size() > 0) {
-//            tommieCaresCase.Course_Connection__c = studentCourseEnrollmentList[studentCourseEnrollmentList.size() - 1].Id;
-//        }
 
         List <String> relationshipTypes = new List<String>{
                 'Primary Advisor',
@@ -158,17 +122,6 @@ public without sharing class tommieCaresNonFacultyLwcController {
             tommieCaresCase.Primary_Advisory_Email__c = 'registrar@stthomas.edu';
         }
 
-//        List<hed__Course_Enrollment__c> courseConnection = [
-//                SELECT Id
-//                FROM hed__Course_Enrollment__c
-//                WHERE hed__Contact__r.Id = :tommieCaresCase.ContactId
-//                AND hed__Course_Offering__c = :formSelections.get('CourseSelectionId')
-//        ];
-//
-//        if (courseConnection.size() > 0) {
-//            tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
-//        }
-
         System.debug(JSON.serializePretty(tommieCaresCase));
 
         insert tommieCaresCase;
@@ -190,32 +143,4 @@ public without sharing class tommieCaresNonFacultyLwcController {
         return advisorInfo;
     }
 
-
-//    @AuraEnabled(Cacheable=true)
-//    public static List<hed__Course_Enrollment__c> studentCourseList(String studentContactId) {
-//
-////        List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
-//
-//        List<RecordType> recordId = [
-//                SELECT Id,
-//                        Name
-//                FROM RecordType
-//                WHERE SobjectType = 'hed__Course_Enrollment__c'
-//                AND DeveloperName = 'Student'
-//        ];
-//
-//        String studentRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
-//
-//        return [SELECT Id,
-//                Course_Name__c,
-//                hed__Contact__c,
-//                hed__Contact__r.Id,
-//                hed__Contact__r.Last_Name_First_Name__c,
-//                hed__Contact__r.University_Banner_ID__c
-//                FROM hed__Course_Enrollment__c
-//                WHERE RecordTypeId = :studentRecordId
-//                AND hed__Contact__r.Id = :studentContactId
-//                AND Course_Connection_Deleted_in_Banner__c = FALSE];
-//
-//    }
 }

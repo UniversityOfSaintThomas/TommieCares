@@ -4,10 +4,7 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
-// import studentCourseList from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentCourseList";
-// import studentInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.studentInformation";
 import advisorInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.advisorInformation";
-
 import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
 import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
 import saveCase from "@salesforce/apex/tommieCaresNonFacultyLwcController.saveCase";
@@ -16,16 +13,13 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     @api paramBId = "";
     @api paramUrl = "";
-    formAccessIdCheck = true;
-    advisorBannerId = ""; /*"101276434";*/
+    // advisorBannerId = ""; /*"101276434";*/
     advisorContactInfo;
-    studentContactInfo;
-    courseListInfo;
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
     @track tommieHigh5Options = [];
 
-    tommieCaresStaffExclusions = [
+    tommieCaresGeneralExclusions = [
         "Academic performance concerns",
         "Attendance concerns"
     ];
@@ -41,7 +35,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     get studentSelectionCheck() {
         return !!this.formSubmitSelections.StudentContactId;
-        // return true; //Temporary until we get reusable lookup working
     };
 
     get caresSelectionCheck() {
@@ -64,10 +57,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     @track formSubmitSelections = {
-        // currentTermId: "",
         AdvisorContactId: "",
         AdvisorEmail: "",
-        // CourseSelectionId: "",
         StudentContactId: "",
         TommieCares_Reasons: "",
         High5_Reasons: "",
@@ -128,7 +119,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     advisorInformationWire({error, data}) {
         if (data) {
             this.advisorContactInfo = JSON.parse(JSON.stringify(data));
-
             this.advisorContactIdCheck = !!this.advisorContactInfo.Id;
             this.noAdvisorContactIdCheck = !this.advisorContactIdCheck;
         }
@@ -138,21 +128,11 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         }
     }
 
-    // @wire (studentInformation, {studentContactId: "$studentContactId"})
-    // studentInformationWire({error, data}) {
-    //     if (data) {
-    //         this.studentContactInfo = JSON.parse(JSON.stringify(data));
-    //     }
-    //
-    //     if (error) {
-    //         console.log("studentInformationWire error!");
-    //     }
-    // }
-
     @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
     pickListTommieCares({ error, data }) {
         if (data) {
             this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
+            this.removeTommieCaresOptions(this.tommieCaresGeneralExclusions, this.tommieCaresOptionsAll);
         } else if (error) {
             console.log("tommieCaresPicklist Error: " + error);
         }
@@ -183,30 +163,23 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
         let subField = event.detail.subField;
 
-        function removeTommieCaresOptions(exclusionList, optionsList) {
-            for (const exclusion of exclusionList) {
-                const index = optionsList.findIndex(option => option.label === exclusion);
-
-                if (index !== -1) {
-                    optionsList.splice(index, 1);
-                }
-            }
-        }
-
-        if (this.advisorContactInfo.St_Thomas_Connection__c) {
-            console.log("What is advisorContactInfo.St_Thomas_Connection__c: "+this.advisorContactInfo.St_Thomas_Connection__c);
-            if (!this.advisorContactInfo.St_Thomas_Connection__c?.toLowerCase().includes("faculty")) {
-                removeTommieCaresOptions(this.tommieCaresStaffExclusions, this.tommieCaresOptions);
-            }
-        }
-
         if (subField) {
             console.log("What is subField: "+subField);
             if (subField?.toLowerCase().includes("graduate student")) {
-                removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+                this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
             }
         }
 
+    }
+
+    removeTommieCaresOptions(exclusionList, optionsList) {
+        for (const exclusion of exclusionList) {
+            const index = optionsList.findIndex(option => option.label === exclusion);
+
+            if (index !== -1) {
+                optionsList.splice(index, 1);
+            }
+        }
     }
 
     reasonsCheckbox(event) {
