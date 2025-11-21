@@ -23,17 +23,19 @@ public without sharing class CommunityOfConcernLwcController {
                 LIMIT 1
         ];
 
-        if (iAmContact.size() > 0 && iAmContact[0]?.St_Thomas_Connection__c != 'Faculty') {
-            List<hed__Course_Offering__c> facultyCheck = [
-                    SELECT Id
-                    FROM hed__Course_Offering__c
-                    WHERE Current_Term__c = TRUE
-                    AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
-                    WITH SECURITY_ENFORCED
-            ];
+        if (iAmContact.size() > 0) {
+            if (iAmContact[0].St_Thomas_Connection__c == null || !iAmContact[0].St_Thomas_Connection__c.contains('Faculty')) {
+                List<hed__Course_Offering__c> facultyCheck = [
+                        SELECT Id
+                        FROM hed__Course_Offering__c
+                        WHERE Current_Term__c = TRUE
+                        AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
+                        WITH SECURITY_ENFORCED
+                ];
 
-            if (facultyCheck.size() > 0) {
-                iAmContact[0].St_Thomas_Connection__c = 'Faculty';
+                if (facultyCheck.size() > 0) {
+                    iAmContact[0].St_Thomas_Connection__c = 'Faculty';
+                }
             }
         }
 
