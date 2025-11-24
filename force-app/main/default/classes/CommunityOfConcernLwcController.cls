@@ -24,7 +24,7 @@ public without sharing class CommunityOfConcernLwcController {
         ];
 
         if (iAmContact.size() > 0) {
-            if (iAmContact[0].St_Thomas_Connection__c == null || !iAmContact[0].St_Thomas_Connection__c.contains('Faculty')) {
+            if (String.isBlank(iAmContact[0].St_Thomas_Connection__c) || !iAmContact[0].St_Thomas_Connection__c.contains('Faculty')) {
                 List<hed__Course_Offering__c> facultyCheck = [
                         SELECT Id
                         FROM hed__Course_Offering__c
