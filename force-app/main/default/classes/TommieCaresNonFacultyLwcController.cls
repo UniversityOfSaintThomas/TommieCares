@@ -2,7 +2,7 @@
  * Created by nguy0092 on 2/7/2025.
  */
 
-public without sharing class tommieCaresNonFacultyLwcController {
+public without sharing class TommieCaresNonFacultyLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static Contact advisorInformation(String advisorBannerId) {

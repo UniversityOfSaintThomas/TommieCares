@@ -4,10 +4,10 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
-import advisorInformation from "@salesforce/apex/tommieCaresNonFacultyLwcController.advisorInformation";
+import advisorInformation from "@salesforce/apex/TommieCaresNonFacultyLwcController.advisorInformation";
 import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
 import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
-import saveCase from "@salesforce/apex/tommieCaresNonFacultyLwcController.saveCase";
+import saveCase from "@salesforce/apex/TommieCaresNonFacultyLwcController.saveCase";
 
 export default class TommieCaresNonFacultyLwc extends LightningElement {
 
