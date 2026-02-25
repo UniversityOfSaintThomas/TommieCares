@@ -85,7 +85,8 @@ public without sharing class TommieCaresNonFacultyLwcController {
                         hed__Status__c,
                         hed__RelatedContact__r.Id,
                         hed__RelatedContact__r.Name,
-                        hed__RelatedContact__r.Email
+                        hed__RelatedContact__r.hed__UniversityEmail__c
+//                        hed__RelatedContact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c IN :relationshipTypes
                 AND hed__Contact__c = :tommieCaresCase.ContactId
@@ -100,8 +101,9 @@ public without sharing class TommieCaresNonFacultyLwcController {
         }
 
         if (advisorContactsMap.size() > 0) {
+            String primaryAdvisorEmail = getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
             tommieCaresCase.Primary_Advisor_Contact__c = getAdvisorInfo('Id', 'Primary Advisor', advisorContactsMap);
-            tommieCaresCase.Primary_Advisory_Email__c = String.isBlank(tommieCaresCase.Primary_Advisor_Contact__c) ? 'registrar@stthomas.edu' : getAdvisorInfo('Email', 'Primary Advisor', advisorContactsMap);
+            tommieCaresCase.Primary_Advisory_Email__c = String.isBlank(tommieCaresCase.Primary_Advisor_Contact__c) || String.isBlank(primaryAdvisorEmail) ? 'registrar@stthomas.edu' : primaryAdvisorEmail;
             tommieCaresCase.Student_Athlete_Advisor_Email__c = getAdvisorInfo('Email', 'Student-Athlete Advisor', advisorContactsMap);
             tommieCaresCase.Student_Athlete_Advisor__c = getAdvisorInfo('Id', 'Student-Athlete Advisor', advisorContactsMap);
             tommieCaresCase.Secondary_Advisor_Email__c = getAdvisorInfo('Email', 'Secondary Advisor', advisorContactsMap);
@@ -135,7 +137,8 @@ public without sharing class TommieCaresNonFacultyLwcController {
                 if (EmailOrId == 'Id') {
                     advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Id;
                 } else if (EmailOrId == 'Email') {
-                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Email;
+                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.hed__UniversityEmail__c;
+//                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Email;
                 }
             }
         }
