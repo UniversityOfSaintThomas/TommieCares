@@ -63,74 +63,75 @@ private class TommieCaresLwcController_TEST {
                 Effective_Term__c = currentTerm.Id
         );
         insert facAdvisorRelationship;
-
-        Contact athAdvisor = new Contact(
-                FirstName = 'Test',
-                LastName = 'Faculty',
-                University_Banner_ID__c = '1111111114',
-                hed__UniversityEmail__c = 'test-athfacultyt@test.com',
-                Email = 'test-athfacultyt@test.com'
-        );
-        insert athAdvisor;
-
-        //Student-Athlete Advisor
-        hed__Relationship__c athAdvisorRelationship = new hed__Relationship__c(
-                hed__Contact__c = athAdvisor.Id,
-                hed__Type__c = 'Student-Athlete Advisor',
-                hed__RelatedContact__c = student.Id,
-                Effective_Term__c = currentTerm.Id
-        );
-        insert athAdvisorRelationship;
-
-        Contact probAdvisor = new Contact(
-                FirstName = 'Test',
-                LastName = 'Faculty',
-                University_Banner_ID__c = '1111111115',
-                hed__UniversityEmail__c = 'test-probfacultyt@test.com',
-                Email = 'test-probfacultyt@test.com'
-        );
-        insert probAdvisor;
-        hed__Relationship__c probAdvisorRelationship = new hed__Relationship__c(
-                hed__Contact__c = probAdvisor.Id,
-                hed__Type__c = 'Probationary Advisor',
-                hed__RelatedContact__c = student.Id,
-                Effective_Term__c = currentTerm.Id
-        );
-        insert probAdvisorRelationship;
-
-        Contact intAdvisor = new Contact(
-                FirstName = 'Test',
-                LastName = 'Faculty',
-                University_Banner_ID__c = '1111111116',
-                hed__UniversityEmail__c = 'test-intfacultyt@test.com',
-                Email = 'test-intfacultyt@test.com'
-        );
-        insert intAdvisor;
-
-        hed__Relationship__c intAdvisorRelationship = new hed__Relationship__c(
-                hed__Contact__c = intAdvisor.Id,
-                hed__Type__c = 'International Advisor',
-                hed__RelatedContact__c = student.Id,
-                Effective_Term__c = currentTerm.Id
-        );
-        insert intAdvisorRelationship;
-
-        Contact finAdvisor = new Contact(
-                FirstName = 'Test',
-                LastName = 'Faculty',
-                University_Banner_ID__c = '1111111117',
-                hed__UniversityEmail__c = 'test-finfacultyt@test.co',
-                Email = 'test-finfacultyt@test.com'
-        );
-        insert finAdvisor;
-
-        hed__Relationship__c finAdvisorRelationship = new hed__Relationship__c(
-                hed__Contact__c = finAdvisor.Id,
-                hed__Type__c = 'Financial Aid Counselor',
-                hed__RelatedContact__c = student.Id,
-                Effective_Term__c = currentTerm.Id
-        );
-        insert finAdvisorRelationship;
+//
+//        Contact athAdvisor = new Contact(
+//                FirstName = 'Test',
+//                LastName = 'Faculty',
+//                University_Banner_ID__c = '1111111114',
+//                hed__UniversityEmail__c = 'test-athfacultyt@test.com',
+//                Email = 'test-athfacultyt@test.com'
+//        );
+//        insert athAdvisor;
+//
+//        //Student-Athlete Advisor
+//        hed__Relationship__c athAdvisorRelationship = new hed__Relationship__c(
+//                hed__Contact__c = athAdvisor.Id,
+//                hed__Type__c = 'Student-Athlete Advisor',
+//                hed__RelatedContact__c = student.Id,
+//                Effective_Term__c = currentTerm.Id
+//        );
+//        insert athAdvisorRelationship;
+//
+//        Contact probAdvisor = new Contact(
+//                FirstName = 'Test',
+//                LastName = 'Faculty',
+//                University_Banner_ID__c = '1111111115',
+//                hed__UniversityEmail__c = 'test-probfacultyt@test.com',
+//                Email = 'test-probfacultyt@test.com'
+//        );
+//        insert probAdvisor;
+//
+//        hed__Relationship__c probAdvisorRelationship = new hed__Relationship__c(
+//                hed__Contact__c = probAdvisor.Id,
+//                hed__Type__c = 'Probationary Advisor',
+//                hed__RelatedContact__c = student.Id,
+//                Effective_Term__c = currentTerm.Id
+//        );
+//        insert probAdvisorRelationship;
+//
+//        Contact intAdvisor = new Contact(
+//                FirstName = 'Test',
+//                LastName = 'Faculty',
+//                University_Banner_ID__c = '1111111116',
+//                hed__UniversityEmail__c = 'test-intfacultyt@test.com',
+//                Email = 'test-intfacultyt@test.com'
+//        );
+//        insert intAdvisor;
+//
+//        hed__Relationship__c intAdvisorRelationship = new hed__Relationship__c(
+//                hed__Contact__c = intAdvisor.Id,
+//                hed__Type__c = 'International Advisor',
+//                hed__RelatedContact__c = student.Id,
+//                Effective_Term__c = currentTerm.Id
+//        );
+//        insert intAdvisorRelationship;
+//
+//        Contact finAdvisor = new Contact(
+//                FirstName = 'Test',
+//                LastName = 'Faculty',
+//                University_Banner_ID__c = '1111111117',
+//                hed__UniversityEmail__c = 'test-finfacultyt@test.co',
+//                Email = 'test-finfacultyt@test.com'
+//        );
+//        insert finAdvisor;
+//
+//        hed__Relationship__c finAdvisorRelationship = new hed__Relationship__c(
+//                hed__Contact__c = finAdvisor.Id,
+//                hed__Type__c = 'Financial Aid Counselor',
+//                hed__RelatedContact__c = student.Id,
+//                Effective_Term__c = currentTerm.Id
+//        );
+//        insert finAdvisorRelationship;
 
         Account courseAccount = new Account(
                 Name = 'Test College',
