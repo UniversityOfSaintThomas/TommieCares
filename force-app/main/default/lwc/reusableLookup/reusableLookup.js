@@ -2,7 +2,7 @@
  * Created by Thaddaeus Dahlberg, Software Engineer, University of St. Thomas on 3/2/2023.
  */
 
-import {LightningElement, api} from 'lwc';
+import {LightningElement, api, track} from 'lwc';
 import fetchRecords from '@salesforce/apex/ReusableLookupController.fetchRecords';
 
 /** The delay used when debouncing event handlers before invoking Apex. */
@@ -14,7 +14,7 @@ export default class ReusableLookup extends LightningElement {
     @api required;
     @api selectedIconName = "standard:account";
     @api objectLabel = "Account";
-    recordsList = [];
+    @track recordsList = [];
     selectedRecordName;
 
     @api objectApiName = "Account";
