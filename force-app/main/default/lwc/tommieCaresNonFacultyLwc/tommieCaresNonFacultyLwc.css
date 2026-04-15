@@ -2,20 +2,6 @@
  * Created by nguy0092 on 2/7/2025.
  */
 
-
-.slds-input {
-    padding-left: 100px !important;
-}
-
-.slds-theme_success {
-    background: #672D85 !important;
-}
-
-.notification_text p {
-    font-size: 1rem !important;
-    color: white;
-}
-
 abbr.slds-required {
     font-weight: bold;
 }
@@ -26,41 +12,23 @@ abbr.slds-required {
     color: rebeccapurple;
 }
 
+.alert-group {
+    overflow: hidden; /* clearfix — forces parent to contain floated children */
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 .footer_info p {
     font-size: 1rem !important;
 }
 
-.additional_info p {
+.label-margin {
+    margin-top: -18px;
+}
+
+.notification_text p {
     font-size: 1rem !important;
-    font-weight: bold;
-}
-
-.additional_info p.no_bold_text {
-    font-weight: normal !important;
-}
-
-.picklist_checkbox_options {
-    display: inline-block;
-    position: relative;
-    float: left;
-    border: solid 1px rebeccapurple;
-}
-
-/*.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: normal;*/
-/*    color: rebeccapurple;*/
-/*}*/
-
-.textarea_sublabel {
-    font-size: 1rem !important;
-    color: black;
-}
-
-.slds-form-element .picklist_checkbox_text {
-    font-size: 1rem !important;
-    text-transform: capitalize;
-    color: black;
+    color: white;
 }
 
 .picklist_checkbox_check {
@@ -75,17 +43,80 @@ abbr.slds-required {
     box-shadow: none;
 }
 
-lightning-button.submit_button {
-    --slds-c-button-success-text-color: #fff;
-    --slds-c-button-success-color-background: #510c76;
-    --slds-c-button-success-color-border: #510c76;
-    --slds-c-button-success-color-background-hover: #8348ad;
-    --slds-c-button-success-color-background-active: #8348ad;
-    --slds-c-button-success-radius-border: 0px;
-    font-size: 1rem !important;
-    font-weight: bold;
+.picklist_checkbox_options {
+    display: inline-block;
+    position: relative;
+    float: left;
+    border: solid 1px rebeccapurple;
 }
 
-.label-margin {
-    margin-top: -18px;
+.section-label {
+    font-size: 1rem !important;
+}
+
+.slds-form-element .picklist_checkbox_text {
+    font-size: 1rem !important;
+    text-transform: capitalize;
+    color: black;
+}
+
+.slds-theme_success {
+    background: #672D85 !important;
+}
+
+.sub-content {
+    clear: both;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.sub-content-fieldset {
+    overflow: hidden;
+}
+
+.submit_button {
+    background-color: #510c76;
+    border: none;
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+}
+
+.submit_button:hover {
+    background-color: #8348ad;
+}
+
+.submit_button:active {
+    background-color: #8348ad;
+}
+
+.submit_button:focus {
+    outline: none;
+    box-shadow: 0 0 3px #510c76;
+}
+
+.submit_button:disabled {
+    background-color: #c9c9c9;
+    border-color: #c9c9c9;
+    color: #6e6e6e;
+    cursor: not-allowed;
+}
+
+.submit_warning {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.textarea_sublabel {
+    font-size: .95rem !important;
+    color: black !important;
+}
+
+.textarea_sublabel strong {
+    color: inherit; /* inherits black from .textarea_sublabel */
 }

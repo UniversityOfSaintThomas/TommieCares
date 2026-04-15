@@ -11,9 +11,8 @@ import saveCase from "@salesforce/apex/TommieCaresNonFacultyLwcController.saveCa
 
 export default class TommieCaresNonFacultyLwc extends LightningElement {
 
-    @api paramBId = "";
     @api paramUrl = "";
-    // advisorBannerId = ""; /*"101276434";*/
+    paramBId = "";
     advisorContactInfo;
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
@@ -32,6 +31,18 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         "Sense of belonging",
         "Other",
     ];
+
+    alertGroupingsFilter = [
+        {"Positive Alert": ["Tommie High 5"]},
+        {"Advising": ["Missed Advising Appointment", "Non-Responsive to Outreach", "Academic Standing Requirement Not Met (only for Academic Counselors)"]},
+        {"Behavior Mental Health": ["Behavior concerns", "Mental health concerns", "Relationship violence/stalking"]},
+        {"Life Circumstances": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Sense of belonging", "Other"]},
+    ]
+
+    @track positiveAlertGroup = [];
+    @track advisingGroup = [];
+    @track behaviorMentalHealthGroup = [];
+    @track lifeCircumstanceGroup = [];
 
     get studentSelectionCheck() {
         return !!this.formSubmitSelections.StudentContactId;
@@ -62,8 +73,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         StudentContactId: "",
         TommieCares_Reasons: "",
         High5_Reasons: "",
-        // Attendance_Reasons: "",
-        // Academic_Reasons: "",
         High5_Details: "",
         Pass_Course_Selection: "",
         Other_Details: "",
@@ -73,9 +82,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     @track formRequired = {
         High5_Required: false,
-        // Attendance_Required: false,
-        // Academic_Required: false,
-        PassCourse_Required: false,
         Other_Required: false,
     }
 
@@ -97,16 +103,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                         this.paramBId = keyValue[1];
                     }
                     break;
-                // case "sbid":
-                //     if (!this.paramSBid) {
-                //         this.paramSBid = keyValue[1];
-                //     }
-                //     break;
-                // case "crn":
-                //     if (!this.paramCrn) {
-                //         this.paramCrn = keyValue[1];
-                //     }
-                //     break;
                 case "submitted":
                     if (keyValue[1] === "true") {
                         this.caseSubmittedCheck = true;
@@ -124,6 +120,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         }
 
         if (error) {
+            this.noAdvisorContactIdCheck = true;
             console.log("advisorInformationWire error!");
         }
     }
@@ -148,28 +145,24 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     selectStudentContactId(event) {
-        this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
+        const { id, subField } = event.detail;
 
-        this.formSubmitSelections.StudentContactId = event.detail.id;
         this.caseSubmittedCheck = false;
 
-        if (!(!!this.formSubmitSelections.StudentContactId)) {
+        if (!id) {
             this.resetForm();
+            return;
         }
 
-        console.log("What is Student Contact id: "+event.detail.id);
-        console.log("What is Student Contact mainField: "+event.detail.mainField);
-        console.log("What is Student Contact subField: "+event.detail.subField);
+        // Student selected — rebuild and filter alert reason options
+        this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
+        this.formSubmitSelections.StudentContactId = id;
 
-        let subField = event.detail.subField;
-
-        if (subField) {
-            console.log("What is subField: "+subField);
-            if (subField?.toLowerCase().includes("graduate student")) {
-                this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
-            }
+        if (subField?.toLowerCase().includes("graduate student")) {
+            this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
         }
 
+        this.buildAlertGroups();
     }
 
     removeTommieCaresOptions(exclusionList, optionsList) {
@@ -178,6 +171,25 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
             if (index !== -1) {
                 optionsList.splice(index, 1);
+            }
+        }
+    }
+
+    buildAlertGroups() {
+        const groupMap = {
+            "Positive Alert":         "positiveAlertGroup",
+            "Advising":               "advisingGroup",
+            "Behavior Mental Health": "behaviorMentalHealthGroup",
+            "Life Circumstances":     "lifeCircumstanceGroup",
+        };
+
+        for (const groupObj of this.alertGroupingsFilter) {
+            const [groupName, values] = Object.entries(groupObj)[0];
+            const propName = groupMap[groupName];
+            if (propName) {
+                this[propName] = this.tommieCaresOptions.filter(option =>
+                    values.includes(option.value)  // <-- value, not label
+                );
             }
         }
     }
@@ -273,6 +285,11 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             })
         }
 
+        const textareas = this.template.querySelectorAll("lightning-textarea");
+        if (textareas) {
+            textareas.forEach(ta => { ta.value = ""; });
+        }
+
         for (const selection in this.formSubmitSelections) {
             this.formSubmitSelections[selection] = "";
         }
@@ -284,30 +301,31 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         for (const required in this.formRequired) {
             this.formRequired[required] = false;
         }
+
+        this.positiveAlertGroup = [];
+        this.advisingGroup = [];
+        this.behaviorMentalHealthGroup = [];
+        this.lifeCircumstanceGroup = [];
     }
 
     submittedUrl() {
         let reloadUrl = new URL(this.paramUrl);
 
         reloadUrl.searchParams.set("bid", this.paramBId);
-        // reloadUrl.searchParams.set("sbid", "");
-        // reloadUrl.searchParams.set("crn", "");
         reloadUrl.searchParams.set("submitted", "true");
 
         return reloadUrl;
     }
 
     async submitCase() {
-        // this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
         this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.Email;
-        // this.formSubmitSelections.CourseSelectionId = this.courseSelection;
 
         console.log("I am being submitted");
 
         try {
             this.caseSubmittedErrorCheck = false;
-            window.scrollTo(0, 0);
+            window.parent.scrollTo({top: 0, behavior: 'smooth' });
             this.submitCaseSpinner = true;
             await saveCase({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
