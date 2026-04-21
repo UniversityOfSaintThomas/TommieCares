@@ -34,7 +34,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
-        {"Advising": ["Missed Advising Appointment", "Non-Responsive to Outreach", "Academic Standing Requirement Not Met (only for Academic Counselors)"]},
+        {"Advising": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
         {"Behavior Mental Health": ["Behavior concerns", "Mental health concerns", "Relationship violence/stalking"]},
         {"Life Circumstances": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Sense of belonging", "Other"]},
     ]
@@ -59,11 +59,15 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     @track selectionsCheck = {
         high5Check: false,
+        nonResponsiveOutreachCheck: false,
+        missedAdvisingAppointments: false,
         behaviorCheck: false,
         financialConcernsCheck: false,
         mentalHealthCheck: false,
         relationshipCheck: false,
-        belongingCheck: false,
+        difficultyMeetingBasicNeedsCheck: false,
+        lifeCircumstanceImpactingSuccessCheck: false,
+        senseOfBelongingCheck: false,
         otherCheck: false,
     }
 
@@ -187,9 +191,13 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             const [groupName, values] = Object.entries(groupObj)[0];
             const propName = groupMap[groupName];
             if (propName) {
-                this[propName] = this.tommieCaresOptions.filter(option =>
-                    values.includes(option.value)  // <-- value, not label
-                );
+                this[propName] = this.tommieCaresOptions
+                    .filter(option => values.includes(option.value))
+                    .sort((a, b) => {
+                        if (a.value === "Other") return 1;
+                        if (b.value === "Other") return -1;
+                        return a.label.localeCompare(b.label);
+                    });
             }
         }
     }
@@ -207,6 +215,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                     this.selectionsCheck.high5Check = event.target.checked;
                     this.formRequired.High5_Required = event.target.checked;
                 }
+                if (event.target.value === "Non-Responsive to Outreach") {
+                    this.selectionsCheck.nonResponsiveOutreachCheck = event.target.checked;
+                }
+                if (event.target.value === "Missed Advising Appointment") {
+                    this.selectionsCheck.missedAdvisingAppointments = event.target.checked;
+                }
                 if (event.target.value === "Behavior concerns") {
                     this.selectionsCheck.behaviorCheck = event.target.checked;
                 }
@@ -219,8 +233,14 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                 if (event.target.value === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = event.target.checked;
                 }
+                if (event.target.value === "Difficulty Meeting Basic Needs (food/housing, etc)") {
+                    this.selectionsCheck.difficultyMeetingBasicNeedsCheck = event.target.checked;
+                }
+                if (event.target.value === "Life Circumstances Impacting Success") {
+                    this.selectionsCheck.lifeCircumstanceImpactingSuccessCheck = event.target.checked;
+                }
                 if (event.target.value === "Sense of belonging") {
-                    this.selectionsCheck.belongingCheck = event.target.checked;
+                    this.selectionsCheck.senseOfBelongingCheck = event.target.checked;
                 }
                 if (event.target.value === "Other") {
                     if (!event.target.checked) {

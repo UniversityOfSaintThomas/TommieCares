@@ -131,7 +131,7 @@
                                             <label class="slds-form-element__label" for="high5-details-id">
                                                 <abbr class="slds-required" title="Required">*</abbr>Tommie High 5 details:</label>
                                             <p class="slds-m-left_xxx-small textarea_sublabel"><i>For Tommie High 5’s the student will receive an email with your message entered in the box below.
-                                                The faculty submitter and the student’s advisor(s) will also be copied on the message.
+                                                The submitter and the student’s advisor(s) will also be copied on the message.
                                                 Ex: You did a great job on your assignment. Keep working hard.</i></p>
                                             <div class="slds-form-element__control slds-m-left_xxx-small ">
                                                 <lightning-textarea id="high5-details-id"
@@ -167,6 +167,12 @@
                                         </label>
                                     </div>
                                 </template>
+                                <div class="slds-m-left_xxx-small sub-content">
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.missedAdvisingAppointments}><strong>The student will receive a message reminding them to set up an advising appointment with you.</strong></p>
+                                </div>
+                                <div class="slds-m-left_xxx-small sub-content">
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}><strong>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</strong></p>
+                                </div>
                             </div>
                         </template>
 
@@ -190,12 +196,12 @@
                                     </div>
                                 </template>
                                 <div class="slds-m-left_xxx-small sub-content">
-                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.behaviorCheck}><strong>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.behaviorCheck}><strong>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you.
                                         The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</strong></p>
-                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.mentalHealthCheck}><strong>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the faculty submitter).
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.mentalHealthCheck}><strong>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you.
                                         The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</strong></p>
                                     <div lwc:if={selectionsCheck.relationshipCheck}>
-                                        <p class="slds-m-bottom_x-small textarea_sublabel"><strong>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the faculty submitter).
+                                        <p class="slds-m-bottom_x-small textarea_sublabel"><strong>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you.
                                             No advisors will be copied or notified.</strong></p>
                                         <p class="textarea_sublabel">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
                                             <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
@@ -224,9 +230,13 @@
                                     </div>
                                 </template>
                                 <div class="slds-m-left_xxx-small sub-content">
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}><strong>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                        The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</strong></p>
                                     <p class="textarea_sublabel" lwc:if={selectionsCheck.financialConcernsCheck}><strong>Financial concerns will be sent directly to the Financial Aid office.
                                         The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</strong></p>
-                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.belongingCheck} ><strong>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}><strong>Life Circumstances Impacting Success concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                        The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</strong></p>
+                                    <p class="textarea_sublabel" lwc:if={selectionsCheck.senseOfBelongingCheck} ><strong>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
                                         No advisors will be copied or notified.</strong></p>
                                     <div class="slds-form-element slds-is-required" lwc:if={selectionsCheck.otherCheck}>
                                         <label class="slds-form-element__label" for="other-details-id">
