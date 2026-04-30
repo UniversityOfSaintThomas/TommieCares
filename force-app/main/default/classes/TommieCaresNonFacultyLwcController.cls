@@ -33,6 +33,116 @@ public without sharing class TommieCaresNonFacultyLwcController {
         return advisorContact;
     }
 
+    @AuraEnabled(Cacheable=true)
+    public static List<Contact> searchStudent(String searchMode, String bannerId, String lastName, String email) {
+        List<Contact> matches = new List<Contact>();
+
+        // Basic guard
+        if (String.isBlank(searchMode)) {
+            return matches;
+        }
+
+        // Build SELECT clause
+        String baseSelect = 'SELECT Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, '
+                + 'University_Banner_ID__c, St_Thomas_Connection__c FROM Contact '
+                + 'WHERE St_Thomas_Connection__c INCLUDES (\'Graduate Student\', \'Student\')';
+
+        // Build WHERE parts dynamically (use escapeSingleQuotes to avoid SOQL injection)
+        List<String> whereParts = new List<String>();
+
+        if (searchMode == 'banner') {
+            if (String.isBlank(bannerId) || String.isBlank(lastName)) {
+                return matches; // keep existing behavior: require bannerId + lastName (you can change to be more permissive)
+            }
+            whereParts.add('University_Banner_ID__c = \'' + String.escapeSingleQuotes(bannerId) + '\'');
+            // We intentionally don't try to normalize last name in SOQL; we'll filter in Apex (keeps query selective)
+        } else if (searchMode == 'email') {
+            if (String.isBlank(email)) {
+                return matches;
+            }
+            // match exact stored university email (escape the input)
+            whereParts.add('hed__UniversityEmail__c = \'' + String.escapeSingleQuotes(email.trim()) + '\'');
+        } else {
+            // unknown mode
+            return matches;
+        }
+
+        if (whereParts.isEmpty()) {
+            return matches; // no filters => return empty set instead of full table scan
+        }
+        // Compose final query; include WITH SECURITY_ENFORCED so the running user must have access
+        String andWhereClause = ' AND ' + String.join(whereParts, ' AND ');
+        String finalQuery = baseSelect + andWhereClause + ' WITH SECURITY_ENFORCED LIMIT 1'; // add a reasonable limit to prevent abuse
+
+        // Execute dynamic query
+        List<Contact> contacts = Database.query(finalQuery);
+
+        // If banner search, filter by normalized last name in Apex (existing normalizeLastName helper)
+        if (searchMode == 'banner') {
+            String normalizedInput = normalizeLastName(lastName);
+            if (String.isBlank(normalizedInput)) {
+                return matches;
+            }
+            for (Contact c : contacts) {
+                String normalizedStored = normalizeLastName(c.LastName);
+                if (normalizedInput.equals(normalizedStored)) {
+                    matches.add(c);
+                }
+            }
+            return matches;
+        }
+
+        // For email search just return results
+        return contacts;
+    }
+//    public static List<Contact> searchStudent(String searchMode, String bannerId, String lastName, String email) {
+//        List<Contact> matches = new List<Contact>();
+//        if (String.isBlank(bannerId) || String.isBlank(lastName)) {
+//            return matches;
+//        }
+//
+//        // Query by banner ID only (keeps SOQL selective); filter by last name in Apex after normalization
+//        List<Contact> contacts = [
+//                SELECT Id,
+//                        FirstName,
+//                        LastName,
+//                        Name,
+//                        Email,
+//                        hed__UniversityEmail__c,
+//                        University_Banner_ID__c
+//                FROM Contact
+//                WHERE University_Banner_ID__c = :bannerId
+//                WITH SECURITY_ENFORCED
+//        ];
+//
+//        String normalizedInput = normalizeLastName(lastName);
+//
+//        for (Contact c : contacts) {
+//            // normalize stored LastName (handles nulls)
+//            String normalizedStored = normalizeLastName(c.LastName);
+//            if (normalizedInput != null && normalizedInput.equals(normalizedStored)) {
+//                matches.add(c);
+//            }
+//        }
+//        return matches;
+//    }
+
+// Helper: remove whitespace, hyphens, and apostrophes, then lowercase.
+// Examples:
+//   "O'Connor" -> "oconnor"
+//   "Smith-Jones" -> "smithjones"
+//   " Van Dyke " -> "vandyke"
+    public static String normalizeLastName(String s) {
+        if (s == null) return '';
+        // Remove whitespace using regex, then remove hyphens and apostrophes.
+        // Use String.valueOf((char)39) to represent the apostrophe character safely.
+        String withoutWhitespace = s.replaceAll('\\s', '');
+        String withoutHyphens = withoutWhitespace.replace('-', '');
+//        String apostrophe = String.valueOf((char)39); // char(39) == '
+        String withoutApos = withoutHyphens.replace('\'', '');
+        return withoutApos.toLowerCase();
+    }
+
     @AuraEnabled(Cacheable=false)
     public static void saveCase(Map<String, String> formSelections) {
         Case tommieCaresCase = new Case();

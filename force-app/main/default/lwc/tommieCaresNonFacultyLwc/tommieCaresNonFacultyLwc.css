@@ -2,12 +2,35 @@
  * Created by nguy0092 on 2/7/2025.
  */
 
+.tommie-form {
+    box-sizing: border-box;   /* include padding in width */
+    width: 80%;               /* change percent to taste */
+    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
+    margin: 0;                /* left aligned (no auto centering) */
+    min-height: 200px;
+}
+
+a {
+    color: rebeccapurple;            /* new color for normal state */
+}
+
+a:hover,
+a:active {
+    color: #8348ad;                  /* hover / active color */
+    text-decoration: underline;
+}
+
 abbr.slds-required {
     font-weight: bold;
 }
 
-.advisor_info p {
-    font-size: 1rem !important;
+.additional-text-message {
+    font-size: .95rem !important;
+    color: black !important;
+}
+
+.advisor_info {
+    font-size: 1.15rem !important;
     font-weight: bold;
     color: rebeccapurple;
 }
@@ -18,46 +41,79 @@ abbr.slds-required {
     padding-bottom: 0.5rem;
 }
 
-.footer_info p {
+.element-sublabel {
     font-size: 1rem !important;
+    color: black !important;
+}
+
+lightning-textarea.custom-textarea {
+    --slds-c-textarea-color-border: rebeccapurple;
+    --sds-c-textarea-color-border: rebeccapurple;
+    --sds-c-textarea-sizing-min-height: 100px;
+    box-sizing: border-box;
+    width: 90%;
+}
+
+.footer-info p {
+    font-size: 1rem !important;
+}
+
+:host {
+    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
 .label-margin {
     margin-top: -18px;
 }
 
-.notification_text p {
+lightning-button.submit_button {
+    --slds-c-button-brand-text-color: #fff;
+    --slds-c-button-brand-color-background: #510c76;
+    --slds-c-button-brand-color-border: #510c76;
+    --slds-c-button-brand-color-background-hover: #8348ad;
+    --slds-c-button-brand-color-background-active: #8348ad;
+    --slds-c-button-brand-radius-border: 0px;
+    font-size: 1rem !important;
+    font-weight: bold;
+}
+
+.notification-text p {
     font-size: 1rem !important;
     color: white;
 }
 
-.picklist_checkbox_check {
-    box-shadow: none;
+.picklist-checkbox:checked + .slds-checkbox__label .slds-checkbox_faux {
+    background-color: rebeccapurple !important;
+    border: none !important;
 }
 
-.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,
-.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {
-    background-color: rebeccapurple;
-    border: none;
-    content: none;
-    box-shadow: none;
-}
-
-.picklist_checkbox_options {
+.picklist-checkbox-options {
     display: inline-block;
     position: relative;
     float: left;
     border: solid 1px rebeccapurple;
 }
 
-.section-label {
-    font-size: 1rem !important;
-}
-
-.slds-form-element .picklist_checkbox_text {
+.picklist-checkbox-text {
     font-size: 1rem !important;
     text-transform: capitalize;
+    color: black !important;
+    padding-left: 5px;
+}
+
+.section-label {
+    font-size: 1rem !important;
     color: black;
+}
+
+.slds-text-title_caps {
+    color: rebeccapurple;
+    font-weight: bold;
+}
+
+.slds-checkbox_faux {
+    border-color: black !important;
+    box-shadow: none !important;
 }
 
 .slds-theme_success {
@@ -72,51 +128,124 @@ abbr.slds-required {
     padding-top: 0.5rem;
 }
 
-.sub-content-fieldset {
+.sub-content p:not(.textarea-sublabel) {
+    margin-bottom: 0 !important;
+}
+
+.sub-content-overflow {
     overflow: hidden;
 }
 
-.submit_button {
-    background-color: #510c76;
-    border: none;
-    border-radius: 0;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 1.5rem;
-}
-
-.submit_button:hover {
-    background-color: #8348ad;
-}
-
-.submit_button:active {
-    background-color: #8348ad;
-}
-
-.submit_button:focus {
-    outline: none;
-    box-shadow: 0 0 3px #510c76;
-}
-
-.submit_button:disabled {
-    background-color: #c9c9c9;
-    border-color: #c9c9c9;
-    color: #6e6e6e;
-    cursor: not-allowed;
-}
-
-.submit_warning {
+.submit-warning {
     font-size: 0.75rem;
     margin-bottom: 0.5rem;
 }
 
-.textarea_sublabel {
-    font-size: .95rem !important;
+.textarea-sublabel {
+    font-size: .90rem !important;
     color: black !important;
 }
 
-.textarea_sublabel strong {
-    color: inherit; /* inherits black from .textarea_sublabel */
+/*start new css*/
+
+/* Make fieldset legend match the "Student Email Search:" label */
+.slds-form-element__legend.slds-form-element__label.section-label {
+    /*display: block;                   !* ensure it behaves like a label block *!*/
+    font-size: 1rem !important;       /* same size as .section-label */
+    font-weight: normal !important;                 /* match label weight (adjust if needed) */
+    color: black !important;          /* same color */
+    /*margin: 0 0 0.25rem 0;            !* spacing below like other labels *!*/
+    /*padding: 0;                       !* remove any browser legend padding *!*/
+    /*line-height: 1.2;*/
+}
+
+.search-mode .slds-radio__label .slds-form-element__label {
+    font-size: 0.95rem;        /* adjust: 0.875rem, 1rem, etc. */
+    color: black;      /* adjust to your color */
+    /*font-weight: 600;          !* optional *!*/
+    /*line-height: 1.2;*/
+}
+
+/* style the faux radio (the round control) to match border */
+.search-mode .slds-radio__label .slds-radio_faux {
+    box-shadow: none !important;      /* remove SLDS shadow */
+    border: 1px solid #9e9aa6 !important;
+    background: white !important;
+}
+
+/* checked state: change the faux background & border color */
+.search-mode .slds-radio input:checked + .slds-radio__label .slds-radio_faux {
+    background-color: rebeccapurple !important;
+    border-color: rebeccapurple !important;
+    box-shadow: none !important;
+}
+
+/* keep an accessible focus ring for keyboard users (replace drop shadow) */
+.search-mode .slds-radio input:focus-visible + .slds-radio__label {
+    outline: 2px solid #ffd966;   /* visible focus ring */
+    outline-offset: 2px;
+}
+
+/* optional: tighten radio spacing */
+.search-mode .slds-radio {
+    margin-bottom: .30rem !important;
+}
+
+/* stack only the radios inside the search-mode block */
+.search-mode .slds-form-element__control {
+    /* turn the grid's direction to column so children stack */
+    flex-direction: column !important;
+    align-items: flex-start; /* keep items left aligned */
+    gap: 0.25rem;             /* spacing between radios */
+}
+
+.banner-input,
+.lastname-input,
+.email-input {
+    --slds-c-input-color-border: rebeccapurple;
+    --sds-c-input-color-border: rebeccapurple;
+}
+
+/* Ensure columns in the banner-search and eamil-search row match height */
+.banner-search .slds-grid,
+.email-search .slds-grid {
+    flex-wrap: wrap;
+    align-items: stretch; /* make children equal height */
+}
+
+/* Make each column a vertical flex container. Inputs remain at top, errors can be anchored to bottom. */
+.banner-search .slds-grid > .slds-col,
+.email-search .slds-grid > .slds-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* SMALL / TABLET: stack inputs + button into their own row */
+@media (max-width: 480px) {
+    .tommie-form {
+        width: 100%;
+    }
+
+    lightning-textarea.custom-textarea {
+        min-width: 0;
+        width: 100%;
+    }
+
+    /* reduce reserved error space on small screens */
+    .banner-search .input-wrapper,
+    .email-search .input-wrapper {
+        min-height: auto;
+        padding-bottom: 0.5rem;
+    }
+}
+
+.custom-warning-icon {
+    --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
+}
+
+.warning-text {
+    font-size: 1rem;
+    color: black;
+    /*font-weight: bold;*/
 }

@@ -5,6 +5,7 @@
 import {LightningElement, api, wire, track} from 'lwc';
 import {getPicklistValues} from "lightning/uiObjectInfoApi";
 import advisorInformation from "@salesforce/apex/TommieCaresNonFacultyLwcController.advisorInformation";
+import searchStudent from "@salesforce/apex/TommieCaresNonFacultyLwcController.searchStudent";
 import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
 import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
 import saveCase from "@salesforce/apex/TommieCaresNonFacultyLwcController.saveCase";
@@ -13,6 +14,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     @api paramUrl = "";
     paramBId = "";
+    searchParamsUrl;
     advisorContactInfo;
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
@@ -45,12 +47,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     @track lifeCircumstanceGroup = [];
 
     get studentSelectionCheck() {
-        return !!this.formSubmitSelections.StudentContactId;
-    };
+        return this.formSubmitSelections.StudentContactId && !this.noStudentsFound;
+    }
 
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
-    };
+    }
 
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
@@ -75,6 +77,9 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         AdvisorContactId: "",
         AdvisorEmail: "",
         StudentContactId: "",
+        StudentName: "",
+        StudentEmail: "",
+        StudentType: "",
         TommieCares_Reasons: "",
         High5_Reasons: "",
         High5_Details: "",
@@ -96,23 +101,36 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     connectedCallback() {
-        let searchParamsUrl = new URL(this.paramUrl);
-        let paramsString = new URLSearchParams(searchParamsUrl.searchParams);
+        const baseUrl = this.paramUrl || window.location.href;
+        this.searchParamsUrl = new URL(baseUrl);
+        // let searchParamsUrl = new URL(this.paramUrl);
+        // let paramsString = new URLSearchParams(searchParamsUrl.searchParams);
 
-        for (let keyValue of paramsString.entries()) {
-
-            switch (keyValue[0]) {
+        for (let [key, value] of this.searchParamsUrl.searchParams.entries()) {
+            switch (key) {
                 case "bid":
-                    if (!this.paramBId) {
-                        this.paramBId = keyValue[1];
-                    }
+                    if (!this.paramBId) this.paramBId = value;
                     break;
                 case "submitted":
-                    if (keyValue[1] === "true") {
-                        this.caseSubmittedCheck = true;
-                    }
+                    if (value === "true") this.caseSubmittedCheck = true;
+                    break;
             }
         }
+
+        // for (let keyValue of paramsString.entries()) {
+        //
+        //     switch (keyValue[0]) {
+        //         case "bid":
+        //             if (!this.paramBId) {
+        //                 this.paramBId = keyValue[1];
+        //             }
+        //             break;
+        //         case "submitted":
+        //             if (keyValue[1] === "true") {
+        //                 this.caseSubmittedCheck = true;
+        //             }
+        //     }
+        // }
     }
 
     @wire (advisorInformation, {advisorBannerId: "$paramBId"})
@@ -329,12 +347,14 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     submittedUrl() {
-        let reloadUrl = new URL(this.paramUrl);
-
-        reloadUrl.searchParams.set("bid", this.paramBId);
-        reloadUrl.searchParams.set("submitted", "true");
-
-        return reloadUrl;
+        this.searchParamsUrl.searchParams.set("submitted", "true");
+        return this.searchParamsUrl.toString();
+        // let reloadUrl = new URL(this.paramUrl);
+        //
+        // reloadUrl.searchParams.set("bid", this.paramBId);
+        // reloadUrl.searchParams.set("submitted", "true");
+        //
+        // return reloadUrl;
     }
 
     async submitCase() {
@@ -355,6 +375,122 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
         }
+    }
+
+    //start new
+
+    // reactive fields
+    searchMode = null; // default
+    stThomasEmail = '';
+    bannerId = '';
+    lastName = '';
+
+    // getters for template binding
+    get isEmail() {
+        return this.searchMode === 'email';
+    }
+    get isBanner() {
+        return this.searchMode === 'banner';
+    }
+
+    // disable banner search until both fields have non-empty values
+    get isBannerSearchDisabled() {
+        // disable until both non-empty
+        return !(this.bannerId && /^\d+$/.test(this.bannerId) && this.lastName);
+    }
+
+    //disable email search until valid email is entered
+    get isEmailSearchDisabled() {
+        return !(this.isValidStThomasEmail && this.stThomasEmail);
+    }
+
+    handleSearchModeChange(event) {
+        this.resetForm();
+        this.noStudentsFound = false;
+        this.searchMode = event.target.value;
+
+        if (this.searchMode === 'email') {
+            // clear banner inputs
+            this.bannerId = '';
+            this.lastName = '';
+            // this.showBannerValidation = false;
+        } else if (this.searchMode === 'banner') {
+            // clear email input
+            this.stThomasEmail = '';
+            // this.emailSearchMessage = '';
+        }
+    }
+
+    // isValidBannerId = false;
+// input handlers
+    handleBannerIdInput(event) {
+        const eventField = event.target;
+        eventField.setCustomValidity("");
+
+        this.bannerId = (event.detail?.value ?? '').trim();
+        const isInputValueDigits = /^\d+$/.test(this.bannerId);
+
+        if (!isInputValueDigits && this.bannerId) {
+            eventField.setCustomValidity("Must be numbers");
+        }
+
+        eventField.reportValidity();
+        console.log("this.bannerId: "+this.bannerId);
+    }
+
+    handleLastNameInput(event) {
+        this.lastName = (event.detail?.value || '').trim();
+        console.log("this.lastName: "+this.lastName);
+    }
+
+    isValidStThomasEmail = false;
+    handleEmailChange(event) {
+        const eventField = event.target;
+        eventField.setCustomValidity("");
+
+        this.stThomasEmail = (event.detail?.value || '').trim();
+        const stThomasEmailRegex = /^[A-Za-z0-9._%+\-=]+@stthomas\.edu$/i;
+        const stThomasEmailStagingRegex = /^[A-Za-z0-9._%+\-=]+@example\.com$/i;
+        this.isValidStThomasEmail = stThomasEmailRegex.test(this.stThomasEmail) || stThomasEmailStagingRegex.test(this.stThomasEmail);
+
+        if (!this.isValidStThomasEmail && this.stThomasEmail) {
+            eventField.setCustomValidity("Must contain @stthomas.edu");
+        }
+
+        eventField.reportValidity();
+        console.log("this.stThomasEmail: "+this.stThomasEmail);
+    }
+
+    noStudentsFound = false;
+
+// handle search actions
+    handleSearchStudent() {
+        console.log("email: " + this.stThomasEmail + "bannerId: " + this.bannerId + "lastName: " + this.lastName);
+
+        searchStudent({ searchMode: this.searchMode, bannerId: this.bannerId, lastName: this.lastName, email: this.stThomasEmail })
+            .then(result => {
+                if (!Array.isArray(result) || result.length === 0) {
+                    this.resetForm();
+                    this.noStudentsFound = true;
+                    console.log('No students found');
+                    return;
+                }
+
+                const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c } = result[0];
+                this.formSubmitSelections.StudentContactId = Id;
+                this.formSubmitSelections.StudentName = Name;
+                this.formSubmitSelections.StudentEmail = hed__UniversityEmail__c;
+
+                this.noStudentsFound = false;
+                console.log("Found Search Result:", JSON.stringify(result));
+                this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
+                this.buildAlertGroups();
+            })
+            .catch(error => {
+                // handle error, e.g. show message
+                console.error("Search error:", error);
+                // Example: this.emailSearchMessage = "Search failed. Please try again.";
+            });
     }
 
 }
