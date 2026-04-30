@@ -20,7 +20,7 @@
         </div>
     </template>
     <template lwc:if={caseSubmittedCheck}>
-        <div class="slds-media slds-theme_success slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+        <div class="slds-media slds-theme_success slds-scoped-notification slds-m-bottom_xx-large slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:success"
                                 alternative-text="submit success"
@@ -33,6 +33,15 @@
                 <p class="slds-text-body_regular">Thank you for your submission. You have a tremendous impact on each student’s experience.</p>
                 <p class="slds-text-body_regular slds-m-top_xx-small"><i>You can submit another below, or close this window if you are done.</i></p>
             </div>
+        </div>
+        <div class="slds-m-top_xx-large">
+            <lightning-button variant="brand"
+                              type="button"
+                              label="SUBMIT ANOTHER"
+                              onclick={submitAnother}
+                              class="slds-p-right_x-small submit_button"
+                              disable-animation>
+            </lightning-button>
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
@@ -50,13 +59,13 @@
             </div>
         </div>
     </template>
-    <template lwc:if={advisorContactIdCheck}>
+    <template lwc:if={initialPageView}>
         <div class="slds-m-bottom_small ">
             <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Last_Name_First_Name__c} ({advisorContactInfo.Email})</p>
         </div>
         <div class="footer-info">
             <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
+                or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555">(651)962-5555</a>.</p>
             <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
                 individuals in order to provide additional support.<br>
                 All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -66,7 +75,7 @@
 
         <!-- Search mode radios -->
         <fieldset class="slds-form-element search-mode">
-            <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_xx-small section-label">Search Student By:</legend>
+            <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
             <div class="slds-form-element__control">
                 <div class="slds-radio">
                     <input type="radio"
@@ -82,22 +91,22 @@
                 </div>
                 <!-- Banner search (shows only when Banner radio selected) -->
                 <template if:true={isBanner}>
-                    <div class="slds-form-element slds-m-top_x-small slds-m-bottom_small banner-search">
+                    <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
                         <div class="slds-form-element__control">
                             <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
-                                <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-12 input-wrapper">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
                                     <lightning-input name="bannerId"
                                                      label=""
                                                      type="text"
                                                      max-length="10"
-                                                     placeholder="Banner Id"
+                                                     placeholder="Banner ID"
                                                      value={bannerId}
                                                      onchange={handleBannerIdInput}
                                                      class="slds-m-right_x-small banner-input"
                                                      variant="label-hidden">
                                     </lightning-input>
                                 </div>
-                                <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-12 input-wrapper">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
                                     <lightning-input name="lastName"
                                                      label=""
                                                      type="text"
@@ -136,13 +145,14 @@
                 </div>
                 <!-- Email search (replace reusable lookup) -->
                 <template if:true={isEmail}>
-                    <div class="slds-form-element slds-m-top_x-small email-search">
+                    <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
                         <div class="slds-form-element__control">
                             <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
-                                <div class="slds-col slds-size_1-of-1 slds-small-size_4-of-12 input-wrapper">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
                                     <lightning-input id="email-search-id"
                                                      name="stThomasEmail"
                                                      type="email"
+                                                     max-length="75"
                                                      label=""
                                                      placeholder="student@stthomas.edu"
                                                      value={stThomasEmail}
@@ -196,7 +206,7 @@
                     </lightning-icon>
                 </div>
                 <div class="slds-media__body">
-                    <p class="warning-text">No students found. Please try searching again.</p>
+                    <p class="warning-text">No students found. Please try your search again.</p>
                 </div>
             </div>
         </template>

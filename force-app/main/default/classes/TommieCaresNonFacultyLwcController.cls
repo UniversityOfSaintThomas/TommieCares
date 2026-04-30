@@ -95,37 +95,6 @@ public without sharing class TommieCaresNonFacultyLwcController {
         // For email search just return results
         return contacts;
     }
-//    public static List<Contact> searchStudent(String searchMode, String bannerId, String lastName, String email) {
-//        List<Contact> matches = new List<Contact>();
-//        if (String.isBlank(bannerId) || String.isBlank(lastName)) {
-//            return matches;
-//        }
-//
-//        // Query by banner ID only (keeps SOQL selective); filter by last name in Apex after normalization
-//        List<Contact> contacts = [
-//                SELECT Id,
-//                        FirstName,
-//                        LastName,
-//                        Name,
-//                        Email,
-//                        hed__UniversityEmail__c,
-//                        University_Banner_ID__c
-//                FROM Contact
-//                WHERE University_Banner_ID__c = :bannerId
-//                WITH SECURITY_ENFORCED
-//        ];
-//
-//        String normalizedInput = normalizeLastName(lastName);
-//
-//        for (Contact c : contacts) {
-//            // normalize stored LastName (handles nulls)
-//            String normalizedStored = normalizeLastName(c.LastName);
-//            if (normalizedInput != null && normalizedInput.equals(normalizedStored)) {
-//                matches.add(c);
-//            }
-//        }
-//        return matches;
-//    }
 
 // Helper: remove whitespace, hyphens, and apostrophes, then lowercase.
 // Examples:

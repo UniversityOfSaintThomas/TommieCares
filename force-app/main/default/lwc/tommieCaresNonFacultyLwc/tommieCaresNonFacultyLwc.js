@@ -46,6 +46,10 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     @track behaviorMentalHealthGroup = [];
     @track lifeCircumstanceGroup = [];
 
+    get initialPageView() {
+        return this.advisorContactInfo && !this.caseSubmittedCheck;
+    }
+
     get studentSelectionCheck() {
         return this.formSubmitSelections.StudentContactId && !this.noStudentsFound;
     }
@@ -166,26 +170,26 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         }
     }
 
-    selectStudentContactId(event) {
-        const { id, subField } = event.detail;
-
-        this.caseSubmittedCheck = false;
-
-        if (!id) {
-            this.resetForm();
-            return;
-        }
-
-        // Student selected — rebuild and filter alert reason options
-        this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
-        this.formSubmitSelections.StudentContactId = id;
-
-        if (subField?.toLowerCase().includes("graduate student")) {
-            this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
-        }
-
-        this.buildAlertGroups();
-    }
+    // selectStudentContactId(event) {
+    //     const { id, subField } = event.detail;
+    //
+    //     this.caseSubmittedCheck = false;
+    //
+    //     if (!id) {
+    //         this.resetForm();
+    //         return;
+    //     }
+    //
+    //     // Student selected — rebuild and filter alert reason options
+    //     this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
+    //     this.formSubmitSelections.StudentContactId = id;
+    //
+    //     if (subField?.toLowerCase().includes("graduate student")) {
+    //         this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+    //     }
+    //
+    //     this.buildAlertGroups();
+    // }
 
     removeTommieCaresOptions(exclusionList, optionsList) {
         for (const exclusion of exclusionList) {
@@ -274,13 +278,13 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                 break;
         }
 
-        if (!(!!this.formSubmitSelections.TommieCares_Reasons)) {
+        if (!(this.formSubmitSelections.TommieCares_Reasons)) {
             this.formSubmitSelections.Additional_Concerns = "";
         }
     }
 
     checkBoxSelect(evt, selectionType) {
-        let selections = !!selectionType ? selectionType.split(";") : [];
+        let selections = selectionType ? selectionType.split(";") : [];
 
         if (evt.target.checked) {
             selections.push(evt.target.value);
@@ -328,17 +332,26 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             textareas.forEach(ta => { ta.value = ""; });
         }
 
-        for (const selection in this.formSubmitSelections) {
-            this.formSubmitSelections[selection] = "";
-        }
+        // for (const selection in this.formSubmitSelections) {
+        //     this.formSubmitSelections[selection] = "";
+        // }
+        Object.keys(this.formSubmitSelections).forEach(k => {
+            this.formSubmitSelections[k] = '';
+        });
 
-        for (const check in this.selectionsCheck) {
-            this.selectionsCheck[check] = false;
-        }
+        // for (const check in this.selectionsCheck) {
+        //     this.selectionsCheck[check] = false;
+        // }
+        Object.keys(this.selectionsCheck).forEach(k => {
+            this.selectionsCheck[k] = false;
+        });
 
-        for (const required in this.formRequired) {
-            this.formRequired[required] = false;
-        }
+        // for (const required in this.formRequired) {
+        //     this.formRequired[required] = false;
+        // }
+        Object.keys(this.formRequired).forEach(k => {
+            this.formRequired[k] = false;
+        });
 
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
@@ -465,25 +478,29 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
 // handle search actions
     handleSearchStudent() {
+        this.resetForm();
         console.log("email: " + this.stThomasEmail + "bannerId: " + this.bannerId + "lastName: " + this.lastName);
 
         searchStudent({ searchMode: this.searchMode, bannerId: this.bannerId, lastName: this.lastName, email: this.stThomasEmail })
             .then(result => {
                 if (!Array.isArray(result) || result.length === 0) {
-                    this.resetForm();
                     this.noStudentsFound = true;
                     console.log('No students found');
                     return;
                 }
+
+                this.noStudentsFound = false;
+                console.log("Found Search Result:", JSON.stringify(result));
 
                 const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c } = result[0];
                 this.formSubmitSelections.StudentContactId = Id;
                 this.formSubmitSelections.StudentName = Name;
                 this.formSubmitSelections.StudentEmail = hed__UniversityEmail__c;
 
-                this.noStudentsFound = false;
-                console.log("Found Search Result:", JSON.stringify(result));
                 this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
+                if (St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
+                    this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+                }
                 this.buildAlertGroups();
             })
             .catch(error => {
@@ -491,6 +508,13 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                 console.error("Search error:", error);
                 // Example: this.emailSearchMessage = "Search failed. Please try again.";
             });
+    }
+
+    submitAnother() {
+        if (window.location && window.location.search) {
+            this.searchParamsUrl.searchParams.delete("submitted");
+        }
+        location.replace(this.searchParamsUrl.toString());
     }
 
 }

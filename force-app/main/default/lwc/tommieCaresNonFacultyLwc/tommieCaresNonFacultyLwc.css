@@ -206,6 +206,11 @@ lightning-button.submit_button {
     --sds-c-input-color-border: rebeccapurple;
 }
 
+/*.banner-search,*/
+/*.email-search {*/
+/*    margin-left: 20px;*/
+/*}*/
+
 /* Ensure columns in the banner-search and eamil-search row match height */
 .banner-search .slds-grid,
 .email-search .slds-grid {
@@ -221,8 +226,7 @@ lightning-button.submit_button {
     justify-content: flex-start;
 }
 
-/* SMALL / TABLET: stack inputs + button into their own row */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .tommie-form {
         width: 100%;
     }
@@ -239,6 +243,25 @@ lightning-button.submit_button {
         padding-bottom: 0.5rem;
     }
 }
+
+/* SMALL / TABLET: stack inputs + button into their own row */
+/*@media (max-width: 480px) {*/
+/*    .tommie-form {*/
+/*        width: 100%;*/
+/*    }*/
+/*    */
+/*    lightning-textarea.custom-textarea {*/
+/*        min-width: 0;*/
+/*        width: 100%;*/
+/*    }*/
+
+/*    !* reduce reserved error space on small screens *!*/
+/*    .banner-search .input-wrapper,*/
+/*    .email-search .input-wrapper {*/
+/*        min-height: auto;*/
+/*        padding-bottom: 0.5rem;*/
+/*    }*/
+/*}*/
 
 .custom-warning-icon {
     --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
