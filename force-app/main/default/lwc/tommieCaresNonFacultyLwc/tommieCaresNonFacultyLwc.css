@@ -62,17 +62,17 @@ lightning-textarea.custom-textarea {
     font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
-.label-margin {
-    margin-top: -18px;
-}
+/*.label-margin {*/
+/*    margin-top: -18px;*/
+/*}*/
 
 lightning-button.submit_button {
-    --slds-c-button-brand-text-color: #fff;
-    --slds-c-button-brand-color-background: #510c76;
-    --slds-c-button-brand-color-border: #510c76;
-    --slds-c-button-brand-color-background-hover: #8348ad;
-    --slds-c-button-brand-color-background-active: #8348ad;
-    --slds-c-button-brand-radius-border: 0px;
+    /*--slds-c-button-brand-text-color: #fff;*/
+    /*--slds-c-button-brand-color-background: #510c76;*/
+    /*--slds-c-button-brand-color-border: #510c76;*/
+    /*--slds-c-button-brand-color-background-hover: #8348ad;*/
+    /*--slds-c-button-brand-color-background-active: #8348ad;*/
+    /*--slds-c-button-brand-radius-border: 0px;*/
     font-size: 1rem !important;
     font-weight: bold;
 }
@@ -154,16 +154,11 @@ lightning-button.submit_button {
     font-size: 1rem !important;       /* same size as .section-label */
     font-weight: normal !important;                 /* match label weight (adjust if needed) */
     color: black !important;          /* same color */
-    /*margin: 0 0 0.25rem 0;            !* spacing below like other labels *!*/
-    /*padding: 0;                       !* remove any browser legend padding *!*/
-    /*line-height: 1.2;*/
 }
 
 .search-mode .slds-radio__label .slds-form-element__label {
     font-size: 0.95rem;        /* adjust: 0.875rem, 1rem, etc. */
     color: black;      /* adjust to your color */
-    /*font-weight: 600;          !* optional *!*/
-    /*line-height: 1.2;*/
 }
 
 /* style the faux radio (the round control) to match border */
@@ -187,17 +182,9 @@ lightning-button.submit_button {
 }
 
 /* optional: tighten radio spacing */
-.search-mode .slds-radio {
-    margin-bottom: .30rem !important;
-}
-
-/* stack only the radios inside the search-mode block */
-.search-mode .slds-form-element__control {
-    /* turn the grid's direction to column so children stack */
-    flex-direction: column !important;
-    align-items: flex-start; /* keep items left aligned */
-    gap: 0.25rem;             /* spacing between radios */
-}
+/*.search-mode .slds-radio {*/
+/*    margin-bottom: .30rem !important;*/
+/*}*/
 
 .banner-input,
 .lastname-input,
@@ -206,25 +193,28 @@ lightning-button.submit_button {
     --sds-c-input-color-border: rebeccapurple;
 }
 
-/*.banner-search,*/
-/*.email-search {*/
-/*    margin-left: 20px;*/
+/* stack only the radios inside the search-mode block */
+/*.search-mode .slds-form-element__control {*/
+/*    !* turn the grid's direction to column so children stack *!*/
+/*    flex-direction: column !important;*/
+/*    align-items: flex-start; !* keep items left aligned *!*/
+/*    gap: 0.25rem;             !* spacing between radios *!*/
 /*}*/
 
 /* Ensure columns in the banner-search and eamil-search row match height */
-.banner-search .slds-grid,
-.email-search .slds-grid {
-    flex-wrap: wrap;
-    align-items: stretch; /* make children equal height */
-}
+/*.banner-search .slds-grid,*/
+/*.email-search .slds-grid {*/
+/*    flex-wrap: wrap;*/
+/*    align-items: stretch; !* make children equal height *!*/
+/*}*/
 
 /* Make each column a vertical flex container. Inputs remain at top, errors can be anchored to bottom. */
-.banner-search .slds-grid > .slds-col,
-.email-search .slds-grid > .slds-col {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
+/*.banner-search .slds-grid > .slds-col,*/
+/*.email-search .slds-grid > .slds-col {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: flex-start;*/
+/*}*/
 
 @media (max-width: 768px) {
     .tommie-form {
@@ -244,25 +234,6 @@ lightning-button.submit_button {
     }
 }
 
-/* SMALL / TABLET: stack inputs + button into their own row */
-/*@media (max-width: 480px) {*/
-/*    .tommie-form {*/
-/*        width: 100%;*/
-/*    }*/
-/*    */
-/*    lightning-textarea.custom-textarea {*/
-/*        min-width: 0;*/
-/*        width: 100%;*/
-/*    }*/
-
-/*    !* reduce reserved error space on small screens *!*/
-/*    .banner-search .input-wrapper,*/
-/*    .email-search .input-wrapper {*/
-/*        min-height: auto;*/
-/*        padding-bottom: 0.5rem;*/
-/*    }*/
-/*}*/
-
 .custom-warning-icon {
     --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
 }
@@ -270,5 +241,4 @@ lightning-button.submit_button {
 .warning-text {
     font-size: 1rem;
     color: black;
-    /*font-weight: bold;*/
 }

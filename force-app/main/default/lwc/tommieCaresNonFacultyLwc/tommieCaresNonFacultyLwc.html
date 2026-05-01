@@ -77,7 +77,7 @@
         <fieldset class="slds-form-element search-mode">
             <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
             <div class="slds-form-element__control">
-                <div class="slds-radio">
+                <div class="slds-radio slds-m-bottom_x-small">
                     <input type="radio"
                            id="searchByBanner"
                            name="searchBy"
@@ -93,7 +93,7 @@
                 <template if:true={isBanner}>
                     <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
                         <div class="slds-form-element__control">
-                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
                                     <lightning-input name="bannerId"
                                                      label=""
@@ -123,7 +123,6 @@
                                                       variant="brand"
                                                       disabled={isBannerSearchDisabled}
                                                       onclick={handleSearchStudent}
-                                                      class="banner-search-button"
                                                       title="Search by Banner Id and Last name">
                                     </lightning-button>
                                 </div>
@@ -131,7 +130,7 @@
                         </div>
                     </div>
                 </template>
-                <div class="slds-radio">
+                <div class="slds-radio slds-m-bottom_x-small">
                     <input type="radio"
                            id="searchByEmail"
                            name="searchBy"
@@ -147,7 +146,7 @@
                 <template if:true={isEmail}>
                     <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
                         <div class="slds-form-element__control">
-                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
                                     <lightning-input id="email-search-id"
                                                      name="stThomasEmail"
@@ -167,7 +166,6 @@
                                                       variant="brand"
                                                       disabled={isEmailSearchDisabled}
                                                       onclick={handleSearchStudent}
-                                                      class="email-search-button"
                                                       title="Search by Email">
                                     </lightning-button>
                                 </div>

@@ -45,7 +45,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
         // Build SELECT clause
         String baseSelect = 'SELECT Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, '
                 + 'University_Banner_ID__c, St_Thomas_Connection__c FROM Contact '
-                + 'WHERE St_Thomas_Connection__c INCLUDES (\'Graduate Student\', \'Student\')';
+                + 'WHERE St_Thomas_Connection__c INCLUDES (\'Student\')';
 
         // Build WHERE parts dynamically (use escapeSingleQuotes to avoid SOQL injection)
         List<String> whereParts = new List<String>();
