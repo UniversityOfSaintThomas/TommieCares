@@ -23,6 +23,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
                     WHERE University_Banner_ID__c = :advisorBannerId
                     AND St_Thomas_Connection__c INCLUDES ('Faculty', 'Staff')
                     WITH SECURITY_ENFORCED
+                    LIMIT 1
             ];
         }
 
@@ -44,7 +45,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
 
         // Build SELECT clause
         String baseSelect = 'SELECT Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, '
-                + 'University_Banner_ID__c, St_Thomas_Connection__c FROM Contact '
+                + 'University_Banner_ID__c, St_Thomas_Connection__c, Undergraduate_Cohort_Code__c FROM Contact '
                 + 'WHERE St_Thomas_Connection__c INCLUDES (\'Student\')';
 
         // Build WHERE parts dynamically (use escapeSingleQuotes to avoid SOQL injection)
@@ -77,13 +78,20 @@ public without sharing class TommieCaresNonFacultyLwcController {
         // Execute dynamic query
         List<Contact> contacts = Database.query(finalQuery);
 
+        List<Contact> filteredContacts = new List<Contact>();
+        for (Contact c : contacts) {
+            if (String.isBlank(c.Undergraduate_Cohort_Code__c) || !c.Undergraduate_Cohort_Code__c.contains('DCNFDSFL')) {
+                filteredContacts.add(c);
+            }
+        }
+
         // If banner search, filter by normalized last name in Apex (existing normalizeLastName helper)
         if (searchMode == 'banner') {
             String normalizedInput = normalizeLastName(lastName);
             if (String.isBlank(normalizedInput)) {
                 return matches;
             }
-            for (Contact c : contacts) {
+            for (Contact c : filteredContacts) {
                 String normalizedStored = normalizeLastName(c.LastName);
                 if (normalizedInput.equals(normalizedStored)) {
                     matches.add(c);
@@ -93,7 +101,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
         }
 
         // For email search just return results
-        return contacts;
+        return filteredContacts;
     }
 
 // Helper: remove whitespace, hyphens, and apostrophes, then lowercase.
