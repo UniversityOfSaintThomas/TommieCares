@@ -136,7 +136,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
 
         tommieCaresCase.RecordTypeId = caseRecordId;
         tommieCaresCase.Case_Reporter__c = formSelections.get('AdvisorContactId');
-        tommieCaresCase.Subject = 'Tommie Cares';
+        tommieCaresCase.Subject = 'Tommie Cares NF';
         tommieCaresCase.Origin = 'Web';
         tommieCaresCase.Reporter_University_Email__c = formSelections.get('AdvisorEmail');
         tommieCaresCase.ContactId = formSelections.get('StudentContactId');
