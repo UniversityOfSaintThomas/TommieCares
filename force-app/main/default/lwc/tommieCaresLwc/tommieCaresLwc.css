@@ -2,17 +2,18 @@
  * Created by nguy0092 on 10/8/2024.
  */
 
-.slds-theme_success {
-    background: #672D85 !important;
-}
-
-.notification_text p {
-    font-size: 1rem !important;
-    color: white;
-}
-
 abbr.slds-required {
     font-weight: bold;
+}
+
+.additional_info {
+    font-size: .90rem !important;
+    /*font-weight: bold;*/
+}
+
+/*Passed in parameter from Community of Concern LWC to hide Advisor information*/
+.advisor_info_hide {
+    display: none;
 }
 
 .advisor_info p {
@@ -21,53 +22,14 @@ abbr.slds-required {
     color: rebeccapurple;
 }
 
+.alert-group-heading {
+    font-size: .80rem !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
 .footer_info p {
     font-size: 1rem !important;
-}
-
-.additional_info p {
-    font-size: 1rem !important;
-    font-weight: bold;
-}
-
-.additional_info p.no_bold_text {
-    font-weight: normal !important;
-}
-
-.picklist_checkbox_options {
-    display: inline-block;
-    position: relative;
-    float: left;
-    border: solid 1px rebeccapurple;
-}
-
-.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
-    font-size: 1rem !important;
-    font-weight: normal;
-    color: rebeccapurple;
-}
-
-.textarea_sublabel {
-    font-size: 1rem !important;
-    color: black;
-}
-
-.slds-form-element .picklist_checkbox_text {
-    font-size: 1rem !important;
-    text-transform: capitalize;
-    color: black;
-}
-
-.picklist_checkbox_check {
-    box-shadow: none;
-}
-
-.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,
-.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {
-    background-color: rebeccapurple;
-    border: none;
-    content: none;
-    box-shadow: none;
 }
 
 lightning-button.submit_button {
@@ -81,6 +43,73 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
-.advisor_info_hide {
-    display: none;
+.notification_text p {
+    font-size: 1rem !important;
+    color: white;
 }
+
+.picklist_checkbox_check {
+    box-shadow: none;
+}
+
+.picklist_checkbox_options {
+    display: inline-block;
+    position: relative;
+    float: left;
+    border: solid 1px rebeccapurple;
+}
+
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check,
+.picklist_checkbox:checked+.slds-checkbox__label .picklist_checkbox_check::after {
+    background-color: rebeccapurple;
+    border: none;
+    content: none;
+    box-shadow: none;
+}
+
+.picklist_dropdown_label, .picklist_checkbox_legend, .textarea_label {
+    font-size: 1rem !important;
+    font-weight: normal;
+    color: rebeccapurple;
+}
+
+.slds-form-element .picklist_checkbox_text {
+    font-size: 1rem !important;
+    text-transform: capitalize;
+    color: black;
+}
+
+.slds-theme_success {
+    background: #672D85 !important;
+}
+
+.submit-warning {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.textarea_sublabel {
+    font-size: .95rem !important;
+    color: black;
+}
+
+/*.element-sublabel {*/
+/*    font-size: 1rem !important;*/
+/*    color: black !important;*/
+/*}*/
+
+/*.sub-content {*/
+/*    clear: both;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 10rem;*/
+/*    !*padding-top: 0.5rem;*!*/
+/*}*/
+
+/*.sub-content p:not(.textarea-sublabel) {*/
+/*    margin-bottom: 0 !important;*/
+/*}*/
+
+/*.sub-content-overflow {*/
+/*    overflow: hidden;*/
+/*}*/

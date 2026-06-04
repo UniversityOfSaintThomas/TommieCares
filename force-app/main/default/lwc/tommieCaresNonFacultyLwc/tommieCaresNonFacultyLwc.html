@@ -4,6 +4,21 @@
 
 <!-- Tommie Cares Non Faculty Lwc -->
 <template>
+    <template lwc:if={noAdvisorContactIdCheck}>
+        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error"
+                                alternative-text="submit case error"
+                                title="submit case error"
+                                size="small"
+                                class="slds-align-middle"
+                                variant="inverse"></lightning-icon>
+            </div>
+            <div class="slds-media__body notification-text">
+                <p class="slds-text-body_regular">Requester Information Not Found. Please contact salesforce@stthomas.edu to report this error.</p>
+            </div>
+        </div>
+    </template>
     <template lwc:if={caseSubmittedErrorCheck}>
         <div class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
@@ -42,21 +57,6 @@
                               class="slds-p-right_x-small submit_button"
                               disable-animation>
             </lightning-button>
-        </div>
-    </template>
-    <template lwc:if={noAdvisorContactIdCheck}>
-        <div class="slds-media slds-media_center slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
-            <div class="slds-media__figure">
-                <lightning-icon icon-name="utility:error"
-                                alternative-text="submit case error"
-                                title="submit case error"
-                                size="small"
-                                class="slds-align-middle"
-                                variant="inverse"></lightning-icon>
-            </div>
-            <div class="slds-media__body notification-text">
-                <p class="slds-text-body_regular">Requester Information Not Found. Please contact salesforce@stthomas.edu to report this error.</p>
-            </div>
         </div>
     </template>
     <template lwc:if={initialPageView}>
@@ -278,7 +278,7 @@
                         <!-- Advising -->
                         <template lwc:if={advisingGroup.length}>
                             <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Advising</p>
+                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Advising Alert</p>
                                 <template for:each={advisingGroup} for:item="cares">
                                     <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
                                         <input type="checkbox"
@@ -306,7 +306,7 @@
                         <!-- Behavior / Mental Health -->
                         <template lwc:if={behaviorMentalHealthGroup.length}>
                             <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Behavior / Mental Health</p>
+                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Behavior/Mental Health Alert</p>
                                 <template for:each={behaviorMentalHealthGroup} for:item="cares">
                                     <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
                                         <input type="checkbox"
@@ -340,7 +340,7 @@
                         <!-- Life Circumstances -->
                         <template lwc:if={lifeCircumstanceGroup.length}>
                             <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Life Circumstances</p>
+                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Life Circumstances Alert</p>
                                 <template for:each={lifeCircumstanceGroup} for:item="cares">
                                     <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
                                         <input type="checkbox"
@@ -388,7 +388,7 @@
 <!--                </fieldset>-->
             </div>
             <template lwc:if={caresSelectionCheck}>
-                <div class="slds-form-element">
+                <div class="slds-form-element" lwc:if={showAdditionalConcerns}>
                     <label class="slds-form-element__label section-label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
                     <p class="slds-m-bottom_xxx-small textarea-sublabel"><i>The information provided below <u>will not</u> be shared with the student.</i></p>
                     <div class="slds-form-element__control">
@@ -402,22 +402,22 @@
                         </lightning-textarea>
                     </div>
                 </div>
-            </template>
-            <div class="slds-m-vertical_x-large" lwc:if={caresSelectionCheck}>
-                <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
-                    <p class="submit-warning">
-                        <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
-                    </p>
+                <div class="slds-m-vertical_x-large">
+                    <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
+                        <p class="submit-warning">
+                            <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
+                        </p>
+                    </div>
+                    <lightning-button variant="brand"
+                                      type="button"
+                                      label="SUBMIT"
+                                      disabled={submitDisable}
+                                      onclick={submitCase}
+                                      class="slds-p-right_x-small submit_button"
+                                      disable-animation>
+                    </lightning-button>
                 </div>
-                <lightning-button variant="brand"
-                                  type="button"
-                                  label="SUBMIT"
-                                  disabled={submitDisable}
-                                  onclick={submitCase}
-                                  class="slds-p-right_x-small submit_button"
-                                  disable-animation>
-                </lightning-button>
-            </div>
+            </template>
             <div class="slds-m-vertical_small footer-info">
                 <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto:studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a>.</p>
                 <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>

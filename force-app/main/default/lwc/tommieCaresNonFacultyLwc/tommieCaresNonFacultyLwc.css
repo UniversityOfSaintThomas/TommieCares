@@ -2,14 +2,6 @@
  * Created by nguy0092 on 2/7/2025.
  */
 
-.tommie-form {
-    box-sizing: border-box;   /* include padding in width */
-    width: 80%;               /* change percent to taste */
-    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
-    margin: 0;                /* left aligned (no auto centering) */
-    min-height: 200px;
-}
-
 a {
     color: rebeccapurple;            /* new color for normal state */
 }
@@ -46,14 +38,6 @@ abbr.slds-required {
     color: black !important;
 }
 
-lightning-textarea.custom-textarea {
-    --slds-c-textarea-color-border: rebeccapurple;
-    --sds-c-textarea-color-border: rebeccapurple;
-    --sds-c-textarea-sizing-min-height: 100px;
-    box-sizing: border-box;
-    width: 90%;
-}
-
 .footer-info p {
     font-size: 1rem !important;
 }
@@ -75,6 +59,14 @@ lightning-button.submit_button {
     /*--slds-c-button-brand-radius-border: 0px;*/
     font-size: 1rem !important;
     font-weight: bold;
+}
+
+lightning-textarea.custom-textarea {
+    --slds-c-textarea-color-border: rebeccapurple;
+    --sds-c-textarea-color-border: rebeccapurple;
+    --sds-c-textarea-sizing-min-height: 100px;
+    box-sizing: border-box;
+    width: 90%;
 }
 
 .notification-text p {
@@ -144,6 +136,14 @@ lightning-button.submit_button {
 .textarea-sublabel {
     font-size: .90rem !important;
     color: black !important;
+}
+
+.tommie-form {
+    box-sizing: border-box;   /* include padding in width */
+    width: 80%;               /* change percent to taste */
+    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
+    margin: 0;                /* left aligned (no auto centering) */
+    min-height: 200px;
 }
 
 /*start new css*/
