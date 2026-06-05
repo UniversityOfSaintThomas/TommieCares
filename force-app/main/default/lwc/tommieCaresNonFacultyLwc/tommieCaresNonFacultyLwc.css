@@ -22,7 +22,7 @@ abbr.slds-required {
 }
 
 .advisor_info {
-    font-size: 1.15rem !important;
+    font-size: 1rem !important;
     font-weight: bold;
     color: rebeccapurple;
 }
@@ -31,6 +31,17 @@ abbr.slds-required {
     overflow: hidden; /* clearfix — forces parent to contain floated children */
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+.alert-group-heading {
+    font-size: .80rem !important;
+    color: black !important;
+    /*font-weight: bold !important;*/
+}
+
+.container {
+    position: relative;
+    min-height: 100px; /* ensures spinner is visible even if content is short */
 }
 
 .element-sublabel {
@@ -95,7 +106,8 @@ lightning-textarea.custom-textarea {
 
 .section-label {
     font-size: 1rem !important;
-    color: black;
+    color: rebeccapurple;
+    font-weight: bold;
 }
 
 .slds-text-title_caps {

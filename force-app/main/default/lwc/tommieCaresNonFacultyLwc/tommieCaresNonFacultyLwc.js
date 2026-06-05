@@ -13,34 +13,10 @@ import saveCase from "@salesforce/apex/TommieCaresNonFacultyLwcController.saveCa
 export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     @api paramUrl = "";
-    paramBId = "";
-    searchParamsUrl;
-    advisorContactInfo;
+
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
     @track tommieHigh5Options = [];
-
-    tommieCaresGeneralExclusions = [
-        "Academic performance concerns",
-        "Attendance concerns"
-    ];
-
-    tommieCaresGraduateExclusions = [
-        "Behavior concerns",
-        "Financial concerns",
-        "Mental health concerns",
-        "Relationship violence/stalking",
-        "Sense of belonging",
-        "Other",
-    ];
-
-    alertGroupingsFilter = [
-        {"Positive Alert": ["Tommie High 5"]},
-        {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
-        {"Behavior Mental Health Alert": ["Behavior concerns", "Mental health concerns", "Relationship violence/stalking"]},
-        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Sense of belonging", "Other"]},
-    ]
-
     @track positiveAlertGroup = [];
     @track advisingGroup = [];
     @track behaviorMentalHealthGroup = [];
@@ -77,31 +53,71 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         High5_Required: false,
         Other_Required: false,
     }
+
+    searchParamsUrl;
+    advisorContactInfo;
+    paramBId = "";
+    bannerId = '';
+    lastName = '';
+    stThomasEmail = '';
+    isValidStThomasEmail = false;
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
     caseSubmittedCheck = false;
     caseSubmittedErrorCheck = false;
     submitCaseSpinner = false;
+    noStudentsFound = false;
+    searchMode = null; // default
+    tommieCaresGeneralExclusions = [
+        "Academic performance concerns",
+        "Attendance concerns"
+    ];
+    tommieCaresGraduateExclusions = [
+        "Behavior concerns",
+        "Financial concerns",
+        "Mental health concerns",
+        "Relationship violence/stalking",
+        "Sense of belonging",
+        "Other",
+    ];
+    alertGroupingsFilter = [
+        {"Positive Alert": ["Tommie High 5"]},
+        {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
+        {"Behavior Mental Health Alert": ["Behavior concerns", "Mental health concerns", "Relationship violence/stalking"]},
+        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Sense of belonging", "Other"]},
+    ]
 
+    get isEmail() {
+        return this.searchMode === 'email';
+    }
+    get isBanner() {
+        return this.searchMode === 'banner';
+    }
+    get isBannerSearchDisabled() {
+        // disable until both non-empty
+        return !(this.bannerId && /^\d+$/.test(this.bannerId) && this.lastName);
+    }
+    get isEmailSearchDisabled() {
+        return !(this.isValidStThomasEmail && this.stThomasEmail);
+    }
     get initialPageView() {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
     }
-
     get studentSelectionCheck() {
         return this.formSubmitSelections.StudentContactId && !this.noStudentsFound;
     }
-
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     }
-
     get showAdditionalConcerns() {
         const excluded = new Set(['otherCheck', 'high5Check']);
         return Object.entries(this.selectionsCheck).some(([key, value]) => !excluded.has(key) && value);
     }
-
     get submitDisable() {
         return Object.values(this.formRequired).includes(true);
+    }
+    get noStudentFoundMessage() {
+        return this.noStudentsFound && (!!this.bannerId || !!this.lastName || !!this.stThomasEmail);
     }
 
     connectedCallback() {
@@ -187,51 +203,54 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     reasonsCheckbox(event) {
+        const eventValue = event.target.value;
+        const eventChecked = event.target.checked;
+
         switch (event.currentTarget.dataset.checkboxtype) {
             case "cares":
                 this.formSubmitSelections.TommieCares_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.TommieCares_Reasons);
 
-                if (event.target.value === "Tommie High 5") {
-                    if (!event.target.checked) {
+                if (eventValue === "Tommie High 5") {
+                    if (!eventChecked) {
                         this.formSubmitSelections.High5_Reasons = "";
                         this.formSubmitSelections.High5_Details = "";
                     }
-                    this.selectionsCheck.high5Check = event.target.checked;
-                    this.formRequired.High5_Required = event.target.checked;
+                    this.selectionsCheck.high5Check = eventChecked;
+                    this.formRequired.High5_Required = eventChecked;
                 }
-                if (event.target.value === "Missed Advising Appointment") {
-                    this.selectionsCheck.missedAdvisingAppointments = event.target.checked;
+                if (eventValue === "Missed Advising Appointment") {
+                    this.selectionsCheck.missedAdvisingAppointments = eventChecked;
                 }
-                if (event.target.value === "Non-Responsive to Outreach") {
-                    this.selectionsCheck.nonResponsiveOutreachCheck = event.target.checked;
+                if (eventValue === "Non-Responsive to Outreach") {
+                    this.selectionsCheck.nonResponsiveOutreachCheck = eventChecked;
                 }
-                if (event.target.value === "Behavior concerns") {
-                    this.selectionsCheck.behaviorCheck = event.target.checked;
+                if (eventValue === "Behavior concerns") {
+                    this.selectionsCheck.behaviorCheck = eventChecked;
                 }
-                if (event.target.value === "Mental health concerns") {
-                    this.selectionsCheck.mentalHealthCheck = event.target.checked;
+                if (eventValue === "Mental health concerns") {
+                    this.selectionsCheck.mentalHealthCheck = eventChecked;
                 }
-                if (event.target.value === "Relationship violence/stalking") {
-                    this.selectionsCheck.relationshipCheck = event.target.checked;
+                if (eventValue === "Relationship violence/stalking") {
+                    this.selectionsCheck.relationshipCheck = eventChecked;
                 }
-                if (event.target.value === "Difficulty Meeting Basic Needs (food/housing, etc)") {
-                    this.selectionsCheck.difficultyMeetingBasicNeedsCheck = event.target.checked;
+                if (eventValue === "Difficulty Meeting Basic Needs (food/housing, etc)") {
+                    this.selectionsCheck.difficultyMeetingBasicNeedsCheck = eventChecked;
                 }
-                if (event.target.value === "Financial concerns") {
-                    this.selectionsCheck.financialConcernsCheck = event.target.checked;
+                if (eventValue === "Financial concerns") {
+                    this.selectionsCheck.financialConcernsCheck = eventChecked;
                 }
-                if (event.target.value === "Life Circumstances Impacting Success") {
-                    this.selectionsCheck.lifeCircumstanceImpactingSuccessCheck = event.target.checked;
+                if (eventValue === "Life Circumstances Impacting Success") {
+                    this.selectionsCheck.lifeCircumstanceImpactingSuccessCheck = eventChecked;
                 }
-                if (event.target.value === "Sense of belonging") {
-                    this.selectionsCheck.senseOfBelongingCheck = event.target.checked;
+                if (eventValue === "Sense of belonging") {
+                    this.selectionsCheck.senseOfBelongingCheck = eventChecked;
                 }
-                if (event.target.value === "Other") {
-                    if (!event.target.checked) {
+                if (eventValue === "Other") {
+                    if (!eventChecked) {
                         this.formSubmitSelections.Other_Details = "";
                     }
-                    this.selectionsCheck.otherCheck = event.target.checked;
-                    this.formRequired.Other_Required = event.target.checked;
+                    this.selectionsCheck.otherCheck = eventChecked;
+                    this.formRequired.Other_Required = eventChecked;
                 }
                 break;
             case "high5":
@@ -261,26 +280,27 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     textAreaDetails(event) {
+        const eventValueTrim = event.detail.value.trim();
+
         switch (event.currentTarget.dataset.texttype) {
             case "high5Details":
-                this.formSubmitSelections.High5_Details = event.detail.value.trim();
+                this.formSubmitSelections.High5_Details = eventValueTrim;
                 this.formRequired.High5_Required = !(this.formSubmitSelections.High5_Reasons && this.formSubmitSelections.High5_Details);
                 break;
             case "otherDetails":
-                this.formSubmitSelections.Other_Details = event.detail.value.trim();
+                this.formSubmitSelections.Other_Details = eventValueTrim;
                 this.formRequired.Other_Required = !this.formSubmitSelections.Other_Details;
                 break;
             case "personalMessage":
-                this.formSubmitSelections.Personal_Message = event.detail.value.trim();
+                this.formSubmitSelections.Personal_Message = eventValueTrim;
                 break;
             case "additionalConcerns":
-                this.formSubmitSelections.Additional_Concerns = event.detail.value.trim();
+                this.formSubmitSelections.Additional_Concerns = eventValueTrim;
                 break;
         }
     }
 
     resetForm() {
-
         const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
 
         if (checkboxes) {
@@ -294,23 +314,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             textareas.forEach(ta => { ta.value = ""; });
         }
 
-        // for (const selection in this.formSubmitSelections) {
-        //     this.formSubmitSelections[selection] = "";
-        // }
         Object.keys(this.formSubmitSelections).forEach(k => {
             this.formSubmitSelections[k] = '';
         });
-
-        // for (const check in this.selectionsCheck) {
-        //     this.selectionsCheck[check] = false;
-        // }
         Object.keys(this.selectionsCheck).forEach(k => {
             this.selectionsCheck[k] = false;
         });
-
-        // for (const required in this.formRequired) {
-        //     this.formRequired[required] = false;
-        // }
         Object.keys(this.formRequired).forEach(k => {
             this.formRequired[k] = false;
         });
@@ -324,59 +333,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     submittedUrl() {
         this.searchParamsUrl.searchParams.set("submitted", "true");
         return this.searchParamsUrl.toString();
-        // let reloadUrl = new URL(this.paramUrl);
-        //
-        // reloadUrl.searchParams.set("bid", this.paramBId);
-        // reloadUrl.searchParams.set("submitted", "true");
-        //
-        // return reloadUrl;
-    }
-
-    async submitCase() {
-        this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
-        this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.Email;
-
-        console.log("I am being submitted");
-
-        try {
-            this.caseSubmittedErrorCheck = false;
-            window.parent.scrollTo({top: 0, behavior: 'smooth' });
-            this.submitCaseSpinner = true;
-            await saveCase({formSelections: this.formSubmitSelections});
-            this.submitCaseSpinner = false;
-            location.replace(this.submittedUrl());
-        } catch (e) {
-            console.log("Submission Error: "+JSON.stringify(e));
-            this.caseSubmittedErrorCheck = true;
-            this.submitCaseSpinner = false;
-        }
-    }
-
-    //start new
-
-    // reactive fields
-    searchMode = null; // default
-    stThomasEmail = '';
-    bannerId = '';
-    lastName = '';
-
-    // getters for template binding
-    get isEmail() {
-        return this.searchMode === 'email';
-    }
-    get isBanner() {
-        return this.searchMode === 'banner';
-    }
-
-    // disable banner search until both fields have non-empty values
-    get isBannerSearchDisabled() {
-        // disable until both non-empty
-        return !(this.bannerId && /^\d+$/.test(this.bannerId) && this.lastName);
-    }
-
-    //disable email search until valid email is entered
-    get isEmailSearchDisabled() {
-        return !(this.isValidStThomasEmail && this.stThomasEmail);
     }
 
     handleSearchModeChange(event) {
@@ -385,22 +341,17 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         this.searchMode = event.target.value;
 
         if (this.searchMode === 'email') {
-            // clear banner inputs
             this.bannerId = '';
             this.lastName = '';
-            // this.showBannerValidation = false;
         } else if (this.searchMode === 'banner') {
-            // clear email input
             this.stThomasEmail = '';
-            // this.emailSearchMessage = '';
         }
     }
 
-    // isValidBannerId = false;
-// input handlers
     handleBannerIdInput(event) {
         const eventField = event.target;
         eventField.setCustomValidity("");
+        this.noStudentsFound = false;
 
         this.bannerId = (event.detail?.value ?? '').trim();
         const isInputValueDigits = /^\d+$/.test(this.bannerId);
@@ -415,13 +366,14 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     handleLastNameInput(event) {
         this.lastName = (event.detail?.value || '').trim();
+        this.noStudentsFound = false;
         console.log("this.lastName: "+this.lastName);
     }
 
-    isValidStThomasEmail = false;
     handleEmailChange(event) {
         const eventField = event.target;
         eventField.setCustomValidity("");
+        this.noStudentsFound = false;
 
         this.stThomasEmail = (event.detail?.value || '').trim();
         const stThomasEmailRegex = /^[A-Za-z0-9._%+\-=]+@stthomas\.edu$/i;
@@ -436,9 +388,6 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         console.log("this.stThomasEmail: "+this.stThomasEmail);
     }
 
-    noStudentsFound = false;
-
-// handle search actions
     handleSearchStudent() {
         this.resetForm();
         console.log("email: " + this.stThomasEmail + "bannerId: " + this.bannerId + "lastName: " + this.lastName);
@@ -477,6 +426,25 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
             this.searchParamsUrl.searchParams.delete("submitted");
         }
         location.replace(this.searchParamsUrl.toString());
+    }
+
+    async submitCase() {
+        this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
+        this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.Email;
+        console.log("I am being submitted");
+
+        try {
+            this.caseSubmittedErrorCheck = false;
+            window.parent.scrollTo({top: 0, behavior: 'smooth' });
+            this.submitCaseSpinner = true;
+            await saveCase({formSelections: this.formSubmitSelections});
+            this.submitCaseSpinner = false;
+            location.replace(this.submittedUrl());
+        } catch (e) {
+            console.log("Submission Error: "+JSON.stringify(e));
+            this.caseSubmittedErrorCheck = true;
+            this.submitCaseSpinner = false;
+        }
     }
 
 }

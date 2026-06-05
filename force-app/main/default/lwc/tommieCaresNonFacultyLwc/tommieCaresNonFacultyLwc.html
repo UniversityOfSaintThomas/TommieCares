@@ -60,210 +60,301 @@
         </div>
     </template>
     <template lwc:if={initialPageView}>
-        <div class="slds-m-bottom_small ">
-            <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Last_Name_First_Name__c} ({advisorContactInfo.Email})</p>
-        </div>
-        <div class="footer-info">
-            <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555">(651)962-5555</a>.</p>
-            <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
-                individuals in order to provide additional support.<br>
-                All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
-                <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
-        </div>
-
-
-        <!-- Search mode radios -->
-        <fieldset class="slds-form-element search-mode">
-            <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
-            <div class="slds-form-element__control">
-                <div class="slds-radio slds-m-bottom_x-small">
-                    <input type="radio"
-                           id="searchByBanner"
-                           name="searchBy"
-                           value="banner"
-                           onchange={handleSearchModeChange}
-                           checked={isBanner}>
-                    <label class="slds-radio__label" for="searchByBanner">
-                        <span class="slds-radio_faux"></span>
-                        <span class="slds-form-element__label">Banner ID and Last Name</span>
-                    </label>
-                </div>
-                <!-- Banner search (shows only when Banner radio selected) -->
-                <template if:true={isBanner}>
-                    <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
-                        <div class="slds-form-element__control">
-                            <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                    <lightning-input name="bannerId"
-                                                     label=""
-                                                     type="text"
-                                                     max-length="10"
-                                                     placeholder="Banner ID"
-                                                     value={bannerId}
-                                                     onchange={handleBannerIdInput}
-                                                     class="slds-m-right_x-small banner-input"
-                                                     variant="label-hidden">
-                                    </lightning-input>
-                                </div>
-                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                    <lightning-input name="lastName"
-                                                     label=""
-                                                     type="text"
-                                                     max-length="50"
-                                                     placeholder="Last Name"
-                                                     value={lastName}
-                                                     onchange={handleLastNameInput}
-                                                     class="slds-m-right_x-small lastname-input"
-                                                     variant="label-hidden">
-                                    </lightning-input>
-                                </div>
-                                <div class="slds-col slds-grow-none input-wrapper">
-                                    <lightning-button label="Search"
-                                                      variant="brand"
-                                                      disabled={isBannerSearchDisabled}
-                                                      onclick={handleSearchStudent}
-                                                      title="Search by Banner Id and Last name">
-                                    </lightning-button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <div class="slds-radio slds-m-bottom_x-small">
-                    <input type="radio"
-                           id="searchByEmail"
-                           name="searchBy"
-                           value="email"
-                           onchange={handleSearchModeChange}
-                           checked={isEmail}>
-                    <label class="slds-radio__label" for="searchByEmail">
-                        <span class="slds-radio_faux"></span>
-                        <span class="slds-form-element__label">University of St. Thomas Email</span>
-                    </label>
-                </div>
-                <!-- Email search (replace reusable lookup) -->
-                <template if:true={isEmail}>
-                    <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
-                        <div class="slds-form-element__control">
-                            <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
-                                    <lightning-input id="email-search-id"
-                                                     name="stThomasEmail"
-                                                     type="email"
-                                                     max-length="75"
-                                                     label=""
-                                                     placeholder="student@stthomas.edu"
-                                                     value={stThomasEmail}
-                                                     onchange={handleEmailChange}
-                                                     class="slds-m-right_x-small email-input"
-                                                     autocomplete="off"
-                                                     variant="label-hidden">
-                                    </lightning-input>
-                                </div>
-                                <div class="slds-col slds-grow-none input-wrapper">
-                                    <lightning-button label="Search"
-                                                      variant="brand"
-                                                      disabled={isEmailSearchDisabled}
-                                                      onclick={handleSearchStudent}
-                                                      title="Search by Email">
-                                    </lightning-button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
+        <div class="container">
+            <template lwc:if={submitCaseSpinner}>
+                <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+            </template>
+            <div class="slds-m-vertical_small ">
+                <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Last_Name_First_Name__c} ({advisorContactInfo.Email})</p>
             </div>
-        </fieldset>
-<!--        <div class="slds-form-element slds-size_1-of-1 slds-small-size_8-of-12">-->
-<!--            <label class="slds-form-element__label section-label">Student Email Search:</label>-->
-<!--            <div id="student-search-id" class="slds-form-element__control label-margin">-->
-<!--                <c-reusable-lookup label=""-->
-<!--                                   selected-icon-name="standard:contact"-->
-<!--                                   object-label=""-->
-<!--                                   object-api-name="Contact"-->
-<!--                                   field-api-name="hed__UniversityEmail__c"-->
-<!--                                   other-field-api-name="Name,St_Thomas_Connection__c"-->
-<!--                                   record-type-name=""-->
-<!--                                   placeholder="Email"-->
-<!--                                   type=""-->
-<!--                                   onvalueselected={selectStudentContactId}-->
-<!--                                   and-criteria=" AND St_Thomas_Connection__c INCLUDES ('Graduate Student','Student')"-->
-<!--                                   order-by-criteria=" ORDER BY Name, Email"-->
-<!--                ></c-reusable-lookup>-->
-<!--            </div>-->
-<!--        </div>-->
-        <template lwc:if={noStudentsFound}>
-            <div class="slds-media slds-media_center slds-scoped-notification slds-m-vertical_medium slds-p-around_small" role="status">
-                <div class="slds-media__figure">
-                    <lightning-icon icon-name="utility:warning"
-                                    alternative-text="no students found"
-                                    title="no students found"
-                                    size="small"
-                                    class="slds-align-middle custom-warning-icon">
-                    </lightning-icon>
-                </div>
-                <div class="slds-media__body">
-                    <p class="warning-text">No students found. Please try your search again.</p>
-                </div>
+            <div class="footer-info">
+                <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+                    or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555">(651)962-5555</a>.</p>
+                <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                    individuals in order to provide additional support.<br>
+                    All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
+                    <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
             </div>
-        </template>
-        <form id="tommieCaresForm" class="tommie-form" data-form="tommieCaresForm">
-            <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
-<!--                <fieldset class="slds-form-element slds-is-required">-->
-                <label class="slds-form-element__label section-label">Select Alert(s) for {formSubmitSelections.StudentName} ({formSubmitSelections.StudentEmail}):</label>
-                    <div class="slds-form-element__control">
-                        <!-- Positive Alert -->
-                        <template lwc:if={positiveAlertGroup.length}>
-                            <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Positive Alert</p>
-                                <template for:each={positiveAlertGroup} for:item="cares">
-                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
-                                        <input type="checkbox"
-                                               name="caresCheckboxes"
-                                               id={cares.value}
-                                               value={cares.value}
-                                               data-checkboxtype="cares"
-                                               onclick={reasonsCheckbox}
-                                               class="picklist-checkbox" />
-                                        <label class="slds-checkbox__label" for={cares.value}>
-                                            <span class="slds-checkbox_faux"></span>
-                                            <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
-                                        </label>
+            <!-- Search mode radios -->
+            <fieldset class="slds-form-element search-mode">
+                <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
+                <div class="slds-form-element__control">
+                    <div class="slds-radio slds-m-bottom_x-small">
+                        <input type="radio"
+                               id="searchByBanner"
+                               name="searchBy"
+                               value="banner"
+                               onchange={handleSearchModeChange}
+                               checked={isBanner}>
+                        <label class="slds-radio__label" for="searchByBanner">
+                            <span class="slds-radio_faux"></span>
+                            <span class="slds-form-element__label">Banner ID and Last Name</span>
+                        </label>
+                    </div>
+                    <!-- Banner search (shows only when Banner radio selected) -->
+                    <template if:true={isBanner}>
+                        <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
+                            <div class="slds-form-element__control">
+                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                        <lightning-input name="bannerId"
+                                                         label=""
+                                                         type="text"
+                                                         max-length="10"
+                                                         placeholder="Banner ID"
+                                                         value={bannerId}
+                                                         onchange={handleBannerIdInput}
+                                                         class="slds-m-right_x-small banner-input"
+                                                         variant="label-hidden">
+                                        </lightning-input>
                                     </div>
-                                </template>
-                                <template lwc:if={selectionsCheck.high5Check}>
-                                    <div class="sub-content">
-                                        <div class="sub-content-overflow">
-                                            <label class="slds-form-element__label element-sublabel">
-                                                <abbr class="slds-required" title="Required">*</abbr>Please select Tommie High 5 Reason(s):</label>
-                                            <div class="slds-form-element__control">
-                                                <template for:each={tommieHigh5Options} for:item="high5">
-                                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={high5.value}>
-                                                        <input type="checkbox"
-                                                               id={high5.value}
-                                                               value={high5.value}
-                                                               data-checkboxtype="high5"
-                                                               onclick={reasonsCheckbox}
-                                                               class="picklist-checkbox" />
-                                                        <label class="slds-checkbox__label" for={high5.value}>
-                                                            <span class="slds-checkbox_faux"></span>
-                                                            <span class="slds-form-element__label picklist-checkbox-text">{high5.label}</span>
-                                                        </label>
-                                                    </div>
-                                                </template>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                        <lightning-input name="lastName"
+                                                         label=""
+                                                         type="text"
+                                                         max-length="50"
+                                                         placeholder="Last Name"
+                                                         value={lastName}
+                                                         onchange={handleLastNameInput}
+                                                         class="slds-m-right_x-small lastname-input"
+                                                         variant="label-hidden">
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-grow-none input-wrapper">
+                                        <lightning-button label="Search"
+                                                          variant="brand"
+                                                          disabled={isBannerSearchDisabled}
+                                                          onclick={handleSearchStudent}
+                                                          title="Search by Banner Id and Last name">
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class="slds-radio slds-m-bottom_x-small">
+                        <input type="radio"
+                               id="searchByEmail"
+                               name="searchBy"
+                               value="email"
+                               onchange={handleSearchModeChange}
+                               checked={isEmail}>
+                        <label class="slds-radio__label" for="searchByEmail">
+                            <span class="slds-radio_faux"></span>
+                            <span class="slds-form-element__label">University of St. Thomas Email</span>
+                        </label>
+                    </div>
+                    <!-- Email search (replace reusable lookup) -->
+                    <template if:true={isEmail}>
+                        <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
+                            <div class="slds-form-element__control">
+                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
+                                        <lightning-input id="email-search-id"
+                                                         name="stThomasEmail"
+                                                         type="email"
+                                                         max-length="75"
+                                                         label=""
+                                                         placeholder="student@stthomas.edu"
+                                                         value={stThomasEmail}
+                                                         onchange={handleEmailChange}
+                                                         class="slds-m-right_x-small email-input"
+                                                         autocomplete="off"
+                                                         variant="label-hidden">
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-grow-none input-wrapper">
+                                        <lightning-button label="Search"
+                                                          variant="brand"
+                                                          disabled={isEmailSearchDisabled}
+                                                          onclick={handleSearchStudent}
+                                                          title="Search by Email">
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </fieldset>
+            <template lwc:if={noStudentFoundMessage}>
+                <div class="slds-media slds-media_center slds-scoped-notification slds-m-vertical_medium slds-p-around_small" role="status">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:warning"
+                                        alternative-text="no students found"
+                                        title="no students found"
+                                        size="small"
+                                        class="slds-align-middle custom-warning-icon">
+                        </lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p class="warning-text">No students found. Please try your search again.</p>
+                    </div>
+                </div>
+            </template>
+            <form id="tommieCaresForm" class="tommie-form" data-form="tommieCaresForm">
+                <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
+                    <label class="slds-form-element__label section-label">Select Alert(s) for {formSubmitSelections.StudentName} ({formSubmitSelections.StudentEmail}):</label>
+                        <div class="slds-form-element__control slds-m-top_x-small">
+                            <!-- Positive Alert -->
+                            <template lwc:if={positiveAlertGroup.length}>
+                                <div class="alert-group">
+                                    <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</p>
+                                    <template for:each={positiveAlertGroup} for:item="cares">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
+                                            <input type="checkbox"
+                                                   name="caresCheckboxes"
+                                                   id={cares.value}
+                                                   value={cares.value}
+                                                   data-checkboxtype="cares"
+                                                   onclick={reasonsCheckbox}
+                                                   class="picklist-checkbox" />
+                                            <label class="slds-checkbox__label" for={cares.value}>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                    <template lwc:if={selectionsCheck.high5Check}>
+                                        <div class="sub-content">
+                                            <div class="sub-content-overflow">
+                                                <label class="slds-form-element__label element-sublabel">
+                                                    <abbr class="slds-required" title="Required">*</abbr>Select Tommie High 5 Reason(s):</label>
+                                                <div class="slds-form-element__control">
+                                                    <template for:each={tommieHigh5Options} for:item="high5">
+                                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={high5.value}>
+                                                            <input type="checkbox"
+                                                                   id={high5.value}
+                                                                   value={high5.value}
+                                                                   data-checkboxtype="high5"
+                                                                   onclick={reasonsCheckbox}
+                                                                   class="picklist-checkbox" />
+                                                            <label class="slds-checkbox__label" for={high5.value}>
+                                                                <span class="slds-checkbox_faux"></span>
+                                                                <span class="slds-form-element__label picklist-checkbox-text">{high5.label}</span>
+                                                            </label>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label element-sublabel" for="high5-details-id">
+                                                    <abbr class="slds-required" title="Required">*</abbr>Tommie High 5 details:</label>
+                                                <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5’s the student will receive an email with your message entered in the box below.<br>
+                                                    The submitter and the student’s advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
+                                                <div class="slds-form-element__control slds-m-left_xxx-small ">
+                                                    <lightning-textarea id="high5-details-id"
+                                                                        label=""
+                                                                        value=""
+                                                                        data-texttype="high5Details"
+                                                                        onchange={textAreaDetails}
+                                                                        variant="label-hidden"
+                                                                        class="custom-textarea">
+                                                    </lightning-textarea>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="slds-form-element">
-                                            <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                                <abbr class="slds-required" title="Required">*</abbr>Tommie High 5 details:</label>
-                                            <p class="slds-m-bottom_xxx-small textarea-sublabel"><i>For Tommie High 5’s the student will receive an email with your message entered in the box below.<br>
-                                                The submitter and the student’s advisor(s) will also be copied on the message. Ex: You did a great job on your assignment. Keep working hard.</i></p>
-                                            <div class="slds-form-element__control slds-m-left_xxx-small ">
-                                                <lightning-textarea id="high5-details-id"
+                                    </template>
+                                </div>
+                            </template>
+                            <!-- Advising -->
+                            <template lwc:if={advisingGroup.length}>
+                                <div class="alert-group">
+                                    <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</p>
+                                    <template for:each={advisingGroup} for:item="cares">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
+                                            <input type="checkbox"
+                                                   name="caresCheckboxes"
+                                                   id={cares.value}
+                                                   value={cares.value}
+                                                   data-checkboxtype="cares"
+                                                   onclick={reasonsCheckbox}
+                                                   class="picklist-checkbox" />
+                                            <label class="slds-checkbox__label" for={cares.value}>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                    <div class="slds-m-left_xxx-small sub-content">
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.missedAdvisingAppointments}>The student will receive a message reminding them to set up an advising appointment with you.</p>
+    <!--                                </div>-->
+    <!--                                <div class="slds-m-left_xxx-small sub-content">-->
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- Behavior / Mental Health -->
+                            <template lwc:if={behaviorMentalHealthGroup.length}>
+                                <div class="alert-group">
+                                    <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</p>
+                                    <template for:each={behaviorMentalHealthGroup} for:item="cares">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
+                                            <input type="checkbox"
+                                                   name="caresCheckboxes"
+                                                   id={cares.value}
+                                                   value={cares.value}
+                                                   data-checkboxtype="cares"
+                                                   onclick={reasonsCheckbox}
+                                                   class="picklist-checkbox" />
+                                            <label class="slds-checkbox__label" for={cares.value}>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                    <div class="slds-m-left_xxx-small sub-content">
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.behaviorCheck}>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                            The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.mentalHealthCheck}>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                            The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
+                                        <div lwc:if={selectionsCheck.relationshipCheck}>
+                                            <p class="slds-m-bottom_xx-small additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you.
+                                                No advisors will be copied or notified.</p>
+                                            <p class="additional-text-message">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
+                                                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- Life Circumstances -->
+                            <template lwc:if={lifeCircumstanceGroup.length}>
+                                <div class="alert-group">
+                                    <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</p>
+                                    <template for:each={lifeCircumstanceGroup} for:item="cares">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
+                                            <input type="checkbox"
+                                                   name="caresCheckboxes"
+                                                   id={cares.value}
+                                                   value={cares.value}
+                                                   data-checkboxtype="cares"
+                                                   onclick={reasonsCheckbox}
+                                                   class="picklist-checkbox" />
+                                            <label class="slds-checkbox__label" for={cares.value}>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                    <div class="slds-m-left_xxx-small sub-content">
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                            The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</p>
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.financialConcernsCheck}>Financial concerns will be sent directly to the Financial Aid office.
+                                            The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</p>
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>Life Circumstances Impacting Success concerns will be sent directly to the Dean of Students Office with a copy to you.
+                                            The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</p>
+                                        <p class="additional-text-message" lwc:if={selectionsCheck.senseOfBelongingCheck} >Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
+                                            No advisors will be copied or notified.</p>
+                                        <div class="slds-form-element slds-is-required" lwc:if={selectionsCheck.otherCheck}>
+                                            <label class="slds-form-element__label element-sublabel" for="other-details-id">
+                                                <abbr class="slds-required" title="Required">*</abbr>Please provide additional details about your Other concerns:</label>
+                                            <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
+                                                <br>No advisors will be copied or notified.</p>
+                                            <div class="slds-form-element__control">
+                                                <lightning-textarea id="other-details-id"
                                                                     label=""
                                                                     value=""
-                                                                    data-texttype="high5Details"
+                                                                    data-texttype="otherDetails"
                                                                     onchange={textAreaDetails}
                                                                     variant="label-hidden"
                                                                     class="custom-textarea">
@@ -271,161 +362,46 @@
                                             </div>
                                         </div>
                                     </div>
-                                </template>
-                            </div>
-                        </template>
-
-                        <!-- Advising -->
-                        <template lwc:if={advisingGroup.length}>
-                            <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Advising Alert</p>
-                                <template for:each={advisingGroup} for:item="cares">
-                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
-                                        <input type="checkbox"
-                                               name="caresCheckboxes"
-                                               id={cares.value}
-                                               value={cares.value}
-                                               data-checkboxtype="cares"
-                                               onclick={reasonsCheckbox}
-                                               class="picklist-checkbox" />
-                                        <label class="slds-checkbox__label" for={cares.value}>
-                                            <span class="slds-checkbox_faux"></span>
-                                            <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
-                                        </label>
-                                    </div>
-                                </template>
-                                <div class="slds-m-left_xxx-small sub-content">
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.missedAdvisingAppointments}>The student will receive a message reminding them to set up an advising appointment with you.</p>
-<!--                                </div>-->
-<!--                                <div class="slds-m-left_xxx-small sub-content">-->
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
                                 </div>
-                            </div>
-                        </template>
-
-                        <!-- Behavior / Mental Health -->
-                        <template lwc:if={behaviorMentalHealthGroup.length}>
-                            <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Behavior/Mental Health Alert</p>
-                                <template for:each={behaviorMentalHealthGroup} for:item="cares">
-                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
-                                        <input type="checkbox"
-                                               name="caresCheckboxes"
-                                               id={cares.value}
-                                               value={cares.value}
-                                               data-checkboxtype="cares"
-                                               onclick={reasonsCheckbox}
-                                               class="picklist-checkbox" />
-                                        <label class="slds-checkbox__label" for={cares.value}>
-                                            <span class="slds-checkbox_faux"></span>
-                                            <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
-                                        </label>
-                                    </div>
-                                </template>
-                                <div class="slds-m-left_xxx-small sub-content">
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.behaviorCheck}>Behavior concerns will be sent directly to the Dean of Students Office with a copy to you.
-                                        The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.mentalHealthCheck}>Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you.
-                                        The Dean of Students Office will address the concern with the student. No advisors will be copied or notified.</p>
-                                    <div lwc:if={selectionsCheck.relationshipCheck}>
-                                        <p class="slds-m-bottom_xx-small additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you.
-                                            No advisors will be copied or notified.</p>
-                                        <p class="additional-text-message">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
-                                            <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-
-                        <!-- Life Circumstances -->
-                        <template lwc:if={lifeCircumstanceGroup.length}>
-                            <div class="alert-group">
-                                <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small">Life Circumstances Alert</p>
-                                <template for:each={lifeCircumstanceGroup} for:item="cares">
-                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={cares.value}>
-                                        <input type="checkbox"
-                                               name="caresCheckboxes"
-                                               id={cares.value}
-                                               value={cares.value}
-                                               data-checkboxtype="cares"
-                                               onclick={reasonsCheckbox}
-                                               class="picklist-checkbox" />
-                                        <label class="slds-checkbox__label" for={cares.value}>
-                                            <span class="slds-checkbox_faux"></span>
-                                            <span class="slds-form-element__label picklist-checkbox-text">{cares.label}</span>
-                                        </label>
-                                    </div>
-                                </template>
-                                <div class="slds-m-left_xxx-small sub-content">
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.
-                                        The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</p>
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.financialConcernsCheck}>Financial concerns will be sent directly to the Financial Aid office.
-                                        The student’s financial aid counselor will connect with the student. No advisors will be copied or notified.</p>
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>Life Circumstances Impacting Success concerns will be sent directly to the Dean of Students Office with a copy to you.
-                                        The Dean of Students Office will address the concern with the student. No additional staff will be copied or notified.</p>
-                                    <p class="additional-text-message" lwc:if={selectionsCheck.senseOfBelongingCheck} >Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
-                                        No advisors will be copied or notified.</p>
-                                    <div class="slds-form-element slds-is-required" lwc:if={selectionsCheck.otherCheck}>
-                                        <label class="slds-form-element__label element-sublabel" for="other-details-id">
-                                            <abbr class="slds-required" title="Required">*</abbr>Please provide additional details about your Other concerns:</label>
-                                        <p class="slds-m-bottom_xxx-small textarea-sublabel"><i>The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the faculty submitter).
-                                            No advisors will be copied or notified.</i></p>
-                                        <div class="slds-form-element__control">
-                                            <lightning-textarea id="other-details-id"
-                                                                label=""
-                                                                value=""
-                                                                data-texttype="otherDetails"
-                                                                onchange={textAreaDetails}
-                                                                variant="label-hidden"
-                                                                class="custom-textarea">
-                                            </lightning-textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-<!--                </fieldset>-->
-            </div>
-            <template lwc:if={caresSelectionCheck}>
-                <div class="slds-form-element" lwc:if={showAdditionalConcerns}>
-                    <label class="slds-form-element__label section-label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
-                    <p class="slds-m-bottom_xxx-small textarea-sublabel"><i>The information provided below <u>will not</u> be shared with the student.</i></p>
-                    <div class="slds-form-element__control">
-                        <lightning-textarea id="additional-concerns-id"
-                                            label=""
-                                            value=""
-                                            data-texttype="additionalConcerns"
-                                            onchange={textAreaDetails}
-                                            variant="label-hidden"
-                                            class="custom-textarea">
-                        </lightning-textarea>
-                    </div>
+                            </template>
+                        </div>
                 </div>
-                <div class="slds-m-vertical_x-large">
-                    <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
-                        <p class="submit-warning">
-                            <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
-                        </p>
+                <template lwc:if={caresSelectionCheck}>
+                    <div class="slds-form-element slds-m-top_medium" lwc:if={showAdditionalConcerns}>
+                        <label class="slds-form-element__label section-label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
+                        <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
+                        <div class="slds-form-element__control">
+                            <lightning-textarea id="additional-concerns-id"
+                                                label=""
+                                                value=""
+                                                data-texttype="additionalConcerns"
+                                                onchange={textAreaDetails}
+                                                variant="label-hidden"
+                                                class="custom-textarea">
+                            </lightning-textarea>
+                        </div>
                     </div>
-                    <lightning-button variant="brand"
-                                      type="button"
-                                      label="SUBMIT"
-                                      disabled={submitDisable}
-                                      onclick={submitCase}
-                                      class="slds-p-right_x-small submit_button"
-                                      disable-animation>
-                    </lightning-button>
+                    <div class="slds-m-vertical_x-large">
+                        <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
+                            <p class="submit-warning">
+                                <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
+                            </p>
+                        </div>
+                        <lightning-button variant="brand"
+                                          type="button"
+                                          label="SUBMIT"
+                                          disabled={submitDisable}
+                                          onclick={submitCase}
+                                          class="slds-p-right_x-small submit_button"
+                                          disable-animation>
+                        </lightning-button>
+                    </div>
+                </template>
+                <div class="slds-m-vertical_small footer-info">
+                    <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto:studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a>.</p>
+                    <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
                 </div>
-            </template>
-            <div class="slds-m-vertical_small footer-info">
-                <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto:studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a>.</p>
-                <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
-            </div>
-        </form>
+            </form>
+        </div>
     </template>
-    <template lwc:if={submitCaseSpinner}>
-        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-    </template>
-
 </template>

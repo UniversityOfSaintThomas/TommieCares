@@ -28,6 +28,11 @@ abbr.slds-required {
     font-weight: bold !important;
 }
 
+.container {
+    position: relative;
+    min-height: 100px; /* ensures spinner is visible even if content is short */
+}
+
 .footer_info p {
     font-size: 1rem !important;
 }
