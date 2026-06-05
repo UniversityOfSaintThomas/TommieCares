@@ -54,13 +54,15 @@ export default class TommieCaresLwc extends LightningElement {
         attendanceCheck: false,
         academicCheck: false,
         attendanceAcademicCheck: false,
-        behaviorCheck: false,
-        financialConcernsCheck: false,
-        mentalHealthCheck: false,
         missedAdvisingAppointmentCheck: false,
         nonResponsiveToOutreachCheck: false,
+        behaviorCheck: false,
+        mentalHealthCheck: false,
         relationshipCheck: false,
-        belongingCheck: false,
+        difficultyMeetingBasicNeedsCheck: false,
+        financialConcernsCheck: false,
+        lifeCircumstanceImpactingSuccessCheck: false,
+        senseOfBelongingCheck: false,
         otherCheck: false,
     }
     @track formRequired = {
@@ -101,6 +103,7 @@ export default class TommieCaresLwc extends LightningElement {
     ]
     searchParamsUrl;
     courseSelection;
+    studentName = "";
     noCurrentTermCheck = false;
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
@@ -152,6 +155,42 @@ export default class TommieCaresLwc extends LightningElement {
                     if (value === "true") this.caseSubmittedCheck = true;
                     break;
             }
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
+    pickListTommieCares({ error, data }) {
+        if (data) {
+            this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("tommieCaresPicklist Error: " + error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
+    pickListTommieHigh5({ error, data }) {
+        if (data) {
+            this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("tommieHigh5PicklistWire Error: " + error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
+    pickListAcademicPerformance({ error, data }) {
+        if (data) {
+            this.academicOptions = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("academicPerformancePicklistWire Error: " + error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
+    pickListAttendanceConcerns({ error, data }) {
+        if (data) {
+            this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
+        } else if (error) {
+            console.log("attendanceConcernsPicklistWire Error: " + error);
         }
     }
 
@@ -215,57 +254,23 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
-    pickListTommieCares({ error, data }) {
-        if (data) {
-            this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("tommieCaresPicklist Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
-    pickListTommieHigh5({ error, data }) {
-        if (data) {
-            this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("tommieHigh5PicklistWire Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
-    pickListAcademicPerformance({ error, data }) {
-        if (data) {
-            this.academicOptions = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("academicPerformancePicklistWire Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
-    pickListAttendanceConcerns({ error, data }) {
-        if (data) {
-            this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("attendanceConcernsPicklistWire Error: " + error);
-        }
-    }
-
     singleSelect(event) {
+        const eventValue = event.detail.value;
+
         switch (event.currentTarget.dataset.selecttype) {
             case "courseSelect":
                 this.resetForm();
-                this.courseSelection = event.detail.value;
+                this.courseSelection = eventValue;
                 refreshApex(this.studentsList);
                 this.caseSubmittedCheck = false;
                 break;
             case "studentSelect":
                 this.resetForm();
-                this.formSubmitSelections.StudentContactId = event.detail.value;
-                this.studentTypeCheck(event.detail.value);
+                this.formSubmitSelections.StudentContactId = eventValue;
+                this.studentTypeCheck(eventValue);
                 break;
             case "passCourseSelect":
-                this.formSubmitSelections.Pass_Course_Selection = event.detail.value;
+                this.formSubmitSelections.Pass_Course_Selection = eventValue;
                 this.passCourseRequired();
                 break;
         }
@@ -273,9 +278,6 @@ export default class TommieCaresLwc extends LightningElement {
 
     studentTypeCheck(contactId) {
         this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
-
-        let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
-        console.log("Selected Student: ", foundStudent);
 
         function removeTommieCaresOptions(exclusionList, optionsList) {
             for (const exclusion of exclusionList) {
@@ -287,7 +289,11 @@ export default class TommieCaresLwc extends LightningElement {
             }
         }
 
+        let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
+        console.log("Selected Student: ", foundStudent);
+
         if (foundStudent) {
+            this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
             if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
                 removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
             }
@@ -360,17 +366,23 @@ export default class TommieCaresLwc extends LightningElement {
                 if (eventValue === "Behavior concerns") {
                     this.selectionsCheck.behaviorCheck = eventChecked;
                 }
-                if (eventValue === "Financial concerns") {
-                    this.selectionsCheck.financialConcernsCheck = eventChecked;
-                }
                 if (eventValue === "Mental health concerns") {
                     this.selectionsCheck.mentalHealthCheck = eventChecked;
                 }
                 if (eventValue === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = eventChecked;
                 }
+                if (eventValue === "Difficulty Meeting Basic Needs (food/housing, etc)") {
+                    this.selectionsCheck.difficultyMeetingBasicNeedsCheck = eventChecked;
+                }
+                if (eventValue === "Financial concerns") {
+                    this.selectionsCheck.financialConcernsCheck = eventChecked;
+                }
+                if (eventValue === "Life Circumstances Impacting Success") {
+                    this.selectionsCheck.lifeCircumstanceImpactingSuccessCheck = eventChecked;
+                }
                 if (eventValue === "Sense of belonging") {
-                    this.selectionsCheck.belongingCheck = eventChecked;
+                    this.selectionsCheck.senseOfBelongingCheck = eventChecked;
                 }
                 if (eventValue === "Other") {
                     if (!eventChecked) {
