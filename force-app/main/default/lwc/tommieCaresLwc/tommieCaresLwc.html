@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
-                <label class="slds-form-element__label picklist_checkbox_legend">Select alert(s) for {studentName}:</label>
+                <label class="slds-form-element__label picklist_checkbox_legend"><b>Select alert(s) for {studentName}:</b></label>
                 <div class="slds-form-element__control">
                     <!-- Positive Alert -->
                     <template lwc:if={positiveAlertGroup.length}>
@@ -386,7 +386,7 @@
             </div>
             <template lwc:if={caresSelectionCheck}>
                 <div class="slds-form-element" lwc:if={showAdditionalConcerns}>
-                    <label class="slds-form-element__label textarea_label" for="additional-concerns-id">Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</label>
+                    <label class="slds-form-element__label textarea_label" for="additional-concerns-id"><b>Please share any additional concerns or information related to this student that you would like the Tommie Success Team to know:</b></label>
                     <p class="textarea_sublabel">The information provided below <b>will not</b> be shared with the student.</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea id="additional-concerns-id"

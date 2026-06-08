@@ -5,6 +5,30 @@
 public without sharing class TommieCaresLwcController {
 
     @AuraEnabled(Cacheable=true)
+    public static Map<String, List<PicklistOption>> getTommieCaresPicklists() {
+        Map<String, List<PicklistOption>> result = new Map<String, List<PicklistOption>>();
+
+        result.put('tommieCaresReasons', getPicklistOptions(Case.Tommie_Alert_Primary_Reason__c));
+        result.put('tommieHigh5Reasons', getPicklistOptions(Case.Tommie_High_5__c));
+        result.put('academicPerformanceReasons', getPicklistOptions(Case.Academic_Performance_Reason_s__c));
+        result.put('attendanceConcernsReasons', getPicklistOptions(Case.Attendance_Concerns_Reason_s__c));
+
+        return result;
+    }
+
+    private static List<PicklistOption> getPicklistOptions(Schema.SObjectField fieldToken) {
+        List<PicklistOption> options = new List<PicklistOption>();
+        Schema.DescribeFieldResult dfr = fieldToken.getDescribe();
+
+        for (Schema.PicklistEntry entry : dfr.getPicklistValues()) {
+            if (entry.isActive()) {
+                options.add(new PicklistOption(entry.getLabel(), entry.getValue()));
+            }
+        }
+        return options;
+    }
+
+    @AuraEnabled(Cacheable=true)
     public static Map<String, String> currentTermAdvisor(String urlBid) {
 
         Map<String, String> termAdvisorMap = new Map<String, String>{
@@ -281,6 +305,16 @@ public without sharing class TommieCaresLwcController {
         }
 
         return advisorInfo;
+    }
+
+    public class PicklistOption {
+        @AuraEnabled public String label;
+        @AuraEnabled public String value;
+
+        public PicklistOption(String label, String value) {
+            this.label = label;
+            this.value = value;
+        }
     }
 
 }

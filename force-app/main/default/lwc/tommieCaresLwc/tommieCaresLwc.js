@@ -4,15 +4,16 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {refreshApex} from "@salesforce/apex";
-import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+// import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+import getTommieCaresPicklists from "@salesforce/apex/TommieCaresLwcController.getTommieCaresPicklists";
 import currentTermAdvisor from "@salesforce/apex/TommieCaresLwcController.currentTermAdvisor";
 import advisorCoursesList from "@salesforce/apex/TommieCaresLwcController.advisorCoursesList";
 import studentCourseList from "@salesforce/apex/TommieCaresLwcController.studentCourseList";
 import saveCase from "@salesforce/apex/TommieCaresLwcController.saveCase";
-import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
-import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
-import ATTENDANCE_CONCERNS_REASONS from "@salesforce/schema/Case.Attendance_Concerns_Reason_s__c";
-import ACADEMIC_PERFORMANCE_REASONS from '@salesforce/schema/Case.Academic_Performance_Reason_s__c';
+// import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
+// import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
+// import ATTENDANCE_CONCERNS_REASONS from "@salesforce/schema/Case.Attendance_Concerns_Reason_s__c";
+// import ACADEMIC_PERFORMANCE_REASONS from '@salesforce/schema/Case.Academic_Performance_Reason_s__c';
 
 export default class TommieCaresLwc extends LightningElement {
 
@@ -158,39 +159,51 @@ export default class TommieCaresLwc extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
-    pickListTommieCares({ error, data }) {
-        if (data) {
-            this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("tommieCaresPicklist Error: " + error);
-        }
-    }
+    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
+    // pickListTommieCares({ error, data }) {
+    //     if (data) {
+    //         this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
+    //     } else if (error) {
+    //         console.log("tommieCaresPicklist Error: " + error);
+    //     }
+    // }
+    //
+    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
+    // pickListTommieHigh5({ error, data }) {
+    //     if (data) {
+    //         this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
+    //     } else if (error) {
+    //         console.log("tommieHigh5PicklistWire Error: " + error);
+    //     }
+    // }
+    //
+    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
+    // pickListAcademicPerformance({ error, data }) {
+    //     if (data) {
+    //         this.academicOptions = JSON.parse(JSON.stringify(data.values));
+    //     } else if (error) {
+    //         console.log("academicPerformancePicklistWire Error: " + error);
+    //     }
+    // }
+    //
+    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
+    // pickListAttendanceConcerns({ error, data }) {
+    //     if (data) {
+    //         this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
+    //     } else if (error) {
+    //         console.log("attendanceConcernsPicklistWire Error: " + error);
+    //     }
+    // }
 
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
-    pickListTommieHigh5({ error, data }) {
+    @wire(getTommieCaresPicklists)
+    picklistsWire({ error, data }) {
         if (data) {
-            this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
+            this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.tommieCaresReasons || []));
+            this.tommieHigh5Options = JSON.parse(JSON.stringify(data.tommieHigh5Reasons || []));
+            this.academicOptions = JSON.parse(JSON.stringify(data.academicPerformanceReasons || []));
+            this.attendanceOptions = JSON.parse(JSON.stringify(data.attendanceConcernsReasons || []));
         } else if (error) {
-            console.log("tommieHigh5PicklistWire Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
-    pickListAcademicPerformance({ error, data }) {
-        if (data) {
-            this.academicOptions = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("academicPerformancePicklistWire Error: " + error);
-        }
-    }
-
-    @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
-    pickListAttendanceConcerns({ error, data }) {
-        if (data) {
-            this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
-        } else if (error) {
-            console.log("attendanceConcernsPicklistWire Error: " + error);
+            console.log("picklistsWire Error: " + JSON.stringify(error));
         }
     }
 
