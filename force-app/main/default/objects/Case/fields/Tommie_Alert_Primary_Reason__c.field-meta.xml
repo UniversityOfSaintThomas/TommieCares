@@ -12,7 +12,6 @@ Sense of belonging (not connecting on campus)</inlineHelpText>
     <trackTrending>false</trackTrending>
     <type>MultiselectPicklist</type>
     <valueSet>
-        <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
@@ -59,6 +58,26 @@ Sense of belonging (not connecting on campus)</inlineHelpText>
                 <fullName>Other</fullName>
                 <default>false</default>
                 <label>Other</label>
+            </value>
+            <value>
+                <fullName>Non-Responsive to Outreach</fullName>
+                <default>false</default>
+                <label>Non-Responsive to Outreach</label>
+            </value>
+            <value>
+                <fullName>Missed Advising Appointment</fullName>
+                <default>false</default>
+                <label>Missed Advising Appointment</label>
+            </value>
+            <value>
+                <fullName>Difficulty Meeting Basic Needs (food/housing, etc)</fullName>
+                <default>false</default>
+                <label>Difficulty Meeting Basic Needs (food/housing, etc)</label>
+            </value>
+            <value>
+                <fullName>Life Circumstances Impacting Success</fullName>
+                <default>false</default>
+                <label>Life Circumstances Impacting Success</label>
             </value>
         </valueSetDefinition>
     </valueSet>
