@@ -4,16 +4,11 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {refreshApex} from "@salesforce/apex";
-// import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import getTommieCaresPicklists from "@salesforce/apex/TommieCaresLwcControllerv2.getTommieCaresPicklists";
 import currentTermAdvisor from "@salesforce/apex/TommieCaresLwcControllerv2.currentTermAdvisor";
 import advisorCoursesList from "@salesforce/apex/TommieCaresLwcControllerv2.advisorCoursesList";
 import studentCourseList from "@salesforce/apex/TommieCaresLwcControllerv2.studentCourseList";
 import saveCase from "@salesforce/apex/TommieCaresLwcControllerv2.saveCase";
-// import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
-// import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
-// import ATTENDANCE_CONCERNS_REASONS from "@salesforce/schema/Case.Attendance_Concerns_Reason_s__c";
-// import ACADEMIC_PERFORMANCE_REASONS from '@salesforce/schema/Case.Academic_Performance_Reason_s__c';
 
 export default class TommieCaresLwcv2 extends LightningElement {
 
@@ -57,8 +52,9 @@ export default class TommieCaresLwcv2 extends LightningElement {
         attendanceAcademicCheck: false,
         missedAdvisingAppointmentCheck: false,
         nonResponsiveToOutreachCheck: false,
-        behaviorCheck: false,
-        mentalHealthCheck: false,
+        behaviorMentalHealthCheck: false,
+        // behaviorCheck: false,
+        // mentalHealthCheck: false,
         relationshipCheck: false,
         difficultyMeetingBasicNeedsCheck: false,
         financialConcernsCheck: false,
@@ -77,6 +73,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     coursesListOptions = [];
     studentsList = [];
     tommieCaresGraduateExclusions = [
+        "Behavior and Mental Health concerns",
         "Behavior concerns",
         "Financial concerns",
         "Mental health concerns",
@@ -93,8 +90,8 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 "Missed Advising Appointment",
                 "Non-Responsive to Outreach"
             ]},
-        {"Behavior Mental Health Alert": ["Behavior concerns", "Mental health concerns", "Relationship violence/stalking"]},
-        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Sense of belonging", "Other"]},
+        {"Behavior Mental Health Alert": ["Behavior and Mental Health concerns", "Relationship violence/stalking", "Sense of belonging",]},
+        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success",  "Other"]},
     ]
     passCourseOptions = [
         {label: "", value: ""},
@@ -158,42 +155,6 @@ export default class TommieCaresLwcv2 extends LightningElement {
             }
         }
     }
-
-    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_CARES_REASONS })
-    // pickListTommieCares({ error, data }) {
-    //     if (data) {
-    //         this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.values));
-    //     } else if (error) {
-    //         console.log("tommieCaresPicklist Error: " + error);
-    //     }
-    // }
-    //
-    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: TOMMIE_HIGH_5_REASONS })
-    // pickListTommieHigh5({ error, data }) {
-    //     if (data) {
-    //         this.tommieHigh5Options = JSON.parse(JSON.stringify(data.values));
-    //     } else if (error) {
-    //         console.log("tommieHigh5PicklistWire Error: " + error);
-    //     }
-    // }
-    //
-    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ACADEMIC_PERFORMANCE_REASONS })
-    // pickListAcademicPerformance({ error, data }) {
-    //     if (data) {
-    //         this.academicOptions = JSON.parse(JSON.stringify(data.values));
-    //     } else if (error) {
-    //         console.log("academicPerformancePicklistWire Error: " + error);
-    //     }
-    // }
-    //
-    // @wire(getPicklistValues, { recordTypeId: "012000000000000AAA", fieldApiName: ATTENDANCE_CONCERNS_REASONS })
-    // pickListAttendanceConcerns({ error, data }) {
-    //     if (data) {
-    //         this.attendanceOptions = JSON.parse(JSON.stringify(data.values));
-    //     } else if (error) {
-    //         console.log("attendanceConcernsPicklistWire Error: " + error);
-    //     }
-    // }
 
     @wire(getTommieCaresPicklists)
     picklistsWire({ error, data }) {
@@ -376,12 +337,15 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 if (eventValue === "Non-Responsive to Outreach") {
                     this.selectionsCheck.nonResponsiveToOutreachCheck = eventChecked;
                 }
-                if (eventValue === "Behavior concerns") {
-                    this.selectionsCheck.behaviorCheck = eventChecked;
+                if (eventValue === "Behavior and Mental Health concerns") {
+                    this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
                 }
-                if (eventValue === "Mental health concerns") {
-                    this.selectionsCheck.mentalHealthCheck = eventChecked;
-                }
+                // if (eventValue === "Behavior concerns") {
+                //     this.selectionsCheck.behaviorCheck = eventChecked;
+                // }
+                // if (eventValue === "Mental health concerns") {
+                //     this.selectionsCheck.mentalHealthCheck = eventChecked;
+                // }
                 if (eventValue === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = eventChecked;
                 }
@@ -527,5 +491,40 @@ export default class TommieCaresLwcv2 extends LightningElement {
             this.submitCaseSpinner = false;
         }
     }
+
+    _incidentDate = "";
+    // validDate = false;
+    // validDateWarning = false;
+    // dateWarningText = "";
+    // dateValidationBlur(event) {
+    //     const eventField = event.currentTarget;
+    //     let inputDate = this._incidentDate;
+    //     let inputTime = "00:00:00";
+    //     const dateNow = new Date();
+    //     const dateTimeNow = dateNow.getTime();
+    //     this.validDate = false;
+    //     if (!eventField.checkValidity()) {
+    //         this.dateWarningText = "Invalid Date format";
+    //         this.validDateWarning = true;
+    //     } else {
+    //         this.validDateWarning = false;
+    //         const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
+    //         if (dateInputParse > dateTimeNow) {
+    //             this.dateWarningText = "Cannot be future Date";
+    //             this.validDateWarning = true;
+    //             this.validTimeWarning = false;
+    //         } else {
+    //             this.wellBeingIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
+    //             this.validDate = true;
+    //             this.validDateWarning = false;
+    //         }
+    //     }
+    //
+    //     if (this.validDateWarning) {
+    //         eventField.classList.add("slds-has-error");
+    //     } else {
+    //         eventField.classList.remove("slds-has-error");
+    //     }
+    // }
 
 }
