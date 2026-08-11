@@ -44,6 +44,8 @@ export default class TommieCaresLwcv2 extends LightningElement {
         Other_Details: "",
         Personal_Message: "",
         Additional_Concerns: "",
+        TellSomeoneWellBeingDate: "",
+        TellSomeoneWellBeingDescription: "",
     };
     @track selectionsCheck = {
         high5Check: false,
@@ -68,6 +70,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         Academic_Required: false,
         PassCourse_Required: false,
         Other_Required: false,
+        TellSomeoneRequired: false,
     }
 
     coursesListOptions = [];
@@ -108,6 +111,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     caseSubmittedCheck = false;
     caseSubmittedErrorCheck = false;
     submitCaseSpinner = false;
+    _incidentDate = "";
 
     get advisorInfoViewClass() {
         return "advisor_info "+this.communityOfConcernLwc; //hiding Advisor information when displaying on Community of Concern LWC
@@ -134,6 +138,27 @@ export default class TommieCaresLwcv2 extends LightningElement {
     get submitDisable() {
         return Object.values(this.formRequired).includes(true);
     }
+    get tellSomeoneCheck() {
+        return !!(this.selectionsCheck.behaviorMentalHealthCheck || this.selectionsCheck.senseOfBelongingCheck);
+    }
+
+    hasAncestorWithId(startNode, id) {
+        let node = startNode;
+
+        while (node) {
+            node = node.parentNode;
+
+            if (typeof ShadowRoot !== "undefined" && node instanceof ShadowRoot) {
+                node = node.host;
+            }
+
+            if (node && node.nodeType === 1 && node.id === id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     connectedCallback() {
         const baseUrl = this.paramUrl || window.location.href;
@@ -154,6 +179,15 @@ export default class TommieCaresLwcv2 extends LightningElement {
                     break;
             }
         }
+
+        // eslint-disable-next-line @lwc/lwc/no-document-query
+        const idInUse = document.getElementById('tommieAlertsLightingOut') || this.hasAncestorWithId(this, 'tommieAlertsLightingOut');
+        if (idInUse) {
+            console.log("Lighting Out");
+        } else {
+            console.log("NOT Lighting Out");
+        }
+
     }
 
     @wire(getTommieCaresPicklists)
@@ -231,6 +265,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     singleSelect(event) {
         const eventValue = event.detail.value;
 
+        // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.selecttype) {
             case "courseSelect":
                 this.resetForm();
@@ -303,6 +338,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         const eventValue = event.target.value;
         const eventChecked = event.target.checked;
 
+        // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.checkboxtype) {
             case "cares":
                 this.formSubmitSelections.TommieCares_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.TommieCares_Reasons);
@@ -339,13 +375,8 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 }
                 if (eventValue === "Behavior and Mental Health concerns") {
                     this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
+                    this.tellSomeoneRequired();
                 }
-                // if (eventValue === "Behavior concerns") {
-                //     this.selectionsCheck.behaviorCheck = eventChecked;
-                // }
-                // if (eventValue === "Mental health concerns") {
-                //     this.selectionsCheck.mentalHealthCheck = eventChecked;
-                // }
                 if (eventValue === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = eventChecked;
                 }
@@ -360,6 +391,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 }
                 if (eventValue === "Sense of belonging") {
                     this.selectionsCheck.senseOfBelongingCheck = eventChecked;
+                    this.tellSomeoneRequired();
                 }
                 if (eventValue === "Other") {
                     if (!eventChecked) {
@@ -393,6 +425,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     textAreaDetails(event) {
         const eventValueTrim = event.detail.value.trim();
 
+        // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.texttype) {
             case "high5Details":
                 this.formSubmitSelections.High5_Details = eventValueTrim;
@@ -407,6 +440,10 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 break;
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
+                break;
+            case "wellBeingDescription":
+                this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
+                this.tellSomeoneRequired();
                 break;
         }
     }
@@ -442,7 +479,35 @@ export default class TommieCaresLwcv2 extends LightningElement {
         this.formRequired.PassCourse_Required = !this.formSubmitSelections.Pass_Course_Selection;
     }
 
+    tellSomeoneRequired() {
+        if (!this.tellSomeoneCheck) {
+            this.formSubmitSelections.TellSomeoneWellBeingDate = "";
+            this._incidentDate = "";
+        }
+        this.formRequired.TellSomeoneRequired = this.tellSomeoneCheck && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
+    }
+
+    get today() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    dateValidation(event) {
+        const dateField = event.target;
+        this._incidentDate = dateField.value;
+        console.log("checkValidity: ", dateField.checkValidity());
+        console.log("today: ", this.today);
+        console.log("this._incidentDate: ", this._incidentDate);
+        if (dateField.checkValidity() && !!this._incidentDate) {
+            this.formSubmitSelections.TellSomeoneWellBeingDate = this._incidentDate;
+        } else {
+            this.formSubmitSelections.TellSomeoneWellBeingDate = "";
+        }
+        this.tellSomeoneRequired();
+        console.log("TellSomeoneWellBeingDate: ", this.formSubmitSelections.TellSomeoneWellBeingDate);
+    }
+
     resetForm() {
+        this._incidentDate = "";
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
         this.behaviorMentalHealthGroup = [];
@@ -484,6 +549,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
             this.submitCaseSpinner = true;
             await saveCase({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
+            // eslint-disable-next-line no-restricted-globals
             location.replace(this.submittedUrl());
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
@@ -491,40 +557,5 @@ export default class TommieCaresLwcv2 extends LightningElement {
             this.submitCaseSpinner = false;
         }
     }
-
-    _incidentDate = "";
-    // validDate = false;
-    // validDateWarning = false;
-    // dateWarningText = "";
-    // dateValidationBlur(event) {
-    //     const eventField = event.currentTarget;
-    //     let inputDate = this._incidentDate;
-    //     let inputTime = "00:00:00";
-    //     const dateNow = new Date();
-    //     const dateTimeNow = dateNow.getTime();
-    //     this.validDate = false;
-    //     if (!eventField.checkValidity()) {
-    //         this.dateWarningText = "Invalid Date format";
-    //         this.validDateWarning = true;
-    //     } else {
-    //         this.validDateWarning = false;
-    //         const dateInputParse = Date.parse(inputDate + ' ' + inputTime);
-    //         if (dateInputParse > dateTimeNow) {
-    //             this.dateWarningText = "Cannot be future Date";
-    //             this.validDateWarning = true;
-    //             this.validTimeWarning = false;
-    //         } else {
-    //             this.wellBeingIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
-    //             this.validDate = true;
-    //             this.validDateWarning = false;
-    //         }
-    //     }
-    //
-    //     if (this.validDateWarning) {
-    //         eventField.classList.add("slds-has-error");
-    //     } else {
-    //         eventField.classList.remove("slds-has-error");
-    //     }
-    // }
 
 }
