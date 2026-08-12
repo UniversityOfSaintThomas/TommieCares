@@ -132,29 +132,30 @@
                     <template lwc:if={positiveAlertGroup.length}>
                         <div class="alert-group">
                             <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</p>
-                                <template for:each={positiveAlertGroup} for:item="alertGroup">
-                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={alertGroup.value}>
+                                <template for:each={positiveAlertGroup} for:item="positiveAlert">
+                                    <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={positiveAlert.value}>
                                         <input type="checkbox"
-                                               name="alertGroupCheckboxes"
-                                               id={alertGroup.value}
-                                               value={alertGroup.value}
+                                               name="positiveAlertCheckboxes"
+                                               id={positiveAlert.value}
+                                               value={positiveAlert.value}
                                                data-checkboxtype="cares"
                                                onclick={reasonsCheckbox}
                                                class="picklist-checkbox" />
-                                        <label class="slds-checkbox__label" for={alertGroup.value}>
-                                            <span class="slds-checkbox_faux picklist_checkbox_check"></span>
-                                            <span class="slds-form-element__label picklist-checkbox-text">{alertGroup.label}</span>
+                                        <label class="slds-checkbox__label" for={positiveAlert.value}>
+                                            <span class="slds-checkbox_faux"></span>
+                                            <span class="slds-form-element__label picklist-checkbox-text">{positiveAlert.label}</span>
                                         </label>
                                     </div>
                                 </template>
-                            <template lwc:if={selectionsCheck.high5Check}>
-                                <div class="sub-content">
-                                    <div class="slds-form-element sub-content-overflow">
+                            <!-- Positive Alert sub-checkboxes -->
+                            <div class="sub-content slds-m-left_small" lwc:if={selectionsCheck.high5Check}>
+<!--                                <div class="sub-content">-->
+                                    <div class="slds-form-element">
                                         <label class="slds-form-element__label slds-form-element__label element-sublabel">
-                                            <abbr class="slds-required" title="Required">*</abbr>Please select Tommie High 5 Reason(s):</label>
-                                        <div class="slds-form-element__control">
+                                            Please select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></label>
+                                        <div class="slds-form-element__control slds-m-top_xx-small">
                                             <template for:each={tommieHigh5Options} for:item="high5">
-                                                <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={high5.value}>
+                                                <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={high5.value}>
                                                     <input type="checkbox"
                                                            name="high5Checkboxes"
                                                            id={high5.value}
@@ -172,7 +173,7 @@
                                     </div>
                                     <div class="slds-form-element">
                                         <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                            <abbr class="slds-required" title="Required">*</abbr>Tommie High 5 details:</label>
+                                            Tommie High 5 details:<abbr class="slds-required" title="Required">*</abbr></label>
                                         <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
                                             The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
                                         <div class="slds-form-element__control slds-m-left_xxx-small">
@@ -187,8 +188,8 @@
                                             </lightning-textarea>
                                         </div>
                                     </div>
-                                </div>
-                            </template>
+<!--                                </div>-->
+                            </div>
                         </div>
                     </template>
                     <!-- Advising -->
@@ -211,14 +212,15 @@
                                 </div>
                             </template>
                             <!-- Academic sub-checkboxes -->
+                            <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.attendanceAcademicCheck}>
                             <template lwc:if={selectionsCheck.academicCheck}>
-                                <div class="sub-content">
-                                    <div class="slds-form-element sub-content-overflow">
+<!--                                <div class="sub-content">-->
+                                    <div class="slds-form-element">
                                         <label class="slds-form-element__label element-sublabel">
-                                            <abbr class="slds-required" title="Required">*</abbr>Please select academic concerns:</label>
-                                        <div class="slds-form-element__control">
+                                            Please select academic concerns:<abbr class="slds-required" title="Required">*</abbr></label>
+                                        <div class="slds-form-element__control slds-m-top_xx-small">
                                             <template for:each={academicOptions} for:item="academic">
-                                                <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={academic.value}>
+                                                <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={academic.value}>
                                                     <input type="checkbox"
                                                            name="academicCheckboxes"
                                                            id={academic.value}
@@ -233,21 +235,22 @@
                                                 </div>
                                             </template>
                                         </div>
+                                        <p class="additional-text-message">Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
                                     </div>
-                                </div>
+<!--                                </div>-->
                             </template>
-                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.academicCheck}>
-                                <p class="additional-text-message">Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
-                            </div>
+<!--                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.academicCheck}>-->
+<!--                                <p class="additional-text-message">Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>-->
+<!--                            </div>-->
                             <!-- Attendance sub-checkboxes -->
                             <template lwc:if={selectionsCheck.attendanceCheck}>
-                                <div class="sub-content">
-                                    <div class="slds-form-element sub-content-overflow">
+<!--                                <div class="sub-content">-->
+                                    <div class="slds-form-element">
                                         <label class="slds-form-element__label element-sublabel">
-                                            <abbr class="slds-required" title="Required">*</abbr>Please select attendance concerns:</label>
+                                            Please select attendance concerns:<abbr class="slds-required" title="Required">*</abbr></label>
                                         <div class="slds-form-element__control">
                                             <template for:each={attendanceOptions} for:item="attendance">
-                                                <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={attendance.value}>
+                                                <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={attendance.value}>
                                                     <input type="checkbox"
                                                            name="attendanceCheckboxes"
                                                            id={attendance.value}
@@ -262,19 +265,20 @@
                                                 </div>
                                             </template>
                                         </div>
+                                        <p class="additional-text-message">Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
                                     </div>
-                                </div>
+<!--                                </div>-->
                             </template>
-                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.attendanceCheck}>
-                                <p class="additional-text-message">Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
-                            </div>
-                            <template lwc:if={selectionsCheck.attendanceAcademicCheck}>
-                                <div class="sub-content">
-                                    <div class="sub-content-overflow">
+<!--                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.attendanceCheck}>-->
+<!--                                <p class="additional-text-message">Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>-->
+<!--                            </div>-->
+<!--                            <div lwc:if={selectionsCheck.attendanceAcademicCheck}>-->
+<!--                                <div class="sub-content">-->
+<!--                                    <div class="sub-content-overflow">-->
                                     <!-- Pass course dropdown -->
-                                        <div class="slds-form-element slds-m-bottom_small">
+                                        <div class="slds-form-element">
                                             <label class="slds-form-element__label element-sublabel">
-                                                <abbr class="slds-required" title="Required">*</abbr>Can the student pass this course?</label>
+                                                Can the student pass this course?<abbr class="slds-required" title="Required">*</abbr></label>
                                             <p class="slds-m-bottom_xxx-small textarea-sublabel">Please do your best to answer this question. Use the personalized message text box below to explain your answer to the student.</p>
                                             <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
                                                 <lightning-combobox id="pass-course-id"
@@ -305,9 +309,10 @@
                                                 </lightning-textarea>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </template>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            </div>
                         </div>
                     </template>
                     <!-- Behavior / Mental Health -->
@@ -329,27 +334,25 @@
                                     </label>
                                 </div>
                             </template>
-                            <template  lwc:if={tellSomeoneCheck}>
-                                <div class="slds-m-left_xxx-small sub-content">
-                                    <div class="slds-form-element">
-                                        <label class="slds-form-element__label element-sublabel">Date of Concerning Incident
-                                            <abbr class="slds-required" title="Required">*</abbr></label>
-                                        <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
-                                            <lightning-input id="well-being-incident-date-id"
-                                                             name="well-being-incident-date"
-                                                             type="date"
-                                                             label=""
-                                                             value={_incidentDate}
-                                                             max={today}
-                                                             data-inputtype="date"
-                                                             variant="label-hidden"
-                                                             onchange={dateValidation}>
-                                            </lightning-input>
-    <!--                                        <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>-->
-                                        </div>
+                            <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneCheck}>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label element-sublabel">Date of Concerning Incident
+                                        <abbr class="slds-required" title="Required">*</abbr></label>
+                                    <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+                                        <lightning-input id="well-being-incident-date-id"
+                                                         name="well-being-incident-date"
+                                                         type="date"
+                                                         label=""
+                                                         value={_incidentDate}
+                                                         max={today}
+                                                         data-inputtype="date"
+                                                         variant="label-hidden"
+                                                         onchange={dateValidation}>
+                                        </lightning-input>
+<!--                                        <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>-->
                                     </div>
                                 </div>
-                                <div class="slds-form-element slds-m-top_medium">
+                                <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="well-being-incident-description-id">Concern Description
                                         <abbr class="slds-required" title="Required">*</abbr></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">Provide a detailed description of your concern for the individual indicated above.</p>
@@ -365,19 +368,19 @@
                                         </lightning-textarea>
                                     </div>
                                 </div>
-                            </template>
-                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.behaviorMentalHealthCheck}>
+                            </div>
+                            <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.behaviorMentalHealthCheck}>
                                 <p class="additional-text-message">Behavior and Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                            <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <p class="additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br>
                                     Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
                                     <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
                             </div>
-                            <div class="slds-m-left_xxx-small sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>
+                            <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>
                                 <p class="additional-text-message" lwc:if={selectionsCheck.senseOfBelongingCheck}>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.</p>
                             </div>
@@ -402,7 +405,7 @@
                                     </label>
                                 </div>
                             </template>
-                            <div class="slds-m-left_xxx-small sub-content">
+                            <div class="slds-m-left_small sub-content">
                                 <p class="additional-text-message" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
@@ -414,7 +417,7 @@
                                     No additional staff will be copied or notified.</p>
                                 <div class="slds-form-element slds-is-required" lwc:if={selectionsCheck.otherCheck}>
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
-                                        <abbr class="slds-required" title="Required">*</abbr>Please provide additional details about your Other concerns:</label>
+                                        Please provide additional details about your Other concerns:<abbr class="slds-required" title="Required">*</abbr></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
                                         <br>No advisors will be copied or notified.</p>
                                     <div class="slds-form-element__control">

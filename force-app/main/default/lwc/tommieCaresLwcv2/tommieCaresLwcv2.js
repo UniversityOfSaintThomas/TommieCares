@@ -55,8 +55,6 @@ export default class TommieCaresLwcv2 extends LightningElement {
         missedAdvisingAppointmentCheck: false,
         nonResponsiveToOutreachCheck: false,
         behaviorMentalHealthCheck: false,
-        // behaviorCheck: false,
-        // mentalHealthCheck: false,
         relationshipCheck: false,
         difficultyMeetingBasicNeedsCheck: false,
         financialConcernsCheck: false,
