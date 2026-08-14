@@ -32,9 +32,12 @@ export default class TommieCaresLwcv2 extends LightningElement {
     @track formSubmitSelections = {
         currentTermId: "",
         AdvisorContactId: "",
+        AdvisorContactName: "",
         AdvisorEmail: "",
         CourseSelectionId: "",
         StudentContactId: "",
+        StudentName: "",
+        StudentEmail: "",
         TommieCares_Reasons: "",
         High5_Reasons: "",
         Attendance_Reasons: "",
@@ -103,6 +106,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     searchParamsUrl;
     courseSelection;
     studentName = "";
+    studentEmail = "";
     noCurrentTermCheck = false;
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
@@ -130,7 +134,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     }
     get showAdditionalConcerns() {
-        const excluded = new Set(['otherCheck', 'high5Check']);
+        const excluded = new Set(['high5Check', 'behaviorMentalHealthCheck', 'senseOfBelongingCheck', 'otherCheck']);
         return Object.entries(this.selectionsCheck).some(([key, value]) => !excluded.has(key) && value);
     }
     get submitDisable() {
@@ -301,6 +305,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
 
         if (foundStudent) {
             this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
+            this.studentEmail = foundStudent.hed__Contact__r.hed__UniversityEmail__c;
             if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
                 removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
             }
@@ -538,8 +543,11 @@ export default class TommieCaresLwcv2 extends LightningElement {
     async submitCase() {
         this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
+        this.formSubmitSelections.AdvisorContactName = this.termAdvisorData.Advisor_ContactName;
         this.formSubmitSelections.AdvisorEmail = this.termAdvisorData.Advisor_Email;
         this.formSubmitSelections.CourseSelectionId = this.courseSelection;
+        this.formSubmitSelections.StudentName = this.studentName;
+        this.formSubmitSelections.StudentEmail = this.studentEmail;
 
         try {
             this.caseSubmittedErrorCheck = false;

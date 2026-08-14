@@ -17,7 +17,7 @@ abbr.slds-required {
 }
 
 .additional-text-message {
-    font-size: .95rem !important;
+    font-size: .90rem !important;
     color: black !important;
 }
 
@@ -41,7 +41,6 @@ abbr.slds-required {
 .alert-group-heading {
     font-size: .80rem !important;
     color: black !important;
-    /*font-weight: bold !important;*/
 }
 
 .container {
@@ -67,17 +66,7 @@ abbr.slds-required {
     font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
-/*.label-margin {*/
-/*    margin-top: -18px;*/
-/*}*/
-
 lightning-button.submit_button {
-    /*--slds-c-button-brand-text-color: #fff;*/
-    /*--slds-c-button-brand-color-background: #510c76;*/
-    /*--slds-c-button-brand-color-border: #510c76;*/
-    /*--slds-c-button-brand-color-background-hover: #8348ad;*/
-    /*--slds-c-button-brand-color-background-active: #8348ad;*/
-    /*--slds-c-button-brand-radius-border: 0px;*/
     font-size: 1rem !important;
     font-weight: bold;
 }
@@ -117,10 +106,8 @@ lightning-textarea.custom-textarea {
     font-size: 1rem !important;
     text-transform: capitalize;
     color: black !important;
-    padding-left: 5px;
+    /*padding-left: 2px;*/
 }
-
-
 
 .section-label {
     font-size: 1rem !important;
@@ -136,6 +123,11 @@ lightning-textarea.custom-textarea {
 .slds-checkbox_faux {
     border-color: black !important;
     box-shadow: none !important;
+}
+
+.slds-checkbox__label {
+    display: flex !important;
+    align-items: center !important;
 }
 
 .slds-theme_success {
@@ -176,45 +168,12 @@ lightning-textarea.custom-textarea {
     min-height: 200px;
 }
 
-/*start new css*/
-
 /* Make fieldset legend match the "Student Email Search:" label */
 .slds-form-element__legend.slds-form-element__label.section-label {
-    /*display: block;                   !* ensure it behaves like a label block *!*/
     font-size: 1rem !important;       /* same size as .section-label */
     font-weight: normal !important;                 /* match label weight (adjust if needed) */
     color: black !important;          /* same color */
 }
-
-/*.search-mode .slds-radio__label .slds-form-element__label {*/
-/*    font-size: 0.95rem;        !* adjust: 0.875rem, 1rem, etc. *!*/
-/*    color: black;      !* adjust to your color *!*/
-/*}*/
-
-/*!* style the faux radio (the round control) to match border *!*/
-/*.search-mode .slds-radio__label .slds-radio_faux {*/
-/*    box-shadow: none !important;      !* remove SLDS shadow *!*/
-/*    border: 1px solid #9e9aa6 !important;*/
-/*    background: white !important;*/
-/*}*/
-
-/*!* checked state: change the faux background & border color *!*/
-/*.search-mode .slds-radio input:checked + .slds-radio__label .slds-radio_faux {*/
-/*    background-color: rebeccapurple !important;*/
-/*    border-color: rebeccapurple !important;*/
-/*    box-shadow: none !important;*/
-/*}*/
-
-/*!* keep an accessible focus ring for keyboard users (replace drop shadow) *!*/
-/*.search-mode .slds-radio input:focus-visible + .slds-radio__label {*/
-/*    outline: 2px solid #ffd966;   !* visible focus ring *!*/
-/*    outline-offset: 2px;*/
-/*}*/
-
-/* optional: tighten radio spacing */
-/*.search-mode .slds-radio {*/
-/*    margin-bottom: .30rem !important;*/
-/*}*/
 
 .banner-input,
 .lastname-input,
@@ -222,29 +181,6 @@ lightning-textarea.custom-textarea {
     --slds-c-input-color-border: rebeccapurple;
     --sds-c-input-color-border: rebeccapurple;
 }
-
-/* stack only the radios inside the search-mode block */
-/*.search-mode .slds-form-element__control {*/
-/*    !* turn the grid's direction to column so children stack *!*/
-/*    flex-direction: column !important;*/
-/*    align-items: flex-start; !* keep items left aligned *!*/
-/*    gap: 0.25rem;             !* spacing between radios *!*/
-/*}*/
-
-/* Ensure columns in the banner-search and eamil-search row match height */
-/*.banner-search .slds-grid,*/
-/*.email-search .slds-grid {*/
-/*    flex-wrap: wrap;*/
-/*    align-items: stretch; !* make children equal height *!*/
-/*}*/
-
-/* Make each column a vertical flex container. Inputs remain at top, errors can be anchored to bottom. */
-/*.banner-search .slds-grid > .slds-col,*/
-/*.email-search .slds-grid > .slds-col {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    justify-content: flex-start;*/
-/*}*/
 
 @media (max-width: 768px) {
     .tommie-form {

@@ -167,8 +167,70 @@ public without sharing class TommieCaresLwcControllerv2 {
         return students;
     }
 
+    public class advocateWellBeingWrapper {
+        public String collection;
+        public String caseType;
+        public Integer reporter_type;
+        public String reporterName;
+        public String reporterPhone;
+        public String reporterEmail;
+        public Integer affiliation_of_harmed_party;
+        public String students_first_name;
+        public String students_email_address;
+        public String students_phone_number;
+        public String date_of_concerning_incident;
+        public String description;
+    }
+
     @AuraEnabled(Cacheable=false)
     public static void saveCase(Map<String, String> formSelections) {
+
+        if (String.isNotBlank(formSelections.get('TellSomeoneWellBeingDate')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingDescription'))) {
+            String wellBeingReportNumber = '';
+
+            advocateWellBeingWrapper advocateWellBeing = new advocateWellBeingWrapper();
+            advocateWellBeing.collection = '6320164b2a4a1fad79299ed27d892c07';
+            advocateWellBeing.caseType = '186974515f78c9526452e03483778417';
+            advocateWellBeing.reporter_type = 2;
+            advocateWellBeing.reporterName = formSelections.get('AdvisorContactName');
+            advocateWellBeing.reporterPhone = '';
+            advocateWellBeing.reporterEmail = formSelections.get('AdvisorEmail');
+            advocateWellBeing.affiliation_of_harmed_party = 1;
+            advocateWellBeing.students_first_name = formSelections.get('StudentName');
+            advocateWellBeing.students_email_address = formSelections.get('StudentEmail');
+            advocateWellBeing.students_phone_number = '';
+            advocateWellBeing.date_of_concerning_incident = formSelections.get('TellSomeoneWellBeingDate');
+            advocateWellBeing.description = formSelections.get('TellSomeoneWellBeingDescription');
+
+            String advocateWellBeingString = JSON.serialize(advocateWellBeing);
+            System.debug('advocateWellBeingString: ' + advocateWellBeingString);
+
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('callout:Symplicity_Advocate_Flex_Forms/v1/fw/cases');
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.setBody(advocateWellBeingString);
+
+            try {
+                Http http = new Http();
+                HttpResponse response = http.send(req);
+                System.debug('Response: ' + response.getBody());
+                if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+                    Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                    wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being Cases
+                }
+            } catch (Exception e) {
+                System.debug('Error occurred while sending request: ' + e.getMessage());
+            }
+
+            if (String.isNotBlank(wellBeingReportNumber)) {
+                formSelections.put('CaseDescription', 'Advocate Record Number: ' + wellBeingReportNumber + ' | ' + formSelections.get('TellSomeoneWellBeingDescription'));
+            } else {
+                formSelections.put('CaseDescription', 'Advocate Record Number: Unable to create record. Reach out to Dean of Students with questions'+ ' | ' + formSelections.get('TellSomeoneWellBeingDescription'));
+            }
+            System.debug('formSelections CaseDescription: ' + formSelections.get('CaseDescription'));
+        }
+
         Case tommieCaresCase = new Case();
 
         List<RecordType> recordId = [
@@ -198,6 +260,7 @@ public without sharing class TommieCaresLwcControllerv2 {
         tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = formSelections.get('Other_Details');
         tommieCaresCase.Case_Reporter_Notes_to_Student__c = formSelections.get('Personal_Message');
         tommieCaresCase.Shared_Case_Notes__c = formSelections.get('Additional_Concerns');
+        tommieCaresCase.Description = formSelections.containsKey('CaseDescription') ? formSelections.get('CaseDescription') : '';
 
         //Get Course Connection for student selected
         List<hed__Course_Enrollment__c> studentCourseEnrollmentList = [
