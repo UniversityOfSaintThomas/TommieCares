@@ -170,11 +170,11 @@ public without sharing class TommieCaresLwcControllerv2 {
     public class advocateWellBeingWrapper {
         public String collection;
         public String caseType;
-        public Integer reporter_type;
+//        public Integer reporter_type;
         public String reporterName;
         public String reporterPhone;
         public String reporterEmail;
-        public Integer affiliation_of_harmed_party;
+//        public Integer affiliation_of_harmed_party;
         public String students_first_name;
         public String students_email_address;
         public String students_phone_number;
@@ -191,11 +191,11 @@ public without sharing class TommieCaresLwcControllerv2 {
             advocateWellBeingWrapper advocateWellBeing = new advocateWellBeingWrapper();
             advocateWellBeing.collection = '6320164b2a4a1fad79299ed27d892c07';
             advocateWellBeing.caseType = '186974515f78c9526452e03483778417';
-            advocateWellBeing.reporter_type = 2;
+//            advocateWellBeing.reporter_type = 2;
             advocateWellBeing.reporterName = formSelections.get('AdvisorContactName');
             advocateWellBeing.reporterPhone = '';
             advocateWellBeing.reporterEmail = formSelections.get('AdvisorEmail');
-            advocateWellBeing.affiliation_of_harmed_party = 1;
+//            advocateWellBeing.affiliation_of_harmed_party = 1;
             advocateWellBeing.students_first_name = formSelections.get('StudentName');
             advocateWellBeing.students_email_address = formSelections.get('StudentEmail');
             advocateWellBeing.students_phone_number = '';

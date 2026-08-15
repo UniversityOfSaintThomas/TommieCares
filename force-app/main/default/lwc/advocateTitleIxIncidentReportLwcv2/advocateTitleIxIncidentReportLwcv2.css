@@ -1,0 +1,136 @@
+/**
+ * Created by nguy0092 on 8/14/2026.
+ */
+
+:host {
+    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
+
+a {
+    color: rebeccapurple;
+}
+
+a:hover,
+a:active {
+    color: #8348ad;
+    text-decoration: underline;
+}
+
+abbr.slds-required {
+    font-weight: bold;
+}
+
+.advocate-well-being-form {
+    box-sizing: border-box;   /* include padding in width */
+    /*width: 80%;               !* change percent to taste *!*/
+    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
+    margin: 0;                /* left aligned (no auto centering) */
+}
+
+/* Body copy / intro paragraphs */
+.regular-body-text p {
+    font-size: 1rem !important;
+    color: black !important;
+}
+
+/* Form field labels — matches .form-element__label-custom in tommieCaresLwcv2 */
+.selection-labels {
+    font-size: 1rem !important;
+    color: black !important;
+    margin-bottom: 0 !important;
+}
+
+/* Helper/description text under labels — matches .textarea-sublabel */
+.regular-body-text p.textarea-sublabel {
+    font-size: .90rem !important;
+    color: black !important;
+    margin-bottom: 0 !important;
+}
+
+lightning-combobox,
+lightning-input,
+lightning-checkbox-group {
+    --slds-c-input-color-border: rebeccapurple;
+    --sds-c-input-color-border: rebeccapurple;
+}
+
+lightning-textarea {
+    --slds-c-textarea-color-border: rebeccapurple;
+    --sds-c-textarea-color-border: rebeccapurple;
+}
+
+.slds-checkbox_faux {
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
+.slds-checkbox__label {
+    display: flex !important;
+    align-items: center !important;
+}
+
+lightning-button.submit_button {
+    font-size: 1rem !important;
+    font-weight: bold;
+}
+
+.submit-error-message {
+    border: solid 1px rebeccapurple;
+    background: #f4eefa;
+}
+
+@media (max-width: 768px) {
+    lightning-textarea {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+.slds-radio_faux {
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
+.slds-radio__label {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.picklist-radio:checked + .slds-radio__label .slds-radio_faux {
+    background-color: rebeccapurple !important;
+    border: none !important;
+}
+
+.picklist-radio-text {
+    font-size: 1rem !important;
+    text-transform: capitalize;
+    color: black !important;
+}
+
+/*.picklist-checkbox-options {*/
+/*    display: inline-block;*/
+/*    position: relative;*/
+/*    float: left;*/
+/*    border: solid 1px rebeccapurple;*/
+/*}*/
+
+/*.picklist-checkbox:checked + .slds-checkbox__label .slds-checkbox_faux {*/
+/*    background-color: rebeccapurple !important;*/
+/*    border: none !important;*/
+/*}*/
+
+/*.picklist-checkbox-text {*/
+/*    font-size: 1rem !important;*/
+/*    text-transform: capitalize;*/
+/*    color: black !important;*/
+/*}*/
+
+/*.slds-checkbox_faux {*/
+/*    border-color: black !important;*/
+/*    box-shadow: none !important;*/
+/*}*/
+
+/*.slds-checkbox__label {*/
+/*    display: flex !important;*/
+/*    align-items: center !important;*/
+/*}*/

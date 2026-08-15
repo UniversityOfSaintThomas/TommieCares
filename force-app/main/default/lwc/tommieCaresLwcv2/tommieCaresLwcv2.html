@@ -12,7 +12,8 @@
                                 title="current term warning"
                                 size="small"
                                 class="slds-align-middle"
-                                variant="inverse"></lightning-icon>
+                                variant="inverse">
+                </lightning-icon>
             </div>
             <div class="slds-media__body notification_text">
                 <p class="slds-text-body_regular">No Active Academic Terms. Please contact salesforce@stthomas.edu to report this error.</p>
@@ -27,7 +28,8 @@
                                 title="submit case error"
                                 size="small"
                                 class="slds-align-middle"
-                                variant="inverse"></lightning-icon>
+                                variant="inverse">
+                </lightning-icon>
             </div>
             <div class="slds-media__body notification_text">
                 <p class="slds-text-body_regular">There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
@@ -42,7 +44,8 @@
                                 title="submit success"
                                 size="small"
                                 class="slds-align-middle"
-                                variant="inverse"></lightning-icon>
+                                variant="inverse">
+                </lightning-icon>
             </div>
             <div class="slds-media__body notification_text">
                 <p class="slds-text-body_regular">Thank you for your submission, and for all you do both in the classroom and as an advisor.
@@ -59,7 +62,8 @@
                                 alternative-text="no faculty or student course found"
                                 title="no faculty or student course found warning"
                                 size="small"
-                                class="slds-align-middle"></lightning-icon>
+                                class="slds-align-middle">
+                </lightning-icon>
             </div>
             <div class="slds-media__body">
                 <p class="slds-text-body_regular" style="font-size: 1rem">No faculty or student course information was found. Please select another option.</p>
@@ -72,7 +76,8 @@
                                 title="no advisor information found error"
                                 size="small"
                                 class="slds-align-middle"
-                                variant="inverse"></lightning-icon>
+                                variant="inverse">
+                </lightning-icon>
             </div>
             <div class="slds-media__body notification_text">
                 <p class="slds-text-body_regular">No Advisor Information Found. Please contact salesforce@stthomas.edu to report this error.</p>
@@ -83,14 +88,14 @@
         <template lwc:if={submitCaseSpinner}>
             <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
         </template>
-        <form id="tommieCaresForm" class="tommie-form" data-form="tommieCaresForm" lwc:if={advisorContactIdCheck}>
+        <div id="tommieCaresForm" class="tommie-cares-form" data-form="tommieCaresForm" lwc:if={advisorContactIdCheck}>
             <div class={advisorInfoViewClass}>
-                <p class="slds-text-body_regular advisor_info">Your Information: {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
+                <p class="advisor_info">Your Information: {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
             </div>
-            <div class="footer-info">
-                <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+            <div class="regular-body-text">
+                <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
                     or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
-                <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                <p class="slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
                     individuals in order to provide additional support.<br>
                     All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                     <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
@@ -367,11 +372,17 @@
                                 The Dean of Students Office will address the concern with the student.<br>
                                 No advisors will be copied or notified.</p>
                         </div>
+<!--                        <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>-->
+<!--                            <p class="additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>-->
+<!--                                No advisors will be copied or notified.<br>-->
+<!--                                Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:-->
+<!--                                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>-->
+<!--                        </div>-->
+<!--                        <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>-->
+<!--                            <c-advocate-title-ix-incident-report-lwc lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwc>-->
+<!--                        </div>-->
                         <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
-                            <p class="additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
-                                No advisors will be copied or notified.<br>
-                                Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:
-                                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>
+                            <c-advocate-title-ix-incident-report-lwcv2 lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwcv2>
                         </div>
                         <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>
                             <p class="additional-text-message" lwc:if={selectionsCheck.senseOfBelongingCheck}>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).<br>
@@ -475,10 +486,10 @@
                     </div>
                 </template>
             </div>
-            <div class="slds-m-vertical_medium footer-info">
-                <p class="slds-text-body_regular slds-m-bottom_small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
-                <p class="slds-text-body_regular slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
+            <div class="slds-m-vertical_medium regular-body-text">
+                <p class="slds-m-bottom_small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
+                <p class="slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
             </div>
-        </form>
+        </div>
     </div>
 </template>

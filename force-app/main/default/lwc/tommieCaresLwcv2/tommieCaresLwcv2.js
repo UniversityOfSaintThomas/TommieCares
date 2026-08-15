@@ -12,6 +12,17 @@ import saveCase from "@salesforce/apex/TommieCaresLwcControllerv2.saveCase";
 
 export default class TommieCaresLwcv2 extends LightningElement {
 
+    get childProps() {
+        return {
+            communityOfConcernReportType: "Faculty",
+            communityOfConcernReporterFirstName: "Test",
+            communityOfConcernReporterLastName: "Tester",
+            communityOfConcernReporterEmail: "test@test.edu",
+            communityOfConcernWhoValue: "Student",
+            communityOfConcernParamsUrl: this.paramUrl,
+        }
+    }
+
     @api paramBId = "";
     @api paramSBid = "";
     @api paramCrn = "";
