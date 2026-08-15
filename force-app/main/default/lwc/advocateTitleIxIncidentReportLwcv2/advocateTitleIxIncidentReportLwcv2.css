@@ -27,6 +27,18 @@ abbr.slds-required {
     margin: 0;                /* left aligned (no auto centering) */
 }
 
+.regular-body-text .attached-file-list * {
+    font-size: .75rem !important;
+    color: black !important;;
+    margin-bottom: 0 !important;;
+}
+
+.regular-body-text .excluded-file-list * {
+    font-size: .75rem !important;
+    color: red !important;;
+    margin-bottom: 0 !important;;
+}
+
 /* Body copy / intro paragraphs */
 .regular-body-text p {
     font-size: 1rem !important;
@@ -105,6 +117,12 @@ lightning-button.submit_button {
     font-size: 1rem !important;
     text-transform: capitalize;
     color: black !important;
+}
+
+.validation-text {
+    color: red;
+    /*font-size: 0.75rem;*/
+    /*margin-top: 0.125rem;*/
 }
 
 /*.picklist-checkbox-options {*/

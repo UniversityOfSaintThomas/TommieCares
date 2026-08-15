@@ -378,10 +378,9 @@
 <!--                                Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:-->
 <!--                                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>-->
 <!--                        </div>-->
-<!--                        <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>-->
-<!--                            <c-advocate-title-ix-incident-report-lwc lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwc>-->
-<!--                        </div>-->
-                        <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                        <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                            <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                                No advisors will be copied or notified.<br></p>
                             <c-advocate-title-ix-incident-report-lwcv2 lwc:spread={childProps}></c-advocate-title-ix-incident-report-lwcv2>
                         </div>
                         <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>
@@ -490,6 +489,12 @@
                 <p class="slds-m-bottom_small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
                 <p class="slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
             </div>
+
+            <lightning-button
+                    label="Get Child Value"
+                    onclick={viewChildForm}>
+            </lightning-button>
+
         </div>
     </div>
 </template>

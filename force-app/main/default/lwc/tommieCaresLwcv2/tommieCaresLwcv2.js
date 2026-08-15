@@ -575,4 +575,17 @@ export default class TommieCaresLwcv2 extends LightningElement {
         }
     }
 
+    viewChildForm() {
+        // Find the child component using querySelector
+        const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
+
+        if (tellSomeoneTitleIx) {
+            // Read the exposed public getter
+            const titleIxFormValues = tellSomeoneTitleIx.formToTommieAlerts;
+            const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+            console.log('titleIxFormValues pulled from child: ', JSON.stringify(titleIxFormValues));
+            console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
+        }
+    }
+
 }

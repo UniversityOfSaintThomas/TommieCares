@@ -17,6 +17,13 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
     @api communityOfConcernReporterEmail = "test@tester.edu";
     @api communityOfConcernParamsUrl = "";
 
+    @api get formToTommieAlerts() {
+        return this.titleIxIncidentFormValues;
+    }
+    @api get documentsToTommieAlerts() {
+        return this.attachDocuments;
+    }
+
     @track reporterTypeOptions = [];
     @track statusWhoCausedHarmOptions = []
     @track notificationOptions = [
@@ -142,6 +149,7 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
 
     selectValueHandler(event) {
         let eventValue = event.detail.value;
+        let eventValueHtml = event.target.value;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
@@ -155,11 +163,11 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
                 this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValue.includes("true");
                 break;
             case "statuswhocausedharm":
-                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
+                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValueHtml;
                 break;
             case "notification":
-                this.notificationSelect = eventValue;
-                this.titleIxIncidentFormValues.notification = eventValue === "true";
+                this.notificationSelect = eventValueHtml;
+                this.titleIxIncidentFormValues.notification = eventValueHtml === "true";
                 break;
         }
     }
@@ -226,7 +234,7 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
-    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedExtensionTypes = ".csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx"; //[".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
     acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
@@ -234,10 +242,13 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
+    maxFileSize = 3;
+    maxFileCount = 5;
 
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
-        let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
+        const attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes,
+            this.fileIndex, this.attachDocuments, this.maxFileSize, this.maxFileCount);
         attachDocumentsUploadResults.attachDocuments.forEach((document) => {
             this.attachDocuments.push(document);
         })
