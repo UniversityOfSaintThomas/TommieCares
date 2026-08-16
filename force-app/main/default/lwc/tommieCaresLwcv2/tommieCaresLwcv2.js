@@ -15,11 +15,11 @@ export default class TommieCaresLwcv2 extends LightningElement {
     get childProps() {
         return {
             communityOfConcernReportType: "Faculty",
-            communityOfConcernReporterFirstName: "Test",
-            communityOfConcernReporterLastName: "Tester",
-            communityOfConcernReporterEmail: "test@test.edu",
-            communityOfConcernWhoValue: "Student",
-            communityOfConcernParamsUrl: this.paramUrl,
+            communityOfConcernReporterFirstName: this.termAdvisorData.Advisor_FirstName,
+            communityOfConcernReporterLastName: this.termAdvisorData.Advisor_FirstName,
+            communityOfConcernReporterEmail: this.termAdvisorData.Advisor_Email,
+            communityOfConcernParamsUrl: this.searchParamsUrl,
+            tommieAlertsStudentName: this.studentName,
         }
     }
 
@@ -148,11 +148,11 @@ export default class TommieCaresLwcv2 extends LightningElement {
         const excluded = new Set(['high5Check', 'behaviorMentalHealthCheck', 'senseOfBelongingCheck', 'otherCheck']);
         return Object.entries(this.selectionsCheck).some(([key, value]) => !excluded.has(key) && value);
     }
-    get submitDisable() {
-        return Object.values(this.formRequired).includes(true);
-    }
-    get tellSomeoneCheck() {
+    get tellSomeoneWellBeingVisible() {
         return !!(this.selectionsCheck.behaviorMentalHealthCheck || this.selectionsCheck.senseOfBelongingCheck);
+    }
+    get submitDisable() {
+        return Object.values(this.formRequired).includes(true) || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
     }
 
     hasAncestorWithId(startNode, id) {
@@ -223,6 +223,14 @@ export default class TommieCaresLwcv2 extends LightningElement {
             this.noCurrentTermCheck = !this.termAdvisorData.Current_Term;
             this.advisorContactIdCheck = !!this.termAdvisorData.Advisor_ContactId;
             this.noAdvisorContactIdCheck = !this.advisorContactIdCheck;
+
+            // if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Faculty")) {
+            //     this.termAdvisorData.Advisor_StThomasConnection = "Faculty";
+            // } else if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Staff")) {
+            //     this.termAdvisorData.Advisor_StThomasConnection = "Staff";
+            // } else if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Student")) {
+            //     this.termAdvisorData.Advisor_StThomasConnection = "Student";
+            // }
         }
 
         if (error) {
@@ -494,11 +502,11 @@ export default class TommieCaresLwcv2 extends LightningElement {
     }
 
     tellSomeoneRequired() {
-        if (!this.tellSomeoneCheck) {
+        if (!this.tellSomeoneWellBeingVisible) {
             this.formSubmitSelections.TellSomeoneWellBeingDate = "";
             this._incidentDate = "";
         }
-        this.formRequired.TellSomeoneRequired = this.tellSomeoneCheck && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
+        this.formRequired.TellSomeoneRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
     }
 
     get today() {
@@ -575,7 +583,13 @@ export default class TommieCaresLwcv2 extends LightningElement {
         }
     }
 
-    viewChildForm() {
+    tellSomeoneTitleIxSubmitDisable = true;
+    tellSomeoneTitleIxSubmitCheck(event) {
+        this.tellSomeoneTitleIxSubmitDisable = event.detail.value;
+        console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
+    }
+
+    tellSomeoneTitleIxForm() {
         // Find the child component using querySelector
         const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
 

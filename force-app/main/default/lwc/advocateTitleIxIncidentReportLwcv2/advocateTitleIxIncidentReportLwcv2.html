@@ -86,25 +86,35 @@
                                 a <b>visitor/guest</b> to the University, the Title IX Coordinator, Dean of Students and Public
                                 Safety will be alerted.</p>
                         </div>
-                        <div class="slds-form-element">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12">
                             <label class="slds-form-element__label selection-labels">
                                 Select status of who caused harm:<abbr class="slds-required" title="Required">*</abbr></label>
                             <div class="slds-form-element__control slds-m-top_xx-small">
-                                <template for:each={statusWhoCausedHarmOptions} for:item="statusOption">
-                                    <div class="slds-radio slds-p-bottom_xx-small slds-m-left_small" key={statusOption.value}>
-                                        <input type="radio"
-                                               name="statusWhoCausedHarmCheckboxes"
-                                               id={statusOption.value}
-                                               value={statusOption.value}
-                                               data-selecttype="statuswhocausedharm"
-                                               onclick={selectValueHandler}
-                                               class="picklist-radio"/>
-                                        <label class="slds-radio__label" for={statusOption.value}>
-                                            <span class="slds-radio_faux"></span>
-                                            <span class="picklist-radio-text">{statusOption.label}</span>
-                                        </label>
-                                    </div>
-                                </template>
+                                <lightning-combobox id="titleix-report-status-who-caused-harm-id"
+                                                    name="Status Who Caused Harm"
+                                                    label=""
+                                                    value=""
+                                                    placeholder="Select..."
+                                                    options={statusWhoCausedHarmOptions}
+                                                    data-selecttype="statuswhocausedharm"
+                                                    onchange={selectValueHandler}
+                                                    variant="label-hidden">
+                                </lightning-combobox>
+<!--                                <template for:each={statusWhoCausedHarmOptions} for:item="statusOption">-->
+<!--                                    <div class="slds-radio slds-p-bottom_xx-small slds-m-left_small" key={statusOption.value}>-->
+<!--                                        <input type="radio"-->
+<!--                                               name="statusWhoCausedHarmCheckboxes"-->
+<!--                                               id={statusOption.value}-->
+<!--                                               value={statusOption.value}-->
+<!--                                               data-selecttype="statuswhocausedharm"-->
+<!--                                               onclick={selectValueHandler}-->
+<!--                                               class="picklist-radio"/>-->
+<!--                                        <label class="slds-radio__label" for={statusOption.value}>-->
+<!--                                            <span class="slds-radio_faux"></span>-->
+<!--                                            <span class="picklist-radio-text">{statusOption.label}</span>-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                </template>-->
                             </div>
                         </div>
     <!--                    <div class="slds-form-element__control">-->
@@ -171,7 +181,7 @@
                 <div class="slds-grid slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-incident-description-id">Incident / Concerning Behavior Description:<abbr class="slds-required" title="Required">*</abbr></label>
-                        <p class="textarea-sublabel">Please provide a brief, concise narrative of the incident or behavior(s) of concern.</p>
+                        <p class="textarea-sublabel">Provide a brief, concise narrative of the incident or behavior(s) of concern.</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea-tall"
                                                 id="titleix-report-incident-description-id"
@@ -201,7 +211,7 @@
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-location-id">Location of Incident:</label>
                         <p class="textarea-sublabel">Did this occur on-campus, off-campus, in a specific residence hall, out of
-                            the country, or unknown? Please be as specific as possible.</p>
+                            the country, or unknown? Be as specific as possible.</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea"
                                                 id="titleix-report-location-id"
@@ -260,39 +270,53 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-form-element slds-m-bottom_medium">
-                    <label class="slds-form-element__label selection-labels">Notification:
-                        <abbr class="slds-required" title="Required">*</abbr></label>
-                    <p class="slds-m-bottom_xx-small textarea-sublabel">If you are not the
-                        impacted/harmed party, and you are reporting on their behalf, do they know you are submitting
-                        this report?</p>
-                    <div class="slds-form-element__control slds-m-top_xx-small">
-                        <template for:each={notificationOptions} for:item="notification">
-                            <div class="slds-radio slds-p-bottom_xx-small slds-m-left_small" key={notification.value}>
-                                <input type="radio"
-                                       name="notificationCheckboxes"
-                                       id={notification.value}
-                                       value={notification.value}
-                                       data-selecttype="notification"
-                                       onclick={selectValueHandler}
-                                       class="picklist-radio"/>
-                                <label class="slds-radio__label" for={notification.value}>
-                                    <span class="slds-radio_faux"></span>
-                                    <span class="picklist-radio-text">{notification.label}</span>
-                                </label>
+                <div class="slds-grid slds-grid_vertical slds-m-bottom_medium">
+                    <div class="slds-form-element">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
+                            <label class="slds-form-element__label selection-labels">Notification:
+                                <abbr class="slds-required" title="Required">*</abbr></label>
+                            <p class="slds-m-bottom_xx-small textarea-sublabel">If you are not the impacted/harmed party and reporting on their behalf, do they know you are submitting this report?</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12">
+                            <div class="slds-form-element__control slds-m-top_xx-small">
+                                <lightning-combobox id="titleix-report-notification-id"
+                                                    name="notification"
+                                                    label=""
+                                                    value=""
+                                                    placeholder="Select..."
+                                                    options={notificationOptions}
+                                                    data-selecttype="notification"
+                                                    onchange={selectValueHandler}
+                                                    variant="label-hidden">
+                                </lightning-combobox>
                             </div>
-                        </template>
-<!--                        <lightning-radio-group id="titleix-report-notification-id"-->
-<!--                                               type="radio"-->
-<!--                                               label=""-->
-<!--                                               options={notificationOptions}-->
-<!--                                               value={notificationSelect}-->
-<!--                                               data-selecttype="notification"-->
-<!--                                               variant="label-hidden"-->
-<!--                                               onchange={selectValueHandler}>-->
-<!--                        </lightning-radio-group>-->
+                        </div>
                     </div>
                 </div>
+    <!--                        <template for:each={notificationOptions} for:item="notification">-->
+    <!--                            <div class="slds-radio slds-p-bottom_xx-small slds-m-left_small" key={notification.value}>-->
+    <!--                                <input type="radio"-->
+    <!--                                       name="notificationCheckboxes"-->
+    <!--                                       id={notification.value}-->
+    <!--                                       value={notification.value}-->
+    <!--                                       data-selecttype="notification"-->
+    <!--                                       onclick={selectValueHandler}-->
+    <!--                                       class="picklist-radio"/>-->
+    <!--                                <label class="slds-radio__label" for={notification.value}>-->
+    <!--                                    <span class="slds-radio_faux"></span>-->
+    <!--                                    <span class="picklist-radio-text">{notification.label}</span>-->
+    <!--                                </label>-->
+    <!--                            </div>-->
+    <!--                        </template>-->
+    <!--                        <lightning-radio-group id="titleix-report-notification-id"-->
+    <!--                                               type="radio"-->
+    <!--                                               label=""-->
+    <!--                                               options={notificationOptions}-->
+    <!--                                               value={notificationSelect}-->
+    <!--                                               data-selecttype="notification"-->
+    <!--                                               variant="label-hidden"-->
+    <!--                                               onchange={selectValueHandler}>-->
+    <!--                        </lightning-radio-group>-->
                 <div class="slds-grid slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-follow-up-id">Reporter Follow-up:
@@ -313,12 +337,12 @@
                 </div>
                 <div class="slds-m-bottom_x-large">
                     <div class="slds-form-element slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
-                        <p class="slds-m-bottom_xx-small textarea-sublabel">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
+                        <label class="slds-form-element__label selection-labels" for="titleix-report-attach-documents-id">Attach documents/Upload</label>
+                        <p class="slds-m-bottom_xx-small textarea-sublabel">Upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
                             Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
                         <div class="slds-form-element__control">
                             <lightning-input
-                                    id="bias-report-attach-documents-id"
+                                    id="titleix-report-attach-documents-id"
                                     type="file"
                                     label=""
                                     accept={acceptedExtensionTypes}

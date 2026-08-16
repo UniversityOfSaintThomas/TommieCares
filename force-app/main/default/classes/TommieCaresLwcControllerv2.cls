@@ -56,9 +56,12 @@ public without sharing class TommieCaresLwcControllerv2 {
             advisor = [
                     SELECT Id,
                             Name,
+                            FirstName,
+                            LastName,
                             Last_Name_First_Name__c,
                             hed__UniversityEmail__c,
-                            University_Banner_ID__c
+                            University_Banner_ID__c,
+                            St_Thomas_Connection__c
                     FROM Contact
                     WHERE University_Banner_ID__c = :urlBid
                     WITH SECURITY_ENFORCED
@@ -68,9 +71,12 @@ public without sharing class TommieCaresLwcControllerv2 {
         if (!advisor.isEmpty()) {
             termAdvisorMap.put('Advisor_ContactId', advisor[0].Id);
             termAdvisorMap.put('Advisor_ContactName', advisor[0].Name);
+            termAdvisorMap.put('Advisor_FirstName', advisor[0].FirstName);
+            termAdvisorMap.put('Advisor_LastName', advisor[0].LastName);
             termAdvisorMap.put('Advisor_LNameFName', advisor[0].Last_Name_First_Name__c);
             termAdvisorMap.put('Advisor_Email', advisor[0].hed__UniversityEmail__c);
             termAdvisorMap.put('Advisor_BannerId', advisor[0].University_Banner_ID__c);
+            termAdvisorMap.put('Advisor_StThomasConnection', advisor[0].St_Thomas_Connection__c);
         }
 
         System.debug('termAdvisorMap: '+termAdvisorMap);

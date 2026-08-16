@@ -11,11 +11,13 @@ import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement {
 
+    //From parent component
     @api communityOfConcernReportType = "Staff";
     @api communityOfConcernReporterFirstName = "Test";
     @api communityOfConcernReporterLastName = "Tester";
     @api communityOfConcernReporterEmail = "test@tester.edu";
     @api communityOfConcernParamsUrl = "";
+    @api tommieAlertsStudentName = "";
 
     @api get formToTommieAlerts() {
         return this.titleIxIncidentFormValues;
@@ -44,7 +46,7 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
         reporterEmail: "", //Reporter's EmailRequired
         reporterPhone: "", //Reporter's Phone
         description: "", //Incident / Concerning Behavior Description REQUIRED
-        person_who_was_harmed_complainants: "", //Name of the person who caused harm
+        person_who_was_harmed_complainants: "", //Name of the person who was harmed
         additionalLocation: "", //Location of Incident
         date_of_incidents: "", //Date of Incident(s)Required
         person_who_did_harm_respondents: "", //Name of the person who caused harm
@@ -91,6 +93,8 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
                 let emailValidationResults = emailValidation(this.communityOfConcernReporterEmail);
                 this.titleIxIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
             }
+            this.titleIxIncidentFormValues.person_who_was_harmed_complainants = this.tommieAlertsStudentName;
+
             this.rendered = !this.rendered;
         }
     }
@@ -163,13 +167,18 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
                 this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValue.includes("true");
                 break;
             case "statuswhocausedharm":
-                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValueHtml;
+                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
+                console.log("status_of_individual_who_caused_harm eventValue: "+eventValue);
+                console.log("status_of_individual_who_caused_harm eventValueHtml: "+eventValueHtml);
                 break;
             case "notification":
-                this.notificationSelect = eventValueHtml;
-                this.titleIxIncidentFormValues.notification = eventValueHtml === "true";
+                this.notificationSelect = eventValue;
+                this.titleIxIncidentFormValues.notification = eventValue === "true";
+                console.log("notification eventValue: "+eventValue);
+                console.log("notification eventValueHtml: "+eventValueHtml);
                 break;
         }
+        this.submitDisableToTommieAlerts();
     }
 
     inputValueHandler(event) {
@@ -207,6 +216,7 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
                 this.titleIxIncidentFormValues.reporter_followup = eventValue;
                 break;
         }
+        this.submitDisableToTommieAlerts();
     }
 
     validEmail = true;
@@ -360,6 +370,14 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
             // console.log("Update submittedUrl: "+this.submittedUrl());
             location.replace(this.submittedUrl());
         }
+    }
+
+    submitDisableToTommieAlerts() {
+        console.log("this.submitDisable: "+this.submitDisable);
+        const customEvent = new CustomEvent("submitdisablecheck", {
+            detail: { value: this.submitDisable }
+        });
+        this.dispatchEvent(customEvent);
     }
 
 }
