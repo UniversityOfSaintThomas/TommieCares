@@ -16,10 +16,10 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-.additional-text-message {
-    font-size: .90rem !important;
-    color: black !important;
-}
+/*.additional-text-message {*/
+/*    font-size: .90rem !important;*/
+/*    color: black !important;*/
+/*}*/
 
 .advisor_info {
     font-size: 1rem !important;

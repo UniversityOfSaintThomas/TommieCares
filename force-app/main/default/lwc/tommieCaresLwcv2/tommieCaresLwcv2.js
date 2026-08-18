@@ -8,6 +8,7 @@ import getTommieCaresPicklists from "@salesforce/apex/TommieCaresLwcControllerv2
 import currentTermAdvisor from "@salesforce/apex/TommieCaresLwcControllerv2.currentTermAdvisor";
 import advisorCoursesList from "@salesforce/apex/TommieCaresLwcControllerv2.advisorCoursesList";
 import studentCourseList from "@salesforce/apex/TommieCaresLwcControllerv2.studentCourseList";
+import submitTellSomeoneTitleIx from "@salesforce/apex/TommieCaresLwcControllerv2.submitTellSomeoneTitleIx";
 import saveCase from "@salesforce/apex/TommieCaresLwcControllerv2.saveCase";
 
 export default class TommieCaresLwcv2 extends LightningElement {
@@ -60,6 +61,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         Additional_Concerns: "",
         TellSomeoneWellBeingDate: "",
         TellSomeoneWellBeingDescription: "",
+        TellSomeoneTitleIxReportNumber: "",
     };
     @track selectionsCheck = {
         high5Check: false,
@@ -82,7 +84,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         Academic_Required: false,
         PassCourse_Required: false,
         Other_Required: false,
-        TellSomeoneRequired: false,
+        TellSomeoneWellBeingRequired: false,
     }
 
     coursesListOptions = [];
@@ -126,6 +128,9 @@ export default class TommieCaresLwcv2 extends LightningElement {
     submitCaseSpinner = false;
     _incidentDate = "";
 
+    get initialPageView() {
+        return this.advisorContactIdCheck && !this.caseSubmittedCheck;
+    }
     get advisorInfoViewClass() {
         return "advisor_info "+this.communityOfConcernLwc; //hiding Advisor information when displaying on Community of Concern LWC
     }
@@ -177,6 +182,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         const baseUrl = this.paramUrl || window.location.href;
         this.searchParamsUrl = new URL(baseUrl);
         for (let [key, value] of this.searchParamsUrl.searchParams.entries()) {
+            // eslint-disable-next-line default-case
             switch (key) {
                 case "bid":
                     if (!this.paramBId) this.paramBId = value;
@@ -397,7 +403,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 }
                 if (eventValue === "Behavior and Mental Health concerns") {
                     this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
-                    this.tellSomeoneRequired();
+                    this.tellSomeoneWellBeingRequired();
                 }
                 if (eventValue === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = eventChecked;
@@ -413,7 +419,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 }
                 if (eventValue === "Sense of belonging") {
                     this.selectionsCheck.senseOfBelongingCheck = eventChecked;
-                    this.tellSomeoneRequired();
+                    this.tellSomeoneWellBeingRequired();
                 }
                 if (eventValue === "Other") {
                     if (!eventChecked) {
@@ -465,7 +471,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 break;
             case "wellBeingDescription":
                 this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
-                this.tellSomeoneRequired();
+                this.tellSomeoneWellBeingRequired();
                 break;
         }
     }
@@ -501,12 +507,12 @@ export default class TommieCaresLwcv2 extends LightningElement {
         this.formRequired.PassCourse_Required = !this.formSubmitSelections.Pass_Course_Selection;
     }
 
-    tellSomeoneRequired() {
+    tellSomeoneWellBeingRequired() {
         if (!this.tellSomeoneWellBeingVisible) {
             this.formSubmitSelections.TellSomeoneWellBeingDate = "";
             this._incidentDate = "";
         }
-        this.formRequired.TellSomeoneRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
+        this.formRequired.TellSomeoneWellBeingRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
     }
 
     get today() {
@@ -524,7 +530,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
         } else {
             this.formSubmitSelections.TellSomeoneWellBeingDate = "";
         }
-        this.tellSomeoneRequired();
+        this.tellSomeoneWellBeingRequired();
         console.log("TellSomeoneWellBeingDate: ", this.formSubmitSelections.TellSomeoneWellBeingDate);
     }
 
@@ -559,6 +565,14 @@ export default class TommieCaresLwcv2 extends LightningElement {
         return this.searchParamsUrl;
     }
 
+    submitAnother() {
+        if (window.location && window.location.search) {
+            this.searchParamsUrl.searchParams.delete("submitted");
+        }
+        location.replace(this.searchParamsUrl.toString());
+    }
+
+    titleIxSubmitError = false;
     async submitCase() {
         this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
@@ -567,11 +581,34 @@ export default class TommieCaresLwcv2 extends LightningElement {
         this.formSubmitSelections.CourseSelectionId = this.courseSelection;
         this.formSubmitSelections.StudentName = this.studentName;
         this.formSubmitSelections.StudentEmail = this.studentEmail;
+        let titleIxFormValues = "";
+        let titleIxDocuments = [];
+
+        if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
+            // Find the child component using querySelector
+            const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
+
+            if (tellSomeoneTitleIx) {
+                // Read the exposed public getter
+                titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
+                titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+                console.log('titleIxFormValues pulled from child: ', JSON.stringify(titleIxFormValues));
+                console.log('titleIxDocuments pulled from child: ', titleIxDocuments);
+            }
+        }
 
         try {
             this.caseSubmittedErrorCheck = false;
-            window.scrollTo(0, 0);
+            window.parent.scrollTo({top: 0, behavior: 'smooth' });
             this.submitCaseSpinner = true;
+
+            if (titleIxFormValues.trim().length > 0) {
+                const titleIxReportNumber = await submitTellSomeoneTitleIx({formValues: titleIxFormValues});
+                console.log('titleIxReportNumber returned from Apex: ', titleIxReportNumber);
+                this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxReportNumber;
+                this.titleIxSubmitError = !this.formSubmitSelections.TellSomeoneTitleIxReportNumber ? "true" : "false";
+            }
+
             await saveCase({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
             // eslint-disable-next-line no-restricted-globals
@@ -589,17 +626,23 @@ export default class TommieCaresLwcv2 extends LightningElement {
         console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
+    // titleIxFormValues = {};
+    // titleIxDocuments = [];
     tellSomeoneTitleIxForm() {
-        // Find the child component using querySelector
-        const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
+        if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
+            // Find the child component using querySelector
+            const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
 
-        if (tellSomeoneTitleIx) {
-            // Read the exposed public getter
-            const titleIxFormValues = tellSomeoneTitleIx.formToTommieAlerts;
-            const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
-            console.log('titleIxFormValues pulled from child: ', JSON.stringify(titleIxFormValues));
-            console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
+            if (tellSomeoneTitleIx) {
+                // Read the exposed public getter
+                const titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
+                const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+                console.log('titleIxFormValues pulled from child: ', titleIxFormValues);
+                console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
+            }
         }
+
+
     }
 
 }

@@ -173,7 +173,33 @@ public without sharing class TommieCaresLwcControllerv2 {
         return students;
     }
 
-    public class advocateWellBeingWrapper {
+    @AuraEnabled(Cacheable=false)
+    public static String submitTellSomeoneTitleIx(String formValues) {
+        String titleIxReportNumber = '';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('Symplicity_Advocate_Integration_Key/v1/titleix_reports');
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.setBody(formValues);
+
+        try {
+            Http http = new Http();
+            HttpResponse response = http.send(req);
+            System.debug('Response: ' + response.getBody());
+            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+                Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
+            }
+        } catch (Exception e) {
+            System.debug('Error occurred while sending request: ' + e.getMessage());
+        }
+
+        return titleIxReportNumber;
+    }
+
+
+    public class tellSomeoneWellBeingWrapper {
         public String collection;
         public String caseType;
 //        public Integer reporter_type;
@@ -190,13 +216,15 @@ public without sharing class TommieCaresLwcControllerv2 {
 
     @AuraEnabled(Cacheable=false)
     public static void saveCase(Map<String, String> formSelections) {
+        String tellSomeoneCollection = '6320164b2a4a1fad79299ed27d892c07';
+        String tellSomeoneCaseType = '186974515f78c9526452e03483778417';
 
         if (String.isNotBlank(formSelections.get('TellSomeoneWellBeingDate')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingDescription'))) {
             String wellBeingReportNumber = '';
 
-            advocateWellBeingWrapper advocateWellBeing = new advocateWellBeingWrapper();
-            advocateWellBeing.collection = '6320164b2a4a1fad79299ed27d892c07';
-            advocateWellBeing.caseType = '186974515f78c9526452e03483778417';
+            tellSomeoneWellBeingWrapper advocateWellBeing = new tellSomeoneWellBeingWrapper();
+            advocateWellBeing.collection = tellSomeoneCollection;
+            advocateWellBeing.caseType = tellSomeoneCaseType;
 //            advocateWellBeing.reporter_type = 2;
             advocateWellBeing.reporterName = formSelections.get('AdvisorContactName');
             advocateWellBeing.reporterPhone = '';
@@ -230,9 +258,9 @@ public without sharing class TommieCaresLwcControllerv2 {
             }
 
             if (String.isNotBlank(wellBeingReportNumber)) {
-                formSelections.put('CaseDescription', 'Advocate Record Number: ' + wellBeingReportNumber + ' | ' + formSelections.get('TellSomeoneWellBeingDescription'));
+                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: ' + wellBeingReportNumber);
             } else {
-                formSelections.put('CaseDescription', 'Advocate Record Number: Unable to create record. Reach out to Dean of Students with questions'+ ' | ' + formSelections.get('TellSomeoneWellBeingDescription'));
+                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: Unable to create record. Reach out to Dean of Students with questions');
             }
             System.debug('formSelections CaseDescription: ' + formSelections.get('CaseDescription'));
         }

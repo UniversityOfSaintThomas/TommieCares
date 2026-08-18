@@ -46,28 +46,39 @@
 <!--            <p class="slds-m-vertical_x-small textarea-sublabel"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>-->
             <div class="advocate-well-being-form">
                 <template lwc:if={isAnonymous}>
-                    <p class="slds-m-bottom_small"><b>Anonymous Reporting</b></p>
-                    <div class="slds-grid slds-m-bottom_xx-small">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
-                            <p>All reports are confidential. If you select to report an incident as
-                                anonymous, St. Thomas will not be able to contact you. Reporting anonymously limits the university's
-                                ability to respond.</p>
-                        </div>
-                    </div>
+                    <p class="slds-m-bottom_x-small"><b>Anonymous Reporting</b></p>
+                    <p class="slds-m-bottom_xxx-small">All reports are confidential. If you select to report an incident as
+                        anonymous, St. Thomas will not be able to contact you. Reporting anonymously limits the university's
+                        ability to respond.</p>
                     <div class="slds-form-element slds-m-bottom_medium">
-                        <label class="slds-form-element__label selection-labels">I understand the statement about Anonymous Reporting
-                            <abbr class="slds-required" title="Required">*</abbr></label>
+                        <label class="slds-form-element__label selection-labels">
+                            I understand the statement about Anonymous Reporting<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control">
-                            <lightning-checkbox-group id="titleix-report-anonymous-reporting-id"
-                                                      name="Anonymous Reporting Select"
-                                                      label=""
-                                                      options={anonymousReportingOptions}
-                                                      value={iUnderstandTheStatementAboutAnonymousSelect}
-                                                      data-selecttype="anonymousreporting"
-                                                      variant="label-hidden"
-                                                      onchange={selectValueHandler}>
-                            </lightning-checkbox-group>
+                            <template for:each={anonymousReportingOptions} for:item="anonymous">
+                                <div class="slds-radio slds-p-bottom_xx-small slds-m-left_xxx-small" key={anonymous.value}>
+                                    <input type="radio"
+                                           id={anonymous.value}
+                                           name="Anonymous Reporting Select"
+                                           value={anonymous.value}
+                                           data-selecttype="anonymousreporting"
+                                           onclick={selectValueHandler}
+                                           class="picklist-radio"/>
+                                    <label class="slds-radio__label" for={anonymous.value}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="picklist-radio-text">{anonymous.label}</span>
+                                    </label>
+                                </div>
+                            </template>
                         </div>
+<!--                            <lightning-checkbox-group id="titleix-report-anonymous-reporting-id"-->
+<!--                                                      name="Anonymous Reporting Select"-->
+<!--                                                      label=""-->
+<!--                                                      options={anonymousReportingOptions}-->
+<!--                                                      value={iUnderstandTheStatementAboutAnonymousSelect}-->
+<!--                                                      data-selecttype="anonymousreporting"-->
+<!--                                                      variant="label-hidden"-->
+<!--                                                      onchange={selectValueHandler}>-->
+<!--                            </lightning-checkbox-group>-->
                     </div>
                 </template>
                 <div class="slds-grid slds-m-bottom_medium">

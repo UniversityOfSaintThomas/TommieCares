@@ -36,6 +36,8 @@ public without sharing class TommieCaresNonFacultyLwcController {
             advisorContactList = [
                     SELECT Id,
                             Name,
+                            FirstName,
+                            LastName,
                             Email,
                             Last_Name_First_Name__c,
                             hed__UniversityEmail__c,
@@ -142,8 +144,72 @@ public without sharing class TommieCaresNonFacultyLwcController {
         return withoutApos.toLowerCase();
     }
 
+    public class tellSomeoneWellBeingWrapper {
+        public String collection;
+        public String caseType;
+//        public Integer reporter_type;
+        public String reporterName;
+        public String reporterPhone;
+        public String reporterEmail;
+//        public Integer affiliation_of_harmed_party;
+        public String students_first_name;
+        public String students_email_address;
+        public String students_phone_number;
+        public String date_of_concerning_incident;
+        public String description;
+    }
+
     @AuraEnabled(Cacheable=false)
     public static void saveCase(Map<String, String> formSelections) {
+        String tellSomeoneCollection = '6320164b2a4a1fad79299ed27d892c07';
+        String tellSomeoneCaseType = '186974515f78c9526452e03483778417';
+
+        if (String.isNotBlank(formSelections.get('TellSomeoneWellBeingDate')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingDescription'))) {
+            String wellBeingReportNumber = '';
+
+            tellSomeoneWellBeingWrapper advocateWellBeing = new tellSomeoneWellBeingWrapper();
+            advocateWellBeing.collection = tellSomeoneCollection;
+            advocateWellBeing.caseType = tellSomeoneCaseType;
+//            advocateWellBeing.reporter_type = 2;
+            advocateWellBeing.reporterName = formSelections.get('AdvisorContactName');
+            advocateWellBeing.reporterPhone = '';
+            advocateWellBeing.reporterEmail = formSelections.get('AdvisorEmail');
+//            advocateWellBeing.affiliation_of_harmed_party = 1;
+            advocateWellBeing.students_first_name = formSelections.get('StudentName');
+            advocateWellBeing.students_email_address = formSelections.get('StudentEmail');
+            advocateWellBeing.students_phone_number = '';
+            advocateWellBeing.date_of_concerning_incident = formSelections.get('TellSomeoneWellBeingDate');
+            advocateWellBeing.description = formSelections.get('TellSomeoneWellBeingDescription');
+
+            String advocateWellBeingString = JSON.serialize(advocateWellBeing);
+            System.debug('advocateWellBeingString: ' + advocateWellBeingString);
+
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('callout:Symplicity_Advocate_Flex_Forms/v1/fw/cases');
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+            req.setBody(advocateWellBeingString);
+
+            try {
+                Http http = new Http();
+                HttpResponse response = http.send(req);
+                System.debug('Response: ' + response.getBody());
+                if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+                    Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                    wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being Cases
+                }
+            } catch (Exception e) {
+                System.debug('Error occurred while sending request: ' + e.getMessage());
+            }
+
+            if (String.isNotBlank(wellBeingReportNumber)) {
+                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: ' + wellBeingReportNumber);
+            } else {
+                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: Unable to create record. Reach out to Dean of Students with questions');
+            }
+            System.debug('formSelections CaseDescription: ' + formSelections.get('CaseDescription'));
+        }
+
         Case tommieCaresCase = new Case();
 
         List<RecordType> recordId = [
@@ -171,6 +237,7 @@ public without sharing class TommieCaresNonFacultyLwcController {
         tommieCaresCase.Tommie_Alert_Primary_Reason_Other_Notes__c = formSelections.get('Other_Details');
         tommieCaresCase.Case_Reporter_Notes_to_Student__c = formSelections.get('Personal_Message');
         tommieCaresCase.Shared_Case_Notes__c = formSelections.get('Additional_Concerns');
+        tommieCaresCase.Description = formSelections.containsKey('CaseDescription') ? formSelections.get('CaseDescription') : '';
 
         List <String> relationshipTypes = new List<String>{
                 'Primary Advisor',

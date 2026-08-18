@@ -17,7 +17,7 @@ abbr.slds-required {
 }
 
 .additional-text-message {
-    font-size: .95rem !important;
+    font-size: 1rem !important;
     color: black !important;
 }
 
@@ -72,6 +72,12 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
+lightning-combobox,
+lightning-input {
+    --slds-c-input-color-border: rebeccapurple;
+    --sds-c-input-color-border: rebeccapurple;
+}
+
 lightning-textarea.custom-textarea {
     --slds-c-textarea-color-border: rebeccapurple;
     --sds-c-textarea-color-border: rebeccapurple;
@@ -102,6 +108,10 @@ lightning-textarea.custom-textarea {
     text-transform: capitalize;
     color: black !important;
     padding-left: 5px;
+}
+
+.regular-body-text p {
+    font-size: 1rem !important;
 }
 
 .section-label {

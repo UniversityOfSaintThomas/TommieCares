@@ -12,10 +12,10 @@ import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement {
 
     //From parent component
-    @api communityOfConcernReportType = "Staff";
-    @api communityOfConcernReporterFirstName = "Test";
-    @api communityOfConcernReporterLastName = "Tester";
-    @api communityOfConcernReporterEmail = "test@tester.edu";
+    @api communityOfConcernReportType = "Anonymous";
+    @api communityOfConcernReporterFirstName = "";
+    @api communityOfConcernReporterLastName = "";
+    @api communityOfConcernReporterEmail = "";
     @api communityOfConcernParamsUrl = "";
     @api tommieAlertsStudentName = "";
 
@@ -163,8 +163,10 @@ export default class AdvocateTitleIxIncidentReportLwcv2 extends LightningElement
                 this.titleIxIncidentFormValues.reporter_type_custom = reporterTypeLabel.label;
                 break;
             case "anonymousreporting":
-                this.iUnderstandTheStatementAboutAnonymousSelect = eventValue;
-                this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValue.includes("true");
+                this.iUnderstandTheStatementAboutAnonymousSelect = eventValueHtml;
+                this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValueHtml.includes("true");
+                console.log("i_understand_the_statement_about_anonymous_r eventValue: "+eventValue);
+                console.log("i_understand_the_statement_about_anonymous_r eventValueHtml: "+eventValueHtml);
                 break;
             case "statuswhocausedharm":
                 this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
