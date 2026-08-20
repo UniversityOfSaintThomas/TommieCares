@@ -386,16 +386,14 @@
                                 <p>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.</p>
                             </div>
-    <!--                        <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.relationshipCheck}>-->
-    <!--                            <p class="additional-text-message">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>-->
-    <!--                                No advisors will be copied or notified.<br>-->
-    <!--                                Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:-->
-    <!--                                <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>-->
-    <!--                        </div>-->
+                            <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
+                            <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablecheck={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-well-being-incident-report-lwc>
+                            </div>
+
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
-                                <c-advocate-title-ix-incident-report-lwcv2 lwc:spread={childProps} onsubmitdisablecheck={tellSomeoneTitleIxSubmitCheck}></c-advocate-title-ix-incident-report-lwcv2>
+                                <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisablecheck={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>
                         </div>
                     </template>
@@ -501,8 +499,12 @@
                 </div>
 
                 <lightning-button
-                        label="Get Child Value"
+                        label="Get TitleIX Child Value"
                         onclick={tellSomeoneTitleIxForm}>
+                </lightning-button>
+                <lightning-button
+                        label="Get Well Being Child Value"
+                        onclick={tellSomeoneWellBeingForm}>
                 </lightning-button>
 
             </div>

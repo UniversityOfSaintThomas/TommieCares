@@ -2,7 +2,7 @@
  * Created by nguy0092 on 10/14/2024.
  */
 
-public without sharing class TommieCaresLwcControllerv2 {
+public without sharing class TommieAlertsLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTommieCaresPicklists() {
@@ -173,30 +173,30 @@ public without sharing class TommieCaresLwcControllerv2 {
         return students;
     }
 
-    @AuraEnabled(Cacheable=false)
-    public static String submitTellSomeoneTitleIx(String formValues) {
-        String titleIxReportNumber = '';
-
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint('Symplicity_Advocate_Integration_Key/v1/titleix_reports');
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.setBody(formValues);
-
-        try {
-            Http http = new Http();
-            HttpResponse response = http.send(req);
-            System.debug('Response: ' + response.getBody());
-            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
-                Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-                titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
-            }
-        } catch (Exception e) {
-            System.debug('Error occurred while sending request: ' + e.getMessage());
-        }
-
-        return titleIxReportNumber;
-    }
+//    @AuraEnabled(Cacheable=false)
+//    public static String submitTellSomeoneTitleIx(String formValues) {
+//        String titleIxReportNumber = '';
+//
+//        HttpRequest req = new HttpRequest();
+//        req.setEndpoint('Symplicity_Advocate_Integration_Key/v1/titleix_reports');
+//        req.setMethod('POST');
+//        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+//        req.setBody(formValues);
+//
+//        try {
+//            Http http = new Http();
+//            HttpResponse response = http.send(req);
+//            System.debug('Response: ' + response.getBody());
+//            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+//                Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+//                titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
+//            }
+//        } catch (Exception e) {
+//            System.debug('Error occurred while sending request: ' + e.getMessage());
+//        }
+//
+//        return titleIxReportNumber;
+//    }
 
 
     public class tellSomeoneWellBeingWrapper {

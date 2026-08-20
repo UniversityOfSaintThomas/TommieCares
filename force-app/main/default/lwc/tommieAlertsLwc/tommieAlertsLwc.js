@@ -4,23 +4,24 @@
 
 import {LightningElement, api, wire, track} from 'lwc';
 import {refreshApex} from "@salesforce/apex";
-import getTommieCaresPicklists from "@salesforce/apex/TommieCaresLwcControllerv2.getTommieCaresPicklists";
-import currentTermAdvisor from "@salesforce/apex/TommieCaresLwcControllerv2.currentTermAdvisor";
-import advisorCoursesList from "@salesforce/apex/TommieCaresLwcControllerv2.advisorCoursesList";
-import studentCourseList from "@salesforce/apex/TommieCaresLwcControllerv2.studentCourseList";
-import submitTellSomeoneTitleIx from "@salesforce/apex/TommieCaresLwcControllerv2.submitTellSomeoneTitleIx";
-import saveCase from "@salesforce/apex/TommieCaresLwcControllerv2.saveCase";
+import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsLwcController.getTommieCaresPicklists";
+import currentTermAdvisor from "@salesforce/apex/TommieAlertsLwcController.currentTermAdvisor";
+import advisorCoursesList from "@salesforce/apex/TommieAlertsLwcController.advisorCoursesList";
+import studentCourseList from "@salesforce/apex/TommieAlertsLwcController.studentCourseList";
+import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReporting";
+import saveCase from "@salesforce/apex/TommieAlertsLwcController.saveCase";
 
-export default class TommieCaresLwcv2 extends LightningElement {
-
+export default class TommieAlertsLwc extends LightningElement {
+    //To TellSomeone child component
     get childProps() {
         return {
-            communityOfConcernReportType: "Faculty",
-            communityOfConcernReporterFirstName: this.termAdvisorData.Advisor_FirstName,
-            communityOfConcernReporterLastName: this.termAdvisorData.Advisor_FirstName,
-            communityOfConcernReporterEmail: this.termAdvisorData.Advisor_Email,
-            communityOfConcernParamsUrl: this.searchParamsUrl,
+            tellSomeoneReportType: "Faculty",
+            tellSomeoneReporterFirstName: this.termAdvisorData.Advisor_FirstName,
+            tellSomeoneReporterLastName: this.termAdvisorData.Advisor_FirstName,
+            tellSomeoneReporterEmail: this.termAdvisorData.Advisor_Email,
+            tellSomeoneParamsUrl: this.searchParamsUrl,
             tommieAlertsStudentName: this.studentName,
+            tommieAlertsStudentEmail: this.studentEmail,
         }
     }
 
@@ -631,7 +632,7 @@ export default class TommieCaresLwcv2 extends LightningElement {
     tellSomeoneTitleIxForm() {
         if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
             // Find the child component using querySelector
-            const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
+            const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
 
             if (tellSomeoneTitleIx) {
                 // Read the exposed public getter
@@ -641,8 +642,21 @@ export default class TommieCaresLwcv2 extends LightningElement {
                 console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
             }
         }
+    }
 
+    tellSomeoneWellBeingForm() {
+        if (this.tellSomeoneWellBeingVisible) {
+            // Find the child component using querySelector
+            const tellSomeoneWellBeing = this.template.querySelector('c-tell-someone-well-being-incident-report-lwc');
 
+            if (tellSomeoneWellBeing) {
+                // Read the exposed public getter
+                const wellBeingFormValues = JSON.stringify(tellSomeoneWellBeing.formToTommieAlerts);
+                const wellBeingDocuments = tellSomeoneWellBeing.documentsToTommieAlerts;
+                console.log('wellBeingFormValues pulled from child: ', wellBeingFormValues);
+                console.log('wellBeingDocuments pulled from child: ', JSON.stringify(wellBeingDocuments));
+            }
+        }
     }
 
 }
