@@ -20,8 +20,10 @@ export default class TommieAlertsLwc extends LightningElement {
             tellSomeoneReporterLastName: this.termAdvisorData.Advisor_FirstName,
             tellSomeoneReporterEmail: this.termAdvisorData.Advisor_Email,
             tellSomeoneParamsUrl: this.searchParamsUrl,
+            tommieAlertsReporterPhone: "Tommie Alerts Submission",
             tommieAlertsStudentName: this.studentName,
             tommieAlertsStudentEmail: this.studentEmail,
+            tommieAlertsHideCss: "tommie-alerts_hide",
         }
     }
 
@@ -85,7 +87,7 @@ export default class TommieAlertsLwc extends LightningElement {
         Academic_Required: false,
         PassCourse_Required: false,
         Other_Required: false,
-        TellSomeoneWellBeingRequired: false,
+        // TellSomeoneWellBeingRequired: false,
     }
 
     coursesListOptions = [];
@@ -158,7 +160,9 @@ export default class TommieAlertsLwc extends LightningElement {
         return !!(this.selectionsCheck.behaviorMentalHealthCheck || this.selectionsCheck.senseOfBelongingCheck);
     }
     get submitDisable() {
-        return Object.values(this.formRequired).includes(true) || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
+        return Object.values(this.formRequired).includes(true)
+            || (this.tellSomeoneWellBeingVisible && this.tellSomeoneWellBeingSubmitDisable)
+            || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
     }
 
     hasAncestorWithId(startNode, id) {
@@ -404,10 +408,15 @@ export default class TommieAlertsLwc extends LightningElement {
                 }
                 if (eventValue === "Behavior and Mental Health concerns") {
                     this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
-                    this.tellSomeoneWellBeingRequired();
+                    if(!this.tellSomeoneWellBeingVisible) {
+                        this.tellSomeoneWellBeingSubmitDisable = true;
+                    }
                 }
                 if (eventValue === "Relationship violence/stalking") {
                     this.selectionsCheck.relationshipCheck = eventChecked;
+                    if(!eventChecked) {
+                        this.tellSomeoneTitleIxSubmitDisable = true;
+                    }
                 }
                 if (eventValue === "Difficulty Meeting Basic Needs (food/housing, etc)") {
                     this.selectionsCheck.difficultyMeetingBasicNeedsCheck = eventChecked;
@@ -420,7 +429,9 @@ export default class TommieAlertsLwc extends LightningElement {
                 }
                 if (eventValue === "Sense of belonging") {
                     this.selectionsCheck.senseOfBelongingCheck = eventChecked;
-                    this.tellSomeoneWellBeingRequired();
+                    if(!this.tellSomeoneWellBeingVisible) {
+                        this.tellSomeoneWellBeingSubmitDisable = true;
+                    }
                 }
                 if (eventValue === "Other") {
                     if (!eventChecked) {
@@ -472,7 +483,7 @@ export default class TommieAlertsLwc extends LightningElement {
                 break;
             case "wellBeingDescription":
                 this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
-                this.tellSomeoneWellBeingRequired();
+                // this.tellSomeoneWellBeingRequired();
                 break;
         }
     }
@@ -508,32 +519,32 @@ export default class TommieAlertsLwc extends LightningElement {
         this.formRequired.PassCourse_Required = !this.formSubmitSelections.Pass_Course_Selection;
     }
 
-    tellSomeoneWellBeingRequired() {
-        if (!this.tellSomeoneWellBeingVisible) {
-            this.formSubmitSelections.TellSomeoneWellBeingDate = "";
-            this._incidentDate = "";
-        }
-        this.formRequired.TellSomeoneWellBeingRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
-    }
+    // tellSomeoneWellBeingRequired() {
+    //     if (!this.tellSomeoneWellBeingVisible) {
+    //         this.formSubmitSelections.TellSomeoneWellBeingDate = "";
+    //         this._incidentDate = "";
+    //     }
+    //     this.formRequired.TellSomeoneWellBeingRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
+    // }
 
     get today() {
         return new Date().toISOString().split('T')[0];
     }
 
-    dateValidation(event) {
-        const dateField = event.target;
-        this._incidentDate = dateField.value;
-        console.log("checkValidity: ", dateField.checkValidity());
-        console.log("today: ", this.today);
-        console.log("this._incidentDate: ", this._incidentDate);
-        if (dateField.checkValidity() && !!this._incidentDate) {
-            this.formSubmitSelections.TellSomeoneWellBeingDate = this._incidentDate;
-        } else {
-            this.formSubmitSelections.TellSomeoneWellBeingDate = "";
-        }
-        this.tellSomeoneWellBeingRequired();
-        console.log("TellSomeoneWellBeingDate: ", this.formSubmitSelections.TellSomeoneWellBeingDate);
-    }
+    // dateValidation(event) {
+    //     const dateField = event.target;
+    //     this._incidentDate = dateField.value;
+    //     console.log("checkValidity: ", dateField.checkValidity());
+    //     console.log("today: ", this.today);
+    //     console.log("this._incidentDate: ", this._incidentDate);
+    //     if (dateField.checkValidity() && !!this._incidentDate) {
+    //         this.formSubmitSelections.TellSomeoneWellBeingDate = this._incidentDate;
+    //     } else {
+    //         this.formSubmitSelections.TellSomeoneWellBeingDate = "";
+    //     }
+    //     // this.tellSomeoneWellBeingRequired();
+    //     console.log("TellSomeoneWellBeingDate: ", this.formSubmitSelections.TellSomeoneWellBeingDate);
+    // }
 
     resetForm() {
         this._incidentDate = "";
@@ -619,6 +630,12 @@ export default class TommieAlertsLwc extends LightningElement {
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
         }
+    }
+
+    tellSomeoneWellBeingSubmitDisable = true;
+    tellSomeoneWellBeingCheck(event) {
+        this.tellSomeoneWellBeingSubmitDisable = event.detail.value;
+        console.log("tellSomeoneWellBeingCheck event: ", this.tellSomeoneWellBeingSubmitDisable);
     }
 
     tellSomeoneTitleIxSubmitDisable = true;

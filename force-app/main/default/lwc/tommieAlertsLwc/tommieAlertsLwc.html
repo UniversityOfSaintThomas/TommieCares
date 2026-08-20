@@ -343,40 +343,40 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel">Date of Concerning Incident
-                                        <abbr class="slds-required" title="Required">*</abbr></label>
-                                    <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
-                                        <lightning-input id="well-being-incident-date-id"
-                                                         name="well-being-incident-date"
-                                                         type="date"
-                                                         label=""
-                                                         value={_incidentDate}
-                                                         max={today}
-                                                         data-inputtype="date"
-                                                         variant="label-hidden"
-                                                         onchange={dateValidation}>
-                                        </lightning-input>
-                                    </div>
-                                </div>
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel" for="well-being-incident-description-id">Concern Description
-                                        <abbr class="slds-required" title="Required">*</abbr></label>
-                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">Provide a detailed description of your concern for the individual indicated above.</p>
-                                    <div class="slds-form-element__control">
-                                        <lightning-textarea id="well-being-incident-description-id"
-                                                            name="well-being-incident-description"
-                                                            label=""
-                                                            value=""
-                                                            data-texttype="wellBeingDescription"
-                                                            onchange={textAreaDetails}
-                                                            variant="label-hidden"
-                                                            class="custom-textarea">
-                                        </lightning-textarea>
-                                    </div>
-                                </div>
-                            </div>
+<!--                            <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneWellBeingVisible}>-->
+<!--                                <div class="slds-form-element">-->
+<!--                                    <label class="slds-form-element__label element-sublabel">Date of Concerning Incident-->
+<!--                                        <abbr class="slds-required" title="Required">*</abbr></label>-->
+<!--                                    <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">-->
+<!--                                        <lightning-input id="well-being-incident-date-id"-->
+<!--                                                         name="well-being-incident-date"-->
+<!--                                                         type="date"-->
+<!--                                                         label=""-->
+<!--                                                         value={_incidentDate}-->
+<!--                                                         max={today}-->
+<!--                                                         data-inputtype="date"-->
+<!--                                                         variant="label-hidden"-->
+<!--                                                         onchange={dateValidation}>-->
+<!--                                        </lightning-input>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="slds-form-element">-->
+<!--                                    <label class="slds-form-element__label element-sublabel" for="well-being-incident-description-id">Concern Description-->
+<!--                                        <abbr class="slds-required" title="Required">*</abbr></label>-->
+<!--                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">Provide a detailed description of your concern for the individual indicated above.</p>-->
+<!--                                    <div class="slds-form-element__control">-->
+<!--                                        <lightning-textarea id="well-being-incident-description-id"-->
+<!--                                                            name="well-being-incident-description"-->
+<!--                                                            label=""-->
+<!--                                                            value=""-->
+<!--                                                            data-texttype="wellBeingDescription"-->
+<!--                                                            onchange={textAreaDetails}-->
+<!--                                                            variant="label-hidden"-->
+<!--                                                            class="custom-textarea">-->
+<!--                                        </lightning-textarea>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.behaviorMentalHealthCheck}>
                                 <p>Behavior and Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
@@ -387,13 +387,12 @@
                                     No advisors will be copied or notified.</p>
                             </div>
                             <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                            <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablecheck={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-well-being-incident-report-lwc>
+                            <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
-
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
-                                <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisablecheck={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
+                                <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>
                         </div>
                     </template>

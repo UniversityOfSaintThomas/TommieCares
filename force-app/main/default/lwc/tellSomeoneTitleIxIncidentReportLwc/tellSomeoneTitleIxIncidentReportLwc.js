@@ -375,7 +375,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     submitDisableToTommieAlerts() {
         console.log("this.submitDisable: "+this.submitDisable);
-        const customEvent = new CustomEvent("submitdisablecheck", {
+        const customEvent = new CustomEvent("submitdisabletitleix", {
             detail: { value: this.submitDisable }
         });
         this.dispatchEvent(customEvent);

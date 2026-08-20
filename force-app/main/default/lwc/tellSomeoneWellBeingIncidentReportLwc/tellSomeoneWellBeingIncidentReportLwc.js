@@ -16,8 +16,10 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     @api tellSomeoneReporterEmail = "test@test.com";
     @api tellSomeoneConcernWhoValue = "Student";
     @api tellSomeoneParamsUrl = "";
+    @api tommieAlertsReporterPhone = ""; //used for Tommie Alert Submission
     @api tommieAlertsStudentName = "Tommie Alerts";
     @api tommieAlertsStudentEmail = "tommie@alerts.com";
+    @api tommieAlertsHideCss = "";
 
     @api get formToTommieAlerts() {
         return this.wellBeingIncidentFormValues;
@@ -51,6 +53,14 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         salesforce_support_documents: "" //For Supporting Documents record ID
     }
 
+    get reporterElementsCss() {
+        return "slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small " + this.tommieAlertsHideCss;
+    }
+
+    get submitSectionElementCss() {
+        return this.tommieAlertsHideCss;
+    }
+
     get showFormAll() {
         return !!this.wellBeingIncidentFormValues.reporter_type_custom;
     }
@@ -76,6 +86,8 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
                 this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
             }
+
+            this.wellBeingIncidentFormValues.reporterPhone = this.tommieAlertsReporterPhone;
 
             this.wellBeingIncidentFormValues.otherStudent = this.tommieAlertsStudentName;
             if (this.tommieAlertsStudentEmail) {
@@ -206,6 +218,8 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.wellBeingIncidentFormValues.description = eventValue;
                 break;
         }
+
+        this.submitDisableToTommieAlerts();
     }
 
     validEmail = true;
@@ -415,7 +429,14 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
             // console.log("Update submittedUrl: "+this.submittedUrl());
             location.replace(this.submittedUrl());
         }
+    }
 
+    submitDisableToTommieAlerts() {
+        console.log("this.submitDisable: "+this.submitDisable);
+        const customEvent = new CustomEvent("submitdisablewellbeing", {
+            detail: { value: this.submitDisable }
+        });
+        this.dispatchEvent(customEvent);
     }
 
 }
