@@ -65,7 +65,7 @@
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
-        <div lwc:if={communityOfConcernLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+        <div lwc:if={tellSomeoneLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no faculty or student course found"
@@ -110,42 +110,45 @@
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                         <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
                 </div>
-                <div class="slds-form-element slds-size_1-of-1 slds-large-size_5-of-12 slds-m-top_small">
-                    <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>
-                    <div class="slds-form-element__control">
-                        <lightning-combobox id="course-selection-id"
-                                            name="course-selection"
-                                            label=""
-                                            value={courseSelection}
-                                            placeholder="Select Course"
-                                            options={coursesListOptions}
-                                            data-selecttype="courseSelect"
-                                            onchange={singleSelect}
-                                            variant="label-hidden">
-                        </lightning-combobox>
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-combobox id="course-selection-id"
+                                                name="course-selection"
+                                                label=""
+                                                value={courseSelection}
+                                                placeholder="Select Course"
+                                                options={coursesListOptions}
+                                                data-selecttype="courseSelect"
+                                                onchange={singleSelect}
+                                                variant="label-hidden">
+                            </lightning-combobox>
+                        </div>
                     </div>
-                </div>
-                <div class="slds-form-element slds-size_1-of-1 slds-large-size_5-of-12 slds-m-vertical_large" lwc:if={courseSelectionCheck}>
-                    <label class="slds-form-element__label form-element__label-custom" for="student-selection-id">Select the student of concern:</label>
-                    <div class="slds-form-element__control">
-                        <lightning-combobox id="student-selection-id"
-                                            name="student-selection"
-                                            label=""
-                                            value={studentSelection}
-                                            placeholder="Select Student"
-                                            options={studentsListOptions}
-                                            data-selecttype="studentSelect"
-                                            onchange={singleSelect}
-                                            variant="label-hidden">
-                        </lightning-combobox>
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-top_medium" lwc:if={courseSelectionCheck}>
+                        <label class="slds-form-element__label form-element__label-custom" for="student-selection-id">Select the student of concern:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-combobox id="student-selection-id"
+                                                name="student-selection"
+                                                label=""
+                                                value={studentSelection}
+                                                placeholder="Select Student"
+                                                options={studentsListOptions}
+                                                data-selecttype="studentSelect"
+                                                onchange={singleSelect}
+                                                variant="label-hidden">
+                            </lightning-combobox>
+                        </div>
                     </div>
                 </div>
                 <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
-                    <label class="section-label"><b>Select alert(s) for {studentName}:</b></label>
+                    <label class="section-label"><b>Select Alert(s) for {studentName}:</b></label>
                     <!-- Positive Alert -->
                     <template lwc:if={positiveAlertGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</legend>
+                            <!--                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</legend>-->
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={positiveAlertGroup} for:item="positiveAlert">
@@ -167,9 +170,10 @@
                             </div>
                             <!-- Positive Alert sub-checkboxes -->
                             <div class="sub-content slds-m-left_small" lwc:if={selectionsCheck.high5Check}>
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel">
-                                        Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></label>
+                                <fieldset class="slds-form-element">
+                                    <legend class="slds-form-element__label element-sublabel">
+                                    <!--<legend class="slds-form-element__label element-sublabel">-->
+                                        Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></legend>
                                     <div class="slds-form-element__control slds-m-top_xx-small">
                                         <template for:each={tommieHigh5Options} for:item="high5">
                                             <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={high5.value}>
@@ -187,7 +191,7 @@
                                             </div>
                                         </template>
                                     </div>
-                                </div>
+                                </fieldset>
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="high5-details-id">
                                         Tommie High 5 details:<abbr class="slds-required" title="Required">*</abbr></label>
@@ -206,12 +210,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <!-- Advising Alert -->
                     <template lwc:if={advisingGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={advisingGroup} for:item="advising">
@@ -235,9 +239,9 @@
                             <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.attendanceAcademicCheck}>
                                 <template lwc:if={selectionsCheck.academicCheck}>
     <!--                                <div class="sub-content">-->
-                                    <div class="slds-form-element regular-body-text">
-                                        <label class="slds-form-element__label element-sublabel">
-                                            Please select academic concerns:<abbr class="slds-required" title="Required">*</abbr></label>
+                                    <fieldset class="slds-form-element regular-body-text">
+                                        <legend class="slds-form-element__label element-sublabel">
+                                            Please select academic concerns:<abbr class="slds-required" title="Required">*</abbr></legend>
                                         <div class="slds-form-element__control slds-m-top_xx-small">
                                             <template for:each={academicOptions} for:item="academic">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={academic.value}>
@@ -256,13 +260,13 @@
                                             </template>
                                         </div>
                                         <p>Academic performance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
-                                    </div>
+                                    </fieldset>
                                 </template>
                                 <!-- Attendance sub-checkboxes -->
                                 <template lwc:if={selectionsCheck.attendanceCheck}>
-                                    <div class="slds-form-element regular-body-text">
-                                        <label class="slds-form-element__label element-sublabel">
-                                            Please select attendance concerns:<abbr class="slds-required" title="Required">*</abbr></label>
+                                    <fieldset class="slds-form-element regular-body-text">
+                                        <legend class="slds-form-element__label element-sublabel">
+                                            Please select attendance concerns:<abbr class="slds-required" title="Required">*</abbr></legend>
                                         <div class="slds-form-element__control">
                                             <template for:each={attendanceOptions} for:item="attendance">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={attendance.value}>
@@ -281,7 +285,7 @@
                                             </template>
                                         </div>
                                         <p>Attendance concerns will be sent to the student with a copy to you (the faculty submitter) and to the student's advisor(s).</p>
-                                    </div>
+                                    </fieldset>
                                 </template>
                                 <!-- Pass course dropdown -->
                                 <div class="slds-form-element">
@@ -318,12 +322,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
+                                <p>The student will receive a message reminding them to set up an advising appointment with you.</p>
+                            </div>
+                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
+                                <p>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
+                            </div>
+                        </fieldset>
                     </template>
                     <!-- Behavior / Mental Health Alert -->
                     <template lwc:if={behaviorMentalHealthGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={behaviorMentalHealthGroup} for:item="behaviorMentalHealth">
@@ -387,7 +397,7 @@
 <!--                                    No advisors will be copied or notified.</p>-->
 <!--                            </div>-->
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p>Behavior and Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                                <p>Behavior or Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
@@ -397,12 +407,12 @@
                                     No advisors will be copied or notified.<br></p>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <!-- Life Circumstances Alert -->
                     <template lwc:if={lifeCircumstanceGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={lifeCircumstanceGroup} for:item="lifeCircumstance">
@@ -456,11 +466,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <template lwc:if={showAdditionalConcerns}>
                         <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</p>
+                            <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
                             <div class="slds-form-element">
                                 <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
                                 <div class="slds-form-element__control">

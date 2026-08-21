@@ -28,6 +28,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     @api paramUrl = "";
+    @api tellSomeoneLwc = ""; //used as a variable for child component in Tell Someone LWC
 
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
@@ -58,7 +59,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     };
     @track selectionsCheck = {
         high5Check: false,
-        missedAdvisingAppointments: false,
+        missedAdvisingAppointmentCheck: false,
         nonResponsiveOutreachCheck: false,
         // behaviorCheck: false,
         // mentalHealthCheck: false,
@@ -94,7 +95,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
     tommieCaresGeneralExclusions = [
         "Academic performance concerns",
-        "Attendance concerns"
+        "Attendance concerns",
+        "Life Circumstances Impacting Success"
     ];
     tommieCaresGraduateExclusions = [
         "Behavior concerns",
@@ -107,8 +109,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
         {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
-        {"Behavior Mental Health Alert": ["Behavior and Mental Health concerns", "Relationship violence/stalking", "Sense of belonging"]},
-        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success", "Other"]},
+        {"Behavior Mental Health Alert": ["Behavior or Mental Health concerns", "Relationship violence/stalking", "Sense of belonging"]},
+        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
 
     get isEmail() {
@@ -126,6 +128,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
     get initialPageView() {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
+    }
+    get advisorInfoViewClass() {
+        return "advisor_info "+this.tellSomeoneLwc; //hiding Advisor information when displaying on Community of Concern LWC
+    }
+    get tellSomeoneLwcNoAdvisor() {
+        return !!this.tellSomeoneLwc; //returns no faculty information was found when displaying on Community of Concern LWC
     }
     get studentSelectionCheck() {
         return this.formSubmitSelections.StudentContactId && !this.noStudentsFound;
@@ -270,12 +278,12 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                     this.formRequired.High5_Required = eventChecked;
                 }
                 if (eventValue === "Missed Advising Appointment") {
-                    this.selectionsCheck.missedAdvisingAppointments = eventChecked;
+                    this.selectionsCheck.missedAdvisingAppointmentCheck = eventChecked;
                 }
                 if (eventValue === "Non-Responsive to Outreach") {
                     this.selectionsCheck.nonResponsiveOutreachCheck = eventChecked;
                 }
-                if (eventValue === "Behavior and Mental Health concerns") {
+                if (eventValue === "Behavior or Mental Health concerns") {
                     this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
                     if(!this.tellSomeoneWellBeingVisible) {
                         this.tellSomeoneWellBeingSubmitDisable = true;
@@ -548,7 +556,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     }
 
     tellSomeoneWellBeingForm() {
-        if (this.tellSomeoneWellBeingVisible) {
+        if (this.tellSomeoneWellBeingVisible && !this.tellSomeoneWellBeingSubmitDisable) {
             // Find the child component using querySelector
             const tellSomeoneWellBeing = this.template.querySelector('c-tell-someone-well-being-incident-report-lwc');
 

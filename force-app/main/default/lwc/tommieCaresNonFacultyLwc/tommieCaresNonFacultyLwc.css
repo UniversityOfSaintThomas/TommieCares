@@ -16,15 +16,20 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-.additional-text-message {
-    font-size: 1rem !important;
-    color: black !important;
-}
+/*.additional-text-message {*/
+/*    font-size: 1rem !important;*/
+/*    color: black !important;*/
+/*}*/
 
 .advisor_info {
     font-size: 1rem !important;
     font-weight: bold;
     color: rebeccapurple;
+}
+
+/*Passed in parameter from Community of Concern LWC to hide Advisor information*/
+.advisor_info_hide {
+    display: none;
 }
 
 .alert-group {
@@ -39,9 +44,20 @@ abbr.slds-required {
     /*font-weight: bold !important;*/
 }
 
+.banner-input,
+.lastname-input,
+.email-input {
+    --slds-c-input-color-border: rebeccapurple;
+    --sds-c-input-color-border: rebeccapurple;
+}
+
 .container {
     position: relative;
     min-height: 100px; /* ensures spinner is visible even if content is short */
+}
+
+.custom-warning-icon {
+    --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
 }
 
 .element-sublabel {
@@ -86,6 +102,24 @@ lightning-textarea.custom-textarea {
     width: 90%;
 }
 
+@media (max-width: 768px) {
+    .tommie-form {
+        width: 100%;
+    }
+
+    lightning-textarea.custom-textarea {
+        min-width: 0;
+        width: 100%;
+    }
+
+    /* reduce reserved error space on small screens */
+    .banner-search .input-wrapper,
+    .email-search .input-wrapper {
+        min-height: auto;
+        padding-bottom: 0.5rem;
+    }
+}
+
 .notification-text p {
     font-size: 1rem !important;
     color: white;
@@ -107,7 +141,7 @@ lightning-textarea.custom-textarea {
     font-size: 1rem !important;
     text-transform: capitalize;
     color: black !important;
-    padding-left: 5px;
+    /*padding-left: 5px;*/
 }
 
 .regular-body-text p {
@@ -208,12 +242,6 @@ lightning-textarea.custom-textarea {
 /*    margin-bottom: .30rem !important;*/
 /*}*/
 
-.banner-input,
-.lastname-input,
-.email-input {
-    --slds-c-input-color-border: rebeccapurple;
-    --sds-c-input-color-border: rebeccapurple;
-}
 
 /* stack only the radios inside the search-mode block */
 /*.search-mode .slds-form-element__control {*/
@@ -238,27 +266,9 @@ lightning-textarea.custom-textarea {
 /*    justify-content: flex-start;*/
 /*}*/
 
-@media (max-width: 768px) {
-    .tommie-form {
-        width: 100%;
-    }
 
-    lightning-textarea.custom-textarea {
-        min-width: 0;
-        width: 100%;
-    }
 
-    /* reduce reserved error space on small screens */
-    .banner-search .input-wrapper,
-    .email-search .input-wrapper {
-        min-height: auto;
-        padding-bottom: 0.5rem;
-    }
-}
 
-.custom-warning-icon {
-    --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
-}
 
 .warning-text {
     font-size: 1rem;

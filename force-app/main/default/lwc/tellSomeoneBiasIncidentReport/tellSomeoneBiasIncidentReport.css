@@ -1,5 +1,5 @@
 /**
- * Created by nguy0092 on 8/19/2026.
+ * Created by nguy0092 on 8/21/2026.
  */
 
 :host {
@@ -39,6 +39,11 @@ abbr.slds-required {
 
 h2 {
     font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+}
+
+legend {
     font-size: 1rem !important;
 }
 
@@ -148,3 +153,4 @@ lightning-textarea {
     /*font-size: 0.75rem;*/
     /*margin-top: 0.125rem;*/
 }
+

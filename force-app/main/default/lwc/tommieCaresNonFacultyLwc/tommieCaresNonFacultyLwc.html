@@ -64,141 +64,141 @@
             <template lwc:if={submitCaseSpinner}>
                 <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
             </template>
-            <div>
-                <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Name} ({advisorContactInfo.Email})</p>
-            </div>
-            <div class="footer-info">
-                <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                    or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555">(651)962-5555</a>.</p>
-                <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
-                    individuals in order to provide additional support.<br>
-                    All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
-                    <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
-            </div>
-            <!-- Search mode radios -->
-            <fieldset class="slds-form-element search-mode">
-                <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
-                <div class="slds-form-element__control">
-                    <div class="slds-radio slds-m-bottom_x-small">
-                        <input type="radio"
-                               id="searchByBanner"
-                               name="searchBy"
-                               value="banner"
-                               onchange={handleSearchModeChange}
-                               checked={isBanner}>
-                        <label class="slds-radio__label" for="searchByBanner">
-                            <span class="slds-radio_faux"></span>
-                            <span class="slds-form-element__label">Banner ID and Last Name</span>
-                        </label>
-                    </div>
-                    <!-- Banner search (shows only when Banner radio selected) -->
-                    <template if:true={isBanner}>
-                        <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
-                            <div class="slds-form-element__control">
-                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                        <lightning-input name="bannerId"
-                                                         label=""
-                                                         type="text"
-                                                         max-length="10"
-                                                         placeholder="Banner ID"
-                                                         value={bannerId}
-                                                         onchange={handleBannerIdInput}
-                                                         class="slds-m-right_x-small banner-input"
-                                                         variant="label-hidden">
-                                        </lightning-input>
-                                    </div>
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                        <lightning-input name="lastName"
-                                                         label=""
-                                                         type="text"
-                                                         max-length="50"
-                                                         placeholder="Last Name"
-                                                         value={lastName}
-                                                         onchange={handleLastNameInput}
-                                                         class="slds-m-right_x-small lastname-input"
-                                                         variant="label-hidden">
-                                        </lightning-input>
-                                    </div>
-                                    <div class="slds-col slds-grow-none input-wrapper">
-                                        <lightning-button label="Search"
-                                                          variant="brand"
-                                                          disabled={isBannerSearchDisabled}
-                                                          onclick={handleSearchStudent}
-                                                          title="Search by Banner Id and Last name">
-                                        </lightning-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <div class="slds-radio slds-m-bottom_x-small">
-                        <input type="radio"
-                               id="searchByEmail"
-                               name="searchBy"
-                               value="email"
-                               onchange={handleSearchModeChange}
-                               checked={isEmail}>
-                        <label class="slds-radio__label" for="searchByEmail">
-                            <span class="slds-radio_faux"></span>
-                            <span class="slds-form-element__label">University of St. Thomas Email</span>
-                        </label>
-                    </div>
-                    <!-- Email search (replace reusable lookup) -->
-                    <template if:true={isEmail}>
-                        <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
-                            <div class="slds-form-element__control">
-                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
-                                        <lightning-input id="email-search-id"
-                                                         name="stThomasEmail"
-                                                         type="email"
-                                                         max-length="75"
-                                                         label=""
-                                                         placeholder="student@stthomas.edu"
-                                                         value={stThomasEmail}
-                                                         onchange={handleEmailChange}
-                                                         class="slds-m-right_x-small email-input"
-                                                         autocomplete="off"
-                                                         variant="label-hidden">
-                                        </lightning-input>
-                                    </div>
-                                    <div class="slds-col slds-grow-none input-wrapper">
-                                        <lightning-button label="Search"
-                                                          variant="brand"
-                                                          disabled={isEmailSearchDisabled}
-                                                          onclick={handleSearchStudent}
-                                                          title="Search by Email">
-                                        </lightning-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </fieldset>
-            <template lwc:if={noStudentFoundMessage}>
-                <div class="slds-media slds-media_center slds-scoped-notification slds-m-vertical_medium slds-p-around_small" role="status">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="utility:warning"
-                                        alternative-text="no students found"
-                                        title="no students found"
-                                        size="small"
-                                        class="slds-align-middle custom-warning-icon">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <p class="warning-text">No students found. Please try your search again.</p>
-                    </div>
-                </div>
-            </template>
             <div id="tommieCaresForm" class="tommie-form" data-form="tommieCaresForm">
+                <div class={advisorInfoViewClass}>
+                    <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Name} ({advisorContactInfo.Email})</p>
+                </div>
+                <div class="regular-body-text">
+                    <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555">(651)962-5555</a>.</p>
+                    <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                        individuals in order to provide additional support.<br>
+                        All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
+                        <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
+                </div>
+                <!-- Search mode radios -->
+                <fieldset class="slds-form-element search-mode">
+                    <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
+                    <div class="slds-form-element__control">
+                        <div class="slds-radio slds-m-bottom_x-small">
+                            <input type="radio"
+                                   id="searchByBanner"
+                                   name="searchBy"
+                                   value="banner"
+                                   onchange={handleSearchModeChange}
+                                   checked={isBanner}>
+                            <label class="slds-radio__label" for="searchByBanner">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">Banner ID and Last Name</span>
+                            </label>
+                        </div>
+                        <!-- Banner search (shows only when Banner radio selected) -->
+                        <template if:true={isBanner}>
+                            <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
+                                <div class="slds-form-element__control">
+                                    <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                            <lightning-input name="bannerId"
+                                                             label=""
+                                                             type="text"
+                                                             max-length="10"
+                                                             placeholder="Banner ID"
+                                                             value={bannerId}
+                                                             onchange={handleBannerIdInput}
+                                                             class="slds-m-right_x-small banner-input"
+                                                             variant="label-hidden">
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                            <lightning-input name="lastName"
+                                                             label=""
+                                                             type="text"
+                                                             max-length="50"
+                                                             placeholder="Last Name"
+                                                             value={lastName}
+                                                             onchange={handleLastNameInput}
+                                                             class="slds-m-right_x-small lastname-input"
+                                                             variant="label-hidden">
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-grow-none input-wrapper">
+                                            <lightning-button label="Search"
+                                                              variant="brand"
+                                                              disabled={isBannerSearchDisabled}
+                                                              onclick={handleSearchStudent}
+                                                              title="Search by Banner Id and Last name">
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="slds-radio slds-m-bottom_x-small">
+                            <input type="radio"
+                                   id="searchByEmail"
+                                   name="searchBy"
+                                   value="email"
+                                   onchange={handleSearchModeChange}
+                                   checked={isEmail}>
+                            <label class="slds-radio__label" for="searchByEmail">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">University of St. Thomas Email</span>
+                            </label>
+                        </div>
+                        <!-- Email search (replace reusable lookup) -->
+                        <template if:true={isEmail}>
+                            <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
+                                <div class="slds-form-element__control">
+                                    <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
+                                            <lightning-input id="email-search-id"
+                                                             name="stThomasEmail"
+                                                             type="email"
+                                                             max-length="75"
+                                                             label=""
+                                                             placeholder="student@stthomas.edu"
+                                                             value={stThomasEmail}
+                                                             onchange={handleEmailChange}
+                                                             class="slds-m-right_x-small email-input"
+                                                             autocomplete="off"
+                                                             variant="label-hidden">
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-grow-none input-wrapper">
+                                            <lightning-button label="Search"
+                                                              variant="brand"
+                                                              disabled={isEmailSearchDisabled}
+                                                              onclick={handleSearchStudent}
+                                                              title="Search by Email">
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <template lwc:if={noStudentFoundMessage}>
+                        <div class="slds-media slds-media_center slds-scoped-notification slds-m-vertical_medium slds-p-around_small" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                alternative-text="no students found"
+                                                title="no students found"
+                                                size="small"
+                                                class="slds-align-middle custom-warning-icon">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="warning-text">No students found. Please try your search again.</p>
+                            </div>
+                        </div>
+                    </template>
+                </fieldset>
                 <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
                     <label class="section-label">Select Alert(s) for {formSubmitSelections.StudentName} ({formSubmitSelections.StudentEmail}):</label>
                     <!-- Positive Alert -->
                     <template lwc:if={positiveAlertGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Positive Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={positiveAlertGroup} for:item="positiveAlert">
@@ -220,9 +220,9 @@
                             </div>
                             <!-- Positive Alert sub-checkboxes -->
                             <div class="sub-content slds-m-left_small" lwc:if={selectionsCheck.high5Check}>
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel">
-                                        Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></label>
+                                <fieldset class="slds-form-element">
+                                    <legend class="slds-form-element__label element-sublabel">
+                                        Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></legend>
                                     <div class="slds-form-element__control slds-m-top_xx-small">
                                         <template for:each={tommieHigh5Options} for:item="high5">
                                             <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={high5.value}>
@@ -239,7 +239,7 @@
                                             </div>
                                         </template>
                                     </div>
-                                </div>
+                                </fieldset>
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="high5-details-id">
                                         Tommie High 5 details:<abbr class="slds-required" title="Required">*</abbr></label>
@@ -257,12 +257,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <!-- Advising Alert -->
                     <template lwc:if={advisingGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={advisingGroup} for:item="advising">
@@ -282,18 +282,18 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointments}>
+                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
                                 <p>The student will receive a message reminding them to set up an advising appointment with you.</p>
                             </div>
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
                                 <p>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <!-- Behavior / Mental Health Alert -->
                     <template lwc:if={behaviorMentalHealthGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={behaviorMentalHealthGroup} for:item="behaviorMentalHealth">
@@ -365,7 +365,7 @@
 <!--&lt;!&ndash;                                            <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>&ndash;&gt;-->
 <!--                            </div>-->
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p>Behavior and Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                                <p>Behavior or Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                                 <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
@@ -375,12 +375,12 @@
                                     No advisors will be copied or notified.<br></p>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                     <!-- Life Circumstances -->
                     <template lwc:if={lifeCircumstanceGroup.length}>
-                        <div class="alert-group">
-                            <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</p>
+                        <fieldset class="slds-m-top_medium alert-group">
+                            <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <template for:each={lifeCircumstanceGroup} for:item="lifeCircumstance">
@@ -433,16 +433,17 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </template>
                 </div>
                 <template lwc:if={showAdditionalConcerns}>
                     <div class="alert-group">
-                        <p class="slds-text-title_caps slds-m-top_small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</p>
+                        <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
                         <div class="slds-form-element">
                             <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
                             <div class="slds-form-element__control">
                                 <lightning-textarea id="additional-concerns-id"
+                                                    name="additional-concerns"
                                                     label=""
                                                     value=""
                                                     data-texttype="additionalConcerns"
@@ -455,7 +456,7 @@
                     </div>
                 </template>
                 <template lwc:if={caresSelectionCheck}>
-                    <div class="slds-m-vertical_x-large">
+                    <div class="slds-m-vertical_large">
                         <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
                             <p class="submit-warning">
                                 <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.

@@ -54,7 +54,11 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     }
 
     get reporterElementsCss() {
-        return "slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small " + this.tommieAlertsHideCss;
+        return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
+    }
+
+    get indidvidualConcernElementsCss() {
+        return this.tommieAlertsHideCss;
     }
 
     get submitSectionElementCss() {

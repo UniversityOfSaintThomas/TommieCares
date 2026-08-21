@@ -90,6 +90,11 @@ lightning-textarea {
     color: black !important;
 }
 
+.regular-body-text p.submit-warning {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
 /* Helper/description text under labels — matches .textarea-sublabel */
 .regular-body-text p.textarea-sublabel {
     font-size: .90rem !important;

@@ -31,7 +31,7 @@ export default class TommieAlertsLwc extends LightningElement {
     @api paramSBid = "";
     @api paramCrn = "";
     @api paramUrl = "";
-    @api communityOfConcernLwc = ""; //used as a variable for child component in Community of Concern LWC
+    @api tellSomeoneLwc = ""; //used as a variable for child component in Tell Someone LWC
 
     @track studentsListOptions = [];
     @track tommieCaresOptionsAll = [];
@@ -73,7 +73,7 @@ export default class TommieAlertsLwc extends LightningElement {
         academicCheck: false,
         attendanceAcademicCheck: false,
         missedAdvisingAppointmentCheck: false,
-        nonResponsiveToOutreachCheck: false,
+        nonResponsiveOutreachCheck: false,
         behaviorMentalHealthCheck: false,
         relationshipCheck: false,
         difficultyMeetingBasicNeedsCheck: false,
@@ -111,7 +111,7 @@ export default class TommieAlertsLwc extends LightningElement {
                 "Missed Advising Appointment",
                 "Non-Responsive to Outreach"
             ]},
-        {"Behavior Mental Health Alert": ["Behavior and Mental Health concerns", "Relationship violence/stalking", "Sense of belonging",]},
+        {"Behavior Mental Health Alert": ["Behavior or Mental Health concerns", "Relationship violence/stalking", "Sense of belonging",]},
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success",  "Other"]},
     ]
     passCourseOptions = [
@@ -136,10 +136,10 @@ export default class TommieAlertsLwc extends LightningElement {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
     }
     get advisorInfoViewClass() {
-        return "advisor_info "+this.communityOfConcernLwc; //hiding Advisor information when displaying on Community of Concern LWC
+        return "advisor_info "+this.tellSomeoneLwc; //hiding Advisor information when displaying on Community of Concern LWC
     }
-    get communityOfConcernLwcNoAdvisor() {
-        return !!this.communityOfConcernLwc; //returns no faculty information was found when displaying on Community of Concern LWC
+    get tellSomeoneLwcNoAdvisor() {
+        return !!this.tellSomeoneLwc; //returns no faculty information was found when displaying on Community of Concern LWC
     }
     get studentSelection() {
         return this.formSubmitSelections.StudentContactId;
@@ -405,9 +405,9 @@ export default class TommieAlertsLwc extends LightningElement {
                     this.selectionsCheck.missedAdvisingAppointmentCheck = eventChecked;
                 }
                 if (eventValue === "Non-Responsive to Outreach") {
-                    this.selectionsCheck.nonResponsiveToOutreachCheck = eventChecked;
+                    this.selectionsCheck.nonResponsiveOutreachCheck = eventChecked;
                 }
-                if (eventValue === "Behavior and Mental Health concerns") {
+                if (eventValue === "Behavior or Mental Health concerns") {
                     this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
                     if(!this.tellSomeoneWellBeingVisible) {
                         this.tellSomeoneWellBeingSubmitDisable = true;
@@ -640,7 +640,7 @@ export default class TommieAlertsLwc extends LightningElement {
     }
 
     tellSomeoneWellBeingForm() {
-        if (this.tellSomeoneWellBeingVisible) {
+        if (this.tellSomeoneWellBeingVisible && !this.tellSomeoneWellBeingSubmitDisable) {
             // Find the child component using querySelector
             const tellSomeoneWellBeing = this.template.querySelector('c-tell-someone-well-being-incident-report-lwc');
 
