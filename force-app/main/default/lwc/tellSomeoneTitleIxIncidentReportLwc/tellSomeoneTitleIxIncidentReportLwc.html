@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <template lwc:if={isNotAnonymous}>
-                    <div class="slds-grid slds-grid_vertical">
+                    <div class={reporterElementsCss}>
                         <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-name-id">
                                 Reporter's Name:</label>
@@ -288,7 +288,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-m-bottom_x-large">
+                <div class="slds-m-top_medium">
                     <div class="slds-form-element slds-m-bottom_small">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-attach-documents-id">
                             Attach documents/Upload</label>
@@ -329,53 +329,55 @@
                         </template>
                     </div>
                 </div>
-                <div class="slds-m-top_x-large slds-m-bottom_medium slds-is-relative">
-                    <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
-                        <p class="submit-warning">
-                            <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
-                        </p>
+                <div class={submitSectionElementCss}>
+                    <div class="slds-m-top_x-large slds-m-bottom_medium slds-is-relative">
+                        <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
+                            <p class="submit-warning">
+                                <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
+                            </p>
+                        </div>
+                        <lightning-button class="submit_button"
+                                          title='Please enter all required fields.'
+                                          type="button"
+                                          label="SUBMIT"
+                                          variant="success"
+                                          disabled={submitDisable}
+                                          onclick={submitFormHandler}
+                                          disable-animation>
+                        </lightning-button>
+                        <template lwc:if={showSpinner}>
+                            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+                        </template>
                     </div>
-                    <lightning-button class="submit_button"
-                                      title='Please enter all required fields.'
-                                      type="button"
-                                      label="SUBMIT"
-                                      variant="success"
-                                      disabled={submitDisable}
-                                      onclick={submitFormHandler}
-                                      disable-animation>
-                    </lightning-button>
-                    <template lwc:if={showSpinner}>
-                        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+                    <template lwc:if={saveDocumentsFail}>
+                        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                alternative-text="save documents error"
+                                                title="save documents error"
+                                                size="small">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={submitTitleIxIncidentFormFail}>
+                        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                alternative-text="submit bias incident form error"
+                                                title="submit bias incident form error"
+                                                size="small">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p>There was a problem submitting your form. Please contact salesforce@stthomas.edu to report this error.</p>
+                            </div>
+                        </div>
                     </template>
                 </div>
-                <template lwc:if={saveDocumentsFail}>
-                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                        <div class="slds-media__figure">
-                            <lightning-icon icon-name="utility:warning"
-                                            alternative-text="save documents error"
-                                            title="save documents error"
-                                            size="small">
-                            </lightning-icon>
-                        </div>
-                        <div class="slds-media__body">
-                            <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>
-                        </div>
-                    </div>
-                </template>
-                <template lwc:if={submitTitleIxIncidentFormFail}>
-                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                        <div class="slds-media__figure">
-                            <lightning-icon icon-name="utility:warning"
-                                            alternative-text="submit bias incident form error"
-                                            title="submit bias incident form error"
-                                            size="small">
-                            </lightning-icon>
-                        </div>
-                        <div class="slds-media__body">
-                            <p>There was a problem submitting your form. Please contact salesforce@stthomas.edu to report this error.</p>
-                        </div>
-                    </div>
-                </template>
             </div>
         </template>
     </div>

@@ -17,7 +17,7 @@ export default class TommieAlertsLwc extends LightningElement {
         return {
             tellSomeoneReportType: "Faculty",
             tellSomeoneReporterFirstName: this.termAdvisorData.Advisor_FirstName,
-            tellSomeoneReporterLastName: this.termAdvisorData.Advisor_FirstName,
+            tellSomeoneReporterLastName: this.termAdvisorData.Advisor_LastName,
             tellSomeoneReporterEmail: this.termAdvisorData.Advisor_Email,
             tellSomeoneParamsUrl: this.searchParamsUrl,
             tommieAlertsReporterPhone: "Tommie Alerts Submission",
@@ -62,8 +62,9 @@ export default class TommieAlertsLwc extends LightningElement {
         Other_Details: "",
         Personal_Message: "",
         Additional_Concerns: "",
-        TellSomeoneWellBeingDate: "",
-        TellSomeoneWellBeingDescription: "",
+        // TellSomeoneWellBeingDate: "",
+        // TellSomeoneWellBeingDescription: "",
+        TellSomeoneWellBeingReportNumber: "",
         TellSomeoneTitleIxReportNumber: "",
     };
     @track selectionsCheck = {
@@ -418,6 +419,12 @@ export default class TommieAlertsLwc extends LightningElement {
                         this.tellSomeoneTitleIxSubmitDisable = true;
                     }
                 }
+                if (eventValue === "Sense of belonging") {
+                    this.selectionsCheck.senseOfBelongingCheck = eventChecked;
+                    if(!this.tellSomeoneWellBeingVisible) {
+                        this.tellSomeoneWellBeingSubmitDisable = true;
+                    }
+                }
                 if (eventValue === "Difficulty Meeting Basic Needs (food/housing, etc)") {
                     this.selectionsCheck.difficultyMeetingBasicNeedsCheck = eventChecked;
                 }
@@ -426,12 +433,6 @@ export default class TommieAlertsLwc extends LightningElement {
                 }
                 if (eventValue === "Life Circumstances Impacting Success") {
                     this.selectionsCheck.lifeCircumstanceImpactingSuccessCheck = eventChecked;
-                }
-                if (eventValue === "Sense of belonging") {
-                    this.selectionsCheck.senseOfBelongingCheck = eventChecked;
-                    if(!this.tellSomeoneWellBeingVisible) {
-                        this.tellSomeoneWellBeingSubmitDisable = true;
-                    }
                 }
                 if (eventValue === "Other") {
                     if (!eventChecked) {
@@ -481,10 +482,10 @@ export default class TommieAlertsLwc extends LightningElement {
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
                 break;
-            case "wellBeingDescription":
-                this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
-                // this.tellSomeoneWellBeingRequired();
-                break;
+            // case "wellBeingDescription":
+            //     this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
+            //     // this.tellSomeoneWellBeingRequired();
+            //     break;
         }
     }
 
@@ -527,10 +528,10 @@ export default class TommieAlertsLwc extends LightningElement {
     //     this.formRequired.TellSomeoneWellBeingRequired = this.tellSomeoneWellBeingVisible && (!this.formSubmitSelections.TellSomeoneWellBeingDate || !this.formSubmitSelections.TellSomeoneWellBeingDescription);
     // }
 
-    get today() {
-        return new Date().toISOString().split('T')[0];
-    }
-
+    // get today() {
+    //     return new Date().toISOString().split('T')[0];
+    // }
+    //
     // dateValidation(event) {
     //     const dateField = event.target;
     //     this._incidentDate = dateField.value;
@@ -547,7 +548,7 @@ export default class TommieAlertsLwc extends LightningElement {
     // }
 
     resetForm() {
-        this._incidentDate = "";
+        // this._incidentDate = "";
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
         this.behaviorMentalHealthGroup = [];
@@ -638,29 +639,6 @@ export default class TommieAlertsLwc extends LightningElement {
         console.log("tellSomeoneWellBeingCheck event: ", this.tellSomeoneWellBeingSubmitDisable);
     }
 
-    tellSomeoneTitleIxSubmitDisable = true;
-    tellSomeoneTitleIxSubmitCheck(event) {
-        this.tellSomeoneTitleIxSubmitDisable = event.detail.value;
-        console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
-    }
-
-    // titleIxFormValues = {};
-    // titleIxDocuments = [];
-    tellSomeoneTitleIxForm() {
-        if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
-            // Find the child component using querySelector
-            const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
-
-            if (tellSomeoneTitleIx) {
-                // Read the exposed public getter
-                const titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
-                const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
-                console.log('titleIxFormValues pulled from child: ', titleIxFormValues);
-                console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
-            }
-        }
-    }
-
     tellSomeoneWellBeingForm() {
         if (this.tellSomeoneWellBeingVisible) {
             // Find the child component using querySelector
@@ -672,6 +650,27 @@ export default class TommieAlertsLwc extends LightningElement {
                 const wellBeingDocuments = tellSomeoneWellBeing.documentsToTommieAlerts;
                 console.log('wellBeingFormValues pulled from child: ', wellBeingFormValues);
                 console.log('wellBeingDocuments pulled from child: ', JSON.stringify(wellBeingDocuments));
+            }
+        }
+    }
+
+    tellSomeoneTitleIxSubmitDisable = true;
+    tellSomeoneTitleIxSubmitCheck(event) {
+        this.tellSomeoneTitleIxSubmitDisable = event.detail.value;
+        console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
+    }
+
+    tellSomeoneTitleIxForm() {
+        if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
+            // Find the child component using querySelector
+            const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
+
+            if (tellSomeoneTitleIx) {
+                // Read the exposed public getter
+                const titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
+                const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+                console.log('titleIxFormValues pulled from child: ', titleIxFormValues);
+                console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
             }
         }
     }

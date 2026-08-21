@@ -134,6 +134,10 @@ lightning-textarea {
     align-items: center !important;
 }
 
+.tommie-alerts_hide {
+    display: none;
+}
+
 .validation-text {
     color: red;
     /*font-size: 0.75rem;*/

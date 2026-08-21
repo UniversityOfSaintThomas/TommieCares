@@ -254,6 +254,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
                 break;
         }
+        this.submitDisableToTommieAlerts();
     }
 
     _incidentDate = "";
@@ -278,7 +279,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.validDateWarning = true;
                 this.validTimeWarning = false;
             } else {
-                this.wellBeingIncidentFormValues.incidentDate = inputDate + ' ' + inputTime;
+                this.wellBeingIncidentFormValues.incidentDate = inputDate;
                 this.validDate = true;
                 this.validDateWarning = false;
             }
@@ -289,6 +290,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         } else {
             eventField.classList.remove("slds-has-error");
         }
+        this.submitDisableToTommieAlerts();
     }
 
     get showAttachDocumentName() {

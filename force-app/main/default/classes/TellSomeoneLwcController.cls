@@ -3,6 +3,8 @@
  */
 
 public without sharing class TellSomeoneLwcController {
+    private static final String symplicityAdvocateIntegrationKeyCallout = 'callout:Symplicity_Advocate_Integration_Key';
+    private static final String symplicityAdvocateFlexFormTokenCallout = 'callout:Symplicity_Advocate_Flex_Forms';
 
     @AuraEnabled(Cacheable=true)
     public static List<Contact> iAmContactInfo(String salesforceId, String bannerId) {
@@ -42,15 +44,15 @@ public without sharing class TellSomeoneLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Object> titleIxReportingFormOptions() {
+    public static List<Object> getWellBeingOptions() {
         List<Object> resultsObjects = new List<Object>();
 
         HttpRequest req1 = new HttpRequest();
-        req1.setEndpoint('callout:Symplicity_Advocate_Integration_Key/v1/picklists/titleix_reports/reporterType');
+        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
         req1.setMethod('GET');
 
         HttpRequest req2 = new HttpRequest();
-        req2.setEndpoint('callout:Symplicity_Advocate_Integration_Key/v1/picklists/titleix_reports/status_of_individual_who_caused_harm');
+        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_the_person_of_concern');
         req2.setMethod('GET');
 
         Http http = new Http();
@@ -64,52 +66,65 @@ public without sharing class TellSomeoneLwcController {
             resultsObjects.add(response1.getBody());
             resultsObjects.add(response2.getBody());
         } else {
-            System.debug('titleIxReportingFormOptions2 Error: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+            System.debug('getTitleIxReportingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
         }
 
         return resultsObjects;
     }
 
-//    @AuraEnabled(Continuation=true Cacheable=true)
-//    public static Object titleIxReportingFormOptions2() {
-//        Continuation con = new Continuation(60);
-//        con.continuationMethod = 'titleIxProcessGetResponse2';
-//        con.state='Picklist Values';
-//
-//        HttpRequest req = new HttpRequest();
-//        req.setEndpoint('callout:Symplicity_Advocate_Integration_Key/v1/picklists/titleix_reports/reporterType');
-//        req.setMethod('GET');
-////        req.setHeader('Authorization', titleix_api_token);
-//        con.addHttpRequest(req);
-//
-//        HttpRequest req2 = new HttpRequest();
-//        req2.setEndpoint('callout:Symplicity_Advocate_Integration_Key/v1/picklists/titleix_reports/status_of_individual_who_caused_harm');
-//        req2.setMethod('GET');
-////        req2.setHeader('Authorization', titleix_api_token);
-//        con.addHttpRequest(req2);
-//
-//        return con;
-//    }
-//
-//    @AuraEnabled(Cacheable=true)
-//    public static List<Object> titleIxProcessGetResponse2(List<String> labels, Object state) {
-//        List<Object> resultsObjects = new List<Object>();
-//        // Get the response by using the unique label
-//        HttpResponse response1 = Continuation.getResponse(labels[0]);
-//        HttpResponse response2 = Continuation.getResponse(labels[1]);
-//
-//        System.debug('response1.getStatusCode(): '+response2.getStatusCode());
-//        System.debug('response2.getStatusCode(): '+response2.getStatusCode());
-//
-//        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200)  {
-//            resultsObjects.add(response1.getBody());
-//            resultsObjects.add(response2.getBody());
-//        } else {
-//            System.debug('titleIxProcessGetResponse1 Error: response1.getStatusCode() or response2.getStatusCode()');
-//        }
-//
-//        return resultsObjects;
-//    }
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> getTitleIxReportingOptions() {
+        List<Object> resultsObjects = new List<Object>();
+
+        HttpRequest req1 = new HttpRequest();
+        req1.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/picklists/titleix_reports/reporterType');
+        req1.setMethod('GET');
+
+        HttpRequest req2 = new HttpRequest();
+        req2.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/picklists/titleix_reports/status_of_individual_who_caused_harm');
+        req2.setMethod('GET');
+
+        Http http = new Http();
+        HttpResponse response1 = http.send(req1);
+        HttpResponse response2 = http.send(req2);
+
+        System.debug('Response1 Code: ' + response1.getStatusCode());
+        System.debug('Response2 Code: ' + response2.getStatusCode());
+
+        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200) {
+            resultsObjects.add(response1.getBody());
+            resultsObjects.add(response2.getBody());
+        } else {
+            System.debug('getTitleIxReportingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+        }
+
+        return resultsObjects;
+    }
+
+    @AuraEnabled(Cacheable=false)
+    public static String submitTitleIxReporting(String formValues) {
+        String titleIxReportNumber = '';
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/titleix_reports');
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.setBody(formValues);
+
+        try {
+            Http http = new Http();
+            HttpResponse response = http.send(req);
+            System.debug('Response: ' + response.getBody());
+            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+                Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
+            }
+        } catch (Exception e) {
+            System.debug('Error submitting request: ' + e.getMessage());
+        }
+
+        return titleIxReportNumber;
+    }
 
     public class DocumentsWrapper {
         @AuraEnabled public String fileId { get; set; }

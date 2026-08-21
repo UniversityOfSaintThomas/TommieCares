@@ -377,16 +377,19 @@
 <!--                                    </div>-->
 <!--                                </div>-->
 <!--                            </div>-->
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.behaviorMentalHealthCheck}>
-                                <p>Behavior and Mental Health concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+<!--                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>-->
+<!--                                <p>Behavior and Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>-->
+<!--                                    The Dean of Students Office will address the concern with the student.<br>-->
+<!--                                    No advisors will be copied or notified.</p>-->
+<!--                            </div>-->
+<!--                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>-->
+<!--                                <p>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).<br>-->
+<!--                                    No advisors will be copied or notified.</p>-->
+<!--                            </div>-->
+                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
+                                <p>Behavior and Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
-                            </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.senseOfBelongingCheck}>
-                                <p>Sense of belonging concerns will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).<br>
-                                    No advisors will be copied or notified.</p>
-                            </div>
-                            <div class="slds-m-left_small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
                             <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>

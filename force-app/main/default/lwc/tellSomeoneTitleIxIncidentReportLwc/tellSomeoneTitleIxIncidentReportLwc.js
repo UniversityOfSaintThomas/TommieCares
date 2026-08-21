@@ -17,6 +17,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     @api tellSomeoneReporterEmail = "test@test.com";
     @api tellSomeoneParamsUrl = "";
     @api tommieAlertsStudentName = "";
+    @api tommieAlertsHideCss = "";
 
     @api get formToTommieAlerts() {
         return this.titleIxIncidentFormValues;
@@ -64,6 +65,14 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     notificationSelect = ""
     iUnderstandTheStatementAboutAnonymousSelect = []
+
+    get reporterElementsCss() {
+        return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
+    }
+
+    get submitSectionElementCss() {
+        return this.tommieAlertsHideCss;
+    }
 
     get showFormAll() {
         return !!this.titleIxIncidentFormValues.reporter_type_custom;
