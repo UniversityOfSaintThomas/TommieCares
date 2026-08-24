@@ -37,8 +37,13 @@ abbr.slds-required {
     /*width: 80%;*/
 }
 
-h2 {
-    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+/*h2 {*/
+/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
+/*    font-size: 1rem !important;*/
+/*    font-weight: bold !important;*/
+/*}*/
+
+.heading-labels {
     font-size: 1rem !important;
     font-weight: bold !important;
 }

@@ -66,7 +66,44 @@ public without sharing class TellSomeoneLwcController {
             resultsObjects.add(response1.getBody());
             resultsObjects.add(response2.getBody());
         } else {
-            System.debug('getTitleIxReportingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+            System.debug('getWellBeingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+        }
+
+        return resultsObjects;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static List<Object> getBiasIncidentOptions() {
+        List<Object> resultsObjects = new List<Object>();
+
+        HttpRequest req1 = new HttpRequest();
+        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
+        req1.setMethod('GET');
+
+        HttpRequest req2 = new HttpRequest();
+        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_harmed_party');
+        req2.setMethod('GET');
+
+        HttpRequest req3 = new HttpRequest();
+        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_person_who_caused_harm');
+        req2.setMethod('GET');
+
+        Http http = new Http();
+        HttpResponse response1 = http.send(req1);
+        HttpResponse response2 = http.send(req2);
+        HttpResponse response3 = http.send(req2);
+
+        System.debug('Response1 Code: ' + response1.getStatusCode());
+        System.debug('Response2 Code: ' + response2.getStatusCode());
+        System.debug('Response3 Code: ' + response3.getStatusCode());
+
+        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200 && response3.getStatusCode() == 200) {
+            resultsObjects.add(response1.getBody());
+            resultsObjects.add(response2.getBody());
+            resultsObjects.add(response3.getBody());
+        } else {
+            System.debug('getBiasIncidentOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode()
+            + ' response3 code=' + response3.getStatusCode());
         }
 
         return resultsObjects;

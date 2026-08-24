@@ -3,18 +3,20 @@
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-import biasReportingFormOptions1 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions1";
-import biasReportingFormOptions2 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions2";
+import biasReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getBiasIncidentOptions";
+// import biasReportingFormOptions1 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions1";
+// import biasReportingFormOptions2 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions2";
 import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
 import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
 import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
-import {emailValidation, attachDocumentsUpload} from "c/communityOfConcernUtilJs";
+import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneBiasIncidentReport extends LightningElement {
     @api tellSomeoneReportType = "Faculty";
     @api tellSomeoneReporterFirstName = "Test";
     @api tellSomeoneReporterLastName = "Tester";
     @api tellSomeoneReporterEmail = "test@tester.com";
+    @api tellSomeoneConcernWhoValue = "Student";
     @api tellSomeoneParamsUrl = "";
 
     @track reporterTypeOptions = [];
@@ -24,7 +26,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
 
     reporterType; //Using variable to hold value for form because can't pass to API reporterType
     @track biasIncidentFormValues = {
-        // reporterType: "", //I am a
+        reporterType: "", //I am a
         reporter_type_custom: "", //Using because can't pass to API reporterType
         reporterName: "", //Your Name
         reporterPhone: "", //Phone Number
@@ -81,10 +83,12 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
         this.timeFieldElement = this.template.querySelector("[data-inputtype='time']");
     }
 
-    @wire(biasReportingFormOptions1, {})
-    biasReportingFormOptions1Wire({error, data}) {
+    @wire(biasReportingFormOptions, {})
+    biasReportingFormOptionsWire({error, data}) {
         let recordOptions = [];
         let _reporterTypeOptions = [];
+        let affiliationTargetOptions = [];
+        let affiliationPersonEngagedHarmOptions = [];
         if (data) {
             data.forEach((o) => {
                 recordOptions.push(JSON.parse(o));
@@ -99,7 +103,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
                 })
 
                 this.reporterTypeOptions = _reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && !this.biasIncidentFormValues.reporter_type_custom) {
+                if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && (!this.biasIncidentFormValues.reporter_type_custom || !this.biasIncidentFormValues.reporterType)) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.tellSomeoneReportType.toLowerCase())) {
                             this.reporterType = this.reporterTypeOptions[i].value;
@@ -117,49 +121,119 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
             }
         }
 
+        if (recordOptions[1]) {
+            recordOptions[1].forEach((options) => {
+                affiliationTargetOptions.push({
+                    label: options.value,
+                    value: options.id.toString(),
+                })
+            })
+            this.affiliationOfTargetOptions = affiliationTargetOptions;
+            if (this.affiliationOfTargetOptions.length > 0 && this.tellSomeoneConcernWhoValue) {
+                for (let i = 0; i < this.affiliationOfTargetOptions.length; i++) {
+                    if (this.affiliationOfTargetOptions[i].label.toLowerCase().includes(this.tellSomeoneConcernWhoValue.toLowerCase())) {
+                        this.biasIncidentFormValues.affiliation_of_target = this.affiliationOfTargetOptions[i].value;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (recordOptions[2]) {
+            recordOptions[2].forEach((options) => {
+                affiliationPersonEngagedHarmOptions.push({
+                    label: options.value,
+                    value: options.id.toString(),
+                })
+            })
+            this.affiliationOfPersonEngagedInHarmOptions = affiliationPersonEngagedHarmOptions;
+        }
+
         if (error) {
             console.log("biasReportingFormOptions1Wire error: "+JSON.stringify(error));
         }
     }
 
-    @wire(biasReportingFormOptions2, {})
-    biasReportingFormOptions2Wire({error, data}) {
-        let recordOptions = [];
-        let affiliationTargetOptions = [];
-        let affiliationPersonEngagedHarmOptions = [];
-        if (data) {
-            data.forEach((o) => {
-                recordOptions.push(JSON.parse(o));
-            })
+    // @wire(biasReportingFormOptions1, {})
+    // biasReportingFormOptions1Wire({error, data}) {
+    //     let recordOptions = [];
+    //     let _reporterTypeOptions = [];
+    //     if (data) {
+    //         data.forEach((o) => {
+    //             recordOptions.push(JSON.parse(o));
+    //         })
+    //
+    //         if (recordOptions[0]) {
+    //             recordOptions[0].forEach((options) => {
+    //                 _reporterTypeOptions.push({
+    //                     label: options.value,
+    //                     value: options.id.toString(),
+    //                 })
+    //             })
+    //
+    //             this.reporterTypeOptions = _reporterTypeOptions;
+    //             if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && !this.biasIncidentFormValues.reporter_type_custom) {
+    //                 for (let i = 0; i < this.reporterTypeOptions.length; i++) {
+    //                     if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.tellSomeoneReportType.toLowerCase())) {
+    //                         this.reporterType = this.reporterTypeOptions[i].value;
+    //                         this.biasIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label;
+    //                         break;
+    //                     } else {
+    //                         let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
+    //                         if (otherType) {
+    //                             this.reporterType = otherType.value;
+    //                             this.biasIncidentFormValues.reporter_type_custom = otherType.label;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     if (error) {
+    //         console.log("biasReportingFormOptions1Wire error: "+JSON.stringify(error));
+    //     }
+    // }
 
-            if (recordOptions[0]) {
-                recordOptions[0].forEach((options) => {
-                    affiliationTargetOptions.push({
-                        label: options.value,
-                        value: options.id.toString(),
-                    })
-                })
-                this.affiliationOfTargetOptions = affiliationTargetOptions;
-            }
-
-            if (recordOptions[1]) {
-                recordOptions[1].forEach((options) => {
-                    affiliationPersonEngagedHarmOptions.push({
-                        label: options.value,
-                        value: options.id.toString(),
-                    })
-                })
-                this.affiliationOfPersonEngagedInHarmOptions = affiliationPersonEngagedHarmOptions;
-            }
-        }
-
-        if (error) {
-            console.log("biasReportingFormOptions2Wire error: "+JSON.stringify(error));
-        }
-    }
+    // @wire(biasReportingFormOptions2, {})
+    // biasReportingFormOptions2Wire({error, data}) {
+    //     let recordOptions = [];
+    //     let affiliationTargetOptions = [];
+    //     let affiliationPersonEngagedHarmOptions = [];
+    //     if (data) {
+    //         data.forEach((o) => {
+    //             recordOptions.push(JSON.parse(o));
+    //         })
+    //
+    //         if (recordOptions[0]) {
+    //             recordOptions[0].forEach((options) => {
+    //                 affiliationTargetOptions.push({
+    //                     label: options.value,
+    //                     value: options.id.toString(),
+    //                 })
+    //             })
+    //             this.affiliationOfTargetOptions = affiliationTargetOptions;
+    //         }
+    //
+    //         if (recordOptions[1]) {
+    //             recordOptions[1].forEach((options) => {
+    //                 affiliationPersonEngagedHarmOptions.push({
+    //                     label: options.value,
+    //                     value: options.id.toString(),
+    //                 })
+    //             })
+    //             this.affiliationOfPersonEngagedInHarmOptions = affiliationPersonEngagedHarmOptions;
+    //         }
+    //     }
+    //
+    //     if (error) {
+    //         console.log("biasReportingFormOptions2Wire error: "+JSON.stringify(error));
+    //     }
+    // }
 
     selectValueHandler(event) {
         let eventValue = event.detail.value;
+        // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
                 this.reporterType = eventValue;
@@ -178,6 +252,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
     inputValueHandler(event) {
         let eventField = event.target;
         let eventValue = event.detail.value;
+        // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
                 this.biasIncidentFormValues.reporterName = eventValue;
@@ -321,7 +396,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
         return this.attachDocumentsExclude.length !== 0;
     }
 
-    acceptedExtensionTypes = [".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedExtensionTypes = ".csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx"; //[".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
     acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
@@ -329,10 +404,13 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
+    maxFileSize = 3;
+    maxFileCount = 5;
 
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
-        let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes, this.fileIndex);
+        const attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes,
+            this.fileIndex, this.attachDocuments, this.maxFileSize, this.maxFileCount);
         attachDocumentsUploadResults.attachDocuments.forEach((document) => {
             this.attachDocuments.push(document);
         })

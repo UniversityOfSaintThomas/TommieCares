@@ -16,8 +16,8 @@
 <!--                visit <a href="https://www.stthomas.edu/title-ix" target=_blank>https://www.stthomas.edu/title-ix</a>.</p>-->
         </div>
         <template lwc:if={showFormAll}>
-            <section>
-                <h2 class="slds-m-bottom_xx-small"><b>Form Overview</b></h2>
+            <div>
+                <label class="slds-m-bottom_xx-small heading-labels"><b>Form Overview</b></label>
                 <p class="slds-m-bottom_x-small">By submitting a Title IX Public Report, you are demonstrating care to
                     promote and protect the personal dignity and well-being of the St. Thomas community. Thank you,
                     and we will likewise take care to respect your privacy and offer you support and resources.</p>
@@ -33,9 +33,9 @@
                 <p>Thank you for keeping our campus healthy and safe by informing us of this
                     incident. For additional information including resources and university policy and processes, please
                     visit <a href="https://www.stthomas.edu/title-ix" target=_blank>https://www.stthomas.edu/title-ix</a>.</p>
-            </section>
-            <section>
-                <h2 class="slds-m-bottom_xx-small"><b>Reporter Type</b></h2>
+            </div>
+            <div>
+                <label class="slds-m-bottom_xx-small heading-labels"><b>Reporter Type</b></label>
                 <p class="slds-m-bottom_x-small">St. Thomas faculty, staff and Resident Assistants <u>MUST IDENTIFY THEMSELVES</u> when submitting a Title IX Report.</p>
                 <p class="slds-m-bottom_x-small">For others, we do not require that you share your name and contact
                     information; however, without this information, we will likely be limited in what we can do to
@@ -43,10 +43,10 @@
                     person of concern and to protect our community, we typically need follow-up and clarifying
                     information from the reporting person.</p>
                 <p>We encourage you to share your name and contact information.</p>
-            </section>
+            </div>
             <div class="advocate-well-being-form">
-                <section lwc:if={isAnonymous}>
-                    <h2 class="slds-m-bottom_xx-small"><b>Anonymous Reporting</b></h2>
+                <div lwc:if={isAnonymous}>
+                    <label class="slds-m-bottom_xx-small heading-labels"><b>Anonymous Reporting</b></label>
                     <p class="slds-m-bottom_xxx-small">All reports are confidential. If you select to report an incident as
                         anonymous, St. Thomas will not be able to contact you. Reporting anonymously limits the university's
                         ability to respond.</p>
@@ -71,9 +71,9 @@
                             </template>
                         </div>
                     </div>
-                </section>
-                <section class="slds-grid slds-grid_vertical slds-m-bottom_medium">
-                    <h2 class="slds-m-bottom_xx-small"><b>Status of Individual Who Caused Harm</b></h2>
+                </div>
+                <div class="slds-grid slds-grid_vertical slds-m-bottom_medium">
+                    <label class="slds-m-bottom_xx-small heading-labels"><b>Status of Individual Who Caused Harm</b></label>
                     <div class="slds-col slds-size_1-of-1">
 <!--                        <p class="slds-m-bottom_x-small"><b>Status of Individual Who Caused Harm</b></p>-->
                         <div class="slds-m-bottom_x-small">
@@ -106,7 +106,7 @@
                             </lightning-combobox>
                         </div>
                     </div>
-                </section>
+                </div>
                 <template lwc:if={isNotAnonymous}>
                     <fieldset class={reporterElementsCss}>
                         <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">

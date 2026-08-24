@@ -318,7 +318,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
     async attachDocumentsHandler(event) {
         const uploadedFiles = event.target.files;
-        let attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes,
+        const attachDocumentsUploadResults = await attachDocumentsUpload(uploadedFiles, this.acceptedExtensionTypes, this.acceptedMimeTypes,
             this.fileIndex, this.attachDocuments, this.maxFileSize, this.maxFileCount);
         attachDocumentsUploadResults.attachDocuments.forEach((document) => {
             this.attachDocuments.push(document);

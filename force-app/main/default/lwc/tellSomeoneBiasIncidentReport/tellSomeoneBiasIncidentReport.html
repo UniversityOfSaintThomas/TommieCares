@@ -18,9 +18,9 @@
         <template lwc:if={showFormAll}>
             <template lwc:if={isNotAnonymous}>
                 <fieldset>
-                    <legend ><b>Reporter Information</b></legend>
+                    <legend><b>Reporter Information</b></legend>
 <!--                    <div class="slds-grid">-->
-                    <p class="slds-col slds-size_1-of-1 slds-m-bottom_x-small">You may leave information about yourself, or you may remain anonymous. If
+                    <p class="slds-col slds-size_1-of-1 slds-m-bottom_xx-small">You may leave information about yourself, or you may remain anonymous. If
                         you do not provide your name and contact information, the university’s ability to respond may be limited.</p>
 <!--                    </div>-->
 <!--                    <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
@@ -55,7 +55,7 @@
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element slds-m-bottom_small">
+                            <div class="slds-form-element">
                                 <label class="slds-form-element__label selection-labels" for="bias-reporter-email-id">
                                     Your Email Address:<abbr class="slds-required" title="Required">*</abbr></label>
                                 <div class="slds-form-element__control">
@@ -78,8 +78,8 @@
             </template>
             <fieldset class="slds-m-top_medium">
                 <legend><b>Time and Location</b></legend>
-                <p class="slds-m-bottom_x-small">Please provide the approximate date, time and location that this incident occurred.</p>
-                <div class="slds-grid slds-wrap slds-m-bottom_small">
+                <p class="slds-m-bottom_xx-small">Please provide the approximate date, time and location that this incident occurred.</p>
+                <div class="slds-grid slds-wrap slds-m-bottom_x-small">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12 slds-m-right_medium">
                         <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control">
@@ -134,10 +134,10 @@
                 <legend><b>Parties Involved</b></legend>
 <!--                <div class="slds-m-top_x-small slds-m-bottom_medium">-->
                     <div class="slds-grid slds-grid_vertical">
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12 slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">
                                 Individuals Involved<abbr class="slds-required" title="Required">*</abbr></label>
-                            <p class="textarea-sublabel-1">Please list the names of all the individuals involved in this incident.</p>
+                            <p class="textarea-sublabel">Please list the names of all the individuals involved in this incident.</p>
                             <div class="slds-form-element__control">
                                 <lightning-textarea class="custom-textarea"
                                                     id="bias-report-students-involved-id"
@@ -194,7 +194,7 @@
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element slds-m-bottom_small">
+                            <div class="slds-form-element">
                                 <label class="slds-form-element__label selection-labels" for="bias-report-affiliation-person-caused-harm-id">
                                     Affiliation of Person Who Caused Harm<abbr class="slds-required" title="Required">*</abbr></label>
                                 <div class="slds-form-element__control">
@@ -212,13 +212,13 @@
                     </div>
 <!--                </div>-->
             </fieldset>
-            <p class="slds-m-top_large"><b>Descriptive Information</b></p>
-            <div class="slds-m-top_x-small slds-m-bottom_x-large">
-                <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_11-of-12 slds-large-size_9-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">Incident
-                            Description<abbr class="slds-required" title="Required">*</abbr></label>
-                        <p class="textarea-sublabel-1">Please describe and be as specific about the incident with as much
+            <div class="slds-m-top_medium">
+                <label class="heading-labels">Descriptive Information</label>
+                <div class="slds-grid">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                        <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">
+                            Incident Description<abbr class="slds-required" title="Required">*</abbr></label>
+                        <p class="textarea-sublabel">Please describe and be as specific about the incident with as much
                             factual details as possible.<br>Include information about the nature of the incident
                             (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.).</p>
                         <div class="slds-form-element__control">
@@ -233,9 +233,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-form-element slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">Attach documents/Upload</label>
-                    <p class="slds-m-bottom_xx-small textarea-sublabel-1">Please upload any supporting documentation that you have for this incident. Max 3MB/file.<br>
+            </div>
+            <div class="slds-m-top_medium">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">
+                        Attach documents/Upload</label>
+                    <p class="textarea-sublabel">Upload any supporting documentation that you have for this incident.<br>
+                        A total of {maxFileCount} files at a maximum of {maxFileSize}MB per file can be uploaded.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
                     <div class="slds-form-element__control">
                         <lightning-input
@@ -248,8 +252,8 @@
                         </lightning-input>
                     </div>
                 </div>
-                <div lwc:if={showAttachDocumentName} class="slds-m-bottom_xx-small attached-file-list">
-                    <p>Attaching Documents:</p>
+                <div lwc:if={showAttachDocumentName} class="slds-m-top_small attached-file-list">
+                    <p>Attached Documents:</p>
                     <template for:each={attachDocuments} for:item="file">
                         <div key={file.fileId} class="slds-p-left_xx-small">
                             {file.fileName}
@@ -264,7 +268,7 @@
                         </div>
                     </template>
                 </div>
-                <div lwc:if={showAttachDocumentExcludeName} class="excluded-file-list">
+                <div lwc:if={showAttachDocumentExcludeName} class="slds-m-top_xx-small excluded-file-list">
                     <p>Excluded Documents:</p>
                     <template for:each={attachDocumentsExclude} for:item="file">
                         <p key={file.fileId} class="slds-p-left_xx-small">{file.fileName} {file.fileSize}MB - {file.fileWarning}</p>
@@ -272,6 +276,11 @@
                 </div>
             </div>
             <div class="slds-m-top_x-large slds-m-bottom_medium slds-is-relative">
+                <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
+                    <p class="submit-warning">
+                        <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
+                    </p>
+                </div>
                 <lightning-button class="submit_button"
                                   title="Please enter all required fields."
                                   type="button"
