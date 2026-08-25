@@ -83,6 +83,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
                                 buildExcludedFile(initialFileIndex, fileName, fileSizeInMB, fileExtension, fileType, "maximum file count reached")
                             );
                         } else {
+                            // eslint-disable-next-line no-await-in-loop
                         const documentContent = await readFileAsBase64(file);
                             if (documentContent.length > 0) {
                                 attachDocumentResults.attachDocuments.push({

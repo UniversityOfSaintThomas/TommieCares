@@ -12,11 +12,11 @@ import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcContro
 import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneBiasIncidentReport extends LightningElement {
-    @api tellSomeoneReportType = "Faculty";
-    @api tellSomeoneReporterFirstName = "Test";
-    @api tellSomeoneReporterLastName = "Tester";
-    @api tellSomeoneReporterEmail = "test@tester.com";
-    @api tellSomeoneConcernWhoValue = "Student";
+    @api tellSomeoneReportType = "";
+    @api tellSomeoneReporterFirstName = "";
+    @api tellSomeoneReporterLastName = "";
+    @api tellSomeoneReporterEmail = "";
+    @api tellSomeoneConcernWhoValue = "";
     @api tellSomeoneParamsUrl = "";
 
     @track reporterTypeOptions = [];
@@ -72,7 +72,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
     timeFieldElement;
     renderedCallback() {
         if(!this.rendered) {
-            this.biasIncidentFormValues.reporterName = !!this.tellSomeoneReporterFirstName ? this.tellSomeoneReporterFirstName + " " + this.tellSomeoneReporterLastName : "";
+            this.biasIncidentFormValues.reporterName = this.tellSomeoneReporterFirstName ? this.tellSomeoneReporterFirstName + " " + this.tellSomeoneReporterLastName : "";
             if (this.tellSomeoneReporterEmail) {
                 let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
                 this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
@@ -85,17 +85,13 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
 
     @wire(biasReportingFormOptions, {})
     biasReportingFormOptionsWire({error, data}) {
-        let recordOptions = [];
         let _reporterTypeOptions = [];
-        let affiliationTargetOptions = [];
-        let affiliationPersonEngagedHarmOptions = [];
+        let _affiliationTargetOptions = [];
+        let _affiliationPersonEngagedHarmOptions = [];
         if (data) {
-            data.forEach((o) => {
-                recordOptions.push(JSON.parse(o));
-            })
-
-            if (recordOptions[0]) {
-                recordOptions[0].forEach((options) => {
+            if (data.reporterType) {
+                let _reporterTypeData = JSON.parse(data.reporterType);
+                _reporterTypeData.forEach((options) => {
                     _reporterTypeOptions.push({
                         label: options.value,
                         value: options.id.toString(),
@@ -119,117 +115,42 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
                     }
                 }
             }
-        }
 
-        if (recordOptions[1]) {
-            recordOptions[1].forEach((options) => {
-                affiliationTargetOptions.push({
-                    label: options.value,
-                    value: options.id.toString(),
+            if (data.affiliationOfHarmedParty) {
+                let _affiliationOfHarmedPartyData = JSON.parse(data.affiliationOfHarmedParty);
+                _affiliationOfHarmedPartyData.forEach((options) => {
+                    _affiliationTargetOptions.push({
+                        label: options.value,
+                        value: options.id.toString(),
+                    })
                 })
-            })
-            this.affiliationOfTargetOptions = affiliationTargetOptions;
-            if (this.affiliationOfTargetOptions.length > 0 && this.tellSomeoneConcernWhoValue) {
-                for (let i = 0; i < this.affiliationOfTargetOptions.length; i++) {
-                    if (this.affiliationOfTargetOptions[i].label.toLowerCase().includes(this.tellSomeoneConcernWhoValue.toLowerCase())) {
-                        this.biasIncidentFormValues.affiliation_of_target = this.affiliationOfTargetOptions[i].value;
-                        break;
+                this.affiliationOfTargetOptions = _affiliationTargetOptions;
+                if (this.affiliationOfTargetOptions.length > 0 && this.tellSomeoneConcernWhoValue) {
+                    for (let i = 0; i < this.affiliationOfTargetOptions.length; i++) {
+                        if (this.affiliationOfTargetOptions[i].label.toLowerCase().includes(this.tellSomeoneConcernWhoValue.toLowerCase())) {
+                            this.biasIncidentFormValues.affiliation_of_target = this.affiliationOfTargetOptions[i].value;
+                            break;
+                        }
                     }
                 }
             }
-        }
 
-        if (recordOptions[2]) {
-            recordOptions[2].forEach((options) => {
-                affiliationPersonEngagedHarmOptions.push({
-                    label: options.value,
-                    value: options.id.toString(),
+            if (data.affiliationOfThePersonWhoCausedHarm) {
+                let _affiliationOfThePersonWhoCausedHarmData = JSON.parse(data.affiliationOfThePersonWhoCausedHarm);
+                _affiliationOfThePersonWhoCausedHarmData.forEach((options) => {
+                    _affiliationPersonEngagedHarmOptions.push({
+                        label: options.value,
+                        value: options.id.toString(),
+                    })
                 })
-            })
-            this.affiliationOfPersonEngagedInHarmOptions = affiliationPersonEngagedHarmOptions;
+                this.affiliationOfPersonEngagedInHarmOptions = _affiliationPersonEngagedHarmOptions;
+            }
         }
 
         if (error) {
-            console.log("biasReportingFormOptions1Wire error: "+JSON.stringify(error));
+            console.log("biasReportingFormOptionsWire error: "+JSON.stringify(error));
         }
     }
-
-    // @wire(biasReportingFormOptions1, {})
-    // biasReportingFormOptions1Wire({error, data}) {
-    //     let recordOptions = [];
-    //     let _reporterTypeOptions = [];
-    //     if (data) {
-    //         data.forEach((o) => {
-    //             recordOptions.push(JSON.parse(o));
-    //         })
-    //
-    //         if (recordOptions[0]) {
-    //             recordOptions[0].forEach((options) => {
-    //                 _reporterTypeOptions.push({
-    //                     label: options.value,
-    //                     value: options.id.toString(),
-    //                 })
-    //             })
-    //
-    //             this.reporterTypeOptions = _reporterTypeOptions;
-    //             if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && !this.biasIncidentFormValues.reporter_type_custom) {
-    //                 for (let i = 0; i < this.reporterTypeOptions.length; i++) {
-    //                     if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.tellSomeoneReportType.toLowerCase())) {
-    //                         this.reporterType = this.reporterTypeOptions[i].value;
-    //                         this.biasIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label;
-    //                         break;
-    //                     } else {
-    //                         let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
-    //                         if (otherType) {
-    //                             this.reporterType = otherType.value;
-    //                             this.biasIncidentFormValues.reporter_type_custom = otherType.label;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     if (error) {
-    //         console.log("biasReportingFormOptions1Wire error: "+JSON.stringify(error));
-    //     }
-    // }
-
-    // @wire(biasReportingFormOptions2, {})
-    // biasReportingFormOptions2Wire({error, data}) {
-    //     let recordOptions = [];
-    //     let affiliationTargetOptions = [];
-    //     let affiliationPersonEngagedHarmOptions = [];
-    //     if (data) {
-    //         data.forEach((o) => {
-    //             recordOptions.push(JSON.parse(o));
-    //         })
-    //
-    //         if (recordOptions[0]) {
-    //             recordOptions[0].forEach((options) => {
-    //                 affiliationTargetOptions.push({
-    //                     label: options.value,
-    //                     value: options.id.toString(),
-    //                 })
-    //             })
-    //             this.affiliationOfTargetOptions = affiliationTargetOptions;
-    //         }
-    //
-    //         if (recordOptions[1]) {
-    //             recordOptions[1].forEach((options) => {
-    //                 affiliationPersonEngagedHarmOptions.push({
-    //                     label: options.value,
-    //                     value: options.id.toString(),
-    //                 })
-    //             })
-    //             this.affiliationOfPersonEngagedInHarmOptions = affiliationPersonEngagedHarmOptions;
-    //         }
-    //     }
-    //
-    //     if (error) {
-    //         console.log("biasReportingFormOptions2Wire error: "+JSON.stringify(error));
-    //     }
-    // }
 
     selectValueHandler(event) {
         let eventValue = event.detail.value;
@@ -237,6 +158,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
         switch (event.currentTarget.dataset.selecttype) {
             case "reportertype":
                 this.reporterType = eventValue;
+                // eslint-disable-next-line no-case-declarations
                 let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
                 this.biasIncidentFormValues.reporter_type_custom = reporterTypeLabel.label;
                 break;
@@ -326,7 +248,7 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
     dateWarningText = "";
     timeWarningText = "";
     dateValidationBlur(event) {
-        const dateTimeDataType = event.currentTarget.dataset.inputtype;
+        // const dateTimeDataType = event.currentTarget.dataset.inputtype;
         let inputDate = this._incidentDate;
         let inputTime = "00:00:00";
         const dateNow = new Date();

@@ -7,6 +7,29 @@ public without sharing class TellSomeoneLwcController {
     private static final String symplicityAdvocateFlexFormTokenCallout = 'callout:Symplicity_Advocate_Flex_Forms';
 
     @AuraEnabled(Cacheable=true)
+    public static Map<String, List<PicklistOption>> getTellSomeonePicklists() {
+        Map<String, List<PicklistOption>> result = new Map<String, List<PicklistOption>>();
+
+        result.put('tellSomeoneReporterType', getPicklistOptions(Case.Community_Concern_Reporter_Type__c));
+        result.put('tellSomeoneWhoType', getPicklistOptions(Case.Community_Concern_Who_Type__c));
+        result.put('tellSomeoneWhatType', getPicklistOptions(Case.Community_Concern__c));
+
+        return result;
+    }
+
+    private static List<PicklistOption> getPicklistOptions(Schema.SObjectField fieldToken) {
+        List<PicklistOption> options = new List<PicklistOption>();
+        Schema.DescribeFieldResult dfr = fieldToken.getDescribe();
+
+        for (Schema.PicklistEntry entry : dfr.getPicklistValues()) {
+            if (entry.isActive()) {
+                options.add(new PicklistOption(entry.getLabel(), entry.getValue()));
+            }
+        }
+        return options;
+    }
+
+    @AuraEnabled(Cacheable=true)
     public static List<Contact> iAmContactInfo(String salesforceId, String bannerId) {
         List<Contact> iAmContact = [
                 SELECT Id,
@@ -44,8 +67,8 @@ public without sharing class TellSomeoneLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Object> getWellBeingOptions() {
-        List<Object> resultsObjects = new List<Object>();
+    public static Map<String, Object> getWellBeingOptions() {
+        Map<String, Object> resultsObjects = new Map<String, Object>();
 
         HttpRequest req1 = new HttpRequest();
         req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
@@ -62,19 +85,24 @@ public without sharing class TellSomeoneLwcController {
         System.debug('Response1 Code: ' + response1.getStatusCode());
         System.debug('Response2 Code: ' + response2.getStatusCode());
 
-        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200) {
-            resultsObjects.add(response1.getBody());
-            resultsObjects.add(response2.getBody());
+        if (response1.getStatusCode() == 200) {
+            resultsObjects.put('reporterType', response1.getBody());
         } else {
-            System.debug('getWellBeingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+            System.debug('getWellBeingOptions Errors: response1 code=' + response1.getStatusCode());
+        }
+
+        if (response2.getStatusCode() == 200) {
+            resultsObjects.put('affiliationOfThePersonOfConcern', response2.getBody());
+        } else {
+            System.debug('getWellBeingOptions Errors: response2 code=' + response2.getStatusCode());
         }
 
         return resultsObjects;
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Object> getBiasIncidentOptions() {
-        List<Object> resultsObjects = new List<Object>();
+    public static Map<String, Object> getBiasIncidentOptions() {
+        Map<String, Object> resultsObjects = new Map<String, Object>();
 
         HttpRequest req1 = new HttpRequest();
         req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
@@ -85,33 +113,42 @@ public without sharing class TellSomeoneLwcController {
         req2.setMethod('GET');
 
         HttpRequest req3 = new HttpRequest();
-        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_person_who_caused_harm');
-        req2.setMethod('GET');
+        req3.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_person_who_caused_harm');
+        req3.setMethod('GET');
 
         Http http = new Http();
         HttpResponse response1 = http.send(req1);
         HttpResponse response2 = http.send(req2);
-        HttpResponse response3 = http.send(req2);
+        HttpResponse response3 = http.send(req3);
 
         System.debug('Response1 Code: ' + response1.getStatusCode());
         System.debug('Response2 Code: ' + response2.getStatusCode());
         System.debug('Response3 Code: ' + response3.getStatusCode());
 
-        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200 && response3.getStatusCode() == 200) {
-            resultsObjects.add(response1.getBody());
-            resultsObjects.add(response2.getBody());
-            resultsObjects.add(response3.getBody());
+        if (response1.getStatusCode() == 200) {
+            resultsObjects.put('reporterType', response1.getBody());
         } else {
-            System.debug('getBiasIncidentOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode()
-            + ' response3 code=' + response3.getStatusCode());
+            System.debug('getBiasIncidentOptions Errors: response1 code=' + response1.getStatusCode());
+        }
+
+        if (response2.getStatusCode() == 200) {
+            resultsObjects.put('affiliationOfHarmedParty', response2.getBody());
+        } else {
+            System.debug('getBiasIncidentOptions Errors: response2 code=' + response2.getStatusCode());
+        }
+
+        if (response3.getStatusCode() == 200) {
+            resultsObjects.put('affiliationOfThePersonWhoCausedHarm', response3.getBody());
+        } else {
+            System.debug('getBiasIncidentOptions Errors: response3 code=' + response3.getStatusCode());
         }
 
         return resultsObjects;
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Object> getTitleIxReportingOptions() {
-        List<Object> resultsObjects = new List<Object>();
+    public static Map<String, Object> getTitleIxReportingOptions() {
+        Map<String, Object> resultsObjects = new Map<String, Object>();
 
         HttpRequest req1 = new HttpRequest();
         req1.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/picklists/titleix_reports/reporterType');
@@ -128,18 +165,23 @@ public without sharing class TellSomeoneLwcController {
         System.debug('Response1 Code: ' + response1.getStatusCode());
         System.debug('Response2 Code: ' + response2.getStatusCode());
 
-        if (response1.getStatusCode() == 200 && response2.getStatusCode() == 200) {
-            resultsObjects.add(response1.getBody());
-            resultsObjects.add(response2.getBody());
+        if (response1.getStatusCode() == 200) {
+            resultsObjects.put('reporterType', response1.getBody());
         } else {
-            System.debug('getTitleIxReportingOptions Errors: response1 code=' + response1.getStatusCode() + ' response2 code=' + response2.getStatusCode());
+            System.debug('getTitleIxReportingOptions Errors: response1 code=' + response1.getStatusCode());
+        }
+
+        if (response2.getStatusCode() == 200) {
+            resultsObjects.put('statusOfIndividualWhoCausedHarm', response2.getBody());
+        } else {
+            System.debug('getTitleIxReportingOptions Errors: response2 code=' + response2.getStatusCode());
         }
 
         return resultsObjects;
     }
 
     @AuraEnabled(Cacheable=false)
-    public static String submitTitleIxReporting(String formValues) {
+    public static String submitTitleIxReportForm(String formValues) {
         String titleIxReportNumber = '';
 
         HttpRequest req = new HttpRequest();
@@ -187,7 +229,8 @@ public without sharing class TellSomeoneLwcController {
             Supporting_Document__c supportingDocument = new Supporting_Document__c(
                     RecordTypeId = recordType,
                     Name = supportingDocumentName,
-                    Source__c = 'Community of Concern',
+//                    Source__c = 'Community of Concern',
+                    Source__c = 'Tell Someone',
                     Document_Load_Date__c = Date.today()
             );
 
@@ -226,5 +269,68 @@ public without sharing class TellSomeoneLwcController {
         return returnStatusUrl;
     }
 
+    @AuraEnabled(Cacheable=false)
+    public static void updateSupportingDocument(String supportingDocumentId, String advocateReportNumber) {
+        String updateStatus = '';
 
+        if (String.isNotBlank(supportingDocumentId) && String.isNotBlank(advocateReportNumber)) {
+            Id validSupportDocumentId;
+            try {
+                validSupportDocumentId = Id.valueOf(supportingDocumentId);
+            } catch (System.StringException e) {
+                updateStatus = 'failed';
+                System.debug('updateSupportingDocument invalid Id: ' + e);
+            }
+
+            try {
+                Supporting_Document__c supportingDocument = new Supporting_Document__c(
+                        Id = validSupportDocumentId,
+                        Supporting_Document_Unique_External_ID__c = advocateReportNumber
+                );
+                update supportingDocument;
+                updateStatus = 'success';
+                System.debug('updateSupportingDocument status: ' + updateStatus);
+            } catch (DmlException e) {
+                updateStatus = 'failed';
+                System.debug('updateSupportingDocument DML error: ' + e);
+            }
+        }
+    }
+
+    @AuraEnabled(Cacheable=false)
+    public static void deleteSupportingDocument(String supportingDocumentId) {
+        String deleteStatus = '';
+
+        if (String.isNotBlank(supportingDocumentId)) {
+            Id validSupportDocumentId;
+            try {
+                validSupportDocumentId = Id.valueOf(supportingDocumentId);
+            } catch (System.StringException e) {
+                deleteStatus = 'failed';
+                System.debug('deleteSupportingDocument invalid Id: ' + e);
+            }
+
+            try {
+                Supporting_Document__c supportingDocument = new Supporting_Document__c(
+                        Id = validSupportDocumentId
+                );
+                delete supportingDocument;
+                deleteStatus = 'success';
+                System.debug('deleteSupportingDocument status: ' + deleteStatus);
+            } catch (DmlException e) {
+                deleteStatus = 'failed';
+                System.debug('deleteSupportingDocument DML error: ' + e);
+            }
+        }
+    }
+
+    public class PicklistOption {
+        @AuraEnabled public String label;
+        @AuraEnabled public String value;
+
+        public PicklistOption(String label, String value) {
+            this.label = label;
+            this.value = value;
+        }
+    }
 }

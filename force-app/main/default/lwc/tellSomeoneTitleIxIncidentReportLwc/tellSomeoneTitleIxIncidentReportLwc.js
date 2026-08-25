@@ -4,17 +4,18 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import titleIxReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getTitleIxReportingOptions";
-import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
-import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
-import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
+import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
+import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElement {
     //From parent component
-    @api tellSomeoneReportType = "Faculty";
-    @api tellSomeoneReporterFirstName = "Test";
-    @api tellSomeoneReporterLastName = "Tester";
-    @api tellSomeoneReporterEmail = "test@test.com";
+    @api tellSomeoneReportType = "";
+    @api tellSomeoneReporterFirstName = "";
+    @api tellSomeoneReporterLastName = "";
+    @api tellSomeoneReporterEmail = "";
     @api tellSomeoneParamsUrl = "";
     @api tommieAlertsStudentName = "";
     @api tommieAlertsHideCss = "";
@@ -109,19 +110,15 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     @wire(titleIxReportingFormOptions, {})
     titleIxReportingFormOptionsWire({error, data}) {
-        let recordOptions = [];
         let _reporterTypeOptions = [];
         let _statusWhoCausedHarmOptions = [];
         if (data) {
-            data.forEach((o) => {
-                recordOptions.push(JSON.parse(o));
-            })
-
-            if (recordOptions[0]) {
-                recordOptions[0].forEach((options) => {
+            if(data.reporterType) {
+                let _reporterTypeData = JSON.parse(data.reporterType);
+                _reporterTypeData.forEach((object) => {
                     _reporterTypeOptions.push({
-                        label: options.value,
-                        value: options.id.toString(),
+                        label: object.value,
+                        value: object.id.toString(),
                     })
                 })
                 this.reporterTypeOptions = _reporterTypeOptions;
@@ -142,8 +139,9 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 }
             }
 
-            if (recordOptions[1]) {
-                recordOptions[1].forEach((options) => {
+            if (data.statusOfIndividualWhoCausedHarm) {
+                let _statusWhoCausedHarmData = JSON.parse(data.statusOfIndividualWhoCausedHarm);
+                _statusWhoCausedHarmData.forEach((options) => {
                     _statusWhoCausedHarmOptions.push({
                         label: options.value,
                         value: options.id.toString(),
@@ -151,7 +149,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 })
                 this.statusWhoCausedHarmOptions = _statusWhoCausedHarmOptions;
             }
-
         }
 
         if (error) {
@@ -314,61 +311,70 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitTitleIxIncidentFormFail = false;
+        this.attachDocumentResponse = {
+            Status: "",
+            SupportingDocumentUrl: "",
+            SupportingDocumentId: ""
+        }
+        this.formReportNumber = "";
 
         this.handleShowSpinner();
-
         if (this.attachDocuments.length > 0) {
             const supportingDocumentName = 'Advocate Title IX Incident';
             try {
-                await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+                let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
 
-                    if (result.Status === 'success') {
+                    if (saveSupportingDocumentsResults.Status === 'success') {
                         this.attachDocumentResponse = {
-                            Status: result.Status,
-                            SupportingDocumentUrl: result.Url,
-                            SupportingDocumentId: result.SupportingDocumentId
+                            Status: saveSupportingDocumentsResults.Status,
+                            SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+                            SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
                         }
 
                         this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-                    } else if (result.Status === 'error') {
+                    } else if (saveSupportingDocumentsResults.Status === 'error') {
                         this.saveDocumentsFail = true;
                     }
-                })
+
+                    console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+                    console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+
             } catch (e) {
                 console.log("Save documents error: " + JSON.stringify(e));
                 this.saveDocumentsFail = true;
             }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                let formValues = JSON.stringify(this.titleIxIncidentFormValues);
-                let formType = 'titleix';
-                await submitForm({formValues: formValues, formType: formType}).then((result) => {
-                    // console.log('This all result: '+JSON.stringify(result));
+        // if (!this.saveDocumentsFail) {
+        //     try {
+        //         let formValues = JSON.stringify(this.titleIxIncidentFormValues);
+        //         let titleIxReportNumber = await submitTitleIxReportForm({formValues: formValues});
+        //
+        //         if (titleIxReportNumber) {
+        //             this.formReportNumber = titleIxReportNumber;
+        //             console.log('titleIxReportNumber: '+this.formReportNumber);
+        //         } else {
+        //             this.submitTitleIxIncidentFormFail = true;
+        //             console.log('No titleIxReportNumber returned from submitTitleIxReporting');
+        //         }
+        //     } catch (error) {
+        //         this.submitTitleIxIncidentFormFail = true;
+        //     }
+        // }
 
-                    if (result[0] !== 201) {
-                        this.submitTitleIxIncidentFormFail = true;
-                        console.log('This result ERROR getStatusCode: '+result[0]);
-                    }
-
-                    this.formReportNumber = result[1].reportNumber;
-                    // console.log('Report Number: '+this.formReportNumber);
-                });
-            } catch (error) {
-                this.submitTitleIxIncidentFormFail = true;
-            }
-        }
-
-        if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
-                    // console.log("Update Status: "+result);
-                });
-            } catch (e) {
-                console.log("updateSupportingDocument error: " + JSON.stringify(e));
-            }
-        }
+        // if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
+        //     } catch (e) {
+        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
+        //     } catch (e) {
+        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // }
 
         if (this.saveDocumentsFail || this.submitTitleIxIncidentFormFail) {
             this.handleHideSpinner();
@@ -378,7 +384,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         } else {
             this.handleHideSpinner();
             // console.log("Update submittedUrl: "+this.submittedUrl());
-            location.replace(this.submittedUrl());
+            // location.replace(this.submittedUrl());
         }
     }
 

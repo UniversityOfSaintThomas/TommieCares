@@ -10,15 +10,15 @@ import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcContro
 import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
-    @api tellSomeoneReportType = "Faculty";
-    @api tellSomeoneReporterFirstName = "Test";
-    @api tellSomeoneReporterLastName = "Tester";
-    @api tellSomeoneReporterEmail = "test@test.com";
-    @api tellSomeoneConcernWhoValue = "Student";
+    @api tellSomeoneReportType = "";
+    @api tellSomeoneReporterFirstName = "";
+    @api tellSomeoneReporterLastName = "";
+    @api tellSomeoneReporterEmail = "";
+    @api tellSomeoneConcernWhoValue = "";
     @api tellSomeoneParamsUrl = "";
     @api tommieAlertsReporterPhone = ""; //used for Tommie Alert Submission
-    @api tommieAlertsStudentName = "Tommie Alerts";
-    @api tommieAlertsStudentEmail = "tommie@alerts.com";
+    @api tommieAlertsStudentName = "";
+    @api tommieAlertsStudentEmail = "";
     @api tommieAlertsHideCss = "";
 
     @api get formToTommieAlerts() {
@@ -105,16 +105,12 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
     @wire(wellBeingReportingFormOptions, {})
     wellBeingReportingFormOptionsWire({error, data}) {
-        let recordOptions = [];
         let _reporterTypeOptions = [];
         let _whoAreYouConcernedAboutOptions = [];
         if (data) {
-            data.forEach((o) => {
-                recordOptions.push(JSON.parse(o));
-            })
-
-            if (recordOptions[0]) {
-                recordOptions[0].forEach((options) => {
+            if (data.reporterType) {
+                let _reporteTypeData = JSON.parse(data.reporterType);
+                _reporteTypeData.forEach((options) => {
                     _reporterTypeOptions.push({
                         label: options.value,
                         value: options.id.toString(),
@@ -139,8 +135,9 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
             }
 
-            if (recordOptions[1]) {
-                recordOptions[1].forEach((options) => {
+            if (data.affiliationOfThePersonOfConcern) {
+                let _affiliationOfThePersonOfConcernData = JSON.parse(data.affiliationOfThePersonOfConcern);
+                _affiliationOfThePersonOfConcernData.forEach((options) => {
                     _whoAreYouConcernedAboutOptions.push({
                         label: options.value,
                         value: options.id.toString(),
