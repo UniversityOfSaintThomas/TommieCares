@@ -20,21 +20,26 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-.advocate-well-being-form {
-    box-sizing: border-box;   /* include padding in width */
-    /*width: 80%;               !* change percent to taste *!*/
-    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
-    margin: 0;                /* left aligned (no auto centering) */
-}
+/*.advocate-well-being-form {*/
+/*    box-sizing: border-box;   !* include padding in width *!*/
+/*    !*width: 80%;               !* change percent to taste *!*!*/
+/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
+/*    margin: 0;                !* left aligned (no auto centering) *!*/
+/*}*/
+
+/*.container {*/
+/*    position: relative;*/
+/*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
+/*}*/
 
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
-    /*width: 80%;*/
+    width: 90%;
 }
 
 .custom-textarea-tall {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
-    /*width: 80%;*/
+    width: 90%;
 }
 
 /*h2 {*/
@@ -143,6 +148,19 @@ lightning-textarea {
     display: flex !important;
     align-items: center !important;
 }
+
+/*.spinner-backdrop {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100vw;*/
+/*    height: 100vh;*/
+/*    background-color: rgba(255, 255, 255, 0.7);*/
+/*    z-index: 9999;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
 
 .tommie-alerts_hide {
     display: none;

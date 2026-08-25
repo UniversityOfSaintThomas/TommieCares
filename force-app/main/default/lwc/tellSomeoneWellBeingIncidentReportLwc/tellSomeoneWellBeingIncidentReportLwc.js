@@ -4,9 +4,10 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import wellBeingReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getWellBeingOptions";
-import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
-import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
+import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
 import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
+import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
@@ -362,64 +363,71 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitWellBeingFormFail = false;
+        this.attachDocumentResponse = {
+            Status: "",
+            SupportingDocumentUrl: "",
+            SupportingDocumentId: ""
+        }
+        this.formReportNumber = "";
 
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
             const supportingDocumentName = 'Advocate Well Being Incident';
             try {
-                await saveSupportingDocuments({ attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+                let saveSupportingDocumentsResults = await saveSupportingDocuments({ attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
 
-                    if (result.Status === 'success') {
-                        if (result.Status === 'success') {
-                            this.attachDocumentResponse = {
-                                Status: result.Status,
-                                SupportingDocumentUrl: result.Url,
-                                SupportingDocumentId: result.SupportingDocumentId
-                            }
-
-                            this.wellBeingIncidentFormValues.salesforce_support_documents = result.Url;
-                        } else if (result.Status === 'error') {
-                            this.saveDocumentsFail = true;
-                        }
+                if (saveSupportingDocumentsResults.Status === 'success') {
+                    this.attachDocumentResponse = {
+                        Status: saveSupportingDocumentsResults.Status,
+                        SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+                        SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
                     }
-                })
+
+                    this.wellBeingIncidentFormValues.salesforce_support_documents = saveSupportingDocumentsResults.Url;
+                } else if (saveSupportingDocumentsResults.Status === 'error') {
+                    this.saveDocumentsFail = true;
+                }
+
+                console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+
             } catch (e) {
                 console.log("Save documents error: " + JSON.stringify(e));
                 this.saveDocumentsFail = true;
             }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
-                let formType = 'wellbeing'
-                await submitForm({formValues: formValues, formType: formType}).then((result) => {
-                    // console.log('This all result: '+JSON.stringify(result));
-
-                    if (result[0] !== 201) {
-                        this.submitWellBeingFormFail = true;
-                        console.log('This result ERROR getStatusCode: '+result[0]);
-                    }
-
-                    this.formReportNumber = result[1].reportNumber;
-                    // console.log('Report Number: '+this.formReportNumber);
-                });
-
-            } catch (error) {
-                this.submitWellBeingFormFail = true;
-            }
-        }
-
-        if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
-                    // console.log("Update Status: "+result);
-                });
-            } catch (e) {
-                console.log("updateSupportingDocument error: " + JSON.stringify(e));
-            }
-        }
+        // if (!this.saveDocumentsFail) {
+        //     try {
+        //         let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+        //         let formType = 'wellbeing'
+        //         await submitForm({formValues: formValues, formType: formType}).then((result) => {
+        //             // console.log('This all result: '+JSON.stringify(result));
+        //
+        //             if (result[0] !== 201) {
+        //                 this.submitWellBeingFormFail = true;
+        //                 console.log('This result ERROR getStatusCode: '+result[0]);
+        //             }
+        //
+        //             this.formReportNumber = result[1].reportNumber;
+        //             // console.log('Report Number: '+this.formReportNumber);
+        //         });
+        //
+        //     } catch (error) {
+        //         this.submitWellBeingFormFail = true;
+        //     }
+        // }
+        //
+        // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
+        //             // console.log("Update Status: "+result);
+        //         });
+        //     } catch (e) {
+        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // }
 
         // const hideSpinnerEvent = new CustomEvent('hidespinner');
         if (this.saveDocumentsFail || this.submitWellBeingFormFail) {

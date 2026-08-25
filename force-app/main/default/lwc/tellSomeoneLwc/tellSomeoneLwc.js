@@ -8,10 +8,6 @@
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
-// import {getPicklistValues} from "lightning/uiObjectInfoApi";
-// import COMMUNITY_CONCERN_REPORTER_TYPE from "@salesforce/schema/Case.Community_Concern_Reporter_Type__c";
-// import COMMUNITY_CONCERN_WHO_TYPE from "@salesforce/schema/Case.Community_Concern_Who_Type__c";
-// import COMMUNITY_CONCERN_WHAT from "@salesforce/schema/Case.Community_Concern__c";
 import getTellSomeonePicklists from "@salesforce/apex/TellSomeoneLwcController.getTellSomeonePicklists";
 import iAmContactInfo from "@salesforce/apex/TellSomeoneLwcController.iAmContactInfo";
 import saveCase from "@salesforce/apex/CommunityOfConcernLwcController.saveCase";

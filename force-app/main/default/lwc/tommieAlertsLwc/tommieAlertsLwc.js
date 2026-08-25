@@ -8,7 +8,7 @@ import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsLwcController.
 import currentTermAdvisor from "@salesforce/apex/TommieAlertsLwcController.currentTermAdvisor";
 import advisorCoursesList from "@salesforce/apex/TommieAlertsLwcController.advisorCoursesList";
 import studentCourseList from "@salesforce/apex/TommieAlertsLwcController.studentCourseList";
-import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReporting";
+import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import saveCase from "@salesforce/apex/TommieAlertsLwcController.saveCase";
 
 export default class TommieAlertsLwc extends LightningElement {

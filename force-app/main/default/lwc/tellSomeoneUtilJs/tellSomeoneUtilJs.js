@@ -12,23 +12,6 @@ const emailValidation = (emailAddress) => {
         validEmailWarning: !validEmail
     };
 };
-// const emailValidation = (emailAddress) => {
-//     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-//     let emailValidationResults = {
-//         emailAddress: emailAddress,
-//         validEmail: null,
-//         validEmailWarning: null
-//     }
-//
-//     if (emailAddress && !(emailRegex.test(emailAddress))) {
-//         emailValidationResults.validEmail = false;
-//         emailValidationResults.validEmailWarning = true;
-//     } else {
-//         emailValidationResults.validEmail = true;
-//         emailValidationResults.validEmailWarning = false;
-//     }
-//     return emailValidationResults;
-// }
 
 const readFileAsBase64 = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader();

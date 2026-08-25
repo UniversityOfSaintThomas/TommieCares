@@ -60,9 +60,9 @@
         </div>
     </template>
     <template lwc:if={initialPageView}>
-        <div class="container">
+        <div class="slds-is-relative">
             <template lwc:if={submitCaseSpinner}>
-                <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
+                <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
             </template>
             <div id="tommieCaresForm" class="tommie-form" data-form="tommieCaresForm">
                 <div class={advisorInfoViewClass}>
@@ -194,7 +194,7 @@
                     </template>
                 </fieldset>
                 <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
-                    <label class="section-label">Select Alert(s) for {formSubmitSelections.StudentName} ({formSubmitSelections.StudentEmail}):</label>
+                    <label class="section-label">Select Alert(s) for {formSubmitSelections.StudentName} ({formSubmitSelections.StudentEmail})</label>
                     <!-- Positive Alert -->
                     <template lwc:if={positiveAlertGroup.length}>
                         <fieldset class="slds-m-top_medium alert-group">
@@ -219,7 +219,7 @@
                                 </div>
                             </div>
                             <!-- Positive Alert sub-checkboxes -->
-                            <div class="sub-content slds-m-left_small" lwc:if={selectionsCheck.high5Check}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.high5Check}>
                                 <fieldset class="slds-form-element">
                                     <legend class="slds-form-element__label element-sublabel">
                                         Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></legend>
@@ -282,10 +282,10 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
                                 <p>The student will receive a message reminding them to set up an advising appointment with you.</p>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
                                 <p>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
                             </div>
                         </fieldset>
@@ -364,13 +364,13 @@
 <!--&lt;!&ndash;                                        <p class="additional-text-message">Please complete the Title IX Complaint form linked below after submitting this Tommie Cares form:&ndash;&gt;-->
 <!--&lt;!&ndash;                                            <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>&ndash;&gt;-->
 <!--                            </div>-->
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
                                 <p>Behavior or Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                                 <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
@@ -400,22 +400,22 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
                             <p>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
                                 The Dean of Students Office will address the concern with the student.<br>
                                 No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
                             <p>Financial concerns will be sent directly to the Financial Aid office.<br>
                                 The student’s financial aid counselor will connect with the student.<br>
                                 No advisors will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_small regular-body-text sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
+                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
                             <p>Life Circumstances Impacting Success concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
                                 The Dean of Students Office will address the concern with the student.<br>
                                 No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_small sub-content" lwc:if={selectionsCheck.otherCheck}>
+                            <div class="sub-content" lwc:if={selectionsCheck.otherCheck}>
                                 <div class="slds-form-element" lwc:if={selectionsCheck.otherCheck}>
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
                                         Please provide additional details about your Other concerns:<abbr class="slds-required" title="Required">*</abbr></label>

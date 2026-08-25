@@ -324,20 +324,20 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             try {
                 let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
 
-                    if (saveSupportingDocumentsResults.Status === 'success') {
-                        this.attachDocumentResponse = {
-                            Status: saveSupportingDocumentsResults.Status,
-                            SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
-                            SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
-                        }
-
-                        this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-                    } else if (saveSupportingDocumentsResults.Status === 'error') {
-                        this.saveDocumentsFail = true;
+                if (saveSupportingDocumentsResults.Status === 'success') {
+                    this.attachDocumentResponse = {
+                        Status: saveSupportingDocumentsResults.Status,
+                        SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+                        SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
                     }
 
-                    console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
-                    console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+                    this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
+                } else if (saveSupportingDocumentsResults.Status === 'error') {
+                    this.saveDocumentsFail = true;
+                }
+
+                console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
 
             } catch (e) {
                 console.log("Save documents error: " + JSON.stringify(e));
@@ -383,8 +383,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             });
         } else {
             this.handleHideSpinner();
-            // console.log("Update submittedUrl: "+this.submittedUrl());
-            // location.replace(this.submittedUrl());
         }
     }
 

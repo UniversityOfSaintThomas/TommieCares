@@ -4,16 +4,14 @@
 
 <!-- Tell Someone Title Ix Incident Report Lwc -->
 <template>
-    <div class="regular-body-text">
+    <div class="slds-is-relative regular-body-text">
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
+        </template>
         <div>
             <p class="slds-m-bottom_medium">Please complete this form with as much detail as possible. If we need
                 additional information from you, we will contact you at the email/number you list on the form. All
                 reports are confidential.</p>
-<!--            <p class="slds-m-bottom_medium">If you select to report an incident as anonymous, St. Thomas will not be-->
-<!--                able to contact you. Reporting anonymously limits the university's ability to respond.</p>-->
-<!--            <p class="slds-m-bottom_medium">Thank you for keeping our campus healthy and safe by informing us of this-->
-<!--                incident. For additional information including resources and university policy and processes, please-->
-<!--                visit <a href="https://www.stthomas.edu/title-ix" target=_blank>https://www.stthomas.edu/title-ix</a>.</p>-->
         </div>
         <template lwc:if={showFormAll}>
             <div>
@@ -44,7 +42,7 @@
                     information from the reporting person.</p>
                 <p>We encourage you to share your name and contact information.</p>
             </div>
-            <div class="advocate-well-being-form">
+<!--            <div class="advocate-well-being-form">-->
                 <div lwc:if={isAnonymous}>
                     <label class="slds-m-bottom_xx-small heading-labels"><b>Anonymous Reporting</b></label>
                     <p class="slds-m-bottom_xxx-small">All reports are confidential. If you select to report an incident as
@@ -75,7 +73,6 @@
                 <div class="slds-grid slds-grid_vertical slds-m-bottom_medium">
                     <label class="slds-m-bottom_xx-small heading-labels"><b>Status of Individual Who Caused Harm</b></label>
                     <div class="slds-col slds-size_1-of-1">
-<!--                        <p class="slds-m-bottom_x-small"><b>Status of Individual Who Caused Harm</b></p>-->
                         <div class="slds-m-bottom_x-small">
                             <p class="slds-m-bottom_x-small">By sharing the status of the person who caused harm, this report
                                 will be routed appropriately. In nearly all instances, the Title IX Coordinator (or their
@@ -90,7 +87,7 @@
                                 Safety will be alerted.</p>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
                         <label class="slds-form-element__label selection-labels">
                             Status of who caused harm:<abbr class="slds-required" title="Required">*</abbr></label>
                         <div class="slds-form-element__control slds-m-top_xx-small">
@@ -109,7 +106,7 @@
                 </div>
                 <template lwc:if={isNotAnonymous}>
                     <fieldset class={reporterElementsCss}>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-name-id">
                                 Reporter's Name:</label>
                             <div class="slds-form-element__control">
@@ -123,7 +120,7 @@
                                 </lightning-input>
                             </div>
                         </div>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-email-id">
                                 Reporter's Email:
                                 <abbr class="slds-required" title="Required">*</abbr></label>
@@ -140,7 +137,7 @@
                                 <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
                             </div>
                         </div>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_medium">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_medium">
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-phone-id">
                                 Reporter's Phone:</label>
                             <div class="slds-form-element__control">
@@ -156,8 +153,9 @@
                         </div>
                     </fieldset>
                 </template>
-                <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+<!--                <div class="slds-grid slds-m-bottom_medium">-->
+<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">-->
+                    <div class="slds-form-element slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-incident-description-id">
                             Incident / Concerning Behavior Description:<abbr class="slds-required" title="Required">*</abbr></label>
                         <p class="textarea-sublabel">Provide a brief, concise narrative of the incident or behavior(s) of concern.</p>
@@ -172,9 +170,9 @@
                             </lightning-textarea>
                         </div>
                     </div>
-                </div>
+<!--                </div>-->
                 <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 ">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-who-harmed-id">
                             Name of the person who was harmed:</label>
                         <div class="slds-form-element__control">
@@ -189,8 +187,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+<!--                <div class="slds-grid slds-m-bottom_medium">-->
+<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">-->
+                    <div class="slds-form-element slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-location-id">
                             Location of Incident:</label>
                         <p class="textarea-sublabel">Did this occur on-campus, off-campus, in a specific residence hall, out of
@@ -206,9 +205,9 @@
                             </lightning-textarea>
                         </div>
                     </div>
-                </div>
+<!--                </div>-->
                 <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-incident-dates-id">
                             Date of Incident(s):
                             <abbr class="slds-required" title="Required">*</abbr></label>
@@ -225,7 +224,7 @@
                     </div>
                 </div>
                 <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
-                    <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 selection-labels" for="titleix-report-who-caused-harm-id">Name of the person who caused harm:</label>
+                    <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-large-size_5-of-12 selection-labels" for="titleix-report-who-caused-harm-id">Name of the person who caused harm:</label>
                     <p class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12 textarea-sublabel">Adding the name of the person who caused harm is not required in order to share concern for another individual.</p>
                     <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12">
                         <lightning-input id="titleix-report-who-caused-harm-id"
@@ -238,8 +237,9 @@
                         </lightning-input>
                     </div>
                 </div>
-                <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+<!--                <div class="slds-grid slds-m-bottom_medium">-->
+<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">-->
+                    <div class="slds-form-element slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-witnesses-id">
                             Witness(es):</label>
                         <p class="textarea-sublabel">Are there other students, staff, faculty, family or visitors who may have witnessed any of the concerns outlined above?</p>
@@ -254,14 +254,14 @@
                             </lightning-textarea>
                         </div>
                     </div>
-                </div>
+<!--                </div>-->
                 <div class="slds-form-element slds-grid_vertical slds-m-bottom_medium">
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+                    <div class="slds-col slds-size_1-of-1">
                         <label class="slds-form-element__label selection-labels">
                             Notification:<abbr class="slds-required" title="Required">*</abbr></label>
                         <p class="slds-m-bottom_xx-small textarea-sublabel">If you are not the impacted/harmed party and reporting on their behalf, do they know you are submitting this report?</p>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_3-of-12">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12">
                         <div class="slds-form-element__control slds-m-top_xx-small">
                             <lightning-combobox id="titleix-report-notification-id"
                                                 name="notification"
@@ -276,8 +276,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-grid slds-m-bottom_medium">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
+<!--                <div class="slds-grid slds-m-bottom_medium">-->
+<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">-->
+                    <div class="slds-form-element slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-follow-up-id">
                             Reporter Follow-up:<abbr class="slds-required" title="Required">*</abbr></label>
                         <p class="textarea-sublabel">Let us know the kind of follow-up you'd like to receive once you have
@@ -293,7 +294,7 @@
                             </lightning-textarea>
                         </div>
                     </div>
-                </div>
+<!--                </div>-->
                 <div class="slds-m-top_medium">
                     <div class="slds-form-element">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-attach-documents-id">
@@ -351,9 +352,6 @@
                                           onclick={submitFormHandler}
                                           disable-animation>
                         </lightning-button>
-                        <template lwc:if={showSpinner}>
-                            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-                        </template>
                     </div>
                     <template lwc:if={saveDocumentsFail}>
                         <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
@@ -384,7 +382,7 @@
                         </div>
                     </template>
                 </div>
-            </div>
+<!--            </div>-->
         </template>
     </div>
 </template>

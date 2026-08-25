@@ -50,10 +50,10 @@ abbr.slds-required {
     --sds-c-input-color-border: rebeccapurple;
 }
 
-.container {
-    position: relative;
-    min-height: 100px; /* ensures spinner is visible even if content is short */
-}
+/*.container {*/
+/*    position: relative;*/
+/*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
+/*}*/
 
 .custom-warning-icon {
     --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
@@ -78,15 +78,15 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
-lightning-combobox,
-lightning-input {
-    --slds-c-input-color-border: rebeccapurple;
-    --sds-c-input-color-border: rebeccapurple;
-}
+/*lightning-combobox,*/
+/*lightning-input {*/
+/*    --slds-c-input-color-border: rebeccapurple;*/
+/*    --sds-c-input-color-border: rebeccapurple;*/
+/*}*/
 
 lightning-textarea.custom-textarea {
-    --slds-c-textarea-color-border: rebeccapurple;
-    --sds-c-textarea-color-border: rebeccapurple;
+    /*--slds-c-textarea-color-border: rebeccapurple;*/
+    /*--sds-c-textarea-color-border: rebeccapurple;*/
     --sds-c-textarea-sizing-min-height: 100px;
     box-sizing: border-box;
     width: 90%;

@@ -4,15 +4,16 @@
 
 <!-- Tell Someone Well Being Incident Report Lwc -->
 <template>
-    <div class="regular-body-text">
-<!--        <p class="slds-m-vertical_x-small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>-->
+    <div class="slds-is-relative">
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
+        </template>
         <template lwc:if={showFormAll}>
             <template lwc:if={isNotAnonymous}>
                 <fieldset class={reporterElementsCss}>
-<!--                    <div class="{reporterElementsCss}">-->
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">
-                            Your Name:<abbr class="slds-required" title="Required">*</abbr></label>
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="well-being-reporter-name-id">
+                            Your Name:</label>
                         <p class="textarea-sublabel">First and last name.</p>
                         <div class="slds-form-element__control">
                             <lightning-input id="well-being-reporter-name-id"
@@ -25,10 +26,9 @@
                             </lightning-input>
                         </div>
                     </div>
-<!--                    <div class="{reporterElementsCss}">-->
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
-                        <label class="slds-form-element__label selection-labels" for="well-being-reporter-email-id">
-                            Your Email Address:<abbr class="slds-required" title="Required">*</abbr></label>
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="well-being-reporter-email-id">
+                            Your Email Address:</label>
                         <p class="textarea-sublabel">St. Thomas email address.</p>
                         <div class="slds-form-element__control">
                             <lightning-input id="well-being-reporter-email-id"
@@ -43,27 +43,26 @@
                             <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
                         </div>
                     </div>
-<!--                        <div class="{reporterElementsCss}">-->
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">
-                                Your Phone Number:<abbr class="slds-required" title="Required">*</abbr></label>
-                            <div class="slds-form-element__control">
-                                <lightning-input id="well-being-reporter-phone-id"
-                                                 type="text"
-                                                 label=""
-                                                 value={wellBeingIncidentFormValues.reporterPhone}
-                                                 data-inputtype="phone"
-                                                 variant="label-hidden"
-                                                 onchange={inputValueHandler}>
-                                </lightning-input>
-                            </div>
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="well-being-reporter-phone-id">
+                            Your Phone Number:</label>
+                        <div class="slds-form-element__control">
+                            <lightning-input id="well-being-reporter-phone-id"
+                                             type="text"
+                                             label=""
+                                             value={wellBeingIncidentFormValues.reporterPhone}
+                                             data-inputtype="phone"
+                                             variant="label-hidden"
+                                             onchange={inputValueHandler}>
+                            </lightning-input>
                         </div>
+                    </div>
                 </fieldset>
             </template>
             <fieldset class="slds-grid slds-grid_vertical">
-                <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
-                    <label class="slds-form-element__label selection-labels" for="well-being-individual-name-id">
-                        Individual of Concern:<abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                    <label class="slds-form-element__label selection-labels form-required-label" for="well-being-individual-name-id">
+                        Individual of Concern:</label>
                     <p class="textarea-sublabel">First and last name of the individual you are concerned about.</p>
                     <div class="slds-form-element__control">
                         <lightning-input id="well-being-individual-name-id"
@@ -77,7 +76,7 @@
                     </div>
                 </div>
                 <div class={indidvidualConcernElementsCss}>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="well-being-individual-email-id">
                             Individual's Email Address:</label>
                         <p class="textarea-sublabel">St. Thomas email address of the individual you are concerned about.</p>
@@ -94,7 +93,7 @@
                             <div lwc:if={validEmailWarningIndividual} class="validation-text">Invalid email address format</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 slds-m-bottom_small">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="well-being-individual-phone-id">
                             Individual's Phone Number:</label>
                         <p class="textarea-sublabel">Phone number of the individual you are concerned about.</p>
@@ -111,10 +110,10 @@
                     </div>
                 </div>
             </fieldset>
-            <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_small">
-                <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12 selection-labels" for="well-being-incident-date-id">
-                    Date of Concerning Incident:<abbr class="slds-required" title="Required">*</abbr></label>
-                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+            <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-large-size_7-of-12 selection-labels form-required-label" for="well-being-incident-date-id">
+                    Date of Concerning Incident:</label>
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_4-of-12">
                     <lightning-input id="well-being-incident-date-id"
                                      type="date"
                                      label=""
@@ -128,9 +127,9 @@
                 </div>
             </div>
             <div class="slds-grid">
-                <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
-                    <label class="slds-form-element__label selection-labels" for="well-being-incident-description-id">
-                        Concern Description:<abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
+                    <label class="slds-form-element__label selection-labels form-required-label" for="well-being-incident-description-id">
+                        Concern Description:</label>
                     <p class="textarea-sublabel">Provide a detailed description of your concern for the individual indicated above.</p>
                     <div class="slds-form-element__control">
                         <lightning-textarea class="custom-textarea-tall"
@@ -201,9 +200,6 @@
                                       onclick={submitFormHandler}
                                       disable-animation>
                     </lightning-button>
-                    <template lwc:if={showSpinner}>
-                        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-                    </template>
                 </div>
                 <template lwc:if={saveDocumentsFail}>
                     <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">

@@ -2,9 +2,9 @@
  * Created by nguy0092 on 6/23/2026.
  */
 
-:host {
-    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-}
+/*:host {*/
+/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
+/*}*/
 
 a {
     color: rebeccapurple;
@@ -20,27 +20,34 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-.advocate-well-being-form {
-    box-sizing: border-box;   /* include padding in width */
-    /*width: 80%;               !* change percent to taste *!*/
-    /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
-    margin: 0;                /* left aligned (no auto centering) */
-}
+/*.advocate-well-being-form {*/
+/*    box-sizing: border-box;   !* include padding in width *!*/
+/*    !*width: 80%;               !* change percent to taste *!*!*/
+/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
+/*    margin: 0;                !* left aligned (no auto centering) *!*/
+/*}*/
 
-.custom-textarea {
-    --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
-    /*width: 80%;*/
-}
+/*.custom-textarea {*/
+/*    --sds-c-textarea-sizing-min-height: 100px; !* Set your desired height *!*/
+/*    !*width: 80%;*!*/
+/*}*/
 
 .custom-textarea-tall {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
-    /*width: 80%;*/
+    /*width: 90%;*/
 }
 
 /*h2 {*/
 /*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
 /*    font-size: 1rem !important;*/
 /*}*/
+
+.form-required-label::after {
+    content: "*";
+    color: #ea001e; /* Standard Salesforce error red */
+    font-weight: bold;
+    display: inline; /* Keeps it on the same line as the text */
+}
 
 .heading-labels {
     font-size: 1rem !important;
@@ -56,29 +63,29 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
-lightning-combobox,
-lightning-input,
-lightning-checkbox-group {
-    --slds-c-input-color-border: rebeccapurple;
-    --sds-c-input-color-border: rebeccapurple;
-}
+/*lightning-combobox,*/
+/*lightning-input,*/
+/*lightning-checkbox-group {*/
+/*    --slds-c-input-color-border: rebeccapurple;*/
+/*    --sds-c-input-color-border: rebeccapurple;*/
+/*}*/
 
-lightning-textarea {
-    --slds-c-textarea-color-border: rebeccapurple;
-    --sds-c-textarea-color-border: rebeccapurple;
-}
+/*lightning-textarea {*/
+/*    --slds-c-textarea-color-border: rebeccapurple;*/
+/*    --sds-c-textarea-color-border: rebeccapurple;*/
+/*}*/
 
 .logo-size {
     width:125px;
     margin-left: 20px;
 }
 
-@media (max-width: 768px) {
-    lightning-textarea {
-        min-width: 0;
-        width: 100%;
-    }
-}
+/*@media (max-width: 768px) {*/
+/*    lightning-textarea {*/
+/*        min-width: 0;*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/
 
 .picklist-radio-text {
     font-size: 1rem !important;
