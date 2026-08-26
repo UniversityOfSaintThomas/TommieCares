@@ -2,9 +2,9 @@
  * Created by nguy0092 on 8/19/2026.
  */
 
-:host {
-    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-}
+/*:host {*/
+/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
+/*}*/
 
 a {
     color: rebeccapurple;
@@ -34,18 +34,25 @@ abbr.slds-required {
 
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
-    width: 90%;
+    /*width: 90%;*/
 }
 
 .custom-textarea-tall {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
-    width: 90%;
+    /*width: 90%;*/
 }
 
 /*h2 {*/
 /*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
 /*    font-size: 1rem !important;*/
 /*}*/
+
+.form-required-label::after {
+    content: "*";
+    color: #ea001e; /* Standard Salesforce error red */
+    font-weight: bold;
+    display: inline; /* Keeps it on the same line as the text */
+}
 
 .heading-labels {
     font-size: 1rem !important;
@@ -57,24 +64,24 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
-lightning-combobox,
-lightning-input,
-lightning-checkbox-group {
-    --slds-c-input-color-border: rebeccapurple;
-    --sds-c-input-color-border: rebeccapurple;
-}
+/*lightning-combobox,*/
+/*lightning-input,*/
+/*lightning-checkbox-group {*/
+/*    --slds-c-input-color-border: rebeccapurple;*/
+/*    --sds-c-input-color-border: rebeccapurple;*/
+/*}*/
 
-lightning-textarea {
-    --slds-c-textarea-color-border: rebeccapurple;
-    --sds-c-textarea-color-border: rebeccapurple;
-}
+/*lightning-textarea {*/
+/*    --slds-c-textarea-color-border: rebeccapurple;*/
+/*    --sds-c-textarea-color-border: rebeccapurple;*/
+/*}*/
 
-@media (max-width: 768px) {
-    lightning-textarea {
-        min-width: 0;
-        width: 100%;
-    }
-}
+/*@media (max-width: 768px) {*/
+/*    lightning-textarea {*/
+/*        min-width: 0;*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/
 
 .picklist-radio-text {
     font-size: 1rem !important;
@@ -87,31 +94,31 @@ lightning-textarea {
     border: none !important;
 }
 
-.regular-body-text .attached-file-list * {
+.attached-file-list * {
     font-size: .75rem !important;
     color: black !important;;
     margin-bottom: 0 !important;;
 }
 
-.regular-body-text .excluded-file-list * {
+.excluded-file-list * {
     font-size: .75rem !important;
     color: red !important;;
     margin-bottom: 0 !important;;
 }
 
 /* Body copy / intro paragraphs */
-.regular-body-text p {
-    font-size: 1rem !important;
-    color: black !important;
-}
+/*.regular-body-text p {*/
+/*    font-size: 1rem !important;*/
+/*    color: black !important;*/
+/*}*/
 
-.regular-body-text p.submit-warning {
+p.submit-warning {
     font-size: 0.75rem !important;
     margin-bottom: 0.5rem !important;
 }
 
 /* Helper/description text under labels — matches .textarea-sublabel */
-.regular-body-text p.textarea-sublabel {
+p.textarea-sublabel {
     font-size: .90rem !important;
     color: black !important;
     margin-bottom: 0 !important;

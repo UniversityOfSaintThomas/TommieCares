@@ -4,7 +4,10 @@
 
 <!-- Tell Someone Bias Incident Report -->
 <template>
-    <div class="regular-body-text">
+    <div class="slds-is-relative">
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
+        </template>
         <div>
             <p class="slds-m-bottom_medium">This form should be used by anyone
                 who believes they have witnessed or been the target of an incident of discrimination, bias, or
@@ -20,15 +23,15 @@
                 <fieldset>
                     <legend><b>Reporter Information</b></legend>
 <!--                    <div class="slds-grid">-->
-                    <p class="slds-col slds-size_1-of-1 slds-m-bottom_xx-small">You may leave information about yourself, or you may remain anonymous. If
+                    <p class="slds-col slds-size_1-of-1 slds-m-bottom_none">You may leave information about yourself, or you may remain anonymous. If
                         you do not provide your name and contact information, the university’s ability to respond may be limited.</p>
 <!--                    </div>-->
 <!--                    <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
-                    <div class="slds-grid">
-                        <div class="slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12">
-                            <div class="slds-form-element slds-m-bottom_small">
-                                <label class="slds-form-element__label selection-labels" for="bias-reporter-name-id">
-                                    Your Name:<abbr class="slds-required" title="Required">*</abbr></label>
+                    <div class="slds-grid slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12">
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-reporter-name-id">
+                                    Your Name:</label>
                                 <p class="textarea-sublabel">Please provide your full name.</p>
                                 <div class="slds-form-element__control">
                                     <lightning-input id="bias-reporter-name-id"
@@ -37,11 +40,12 @@
                                                      value={biasIncidentFormValues.reporterName}
                                                      data-inputtype="name"
                                                      variant="label-hidden"
+                                                     required="true"
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element slds-m-bottom_small">
+                            <div class="slds-form-element slds-m-bottom_medium">
                                 <label class="slds-form-element__label selection-labels" for="bias-reporter-phone-id">
                                     Your Phone Number:</label>
                                 <div class="slds-form-element__control">
@@ -55,9 +59,9 @@
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element">
-                                <label class="slds-form-element__label selection-labels" for="bias-reporter-email-id">
-                                    Your Email Address:<abbr class="slds-required" title="Required">*</abbr></label>
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-reporter-email-id">
+                                    Your Email Address:</label>
                                 <div class="slds-form-element__control">
                                     <lightning-input id="bias-reporter-email-id"
                                                      type="text"
@@ -65,6 +69,7 @@
                                                      value={biasIncidentFormValues.reporterEmail}
                                                      data-inputtype="email"
                                                      variant="label-hidden"
+                                                     required="true"
                                                      onchange={inputValueHandler}
                                                      onblur={emailValidationBlur}>
                                     </lightning-input>
@@ -76,12 +81,13 @@
 <!--                    </div>-->
                 </fieldset>
             </template>
-            <fieldset class="slds-m-top_medium">
+            <fieldset class="slds-m-top_small">
                 <legend><b>Time and Location</b></legend>
                 <p class="slds-m-bottom_xx-small">Please provide the approximate date, time and location that this incident occurred.</p>
-                <div class="slds-grid slds-wrap slds-m-bottom_x-small">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12 slds-m-right_medium">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-date-id">Date<abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-right_medium">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-date-id">
+                            Date:</label>
                         <div class="slds-form-element__control">
                             <lightning-input id="bias-report-date-id"
                                              type="date"
@@ -89,14 +95,16 @@
                                              value={_incidentDate}
                                              data-inputtype="date"
                                              variant="label-hidden"
+                                             required="true"
                                              onchange={inputValueHandler}
                                              onblur={dateValidationBlur}>
                             </lightning-input>
                             <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-small-size_6-of-12 slds-medium-size_4-of-12 slds-large-size_3-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-time-id">Time</label>
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-time-id">
+                            Time:</label>
                         <div class="slds-form-element__control">
                             <lightning-input
                                     id="bias-report-time-id"
@@ -105,6 +113,7 @@
                                     value={_incidentTime}
                                     data-inputtype="time"
                                     variant="label-hidden"
+                                    required="true"
                                     onchange={inputValueHandler}
                                     onblur={dateValidationBlur}>
                             </lightning-input>
@@ -112,10 +121,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-grid">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-location-id">Location
-                            of Incident<abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-grid slds-m-bottom_small">
+                    <div class="slds-form-element slds-col slds-large-size_11-of-12">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-location-id">Location
+                            of Incident:</label>
                         <p class="textarea-sublabel">Please provide as much detail about the location of this incident as possible.</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea"
@@ -124,19 +133,20 @@
                                                 value={biasIncidentFormValues.additionalInformation}
                                                 data-inputtype="location"
                                                 variant="label-hidden"
+                                                required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="slds-m-top_medium">
+            <fieldset class="slds-m-top_small">
                 <legend><b>Parties Involved</b></legend>
 <!--                <div class="slds-m-top_x-small slds-m-bottom_medium">-->
                     <div class="slds-grid slds-grid_vertical">
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12 slds-m-bottom_small">
-                            <label class="slds-form-element__label selection-labels" for="bias-report-students-involved-id">
-                                Individuals Involved<abbr class="slds-required" title="Required">*</abbr></label>
+                        <div class="slds-form-element slds-col slds-large-size_11-of-12 slds-m-bottom_medium">
+                            <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-students-involved-id">
+                                Individuals Involved:</label>
                             <p class="textarea-sublabel">Please list the names of all the individuals involved in this incident.</p>
                             <div class="slds-form-element__control">
                                 <lightning-textarea class="custom-textarea"
@@ -145,16 +155,17 @@
                                                     value={biasIncidentFormValues.otherStudent}
                                                     data-inputtype="studentsinvolved"
                                                     variant="label-hidden"
+                                                    required="true"
                                                     onchange={inputValueHandler}>
                                 </lightning-textarea>
                             </div>
                         </div>
 <!--                    </div>-->
 <!--                    <div class="slds-grid">-->
-                        <div class="slds-col slds-size_1-of-1 slds-small-size_8-of-12 slds-medium-size_6-of-12">
-                            <div class="slds-form-element slds-m-bottom_small">
-                                <label class="slds-form-element__label selection-labels" for="bias-report-who-harmed-id">
-                                    Who was harmed?<abbr class="slds-required" title="Required">*</abbr></label>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12">
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-who-harmed-id">
+                                    Who was harmed?</label>
                                 <div class="slds-form-element__control">
                                     <lightning-input id="bias-report-who-harmed-id"
                                                      type="text"
@@ -162,13 +173,14 @@
                                                      value={biasIncidentFormValues.who_was_the_target_of_the_behavior}
                                                      data-inputtype="whoharmed"
                                                      variant="label-hidden"
+                                                     required="true"
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element slds-m-bottom_small">
-                                <label class="slds-form-element__label selection-labels" for="bias-report-affiliation-harmed-id">
-                                    Affiliation of Harmed Party<abbr class="slds-required" title="Required">*</abbr></label>
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-affiliation-harmed-id">
+                                    Affiliation of Harmed Party:</label>
                                 <div class="slds-form-element__control">
                                     <lightning-combobox id="bias-report-affiliation-harmed-id"
                                                         label=""
@@ -176,13 +188,14 @@
                                                         value={biasIncidentFormValues.affiliation_of_target}
                                                         data-selecttype="affiliationharmed"
                                                         variant="label-hidden"
+                                                        required="true"
                                                         onchange={selectValueHandler}>
                                     </lightning-combobox>
                                 </div>
                             </div>
-                            <div class="slds-form-element slds-m-bottom_small">
-                                <label class="slds-form-element__label selection-labels" for="bias-report-who-caused-harm-id">
-                                    Who caused the harm?<abbr class="slds-required" title="Required">*</abbr></label>
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-who-caused-harm-id">
+                                    Who caused the harm?</label>
                                 <div class="slds-form-element__control">
                                     <lightning-input id="bias-report-who-caused-harm-id"
                                                      type="text"
@@ -190,13 +203,14 @@
                                                      value={biasIncidentFormValues.who_engaged_in_the_behavior}
                                                      data-inputtype="whocausedharm"
                                                      variant="label-hidden"
+                                                     required="true"
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
                                 </div>
                             </div>
-                            <div class="slds-form-element">
-                                <label class="slds-form-element__label selection-labels" for="bias-report-affiliation-person-caused-harm-id">
-                                    Affiliation of Person Who Caused Harm<abbr class="slds-required" title="Required">*</abbr></label>
+                            <div class="slds-form-element slds-m-bottom_small">
+                                <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-affiliation-person-caused-harm-id">
+                                    Affiliation of Person Who Caused Harm:</label>
                                 <div class="slds-form-element__control">
                                     <lightning-combobox id="bias-report-affiliation-person-caused-harm-id"
                                                         label=""
@@ -204,6 +218,7 @@
                                                         value={biasIncidentFormValues.affiliation_of_person_engaged_in_harm}
                                                         data-selecttype="affiliationcausedharm"
                                                         variant="label-hidden"
+                                                        required="true"
                                                         onchange={selectValueHandler}>
                                     </lightning-combobox>
                                 </div>
@@ -212,12 +227,12 @@
                     </div>
 <!--                </div>-->
             </fieldset>
-            <div class="slds-m-top_medium">
+            <div class="slds-m-top_medium slds-m-bottom_large">
                 <label class="heading-labels">Descriptive Information</label>
-                <div class="slds-grid">
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-medium-size_10-of-12 slds-large-size_8-of-12">
-                        <label class="slds-form-element__label selection-labels" for="bias-report-incident-description-id">
-                            Incident Description<abbr class="slds-required" title="Required">*</abbr></label>
+                <div class="slds-grid slds-m-bottom_x-small">
+                    <div class="slds-form-element slds-col slds-large-size_11-of-12">
+                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-incident-description-id">
+                            Incident Description:</label>
                         <p class="textarea-sublabel">Please describe and be as specific about the incident with as much
                             factual details as possible.<br>Include information about the nature of the incident
                             (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.).</p>
@@ -228,6 +243,7 @@
                                                 value={biasIncidentFormValues.description}
                                                 data-inputtype="description"
                                                 variant="label-hidden"
+                                                required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
@@ -237,7 +253,7 @@
             <div class="slds-m-top_medium">
                 <div class="slds-form-element">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">
-                        Attach documents/Upload</label>
+                        <b>Attach documents/Upload</b></label>
                     <p class="textarea-sublabel">Upload any supporting documentation that you have for this incident.<br>
                         A total of {maxFileCount} files at a maximum of {maxFileSize}MB per file can be uploaded.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
@@ -275,7 +291,7 @@
                     </template>
                 </div>
             </div>
-            <div class="slds-m-top_large slds-m-bottom_medium slds-is-relative">
+            <div class="slds-m-top_x-large slds-m-bottom_medium">
                 <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
                     <p class="submit-warning">
                         <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
@@ -290,9 +306,6 @@
                                   onclick={submitFormHandler}
                                   disable-animation>
                 </lightning-button>
-                <template lwc:if={showSpinner}>
-                    <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-                </template>
             </div>
             <template lwc:if={saveDocumentsFail}>
                 <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">

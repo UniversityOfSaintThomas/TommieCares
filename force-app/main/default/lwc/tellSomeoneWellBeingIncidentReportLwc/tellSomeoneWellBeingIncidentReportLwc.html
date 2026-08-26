@@ -9,6 +9,9 @@
             <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
         </template>
         <template lwc:if={showFormAll}>
+            <div class="slds-m-bottom_xx-small">
+                <label><b>Behavior or Well Being Report</b></label>
+            </div>
             <template lwc:if={isNotAnonymous}>
                 <fieldset class={reporterElementsCss}>
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
@@ -22,6 +25,7 @@
                                              value={wellBeingIncidentFormValues.reporterName}
                                              data-inputtype="name"
                                              variant="label-hidden"
+                                             required="true"
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -37,6 +41,7 @@
                                              value={wellBeingIncidentFormValues.reporterEmail}
                                              data-inputtype="email"
                                              variant="label-hidden"
+                                             required="true"
                                              onchange={inputValueHandler}
                                              onblur={emailValidationBlur}>
                             </lightning-input>
@@ -53,6 +58,7 @@
                                              value={wellBeingIncidentFormValues.reporterPhone}
                                              data-inputtype="phone"
                                              variant="label-hidden"
+                                             required="true"
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -71,6 +77,7 @@
                                          value={wellBeingIncidentFormValues.otherStudent}
                                          data-inputtype="involvedname"
                                          variant="label-hidden"
+                                         required="true"
                                          onchange={inputValueHandler}>
                         </lightning-input>
                     </div>
@@ -111,22 +118,23 @@
                 </div>
             </fieldset>
             <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
-                <label class="slds-form-element__label slds-col slds-size_1-of-1 slds-large-size_7-of-12 selection-labels form-required-label" for="well-being-incident-date-id">
+                <label class="slds-form-element__label slds-col slds-size_1-of-1 selection-labels form-required-label" for="well-being-incident-date-id">
                     Date of Concerning Incident:</label>
-                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_4-of-12">
+                <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_7-of-12">
                     <lightning-input id="well-being-incident-date-id"
                                      type="date"
                                      label=""
                                      value={_incidentDate}
                                      data-inputtype="date"
                                      variant="label-hidden"
+                                     required="true"
                                      onchange={inputValueHandler}
                                      onblur={dateValidationBlur}>>
                     </lightning-input>
                     <div lwc:if={validDateWarning} class="validation-text">{dateWarningText}</div>
                 </div>
             </div>
-            <div class="slds-grid">
+            <div class="slds-grid slds-m-bottom_large">
                 <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
                     <label class="slds-form-element__label selection-labels form-required-label" for="well-being-incident-description-id">
                         Concern Description:</label>
@@ -138,6 +146,7 @@
                                             value={wellBeingIncidentFormValues.description}
                                             data-inputtype="description"
                                             variant="label-hidden"
+                                            required="true"
                                             onchange={inputValueHandler}>
                         </lightning-textarea>
                     </div>
@@ -146,7 +155,7 @@
             <div class="slds-m-top_medium">
                 <div class="slds-form-element">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">
-                        Attach documents/Upload:</label>
+                        <b>Attach documents/Upload</b></label>
                     <p class="textarea-sublabel">Upload any supporting documentation that you have for this incident.<br>
                         A total of {maxFileCount} files at a maximum of {maxFileSize}MB per file can be uploaded.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>
@@ -185,7 +194,7 @@
                 </div>
             </div>
             <div class={submitSectionElementCss}>
-                <div class="slds-m-top_large slds-m-bottom_medium slds-is-relative">
+                <div class="slds-m-top_x-large slds-m-bottom_medium">
                     <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
                         <p class="submit-warning">
                             <abbr class="slds-required" title="Required">*</abbr> Required fields not completed.
