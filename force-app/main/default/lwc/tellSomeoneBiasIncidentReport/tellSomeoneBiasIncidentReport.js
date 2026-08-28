@@ -4,12 +4,11 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import biasReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getBiasIncidentOptions";
-// import biasReportingFormOptions1 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions1";
-// import biasReportingFormOptions2 from "@salesforce/apexContinuation/CommunityOfConcernLwcController.incidentReportingFormOptions2";
-import saveSupportingDocuments from "@salesforce/apex/CommunityOfConcernLwcController.saveSupportingDocuments";
-import updateSupportingDocument from "@salesforce/apex/CommunityOfConcernLwcController.updateSupportingDocument";
-import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
-import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
+import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+// import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
+import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneBiasIncidentReport extends LightningElement {
     @api tellSomeoneReportType = "";
@@ -382,70 +381,93 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
-            const supportingDocumentName = 'Advocate Bias Incident';
-            try {
-                await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName}).then((result) => {
+            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Bias Incident',
+                this.attachDocumentResponse, this.biasIncidentFormValues);
 
-                    if (result.Status === 'success') {
-                        this.attachDocumentResponse = {
-                            Status: result.Status,
-                            SupportingDocumentUrl: result.Url,
-                            SupportingDocumentId: result.SupportingDocumentId
-                        }
+            console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            console.log('this.biasIncidentFormValues: ', JSON.stringify(this.biasIncidentFormValues));
 
-                        this.biasIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-                    } else if (result.Status === 'error') {
-                        this.saveDocumentsFail = true;
-                    }
-                })
-            } catch (e) {
-                console.log("Save documents error: " + JSON.stringify(e));
-                this.saveDocumentsFail = true;
-            }
+            // const supportingDocumentName = 'Advocate Bias Incident';
+            // try {
+            //     let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
+            //
+            //     if (saveSupportingDocumentsResults.Status === 'success') {
+            //         this.attachDocumentResponse = {
+            //             Status: saveSupportingDocumentsResults.Status,
+            //             SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+            //             SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
+            //         }
+            //
+            //         this.biasIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
+            //     } else if (saveSupportingDocumentsResults.Status === 'error') {
+            //         this.saveDocumentsFail = true;
+            //     }
+            //
+            //     console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            //     console.log('this.biasIncidentFormValues: ', JSON.stringify(this.biasIncidentFormValues));
+            //
+            // } catch (e) {
+            //     console.log("Save documents error: " + JSON.stringify(e));
+            //     this.saveDocumentsFail = true;
+            // }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                let formValues = JSON.stringify(this.biasIncidentFormValues);
-                let formType = 'bias';
-                await submitForm({formValues: formValues, formType: formType}).then((result) => {
-                    // console.log('This all result: '+JSON.stringify(result));
+        // if (!this.saveDocumentsFail) {
+        //     try {
+        //         let formValues = JSON.stringify(this.biasIncidentFormValues);
+        //         let formType = 'bias';
+        //         await submitForm({formValues: formValues, formType: formType}).then((result) => {
+        //             // console.log('This all result: '+JSON.stringify(result));
+        //
+        //             if (result[0] !== 201) {
+        //                 this.submitBiasIncidentFormFail = true;
+        //                 console.log('This result ERROR getStatusCode: '+result[0]);
+        //             }
+        //
+        //             this.formReportNumber = result[1].reportNumber;
+        //             // console.log('Report Number: '+this.formReportNumber);
+        //         });
+        //
+        //     } catch (error) {
+        //         this.submitBiasIncidentFormFail = true;
+        //     }
+        // }
 
-                    if (result[0] !== 201) {
-                        this.submitBiasIncidentFormFail = true;
-                        console.log('This result ERROR getStatusCode: '+result[0]);
-                    }
-
-                    this.formReportNumber = result[1].reportNumber;
-                    // console.log('Report Number: '+this.formReportNumber);
-                });
-
-            } catch (error) {
-                this.submitBiasIncidentFormFail = true;
-            }
-        }
+        /*START TEST INPUTS*/
+        this.submitBiasIncidentFormFail = true;
+        this.formReportNumber = "TEST-aaaaa";
+        /*END TEST INPUTS*/
 
         if (!this.saveDocumentsFail && !this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
             try {
-                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
-                    // console.log("Update Status: "+result);
-                });
+                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber})
+                console.log("updateSupportingDocument Path");
             } catch (e) {
                 console.log("updateSupportingDocument error: " + JSON.stringify(e));
             }
+        } else if (!this.saveDocumentsFail && this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
+                console.log("deleteSupportingDocument Path");
+            } catch (e) {
+                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+            }
         }
 
-        if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
-            this.handleHideSpinner();
-            eventField.scrollIntoView({
-                behavior: 'smooth',
-            });
-        } else {
-            this.handleHideSpinner();
-            // console.log("Update submittedUrl: "+this.submittedUrl());
-            location.replace(this.submittedUrl());
-        }
+        // if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
+        //     this.handleHideSpinner();
+        //     eventField.scrollIntoView({
+        //         behavior: 'smooth',
+        //     });
+        // } else {
+        //     this.handleHideSpinner();
+        //     // console.log("Update submittedUrl: "+this.submittedUrl());
+        //     location.replace(this.submittedUrl());
+        // }
 
+        /*START TEST INPUTS*/
+        this.handleHideSpinner();
+        /*END TEST INPUTS*/
     }
 
 }

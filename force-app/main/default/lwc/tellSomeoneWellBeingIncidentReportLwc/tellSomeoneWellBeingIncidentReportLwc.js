@@ -8,7 +8,7 @@ import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.s
 import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
 import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
 import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
     @api tellSomeoneReportType = "";
@@ -373,29 +373,35 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
-            const supportingDocumentName = 'Advocate Well Being Incident';
-            try {
-                let saveSupportingDocumentsResults = await saveSupportingDocuments({ attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
+            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Well Being Incident',
+                this.attachDocumentResponse, this.wellBeingIncidentFormValues);
 
-                if (saveSupportingDocumentsResults.Status === 'success') {
-                    this.attachDocumentResponse = {
-                        Status: saveSupportingDocumentsResults.Status,
-                        SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
-                        SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
-                    }
+            console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
 
-                    this.wellBeingIncidentFormValues.salesforce_support_documents = saveSupportingDocumentsResults.Url;
-                } else if (saveSupportingDocumentsResults.Status === 'error') {
-                    this.saveDocumentsFail = true;
-                }
-
-                console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
-                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
-
-            } catch (e) {
-                console.log("Save documents error: " + JSON.stringify(e));
-                this.saveDocumentsFail = true;
-            }
+            // const supportingDocumentName = 'Advocate Well Being Incident';
+            // try {
+            //     let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
+            //
+            //     if (saveSupportingDocumentsResults.Status === 'success') {
+            //         this.attachDocumentResponse = {
+            //             Status: saveSupportingDocumentsResults.Status,
+            //             SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+            //             SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
+            //         }
+            //
+            //         this.wellBeingIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
+            //     } else if (saveSupportingDocumentsResults.Status === 'error') {
+            //         this.saveDocumentsFail = true;
+            //     }
+            //
+            //     console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            //     console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
+            //
+            // } catch (e) {
+            //     console.log("Save documents error: " + JSON.stringify(e));
+            //     this.saveDocumentsFail = true;
+            // }
         }
 
         // if (!this.saveDocumentsFail) {
@@ -418,7 +424,27 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         //         this.submitWellBeingFormFail = true;
         //     }
         // }
-        //
+
+        /*START TEST INPUTS*/
+        this.submitWellBeingFormFail = true;
+        this.formReportNumber = "TEST-xxxxx";
+        /*END TEST INPUTS*/
+
+        if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
+                console.log("updateSupportingDocument Path");
+            } catch (e) {
+                console.log("updateSupportingDocument error: " + JSON.stringify(e));
+            }
+        } else if (!this.saveDocumentsFail && this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
+                console.log("deleteSupportingDocument Path");
+            } catch (e) {
+                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+            }
+        }
         // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
         //     try {
         //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
@@ -429,17 +455,20 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         //     }
         // }
 
-        // const hideSpinnerEvent = new CustomEvent('hidespinner');
-        if (this.saveDocumentsFail || this.submitWellBeingFormFail) {
-            this.handleHideSpinner();
-            eventField.scrollIntoView({
-                behavior: 'smooth',
-            });
-        } else {
-            this.handleHideSpinner();
-            // console.log("Update submittedUrl: "+this.submittedUrl());
-            location.replace(this.submittedUrl());
-        }
+        // if (this.saveDocumentsFail || this.submitWellBeingFormFail) {
+        //     this.handleHideSpinner();
+        //     eventField.scrollIntoView({
+        //         behavior: 'smooth',
+        //     });
+        // } else {
+        //     this.handleHideSpinner();
+        //     // console.log("Update submittedUrl: "+this.submittedUrl());
+        //     location.replace(this.submittedUrl());
+        // }
+
+        /*START TEST INPUTS*/
+        this.handleHideSpinner();
+        /*END TEST INPUTS*/
     }
 
     submitDisableToTommieAlerts() {

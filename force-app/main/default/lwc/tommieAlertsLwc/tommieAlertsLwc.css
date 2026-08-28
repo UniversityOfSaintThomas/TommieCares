@@ -69,9 +69,9 @@ abbr.slds-required {
     color: black;
 }
 
-:host {
-    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-}
+/*:host {*/
+/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
+/*}*/
 
 lightning-button.submit_button {
     font-size: 1rem !important;
@@ -92,10 +92,10 @@ lightning-textarea.custom-textarea {
     width: 90%;
 }
 
-@media (max-width: 768px) {
-    .tommie-form {
-        width: 100%;
-    }
+@media (max-width: 7684px) {
+    /*.tommie-form {*/
+    /*    width: 100%;*/
+    /*}*/
 
     lightning-textarea.custom-textarea {
         min-width: 0;
@@ -134,9 +134,9 @@ lightning-textarea.custom-textarea {
     /*padding-left: 2px;*/
 }
 
-.regular-body-text p {
-    font-size: 1rem !important;
-}
+/*.regular-body-text p {*/
+/*    font-size: 1rem !important;*/
+/*}*/
 
 .section-label {
     font-size: 1rem !important;
@@ -191,7 +191,7 @@ lightning-textarea.custom-textarea {
 
 .tommie-cares-form {
     box-sizing: border-box;   /* include padding in width */
-    width: 80%;               /* change percent to taste */
+    /*width: 80%;               !* change percent to taste *!*/
     /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
     margin: 0;                /* left aligned (no auto centering) */
     min-height: 200px;

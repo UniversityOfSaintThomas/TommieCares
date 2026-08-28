@@ -251,7 +251,6 @@ public without sharing class TellSomeoneLwcController {
                 }
 
                 insert insertContentVersionList;
-                //ContentVersionTriggers->ContentVersionTriggersHandler attaches document to Supporting Document record
 
                 String baseUrl = Url.getOrgDomainUrl().toExternalForm();
                 recordUrl = baseUrl + '/' + supportingDocument.Id;
@@ -280,6 +279,7 @@ public without sharing class TellSomeoneLwcController {
             } catch (System.StringException e) {
                 updateStatus = 'failed';
                 System.debug('updateSupportingDocument invalid Id: ' + e);
+                return;
             }
 
             try {
@@ -308,6 +308,7 @@ public without sharing class TellSomeoneLwcController {
             } catch (System.StringException e) {
                 deleteStatus = 'failed';
                 System.debug('deleteSupportingDocument invalid Id: ' + e);
+                return;
             }
 
             try {

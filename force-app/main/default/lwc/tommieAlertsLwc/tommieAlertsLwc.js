@@ -8,8 +8,12 @@ import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsLwcController.
 import currentTermAdvisor from "@salesforce/apex/TommieAlertsLwcController.currentTermAdvisor";
 import advisorCoursesList from "@salesforce/apex/TommieAlertsLwcController.advisorCoursesList";
 import studentCourseList from "@salesforce/apex/TommieAlertsLwcController.studentCourseList";
-import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
+import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
+// import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import saveCase from "@salesforce/apex/TommieAlertsLwcController.saveCase";
+import {attachedDocumentsSave} from "c/tellSomeoneUtilJs";
 
 export default class TommieAlertsLwc extends LightningElement {
     //To TellSomeone child component
@@ -585,7 +589,9 @@ export default class TommieAlertsLwc extends LightningElement {
         location.replace(this.searchParamsUrl.toString());
     }
 
-    titleIxSubmitError = false;
+    titleIxsaveDocumentsFail = false;
+    submitTitleIxIncidentFormFail = false;
+
     async submitCase() {
         this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
         this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
@@ -594,17 +600,23 @@ export default class TommieAlertsLwc extends LightningElement {
         this.formSubmitSelections.CourseSelectionId = this.courseSelection;
         this.formSubmitSelections.StudentName = this.studentName;
         this.formSubmitSelections.StudentEmail = this.studentEmail;
-        let titleIxFormValues = "";
+        let titleIxFormValues = {};
         let titleIxDocuments = [];
+        let titleIxAttachDocumentResponse = {
+            Status: "",
+            SupportingDocumentUrl: "",
+            SupportingDocumentId: ""
+        }
+        let titleIxFormReportNumber = "";
 
         if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
             // Find the child component using querySelector
-            const tellSomeoneTitleIx = this.template.querySelector('c-advocate-title-ix-incident-report-lwcv2');
+            const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
 
             if (tellSomeoneTitleIx) {
                 // Read the exposed public getter
-                titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
-                titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+                titleIxFormValues = JSON.parse(JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts));
+                titleIxDocuments = JSON.parse(JSON.stringify(tellSomeoneTitleIx.documentsToTommieAlerts));
                 console.log('titleIxFormValues pulled from child: ', JSON.stringify(titleIxFormValues));
                 console.log('titleIxDocuments pulled from child: ', titleIxDocuments);
             }
@@ -612,20 +624,49 @@ export default class TommieAlertsLwc extends LightningElement {
 
         try {
             this.caseSubmittedErrorCheck = false;
-            window.parent.scrollTo({top: 0, behavior: 'smooth' });
+            // window.parent.scrollTo({top: 0, behavior: 'smooth' });
             this.submitCaseSpinner = true;
 
-            if (titleIxFormValues.trim().length > 0) {
-                const titleIxReportNumber = await submitTellSomeoneTitleIx({formValues: titleIxFormValues});
-                console.log('titleIxReportNumber returned from Apex: ', titleIxReportNumber);
-                this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxReportNumber;
-                this.titleIxSubmitError = !this.formSubmitSelections.TellSomeoneTitleIxReportNumber ? "true" : "false";
+            if (titleIxFormValues && Object.keys(titleIxFormValues).length > 0) {
+                if (titleIxDocuments.length > 0) {
+                    this.titleIxsaveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, titleIxDocuments, 'Advocate Title IX Incident',
+                        titleIxAttachDocumentResponse, titleIxFormValues);
+
+                    console.log('titleIxAttachDocumentResponse: ', JSON.stringify(titleIxAttachDocumentResponse));
+                    console.log('titleIxFormValues: ', JSON.stringify(titleIxFormValues));
+                    console.log('this.titleIxsaveDocumentsFail: ', this.titleIxsaveDocumentsFail);
+
+                    // const titleIxReportNumber = await submitTellSomeoneTitleIx({formValues: titleIxFormValues});
+                    // console.log('titleIxReportNumber returned from Apex: ', titleIxReportNumber);
+                    // this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxReportNumber;
+                    // this.titleIxSubmitError = !this.formSubmitSelections.TellSomeoneTitleIxReportNumber ? "true" : "false";
+                }
+            }
+            /*START TEST INPUTS*/
+            this.submitTitleIxIncidentFormFail = true;
+            titleIxFormReportNumber = "TEST-WWWWWW";
+            /*END TEST INPUTS*/
+
+            if (!this.titleIxsaveDocumentsFail && !this.submitTitleIxIncidentFormFail && titleIxAttachDocumentResponse.SupportingDocumentUrl) {
+                try {
+                    await updateSupportingDocument( {supportingDocumentId: titleIxAttachDocumentResponse.SupportingDocumentId, advocateReportNumber: titleIxFormReportNumber});
+                    console.log("updateSupportingDocument Path");
+                } catch (e) {
+                    console.log("updateSupportingDocument error: " + JSON.stringify(e));
+                }
+            } else if (!this.titleIxsaveDocumentsFail && this.submitTitleIxIncidentFormFail && titleIxAttachDocumentResponse.SupportingDocumentUrl) {
+                try {
+                    await deleteSupportingDocument( {supportingDocumentId: titleIxAttachDocumentResponse.SupportingDocumentId});
+                    console.log("deleteSupportingDocument Path");
+                } catch (e) {
+                    console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+                }
             }
 
-            await saveCase({formSelections: this.formSubmitSelections});
+            // await saveCase({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
             // eslint-disable-next-line no-restricted-globals
-            location.replace(this.submittedUrl());
+            // location.replace(this.submittedUrl());
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
@@ -660,19 +701,19 @@ export default class TommieAlertsLwc extends LightningElement {
         console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
-    tellSomeoneTitleIxForm() {
-        if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
-            // Find the child component using querySelector
-            const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
-
-            if (tellSomeoneTitleIx) {
-                // Read the exposed public getter
-                const titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
-                const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
-                console.log('titleIxFormValues pulled from child: ', titleIxFormValues);
-                console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
-            }
-        }
-    }
+    // tellSomeoneTitleIxForm() {
+    //     if (this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable) {
+    //         // Find the child component using querySelector
+    //         const tellSomeoneTitleIx = this.template.querySelector('c-tell-someone-title-ix-incident-report-lwc');
+    //
+    //         if (tellSomeoneTitleIx) {
+    //             // Read the exposed public getter
+    //             const titleIxFormValues = JSON.stringify(tellSomeoneTitleIx.formToTommieAlerts);
+    //             const titleIxDocuments = tellSomeoneTitleIx.documentsToTommieAlerts;
+    //             console.log('titleIxFormValues pulled from child: ', titleIxFormValues);
+    //             console.log('titleIxDocuments pulled from child: ', JSON.stringify(titleIxDocuments));
+    //         }
+    //     }
+    // }
 
 }

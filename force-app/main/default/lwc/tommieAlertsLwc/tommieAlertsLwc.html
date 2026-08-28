@@ -104,7 +104,7 @@
                 </div>
                 <div class="regular-body-text">
                     <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at 651-962-5555.</p>
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555">(651) 962-5555</a>.</p>
                     <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
                         individuals in order to provide additional support.<br>
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -173,7 +173,7 @@
                                 <fieldset class="slds-form-element">
                                     <legend class="slds-form-element__label element-sublabel">
                                     <!--<legend class="slds-form-element__label element-sublabel">-->
-                                        Select Tommie High 5 Reason(s):<abbr class="slds-required" title="Required">*</abbr></legend>
+                                        <span class="slds-text-nowrap">Select Tommie High 5 Reason(s):<abbr class="slds-required" title="required">*</abbr></span></legend>
                                     <div class="slds-form-element__control slds-m-top_xx-small">
                                         <template for:each={tommieHigh5Options} for:item="high5">
                                             <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={high5.value}>
@@ -183,7 +183,8 @@
                                                        value={high5.value}
                                                        data-checkboxtype="high5"
                                                        onclick={reasonsCheckbox}
-                                                       class="picklist-checkbox"/>
+                                                       class="picklist-checkbox"
+                                                       required/>
                                                 <label class="slds-checkbox__label" for={high5.value}>
                                                     <span class="slds-checkbox_faux"></span>
                                                     <span class="picklist-checkbox-text">{high5.label}</span>
@@ -194,7 +195,7 @@
                                 </fieldset>
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                        Tommie High 5 details:<abbr class="slds-required" title="Required">*</abbr></label>
+                                        <span class="slds-text-nowrap">Tommie High 5 details:<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
                                         The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
                                     <div class="slds-form-element__control slds-m-left_xxx-small">
@@ -205,7 +206,8 @@
                                                             data-texttype="high5Details"
                                                             onchange={textAreaDetails}
                                                             variant="label-hidden"
-                                                            class="custom-textarea">
+                                                            class="custom-textarea"
+                                                            required="true">
                                         </lightning-textarea>
                                     </div>
                                 </div>
@@ -241,7 +243,7 @@
     <!--                                <div class="sub-content">-->
                                     <fieldset class="slds-form-element regular-body-text">
                                         <legend class="slds-form-element__label element-sublabel">
-                                            Please select academic concerns:<abbr class="slds-required" title="Required">*</abbr></legend>
+                                            <span class="slds-text-nowrap">Please select academic concerns:<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control slds-m-top_xx-small">
                                             <template for:each={academicOptions} for:item="academic">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={academic.value}>
@@ -251,7 +253,8 @@
                                                            value={academic.value}
                                                            data-checkboxtype="academic"
                                                            onclick={reasonsCheckbox}
-                                                           class="picklist-checkbox" />
+                                                           class="picklist-checkbox"
+                                                           required/>
                                                     <label class="slds-checkbox__label" for={academic.value}>
                                                         <span class="slds-checkbox_faux"></span>
                                                         <span class="picklist-checkbox-text">{academic.label}</span>
@@ -266,7 +269,7 @@
                                 <template lwc:if={selectionsCheck.attendanceCheck}>
                                     <fieldset class="slds-form-element regular-body-text">
                                         <legend class="slds-form-element__label element-sublabel">
-                                            Please select attendance concerns:<abbr class="slds-required" title="Required">*</abbr></legend>
+                                            <span class="slds-text-nowrap">Please select attendance concerns:<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control">
                                             <template for:each={attendanceOptions} for:item="attendance">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={attendance.value}>
@@ -276,7 +279,8 @@
                                                            value={attendance.value}
                                                            data-checkboxtype="attendance"
                                                            onclick={reasonsCheckbox}
-                                                           class="picklist-checkbox" />
+                                                           class="picklist-checkbox"
+                                                           required/>
                                                     <label class="slds-checkbox__label" for={attendance.value}>
                                                         <span class="slds-checkbox_faux"></span>
                                                         <span class="picklist-checkbox-text">{attendance.label}</span>
@@ -290,7 +294,7 @@
                                 <!-- Pass course dropdown -->
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel">
-                                        Can the student pass this course?<abbr class="slds-required" title="Required">*</abbr></label>
+                                        <span class="slds-text-nowrap">Can the student pass this course?<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">Please do your best to answer this question. Use the personalized message text box below to explain your answer to the student.</p>
                                     <div class="slds-form-element__control slds-col slds-size_1-of-1 slds-large-size_3-of-12">
                                         <lightning-combobox id="pass-course-id"
@@ -301,7 +305,8 @@
                                                             options={passCourseOptions}
                                                             data-selecttype="passCourseSelect"
                                                             onchange={singleSelect}
-                                                            variant="label-hidden">
+                                                            variant="label-hidden"
+                                                            required="true">
                                         </lightning-combobox>
                                     </div>
                                 </div>
@@ -450,7 +455,7 @@
                             <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.otherCheck}>
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
-                                        Please provide additional details about your Other concerns:<abbr class="slds-required" title="Required">*</abbr></label>
+                                        <span class="slds-text-nowrap">Please provide additional details about your Other concerns:<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
                                         <br>No advisors will be copied or notified.</p>
                                     <div class="slds-form-element__control">
@@ -461,6 +466,7 @@
                                                             data-texttype="otherDetails"
                                                             onchange={textAreaDetails}
                                                             variant="label-hidden"
+                                                            required="true"
                                                             class="custom-textarea">
                                         </lightning-textarea>
                                     </div>

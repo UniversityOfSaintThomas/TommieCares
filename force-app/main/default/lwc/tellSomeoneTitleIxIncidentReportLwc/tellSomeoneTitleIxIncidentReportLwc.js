@@ -8,7 +8,7 @@ import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.s
 import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
 import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-import {emailValidation, attachDocumentsUpload} from "c/tellSomeoneUtilJs";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElement {
     //From parent component
@@ -300,49 +300,57 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     saveDocumentsFail = false;
     submitTitleIxIncidentFormFail = false;
-    attachDocumentResponse = {
-        Status: "",
-        SupportingDocumentUrl: "",
-        SupportingDocumentId: ""
-    }
-    formReportNumber = "";
+    // attachDocumentResponse = {
+    //     Status: "",
+    //     SupportingDocumentUrl: "",
+    //     SupportingDocumentId: ""
+    // }
+    // formReportNumber = "";
 
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitTitleIxIncidentFormFail = false;
-        this.attachDocumentResponse = {
+        let attachDocumentResponse = {
             Status: "",
             SupportingDocumentUrl: "",
             SupportingDocumentId: ""
         }
-        this.formReportNumber = "";
+        let formReportNumber = "";
 
         this.handleShowSpinner();
+
         if (this.attachDocuments.length > 0) {
-            const supportingDocumentName = 'Advocate Title IX Incident';
-            try {
-                let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
 
-                if (saveSupportingDocumentsResults.Status === 'success') {
-                    this.attachDocumentResponse = {
-                        Status: saveSupportingDocumentsResults.Status,
-                        SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
-                        SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
-                    }
+            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Title IX Incident',
+                attachDocumentResponse, this.titleIxIncidentFormValues);
 
-                    this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-                } else if (saveSupportingDocumentsResults.Status === 'error') {
-                    this.saveDocumentsFail = true;
-                }
-
-                console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
                 console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
 
-            } catch (e) {
-                console.log("Save documents error: " + JSON.stringify(e));
-                this.saveDocumentsFail = true;
-            }
+            // const supportingDocumentName = 'Advocate Title IX Incident';
+            // try {
+            //     let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
+            //
+            //     if (saveSupportingDocumentsResults.Status === 'success') {
+            //         this.attachDocumentResponse = {
+            //             Status: saveSupportingDocumentsResults.Status,
+            //             SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
+            //             SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
+            //         }
+            //
+            //         this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
+            //     } else if (saveSupportingDocumentsResults.Status === 'error') {
+            //         this.saveDocumentsFail = true;
+            //     }
+            //
+            //     console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            //     console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+            //
+            // } catch (e) {
+            //     console.log("Save documents error: " + JSON.stringify(e));
+            //     this.saveDocumentsFail = true;
+            // }
         }
 
         // if (!this.saveDocumentsFail) {
@@ -362,28 +370,39 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         //     }
         // }
 
-        // if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-        //     try {
-        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
-        //     } catch (e) {
-        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-        //     try {
-        //         await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
-        //     } catch (e) {
-        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-        //     }
+        /*START TEST INPUTS*/
+        this.submitTitleIxIncidentFormFail = true;
+        formReportNumber = "TEST-123456";
+        /*END TEST INPUTS*/
+
+        if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await updateSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: formReportNumber});
+                console.log("updateSupportingDocument Path");
+            } catch (e) {
+                console.log("updateSupportingDocument error: " + JSON.stringify(e));
+            }
+        } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+            try {
+                await deleteSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
+                console.log("deleteSupportingDocument Path");
+            } catch (e) {
+                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+            }
+        }
+
+        // if (this.saveDocumentsFail || this.submitTitleIxIncidentFormFail) {
+        //     this.handleHideSpinner();
+        //     eventField.scrollIntoView({
+        //         behavior: 'smooth',
+        //     });
+        // } else {
+        //     this.handleHideSpinner();
         // }
 
-        if (this.saveDocumentsFail || this.submitTitleIxIncidentFormFail) {
-            this.handleHideSpinner();
-            eventField.scrollIntoView({
-                behavior: 'smooth',
-            });
-        } else {
-            this.handleHideSpinner();
-        }
+        /*START TEST INPUTS*/
+        this.handleHideSpinner();
+        /*END TEST INPUTS*/
     }
 
     submitDisableToTommieAlerts() {

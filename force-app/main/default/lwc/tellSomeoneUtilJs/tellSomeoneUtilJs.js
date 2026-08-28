@@ -115,4 +115,27 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
     return attachDocumentResults;
 }
 
-export { emailValidation, attachDocumentsUpload };
+const attachedDocumentsSave = async (apexMethod, attachDocuments, supportingDocumentName, attachDocumentResponse, formValues) =>  {
+    let saveDocumentsFail = false;
+
+    try {
+        let saveSupportingDocumentsResults = await apexMethod({attachedDocumentsList: attachDocuments, supportingDocumentName: supportingDocumentName});
+
+        if (saveSupportingDocumentsResults.Status === 'success') {
+            attachDocumentResponse.Status = saveSupportingDocumentsResults.Status;
+            attachDocumentResponse.SupportingDocumentUrl = saveSupportingDocumentsResults.Url;
+            attachDocumentResponse.SupportingDocumentId = saveSupportingDocumentsResults.SupportingDocumentId;
+            formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+        } else if (saveSupportingDocumentsResults.Status === 'error') {
+            saveDocumentsFail = true;
+        }
+
+    } catch (e) {
+        console.log("Save documents error: " + JSON.stringify(e));
+        saveDocumentsFail = true;
+    }
+
+    return saveDocumentsFail;
+}
+
+export { emailValidation, attachDocumentsUpload, attachedDocumentsSave };
