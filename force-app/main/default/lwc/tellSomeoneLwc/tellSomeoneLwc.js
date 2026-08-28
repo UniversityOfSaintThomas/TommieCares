@@ -12,7 +12,7 @@ import getTellSomeonePicklists from "@salesforce/apex/TellSomeoneLwcController.g
 import iAmContactInfo from "@salesforce/apex/TellSomeoneLwcController.iAmContactInfo";
 import saveCase from "@salesforce/apex/CommunityOfConcernLwcController.saveCase";
 import TELL_SOMEONE_LOGO from '@salesforce/resourceUrl/TellSomeoneLogoPng';
-import {emailValidation} from "c/communityOfConcernUtilJs";
+import {emailValidation} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneLwc extends LightningElement {
 
@@ -26,13 +26,14 @@ export default class TellSomeoneLwc extends LightningElement {
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
+    documentAttachFail = false;
 
     @track iAmOptions = [];
     @track concernedWhoOptions = [];
     @track whatPicklist = [];
     @track whatNoStudentPicklist = [];
     @track initialContactInfo = {};
-    @track communityOfConcernCase = {
+    @track tellSomeoneCase = {
         IAmValue: "",
         IAmContactId: "",
         IAmFirstName: "",
@@ -56,17 +57,17 @@ export default class TellSomeoneLwc extends LightningElement {
 
     get childProps() {
         return {
-            tellSomeoneReportType: this.communityOfConcernCase?.IAmValue,
-            tellSomeoneReporterFirstName: this.communityOfConcernCase?.IAmFirstName,
-            tellSomeoneReporterLastName: this.communityOfConcernCase?.IAmLastName,
-            tellSomeoneReporterEmail: this.communityOfConcernCase?.IAmEmail,
-            tellSomeoneConcernWhoValue: this.communityOfConcernCase?.ConcernedWhoValue,
+            tellSomeoneReportType: this.tellSomeoneCase?.IAmValue,
+            tellSomeoneReporterFirstName: this.tellSomeoneCase?.IAmFirstName,
+            tellSomeoneReporterLastName: this.tellSomeoneCase?.IAmLastName,
+            tellSomeoneReporterEmail: this.tellSomeoneCase?.IAmEmail,
+            tellSomeoneConcernWhoValue: this.tellSomeoneCase?.ConcernedWhoValue,
             tellSomeoneParamsUrl: this.searchParamsUrl,
         }
     }
 
     get concernedWhatOptions() {
-        if (this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty") && this.communityOfConcernCase.ConcernedWhoValue === "Student") {
+        if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
             return this.whatPicklist;
         } else {
             return this.whatNoStudentPicklist;
@@ -74,7 +75,7 @@ export default class TellSomeoneLwc extends LightningElement {
     }
 
     get iAmAnonymousCheck() {
-        return this.communityOfConcernCase.IAmValue === "Anonymous";
+        return this.tellSomeoneCase.IAmValue === "Anonymous";
     }
 
     get iAmNotAnonymousCheck() {
@@ -82,48 +83,48 @@ export default class TellSomeoneLwc extends LightningElement {
     }
 
     get showConcernedWhoSelect() {
-        return !!this.communityOfConcernCase.IAmValue;
+        return !!this.tellSomeoneCase.IAmValue;
     }
 
     get showConcernedWhatSelect() {
-        return this.showConcernedWhoSelect && !!this.communityOfConcernCase.ConcernedWhoValue;
+        return this.showConcernedWhoSelect && !!this.tellSomeoneCase.ConcernedWhoValue;
     }
 
     get showWhatTommieAlerts() {
-        return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.communityOfConcernCase.IAmValue === "Faculty" && this.communityOfConcernCase.ConcernedWhoValue === "Student";
+        return this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.ConcernedWhoValue === "Student";
     }
 
     get showWhatWellBeing() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
+        let requiredSelected = this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to report a behavior or well-being concern";
         return {
             show: requiredSelected,
-            student: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue === "Student",
-            nonStudent: requiredSelected && this.communityOfConcernCase.ConcernedWhoValue !== "Student",
+            student: requiredSelected && this.tellSomeoneCase.ConcernedWhoValue === "Student",
+            nonStudent: requiredSelected && this.tellSomeoneCase.ConcernedWhoValue !== "Student",
         }
     }
 
     get showWhatDiscrimination() {
-        return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
+        return this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I want to report an incident of possible discrimination, bias, or harassment";
     }
 
     get showWhatMisconduct() {
-        return this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
+        return this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to report a concern related to possible sexual misconduct (including Title IX)";
     }
 
     get showWhatOther() {
-        let requiredSelected = this.showConcernedWhatSelect && this.communityOfConcernCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
+        let requiredSelected = this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to submit an information report that does not fit the criteria of any of the above reports";
         return {
             show: requiredSelected,
-            text: this.communityOfConcernCase.ConcernedWhoValue !== "Student"
+            text: this.tellSomeoneCase.ConcernedWhoValue !== "Student"
         }
     }
 
     get submitDisable() {
-        return !(!!this.communityOfConcernCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
+        return !(!!this.tellSomeoneCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
     }
 
     get iAmInfoInputDisabled() {
-        return !!this.communityOfConcernCase.IAmContactId;
+        return !!this.tellSomeoneCase.IAmContactId;
     }
 
     connectedCallback() {
@@ -141,25 +142,32 @@ export default class TellSomeoneLwc extends LightningElement {
                 case "submitted":
                     if (value === "true") this.caseSubmittedCheck = true;
                     break;
+                case "nodocument":
+                    if (value === "true") this.documentAttachFail = true
             }
         }
     }
 
-    rendered = false;
-    renderedCallback() {
-        if (!this.rendered) {
-            if (this.caseSubmittedCheck) {
-                const caseSubmittedElement = this.template.querySelector(".case-submitted");
-                if (caseSubmittedElement) {
-                    caseSubmittedElement.scrollIntoView({
-                        behavior: "instant",
-                        block: "center"
-                    });
-                }
-            }
-            this.rendered = !this.rendered;
-        }
-    }
+    // rendered = false;
+    // renderedCallback() {
+    //     if (!this.rendered) {
+    //         window.scrollTo({
+    //             top: 0,
+    //             behavior: 'smooth'
+    //         });
+    //         // if (this.caseSubmittedCheck) {
+    //         //     const caseSubmittedElement = this.template.querySelector(".case-submitted");
+    //         //     if (caseSubmittedElement) {
+    //         //         caseSubmittedElement.scrollIntoView({
+    //         //             top: 0,
+    //         //             behavior: "instant",
+    //         //             // block: "center"
+    //         //         });
+    //         //     }
+    //         // }
+    //         this.rendered = !this.rendered;
+    //     }
+    // }
 
     @wire(getTellSomeonePicklists, {})
     wireGetTellSomeonePicklists({error, data}) {
@@ -194,7 +202,7 @@ export default class TellSomeoneLwc extends LightningElement {
             let wireContactInfo = JSON.parse(JSON.stringify(data));
             if (wireContactInfo.length > 0) {
                 this.initialContactInfo = wireContactInfo[0];
-                this.communityOfConcernCase = {
+                this.tellSomeoneCase = {
                     IAmContactId: this.initialContactInfo.Id,
                     IAmFirstName: this.initialContactInfo.FirstName,
                     IAmLastName: this.initialContactInfo.LastName,
@@ -203,21 +211,21 @@ export default class TellSomeoneLwc extends LightningElement {
                 }
                 if (this.initialContactInfo.hed__UniversityEmail__c) {
                     let emailValidationResults = emailValidation(this.initialContactInfo.hed__UniversityEmail__c);
-                    this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                    this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
                     this.validEmail = emailValidationResults.validEmail;
                 }
 
-                if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Faculty")) {
-                    this.communityOfConcernCase.IAmValue = "Faculty";
-                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Staff")) {
-                    this.communityOfConcernCase.IAmValue = "Staff";
-                } else if (this.communityOfConcernCase.IAmStThomasConnection?.includes("Student")) {
-                    this.communityOfConcernCase.IAmValue = "Student";
+                if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty")) {
+                    this.tellSomeoneCase.IAmValue = "Faculty";
+                } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Staff")) {
+                    this.tellSomeoneCase.IAmValue = "Staff";
+                } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Student")) {
+                    this.tellSomeoneCase.IAmValue = "Student";
                 }
             }
             if (window.location && window.location.search) {
-                this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-                this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+                this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
+                this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
                 this.paramUrl = this.searchParamsUrl.toString();
                 // console.log("paramUrl: " + this.paramUrl)
             }
@@ -230,41 +238,41 @@ export default class TellSomeoneLwc extends LightningElement {
 
     selectValueHandler(event) {
         let eventValue = event.detail.value;
-        this.communityOfConcernCase.ConcernedWhatValue = "";
-        this.communityOfConcernCase.ConcernedWhatAdditionalInfo = "";
+        this.tellSomeoneCase.ConcernedWhatValue = "";
+        this.tellSomeoneCase.ConcernedWhatAdditionalInfo = "";
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.selecttype) {
             case "iamselect":
-                this.communityOfConcernCase.IAmValue = eventValue;
-                if (this.communityOfConcernCase.IAmValue === "Anonymous") {
-                    this.communityOfConcernCase.IAmContactId = "";
-                    this.communityOfConcernCase.IAmFirstName = "";
-                    this.communityOfConcernCase.IAmLastName = "";
-                    this.communityOfConcernCase.IAmStThomasConnection = "";
-                    this.communityOfConcernCase.IAmEmail = "";
-                    this.communityOfConcernCase.IAmPhone = "";
-                    this.communityOfConcernCase.IAmBannerId = "";
+                this.tellSomeoneCase.IAmValue = eventValue;
+                if (this.tellSomeoneCase.IAmValue === "Anonymous") {
+                    this.tellSomeoneCase.IAmContactId = "";
+                    this.tellSomeoneCase.IAmFirstName = "";
+                    this.tellSomeoneCase.IAmLastName = "";
+                    this.tellSomeoneCase.IAmStThomasConnection = "";
+                    this.tellSomeoneCase.IAmEmail = "";
+                    this.tellSomeoneCase.IAmPhone = "";
+                    this.tellSomeoneCase.IAmBannerId = "";
                 } else {
                     if (this.initialContactInfo) {
-                        this.communityOfConcernCase.IAmContactId = this.initialContactInfo.Id;
-                        this.communityOfConcernCase.IAmFirstName = this.initialContactInfo.FirstName;
-                        this.communityOfConcernCase.IAmLastName = this.initialContactInfo.LastName;
-                        this.communityOfConcernCase.IAmStThomasConnection = this.initialContactInfo.St_Thomas_Connection__c;
-                        this.communityOfConcernCase.IAmEmail = this.initialContactInfo.hed__UniversityEmail__c;
-                        this.communityOfConcernCase.IAmPhone = "";
-                        this.communityOfConcernCase.IAmBannerId = this.initialContactInfo.University_Banner_ID__c;
+                        this.tellSomeoneCase.IAmContactId = this.initialContactInfo.Id;
+                        this.tellSomeoneCase.IAmFirstName = this.initialContactInfo.FirstName;
+                        this.tellSomeoneCase.IAmLastName = this.initialContactInfo.LastName;
+                        this.tellSomeoneCase.IAmStThomasConnection = this.initialContactInfo.St_Thomas_Connection__c;
+                        this.tellSomeoneCase.IAmEmail = this.initialContactInfo.hed__UniversityEmail__c;
+                        this.tellSomeoneCase.IAmPhone = "";
+                        this.tellSomeoneCase.IAmBannerId = this.initialContactInfo.University_Banner_ID__c;
                     }
                 }
                 // eslint-disable-next-line no-case-declarations
-                let emailValidationResults = emailValidation(this.communityOfConcernCase.IAmEmail);
-                this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                let emailValidationResults = emailValidation(this.tellSomeoneCase.IAmEmail);
+                this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
                 this.validEmail = emailValidationResults.validEmail;
                 break;
             case "concernedwhoselect":
-                this.communityOfConcernCase.ConcernedWhoValue = eventValue;
+                this.tellSomeoneCase.ConcernedWhoValue = eventValue;
                 break;
             case "concernedwhatselect":
-                this.communityOfConcernCase.ConcernedWhatValue = eventValue;
+                this.tellSomeoneCase.ConcernedWhatValue = eventValue;
                 break;
         }
     }
@@ -277,10 +285,10 @@ export default class TellSomeoneLwc extends LightningElement {
                 // eslint-disable-next-line default-case
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.communityOfConcernCase.IAmFirstName = eventValue.trim();
+                        this.tellSomeoneCase.IAmFirstName = eventValue.trim();
                         break;
                     case "lastname":
-                        this.communityOfConcernCase.IAmLastName = eventValue.trim();
+                        this.tellSomeoneCase.IAmLastName = eventValue.trim();
                         break;
                     case "email":
                         if (!eventValue) {
@@ -291,7 +299,7 @@ export default class TellSomeoneLwc extends LightningElement {
                         }
                         break;
                     case "phone":
-                        this.communityOfConcernCase.IAmPhone = eventValue.trim();
+                        this.tellSomeoneCase.IAmPhone = eventValue.trim();
                         break;
                 }
                 break;
@@ -299,10 +307,10 @@ export default class TellSomeoneLwc extends LightningElement {
                 // eslint-disable-next-line default-case
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.communityOfConcernCase.ConcernedWhoFirstName = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoFirstName = eventValue.trim();
                         break;
                     case "lastname":
-                        this.communityOfConcernCase.ConcernedWhoLastName = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoLastName = eventValue.trim();
                         break;
                     case "email":
                         if (!eventValue) {
@@ -313,12 +321,12 @@ export default class TellSomeoneLwc extends LightningElement {
                         }
                         break;
                     case "phone":
-                        this.communityOfConcernCase.ConcernedWhoPhone = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoPhone = eventValue.trim();
                         break;
                 }
                 break;
             case "concernedwhatadditionalinfo":
-                this.communityOfConcernCase.ConcernedWhatAdditionalInfo = eventValue.trim();
+                this.tellSomeoneCase.ConcernedWhatAdditionalInfo = eventValue.trim();
                 break;
         }
     }
@@ -335,7 +343,7 @@ export default class TellSomeoneLwc extends LightningElement {
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
-                this.communityOfConcernCase.IAmEmail = emailValidationResults.emailAddress;
+                this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
                 this.validEmail = emailValidationResults.validEmail;
                 this.validEmailWarning = emailValidationResults.validEmailWarning;
                 if (this.validEmailWarning) {
@@ -345,7 +353,7 @@ export default class TellSomeoneLwc extends LightningElement {
                 }
                 break;
             case "concernedwhoinfo":
-                this.communityOfConcernCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
+                this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
                 this.validEmailWho = emailValidationResults.validEmail;
                 this.validEmailWarningWho = emailValidationResults.validEmailWarning;
                 if (this.validEmailWarningWho) {
@@ -377,10 +385,12 @@ export default class TellSomeoneLwc extends LightningElement {
 
     openNewForm() {
         if (window.location && window.location.search) {
-            this.searchParamsUrl.searchParams.set("bid", this.communityOfConcernCase.IAmBannerId);
-            this.searchParamsUrl.searchParams.set("sfid", this.communityOfConcernCase.IAmContactId);
+            this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
+            this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
             this.searchParamsUrl.searchParams.delete("submitted");
+            this.searchParamsUrl.searchParams.delete("nodocument");
         }
+        // eslint-disable-next-line no-restricted-globals
         location.replace(this.searchParamsUrl.toString());
     }
 
@@ -392,7 +402,7 @@ export default class TellSomeoneLwc extends LightningElement {
         this.submitCaseFail = false;
         try {
             this.handleShowSpinner();
-            await saveCase({formSelections: this.communityOfConcernCase}).then((result) => {
+            await saveCase({formSelections: this.tellSomeoneCase}).then((result) => {
                 this.submitCaseFail = !!result;
             });
         } catch (e) {

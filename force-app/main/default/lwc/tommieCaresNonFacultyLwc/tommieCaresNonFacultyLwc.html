@@ -291,23 +291,23 @@
                         </fieldset>
                     </template>
                     <!-- Behavior / Mental Health Alert -->
-                    <template lwc:if={behaviorMentalHealthGroup.length}>
+                    <template lwc:if={behaviorWellBeingGroup.length}>
                         <fieldset class="slds-m-top_medium alert-group">
                             <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <template for:each={behaviorMentalHealthGroup} for:item="behaviorMentalHealth">
-                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={behaviorMentalHealth.value}>
+                                    <template for:each={behaviorWellBeingGroup} for:item="behaviorWellBeing">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={behaviorWellBeing.value}>
                                             <input type="checkbox"
                                                    name="behaviorMentalHealthCheckboxes"
-                                                   id={behaviorMentalHealth.value}
-                                                   value={behaviorMentalHealth.value}
+                                                   id={behaviorWellBeing.value}
+                                                   value={behaviorWellBeing.value}
                                                    data-checkboxtype="cares"
                                                    onclick={reasonsCheckbox}
                                                    class="picklist-checkbox" />
-                                            <label class="slds-checkbox__label" for={behaviorMentalHealth.value}>
+                                            <label class="slds-checkbox__label" for={behaviorWellBeing.value}>
                                                 <span class="slds-checkbox_faux"></span>
-                                                <span class="picklist-checkbox-text">{behaviorMentalHealth.label}</span>
+                                                <span class="picklist-checkbox-text">{behaviorWellBeing.label}</span>
                                             </label>
                                         </div>
                                     </template>
@@ -365,13 +365,13 @@
 <!--&lt;!&ndash;                                            <a href="https://stthomas-advocate.symplicity.com/titleix_report/index.php/pid350778?" target="_blank"> Submit a Title IX Complaint | St. Thomas Conduct</a></p>&ndash;&gt;-->
 <!--                            </div>-->
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p>Behavior or Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_small">Behavior or Well-Being and Sense of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                                 <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
-                                <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_small">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>

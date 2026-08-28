@@ -20,19 +20,16 @@
 <!--        <p class="slds-m-vertical_x-small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>-->
         <template lwc:if={showFormAll}>
             <template lwc:if={isNotAnonymous}>
+                <h2>Reporter Information</h2>
+                <p class="slds-col slds-size_1-of-1 slds-m-bottom_none">You may leave information about yourself, or you may remain anonymous. If
+                    you do not provide your name and contact information, the university’s ability to respond may be limited.</p>
                 <fieldset>
-                    <legend><b>Reporter Information</b></legend>
-<!--                    <div class="slds-grid">-->
-                    <p class="slds-col slds-size_1-of-1 slds-m-bottom_none">You may leave information about yourself, or you may remain anonymous. If
-                        you do not provide your name and contact information, the university’s ability to respond may be limited.</p>
-<!--                    </div>-->
-<!--                    <div class="slds-grid slds-m-top_x-small slds-m-bottom_medium">-->
                     <div class="slds-grid slds-m-top_small">
                         <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12">
                             <div class="slds-form-element slds-m-bottom_medium">
                                 <label class="slds-form-element__label selection-labels form-required-label" for="bias-reporter-name-id">
                                     Your Name:</label>
-                                <p class="textarea-sublabel">Please provide your full name.</p>
+                                <p class="textarea-sublabel">Provide your full name.</p>
                                 <div class="slds-form-element__control">
                                     <lightning-input id="bias-reporter-name-id"
                                                      type="text"
@@ -78,12 +75,11 @@
                             </div>
                         </div>
                     </div>
-<!--                    </div>-->
                 </fieldset>
             </template>
             <fieldset class="slds-m-top_small">
-                <legend><b>Time and Location</b></legend>
-                <p class="slds-m-bottom_xx-small">Please provide the approximate date, time and location that this incident occurred.</p>
+<!--                <legend>Time and Location</legend>-->
+                <p class="slds-m-bottom_xx-small">Provide the approximate date, time and location that this incident occurred.</p>
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-right_medium">
                         <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-date-id">
@@ -123,9 +119,9 @@
                 </div>
                 <div class="slds-grid slds-m-bottom_small">
                     <div class="slds-form-element slds-col slds-large-size_11-of-12">
-                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-location-id">Location
-                            of Incident:</label>
-                        <p class="textarea-sublabel">Please provide as much detail about the location of this incident as possible.</p>
+                        <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-location-id">
+                            Location of Incident:</label>
+                        <p class="textarea-sublabel">Provide as much detail about the location of this incident as possible.</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea"
                                                 id="bias-report-location-id"
@@ -141,13 +137,13 @@
                 </div>
             </fieldset>
             <fieldset class="slds-m-top_small">
-                <legend><b>Parties Involved</b></legend>
+<!--                <legend>Parties Involved</legend>-->
 <!--                <div class="slds-m-top_x-small slds-m-bottom_medium">-->
                     <div class="slds-grid slds-grid_vertical">
                         <div class="slds-form-element slds-col slds-large-size_11-of-12 slds-m-bottom_medium">
                             <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-students-involved-id">
                                 Individuals Involved:</label>
-                            <p class="textarea-sublabel">Please list the names of all the individuals involved in this incident.</p>
+                            <p class="textarea-sublabel">List the names of all the individuals involved in this incident.</p>
                             <div class="slds-form-element__control">
                                 <lightning-textarea class="custom-textarea"
                                                     id="bias-report-students-involved-id"
@@ -227,14 +223,14 @@
                     </div>
 <!--                </div>-->
             </fieldset>
-            <div class="slds-m-top_medium slds-m-bottom_large">
-                <label class="heading-labels">Descriptive Information</label>
-                <div class="slds-grid slds-m-bottom_x-small">
+<!--            <div class="slds-m-top_medium slds-m-bottom_large">-->
+<!--                <label class="heading-labels">Descriptive Information</label>-->
+                <div class="slds-grid slds-m-top_x-small slds-m-bottom_x-small">
                     <div class="slds-form-element slds-col slds-large-size_11-of-12">
                         <label class="slds-form-element__label selection-labels form-required-label" for="bias-report-incident-description-id">
                             Incident Description:</label>
-                        <p class="textarea-sublabel">Please describe and be as specific about the incident with as much
-                            factual details as possible.<br>Include information about the nature of the incident
+                        <p class="textarea-sublabel">Describe and be as specific about the incident with as much
+                            factual details as possible.Include information about the nature of the incident
                             (e.g., physical assault, verbal assault, threats, written slurs, threatening communications, etc.).</p>
                         <div class="slds-form-element__control">
                             <lightning-textarea class="custom-textarea-tall"
@@ -249,11 +245,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+<!--            </div>-->
             <div class="slds-m-top_medium">
                 <div class="slds-form-element">
                     <label class="slds-form-element__label selection-labels" for="bias-report-attach-documents-id">
-                        <b>Attach Documents/Upload</b></label>
+                        Attach Documents/Upload</label>
                     <p class="textarea-sublabel">Upload any supporting documentation that you have for this incident.<br>
                         A total of {maxFileCount} files at a maximum of {maxFileSize}MB per file can be uploaded.<br>
                         Supported documents types: .csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx.</p>

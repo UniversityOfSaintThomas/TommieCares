@@ -47,17 +47,17 @@ abbr.slds-required {
 /*    font-size: 1rem !important;*/
 /*}*/
 
-.form-required-label::after {
-    content: "*";
-    color: #ea001e; /* Standard Salesforce error red */
-    font-weight: bold;
-    display: inline; /* Keeps it on the same line as the text */
-}
+/*.form-required-label::after {*/
+/*    content: "*";*/
+/*    color: #ea001e; !* Standard Salesforce error red *!*/
+/*    font-weight: bold;*/
+/*    display: inline; !* Keeps it on the same line as the text *!*/
+/*}*/
 
-.heading-labels {
-    font-size: 1rem !important;
-    font-weight: bold !important;
-}
+/*.heading-labels {*/
+/*    font-size: 1rem !important;*/
+/*    font-weight: bold !important;*/
+/*}*/
 
 lightning-button.submit_button {
     font-size: 1rem !important;

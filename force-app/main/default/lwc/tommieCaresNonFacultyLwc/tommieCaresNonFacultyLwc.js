@@ -35,7 +35,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     @track tommieHigh5Options = [];
     @track positiveAlertGroup = [];
     @track advisingGroup = [];
-    @track behaviorMentalHealthGroup = [];
+    @track behaviorWellBeingGroup = [];
     @track lifeCircumstanceGroup = [];
     @track formSubmitSelections = {
         AdvisorContactId: "",
@@ -63,7 +63,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         nonResponsiveOutreachCheck: false,
         // behaviorCheck: false,
         // mentalHealthCheck: false,
-        behaviorMentalHealthCheck: false,
+        behaviorWellBeingCheck: false,
         relationshipCheck: false,
         difficultyMeetingBasicNeedsCheck: false,
         financialConcernsCheck: false,
@@ -109,7 +109,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
         {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
-        {"Behavior Mental Health Alert": ["Behavior or Mental Health concerns", "Relationship violence/stalking", "Sense of belonging"]},
+        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging"]},
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
 
@@ -149,7 +149,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         return this.noStudentsFound && (!!this.bannerId || !!this.lastName || !!this.stThomasEmail);
     }
     get tellSomeoneWellBeingVisible() {
-        return !!(this.selectionsCheck.behaviorMentalHealthCheck || this.selectionsCheck.senseOfBelongingCheck);
+        return !!(this.selectionsCheck.behaviorWellBeingCheck || this.selectionsCheck.senseOfBelongingCheck);
     }
     get submitDisable() {
         return Object.values(this.formRequired).includes(true)
@@ -241,7 +241,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
         const groupMap = {
             "Positive Alert":         "positiveAlertGroup",
             "Advising Alert":               "advisingGroup",
-            "Behavior Mental Health Alert": "behaviorMentalHealthGroup",
+            "Behavior Well Being Alert": "behaviorWellBeingGroup",
             "Life Circumstances Alert":     "lifeCircumstanceGroup",
         };
 
@@ -283,8 +283,8 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
                 if (eventValue === "Non-Responsive to Outreach") {
                     this.selectionsCheck.nonResponsiveOutreachCheck = eventChecked;
                 }
-                if (eventValue === "Behavior or Mental Health concerns") {
-                    this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
+                if (eventValue === "Behavior or Well-Being Concern") {
+                    this.selectionsCheck.behaviorWellBeingCheck = eventChecked;
                     if(!this.tellSomeoneWellBeingVisible) {
                         this.tellSomeoneWellBeingSubmitDisable = true;
                     }
@@ -399,7 +399,7 @@ export default class TommieCaresNonFacultyLwc extends LightningElement {
 
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
-        this.behaviorMentalHealthGroup = [];
+        this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
         // this._incidentDate = "";
     }

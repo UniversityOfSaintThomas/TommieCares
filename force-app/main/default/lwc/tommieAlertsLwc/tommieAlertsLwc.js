@@ -46,7 +46,7 @@ export default class TommieAlertsLwc extends LightningElement {
     @track termAdvisorData = {};
     @track positiveAlertGroup = [];
     @track advisingGroup = [];
-    @track behaviorMentalHealthGroup = [];
+    @track behaviorWellBeingGroup = [];
     @track lifeCircumstanceGroup = [];
     @track formSubmitSelections = {
         currentTermId: "",
@@ -78,7 +78,7 @@ export default class TommieAlertsLwc extends LightningElement {
         attendanceAcademicCheck: false,
         missedAdvisingAppointmentCheck: false,
         nonResponsiveOutreachCheck: false,
-        behaviorMentalHealthCheck: false,
+        behaviorWellBeingCheck: false,
         relationshipCheck: false,
         difficultyMeetingBasicNeedsCheck: false,
         financialConcernsCheck: false,
@@ -115,7 +115,7 @@ export default class TommieAlertsLwc extends LightningElement {
                 "Missed Advising Appointment",
                 "Non-Responsive to Outreach"
             ]},
-        {"Behavior Mental Health Alert": ["Behavior or Mental Health concerns", "Relationship violence/stalking", "Sense of belonging",]},
+        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging",]},
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success",  "Other"]},
     ]
     passCourseOptions = [
@@ -158,11 +158,11 @@ export default class TommieAlertsLwc extends LightningElement {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     }
     get showAdditionalConcerns() {
-        const excluded = new Set(['high5Check', 'behaviorMentalHealthCheck', 'senseOfBelongingCheck', 'otherCheck']);
+        const excluded = new Set(['high5Check', 'behaviorWellBeingCheck', 'senseOfBelongingCheck', 'otherCheck']);
         return Object.entries(this.selectionsCheck).some(([key, value]) => !excluded.has(key) && value);
     }
     get tellSomeoneWellBeingVisible() {
-        return !!(this.selectionsCheck.behaviorMentalHealthCheck || this.selectionsCheck.senseOfBelongingCheck);
+        return !!(this.selectionsCheck.behaviorWellBeingCheck || this.selectionsCheck.senseOfBelongingCheck);
     }
     get submitDisable() {
         return Object.values(this.formRequired).includes(true)
@@ -353,7 +353,7 @@ export default class TommieAlertsLwc extends LightningElement {
         const groupMap = {
             "Positive Alert":         "positiveAlertGroup",
             "Advising Alert":               "advisingGroup",
-            "Behavior Mental Health Alert": "behaviorMentalHealthGroup",
+            "Behavior Well Being Alert": "behaviorWellBeingGroup",
             "Life Circumstances Alert":     "lifeCircumstanceGroup",
         };
 
@@ -411,8 +411,8 @@ export default class TommieAlertsLwc extends LightningElement {
                 if (eventValue === "Non-Responsive to Outreach") {
                     this.selectionsCheck.nonResponsiveOutreachCheck = eventChecked;
                 }
-                if (eventValue === "Behavior or Mental Health concerns") {
-                    this.selectionsCheck.behaviorMentalHealthCheck = eventChecked;
+                if (eventValue === "Behavior or Well-Being Concern") {
+                    this.selectionsCheck.behaviorWellBeingCheck = eventChecked;
                     if(!this.tellSomeoneWellBeingVisible) {
                         this.tellSomeoneWellBeingSubmitDisable = true;
                     }
@@ -555,7 +555,7 @@ export default class TommieAlertsLwc extends LightningElement {
         // this._incidentDate = "";
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
-        this.behaviorMentalHealthGroup = [];
+        this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
 
         this.template.querySelectorAll("input[type='checkbox']").forEach(check => {

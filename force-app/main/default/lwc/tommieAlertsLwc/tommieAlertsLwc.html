@@ -50,8 +50,7 @@
             <div class="slds-media__body regular-body-text">
                 <p class="slds-m-bottom_xx-small">Thank you for your submission, and for all you do both in the classroom and as an advisor.
                     You have a tremendous impact on each student’s experience.</p>
-                <p><i>You can submit another below, or close this
-                    window if you are done.</i></p>
+                <p><i>You can submit another below, or close this window if you are done.</i></p>
             </div>
         </div>
         <div class="slds-m-top_xx-large">
@@ -104,7 +103,7 @@
                 </div>
                 <div class="regular-body-text">
                     <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555">(651) 962-5555</a>.</p>
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555">(651)962-5555</a>.</p>
                     <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
                         individuals in order to provide additional support.<br>
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -173,7 +172,7 @@
                                 <fieldset class="slds-form-element">
                                     <legend class="slds-form-element__label element-sublabel">
                                     <!--<legend class="slds-form-element__label element-sublabel">-->
-                                        <span class="slds-text-nowrap">Select Tommie High 5 Reason(s):<abbr class="slds-required" title="required">*</abbr></span></legend>
+                                        <span class="slds-text-nowrap">Select Tommie High 5 Reason(s)<abbr class="slds-required" title="required">*</abbr></span></legend>
                                     <div class="slds-form-element__control slds-m-top_xx-small">
                                         <template for:each={tommieHigh5Options} for:item="high5">
                                             <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={high5.value}>
@@ -195,7 +194,7 @@
                                 </fieldset>
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                        <span class="slds-text-nowrap">Tommie High 5 details:<abbr class="slds-required" title="required">*</abbr></span></label>
+                                        <span class="slds-text-nowrap">Tommie High 5 details<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
                                         The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
                                     <div class="slds-form-element__control slds-m-left_xxx-small">
@@ -216,7 +215,7 @@
                     </template>
                     <!-- Advising Alert -->
                     <template lwc:if={advisingGroup.length}>
-                        <fieldset class="slds-m-top_medium alert-group">
+                        <fieldset class="slds-m-top_large alert-group">
                             <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
@@ -243,7 +242,7 @@
     <!--                                <div class="sub-content">-->
                                     <fieldset class="slds-form-element regular-body-text">
                                         <legend class="slds-form-element__label element-sublabel">
-                                            <span class="slds-text-nowrap">Please select academic concerns:<abbr class="slds-required" title="required">*</abbr></span></legend>
+                                            <span class="slds-text-nowrap">Please select academic concerns<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control slds-m-top_xx-small">
                                             <template for:each={academicOptions} for:item="academic">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={academic.value}>
@@ -269,7 +268,7 @@
                                 <template lwc:if={selectionsCheck.attendanceCheck}>
                                     <fieldset class="slds-form-element regular-body-text">
                                         <legend class="slds-form-element__label element-sublabel">
-                                            <span class="slds-text-nowrap">Please select attendance concerns:<abbr class="slds-required" title="required">*</abbr></span></legend>
+                                            <span class="slds-text-nowrap">Please select attendance concerns<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control">
                                             <template for:each={attendanceOptions} for:item="attendance">
                                                 <div class="slds-checkbox slds-p-bottom_xx-small slds-m-left_small" key={attendance.value}>
@@ -336,23 +335,23 @@
                         </fieldset>
                     </template>
                     <!-- Behavior / Mental Health Alert -->
-                    <template lwc:if={behaviorMentalHealthGroup.length}>
-                        <fieldset class="slds-m-top_medium alert-group">
+                    <template lwc:if={behaviorWellBeingGroup.length}>
+                        <fieldset class="slds-m-top_large alert-group">
                             <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Behavior/Mental Health Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
-                                    <template for:each={behaviorMentalHealthGroup} for:item="behaviorMentalHealth">
-                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={behaviorMentalHealth.value}>
+                                    <template for:each={behaviorWellBeingGroup} for:item="behaviorWellBeing">
+                                        <div class="slds-checkbox slds-p-around_x-small slds-m-around_xx-small picklist-checkbox-options" key={behaviorWellBeing.value}>
                                             <input type="checkbox"
-                                                   name="behaviorMentalHealthCheckboxes"
-                                                   id={behaviorMentalHealth.value}
-                                                   value={behaviorMentalHealth.value}
+                                                   name="behaviorWellBeingCheckboxes"
+                                                   id={behaviorWellBeing.value}
+                                                   value={behaviorWellBeing.value}
                                                    data-checkboxtype="cares"
                                                    onclick={reasonsCheckbox}
                                                    class="picklist-checkbox"/>
-                                            <label class="slds-checkbox__label" for={behaviorMentalHealth.value}>
+                                            <label class="slds-checkbox__label" for={behaviorWellBeing.value}>
                                                 <span class="slds-checkbox_faux"></span>
-                                                <span class="picklist-checkbox-text">{behaviorMentalHealth.label}</span>
+                                                <span class="picklist-checkbox-text">{behaviorWellBeing.label}</span>
                                             </label>
                                         </div>
                                     </template>
@@ -402,13 +401,13 @@
 <!--                                    No advisors will be copied or notified.</p>-->
 <!--                            </div>-->
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p>Behavior or Mental Health and Sense Of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_xx-small">Behavior or Well-Being and Sense of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
-                                <p>Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_xx-small">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
                             </div>
@@ -416,7 +415,7 @@
                     </template>
                     <!-- Life Circumstances Alert -->
                     <template lwc:if={lifeCircumstanceGroup.length}>
-                        <fieldset class="slds-m-top_medium alert-group">
+                        <fieldset class="slds-m-top_large alert-group">
                             <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Life Circumstances Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
@@ -475,7 +474,7 @@
                         </fieldset>
                     </template>
                     <template lwc:if={showAdditionalConcerns}>
-                        <div class="alert-group">
+                        <div class="slds-m-top_medium alert-group">
                             <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
                             <div class="slds-form-element">
                                 <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
@@ -511,9 +510,9 @@
                         </div>
                     </template>
                 </div>
-                <div class="slds-m-vertical_medium regular-body-text">
-                    <p class="slds-m-bottom_small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
-                    <p class="slds-m-bottom_small">To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
+                <div class="slds-m-top_x-large regular-body-text">
+                    <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
+                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
                 </div>
 
                 <lightning-button

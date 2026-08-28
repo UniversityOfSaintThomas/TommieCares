@@ -295,17 +295,14 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     submittedUrl() {
         this.searchParamsUrl = new URL(this.tellSomeoneParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
+        if (this.saveDocumentsFail) {
+            this.searchParamsUrl.searchParams.set("nodocument", "true");
+        }
         return this.searchParamsUrl;
     }
 
     saveDocumentsFail = false;
     submitTitleIxIncidentFormFail = false;
-    // attachDocumentResponse = {
-    //     Status: "",
-    //     SupportingDocumentUrl: "",
-    //     SupportingDocumentId: ""
-    // }
-    // formReportNumber = "";
 
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
@@ -327,30 +324,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
                 console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
                 console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
-
-            // const supportingDocumentName = 'Advocate Title IX Incident';
-            // try {
-            //     let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
-            //
-            //     if (saveSupportingDocumentsResults.Status === 'success') {
-            //         this.attachDocumentResponse = {
-            //             Status: saveSupportingDocumentsResults.Status,
-            //             SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
-            //             SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
-            //         }
-            //
-            //         this.titleIxIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-            //     } else if (saveSupportingDocumentsResults.Status === 'error') {
-            //         this.saveDocumentsFail = true;
-            //     }
-            //
-            //     console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
-            //     console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
-            //
-            // } catch (e) {
-            //     console.log("Save documents error: " + JSON.stringify(e));
-            //     this.saveDocumentsFail = true;
-            // }
         }
 
         // if (!this.saveDocumentsFail) {
@@ -373,6 +346,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         /*START TEST INPUTS*/
         this.submitTitleIxIncidentFormFail = true;
         formReportNumber = "TEST-123456";
+        this.saveDocumentsFail = false;
         /*END TEST INPUTS*/
 
         if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && attachDocumentResponse.SupportingDocumentUrl) {
@@ -391,14 +365,16 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             }
         }
 
-        // if (this.saveDocumentsFail || this.submitTitleIxIncidentFormFail) {
-        //     this.handleHideSpinner();
-        //     eventField.scrollIntoView({
-        //         behavior: 'smooth',
-        //     });
-        // } else {
-        //     this.handleHideSpinner();
-        // }
+        if (this.submitTitleIxIncidentFormFail) {
+            this.handleHideSpinner();
+            eventField.scrollIntoView({
+                behavior: 'smooth',
+            });
+        } else {
+            this.handleHideSpinner();
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
+        }
 
         /*START TEST INPUTS*/
         this.handleHideSpinner();

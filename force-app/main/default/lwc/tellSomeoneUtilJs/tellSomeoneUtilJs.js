@@ -129,7 +129,6 @@ const attachedDocumentsSave = async (apexMethod, attachDocuments, supportingDocu
         } else if (saveSupportingDocumentsResults.Status === 'error') {
             saveDocumentsFail = true;
         }
-
     } catch (e) {
         console.log("Save documents error: " + JSON.stringify(e));
         saveDocumentsFail = true;
