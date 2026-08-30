@@ -4,37 +4,53 @@
 
 <!-- Tell Someone Lwc -->
 <template>
-    <div id="tellsomeonelwcform" data-form="tellsomeonelwcform">
-        <div class="case-submitted">
-            <template lwc:if={documentAttachFail}>
-                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="utility:warning"
-                                        alternative-text="save documents error"
-                                        title="save documents error"
-                                        size="small">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <p>Your submission was successful but there was a problem saving your documents.
-                            Please contact the <a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/index.html" target=_blank>Dean of Students Office </a>
-                            if you want to continue to submit documents related to your submission.</p>
+    <div id="tellsomeonelwcform" data-form="tellsomeonelwcform" class="tellsomeonelwcform">
+<!--        <div class="case-submitted">-->
+            <template lwc:if={caseSubmittedCheck}>
+                <div lwc:if={formSubmitError} class="slds-m-bottom_xx-large">
+                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:warning"
+                                            alternative-text="form submit error"
+                                            title="form submit error"
+                                            size="small">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <p>There was a problem with your submission. Please contact <a href="mailto: salesforce@stthomas.edu" target="_blank">salesforce@stthomas.edu</a>.</p>
+                        </div>
                     </div>
                 </div>
-            </template>
-            <div lwc:if={caseSubmittedCheck} class="slds-m-bottom_large">
-                <p class="slds-m-bottom_large">
-                    <i><span class="text-larger">Thank you</span> for submitting a concern via the Tell Someone
-                        page. We appreciate your commitment to fostering a respectful, safe, and supportive campus
-                        environment. A designated staff member will follow up on your report in a timely manner.
-                        Please know that all concerns are taken seriously and will be addressed in accordance with
-                        university policies and practices. Based on the nature of the report, it is possible that an
-                        investigator may reach out to you for additional information. While our ability to share
-                        specific updates may be limited due to privacy considerations, we want to assure you that
-                        your input is valued and helps us respond appropriately. Please note that if you made an
-                        anonymous report, the university’s ability to respond may be limited.
-                    </i>
-                </p>
+                <div lwc:else class="slds-m-bottom_xx-large">
+                    <template lwc:if={documentAttachFail}>
+                        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                alternative-text="save documents error"
+                                                title="save documents error"
+                                                size="small">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p>Your submission was successful but there was a problem saving your documents.
+                                    Please contact the <a href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/index.html" target=_blank>Dean of Students Office </a>
+                                    if you want to continue to submit documents related to this submission.</p>
+                            </div>
+                        </div>
+                    </template>
+                    <p class="slds-m-bottom_none">
+                        <i><b>Thank you</b> for submitting a concern via the Tell Someone
+                            page. We appreciate your commitment to fostering a respectful, safe, and supportive campus
+                            environment. A designated staff member will follow up on your report in a timely manner.
+                            Please know that all concerns are taken seriously and will be addressed in accordance with
+                            university policies and practices. Based on the nature of the report, it is possible that an
+                            investigator may reach out to you for additional information. While our ability to share
+                            specific updates may be limited due to privacy considerations, we want to assure you that
+                            your input is valued and helps us respond appropriately. Please note that if you made an
+                            anonymous report, the university’s ability to respond may be limited.
+                        </i>
+                    </p>
+                </div>
                 <p class="slds-m-bottom_small">
                     <lightning-button variant="brand"
                                       label="Enter another concern"
@@ -42,33 +58,32 @@
                                       onclick={openNewForm}>
                     </lightning-button>
                 </p>
-            </div>
+            </template>
             <div lwc:else class="slds-m-bottom_large">
-<!--                    <p class="slds-m-bottom_x-small"><b><i>Online reports are reviewed during regular business hours. If you-->
-<!--                        believe someone is at risk of immediate harm, call <a href="tel:+911">911</a> or the Public Safety emergency line-->
-<!--                        at <a href="tel:+16519625555">(651) 962-5555</a>.</i></b></p>-->
-<!--                    <p class="slds-m-bottom_small"><b><i>Students, faculty and staff also have the option to report a-->
-<!--                        concern directly to <a href="https://www.stthomas.edu/public-safety/" target=_blank>Public Safety</a>, the <a-->
-<!--                                href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/" target=_blank>Dean of Students Office</a>, <a-->
-<!--                                href="https://one.stthomas.edu/sites/human-resources/SitePageModern/141920/home" target=_blank>Human Resources</a> or <a-->
-<!--                                href="https://secure.ethicspoint.com/domain/media/en/gui/21998/index.html" target=_blank>Ethicspoint</a>. Dougherty Family-->
-<!--                        College students also have the option to report directly to Brad Pulles, Associate Dean of DFC (<a href="mailto:brad.pulles@stthomas.edu">brad.pulles@stthomas.edu</a>).</i></b></p>-->
-<!--                    <p class="slds-m-bottom_xx-small"><b>Confidentiality</b></p>-->
-<!--                    <p class="slds-m-bottom_x-small">Details of reports, investigations, and resolutions will be kept confidential-->
-<!--                        to the extent practical, consistent with the need to investigate and address any adverse impact on the-->
-<!--                        affected individual and broader community. Because of confidentiality restrictions, reporting parties-->
-<!--                        generally will not receive details regarding the resolution of their report.</p>-->
-<!--                    <p class="slds-m-bottom_small">St. Thomas prohibits retaliation against community members who report concerns in good faith.</p>-->
-<!--                    <p class="slds-m-vertical_xx-small"><b>What happens after I submit a report of concern?</b></p>-->
-<!--                    <p class="slds-m-bottom_x-small">A staff member from the Dean of Students Office, Title IX, or Human Resources-->
-<!--                        will reach out to the reporting party. Dougherty Family College students will be contacted by the-->
-<!--                        Associate Dean of Students at DFC. Our goal is to better understand the incident, ensure that resources-->
-<!--                        and support are offered, and determine the appropriate resolution options for the particular report.</p>-->
-<!--                    <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able-->
-<!--                        to respond directly to you but will assess the information submitted and consider appropriate next-->
-<!--                        steps. St. Thomas is limited in steps it can take in the absence of a reporting party.</p>-->
-<!--                    <h2><b>Tell Us About Your Concerns</b></h2>-->
-                <!--                    <p class="slds-m-bottom_xx-small"><b>Tell Us About Your Concerns</b></p>-->
+                <p class="slds-m-bottom_x-small"><b><i>Online reports are reviewed during regular business hours. If you
+                    believe someone is at risk of immediate harm, call <a href="tel:+911">911</a> or the Public Safety emergency line
+                    at <a href="tel:+16519625555">(651) 962-5555</a>.</i></b></p>
+                <p class="slds-m-bottom_small"><b><i>Students, faculty and staff also have the option to report a
+                    concern directly to <a href="https://www.stthomas.edu/public-safety/" target=_blank>Public Safety</a>, the <a
+                            href="https://www.stthomas.edu/student-affairs/departments/dean-of-students/" target=_blank>Dean of Students Office</a>, <a
+                            href="https://one.stthomas.edu/sites/human-resources/SitePageModern/141920/home" target=_blank>Human Resources</a> or <a
+                            href="https://secure.ethicspoint.com/domain/media/en/gui/21998/index.html" target=_blank>Ethicspoint</a>. Dougherty Family
+                    College students also have the option to report directly to Brad Pulles, Associate Dean of DFC (<a href="mailto:brad.pulles@stthomas.edu">brad.pulles@stthomas.edu</a>).</i></b></p>
+                <h2 class="slds-m-bottom_xx-small">Confidentiality</h2>
+                <p class="slds-m-bottom_x-small">Details of reports, investigations, and resolutions will be kept confidential
+                    to the extent practical, consistent with the need to investigate and address any adverse impact on the
+                    affected individual and broader community. Because of confidentiality restrictions, reporting parties
+                    generally will not receive details regarding the resolution of their report.</p>
+                <p class="slds-m-bottom_small">St. Thomas prohibits retaliation against community members who report concerns in good faith.</p>
+                <h2 class="slds-m-vertical_xx-small">What happens after I submit a report of concern?</h2>
+                <p class="slds-m-bottom_x-small">A staff member from the Dean of Students Office, Title IX, or Human Resources
+                    will reach out to the reporting party. Dougherty Family College students will be contacted by the
+                    Associate Dean of Students at DFC. Our goal is to better understand the incident, ensure that resources
+                    and support are offered, and determine the appropriate resolution options for the particular report.</p>
+                <p class="slds-m-bottom_small">If you make an anonymous report using this form, St. Thomas will not be able
+                    to respond directly to you but will assess the information submitted and consider appropriate next
+                    steps. St. Thomas is limited in steps it can take in the absence of a reporting party.</p>
+                <h2 class="slds-m-bottom_x-small">Tell Us About Your Concerns</h2>
                 <div class="slds-grid">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12">
                         <label class="slds-form-element__label selection-labels" for="i-am-selection-id">
@@ -134,7 +149,7 @@
                     </div>
                 </template>
                 <div lwc:if={showWhatTommieAlerts} class="slds-m-top_large">
-                    <c-tommie-cares-lwc param-url={paramUrl} community-of-concern-lwc="advisor_info_hide"></c-tommie-cares-lwc>
+                    <c-tommie-alerts-lwc param-url={paramUrl} tell-someone-lwc="advisor_info_hide"></c-tommie-alerts-lwc>
                 </div>
                 <template lwc:if={showWhatWellBeing.show}>
                     <div class="slds-m-vertical_medium">
@@ -363,11 +378,11 @@
                             </lightning-icon>
                         </div>
                         <div class="slds-media__body">
-                            <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
+                            <p>There was a problem with your submission. Please contact <a href="mailto: salesforce@stthomas.edu" target="_blank">salesforce@stthomas.edu</a> to report this error.</p>
                         </div>
                     </div>
                 </template>
-            </div>
+<!--            </div>-->
 <!--                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-m-bottom_medium">-->
 <!--                    <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">-->
 <!--                    <div class="slds-m-top_medium link-text-size">-->

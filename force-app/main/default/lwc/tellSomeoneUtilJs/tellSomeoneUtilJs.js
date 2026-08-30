@@ -1,6 +1,9 @@
 /**
  * Created by nguy0092 on 6/23/2026.
  */
+import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 
 const emailValidation = (emailAddress) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -115,17 +118,17 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
     return attachDocumentResults;
 }
 
-const attachedDocumentsSave = async (apexMethod, attachDocuments, supportingDocumentName, attachDocumentResponse, formValues) =>  {
+const attachedDocumentsSave = async (attachDocuments, supportingDocumentName, attachDocumentResponse/*, formValues*/) =>  {
     let saveDocumentsFail = false;
 
     try {
-        let saveSupportingDocumentsResults = await apexMethod({attachedDocumentsList: attachDocuments, supportingDocumentName: supportingDocumentName});
+        let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: attachDocuments, supportingDocumentName: supportingDocumentName});
 
         if (saveSupportingDocumentsResults.Status === 'success') {
             attachDocumentResponse.Status = saveSupportingDocumentsResults.Status;
             attachDocumentResponse.SupportingDocumentUrl = saveSupportingDocumentsResults.Url;
             attachDocumentResponse.SupportingDocumentId = saveSupportingDocumentsResults.SupportingDocumentId;
-            formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            // formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
         } else if (saveSupportingDocumentsResults.Status === 'error') {
             saveDocumentsFail = true;
         }
@@ -137,4 +140,68 @@ const attachedDocumentsSave = async (apexMethod, attachDocuments, supportingDocu
     return saveDocumentsFail;
 }
 
-export { emailValidation, attachDocumentsUpload, attachedDocumentsSave };
+const finalizeSupportingDocument = async (saveDocumentsFail, submitFormFail, attachDocumentResponse, reportNumber) => {
+    if (!saveDocumentsFail && !submitFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+        try {
+            await updateSupportingDocument({supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: reportNumber});
+        } catch (e) {
+            console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        }
+    } else if (!saveDocumentsFail && submitFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+        try {
+            await deleteSupportingDocument({supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
+        } catch (e) {
+            console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+        }
+    }
+};
+
+const tommieAlertsTellSomeoneSubmission = async (template, formSubmitSelections,
+                                            {selectorName, visible, documentTypeLabel, submitApexMethod, formSubmitSelectionsKey}) => {
+    let formValues = {};
+    let documents = [];
+    let attachDocumentResponse = {
+        Status: "",
+        SupportingDocumentUrl: "",
+        SupportingDocumentId: ""
+    };
+    let reportNumber = "";
+    let saveDocumentsFail = false;
+    let submitFormFail = false;
+
+    if (visible) {
+        const childComponent = template.querySelector(selectorName);
+
+        if (childComponent) {
+            formValues = JSON.parse(JSON.stringify(childComponent.formToTommieAlerts));
+            documents = JSON.parse(JSON.stringify(childComponent.documentsToTommieAlerts));
+        }
+
+        if (formValues && Object.keys(formValues).length > 0) {
+            if (documents.length > 0) {
+                saveDocumentsFail = await attachedDocumentsSave(documents, documentTypeLabel, attachDocumentResponse);
+                formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            }
+
+            if (submitApexMethod) {
+                reportNumber = await submitApexMethod({formValues: JSON.stringify(formValues)});
+            }
+
+            /*START TEST FOR TOMMIE ALERTS SUBMIT*/
+            // this.submitTitleIxIncidentFormFail = true;
+            reportNumber = "This is a yes!";
+            /*END TEST FOR TOMMIE ALERTS SUBMIT*/
+
+            formSubmitSelections[formSubmitSelectionsKey] = reportNumber;
+            submitFormFail = !reportNumber;
+
+            await finalizeSupportingDocument(saveDocumentsFail, submitFormFail, attachDocumentResponse, reportNumber);
+        }
+    }
+
+    return {formValues, documents, attachDocumentResponse, reportNumber, saveDocumentsFail, submitFormFail};
+};
+
+
+
+export { emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument, tommieAlertsTellSomeoneSubmission };

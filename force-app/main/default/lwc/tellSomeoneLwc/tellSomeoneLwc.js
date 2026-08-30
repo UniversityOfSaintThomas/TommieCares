@@ -26,6 +26,7 @@ export default class TellSomeoneLwc extends LightningElement {
     searchParamsUrl;
     paramsString;
     caseSubmittedCheck = false;
+    formSubmitError = false;
     documentAttachFail = false;
 
     @track iAmOptions = [];
@@ -140,17 +141,22 @@ export default class TellSomeoneLwc extends LightningElement {
                     if (!this.paramSfId) this.paramSfId = value;
                     break;
                 case "submitted":
-                    if (value === "true") this.caseSubmittedCheck = true;
+                    if (value === "true") this.caseSubmittedCheck = true
+                    break
+                case "submitvalid":
+                    if (value === "false") this.formSubmitError = true;
                     break;
                 case "nodocument":
-                    if (value === "true") this.documentAttachFail = true
+                    if (value === "true") this.documentAttachFail = true;
+                    break
             }
         }
     }
 
     // rendered = false;
+    renderedCount = 1;
     // renderedCallback() {
-    //     if (!this.rendered) {
+    //     // if (!this.rendered) {
     //         window.scrollTo({
     //             top: 0,
     //             behavior: 'smooth'
@@ -165,7 +171,8 @@ export default class TellSomeoneLwc extends LightningElement {
     //         //         });
     //         //     }
     //         // }
-    //         this.rendered = !this.rendered;
+    //         // this.rendered = !this.rendered;
+    //     console.log("rendered count: "+this.renderedCount);
     //     }
     // }
 
@@ -178,7 +185,6 @@ export default class TellSomeoneLwc extends LightningElement {
                 if (this.paramPageType === "public") {
                     for (const types of removeTypes) {
                         const index = this.iAmOptions.findIndex(option => option.label === types);
-
                         if (index !== -1) {
                             this.iAmOptions.splice(index, 1);
                         }
@@ -226,6 +232,7 @@ export default class TellSomeoneLwc extends LightningElement {
             if (window.location && window.location.search) {
                 this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
                 this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
+                // eslint-disable-next-line @lwc/lwc/no-api-reassignments
                 this.paramUrl = this.searchParamsUrl.toString();
                 // console.log("paramUrl: " + this.paramUrl)
             }
@@ -367,7 +374,6 @@ export default class TellSomeoneLwc extends LightningElement {
     }
 
     showSpinner = false;
-
     handleShowSpinner() {
         this.showSpinner = true;
     }
@@ -376,26 +382,22 @@ export default class TellSomeoneLwc extends LightningElement {
         this.showSpinner = false;
     }
 
-    submittedUrl() {
-        if (window.location) {
-            this.searchParamsUrl.searchParams.set("submitted", "true");
-            return this.searchParamsUrl;
-        }
+    get submittedUrl() {
+        this.searchParamsUrl.searchParams.set("submitted", "true");
+        return this.searchParamsUrl;
     }
 
     openNewForm() {
-        if (window.location && window.location.search) {
-            this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
-            this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
-            this.searchParamsUrl.searchParams.delete("submitted");
-            this.searchParamsUrl.searchParams.delete("nodocument");
-        }
+        this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
+        this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
+        this.searchParamsUrl.searchParams.delete("submitted");
+        this.searchParamsUrl.searchParams.delete("submitvalid");
+        this.searchParamsUrl.searchParams.delete("nodocument");
         // eslint-disable-next-line no-restricted-globals
         location.replace(this.searchParamsUrl.toString());
     }
 
     submitCaseFail = false;
-
     async submitCase(event) {
         // console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
         const eventField = event.currentTarget;
@@ -417,7 +419,8 @@ export default class TellSomeoneLwc extends LightningElement {
             });
         } else {
             this.handleHideSpinner();
-            location.replace(this.submittedUrl());
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl);
         }
     }
 

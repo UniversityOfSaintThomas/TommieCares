@@ -4,11 +4,11 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import biasReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getBiasIncidentOptions";
-import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
 // import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
-import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
+// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneBiasIncidentReport extends LightningElement {
     @api tellSomeoneReportType = "";
@@ -366,25 +366,23 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
 
     saveDocumentsFail = false;
     submitBiasIncidentFormFail = false;
-    attachDocumentResponse = {
-        Status: "",
-        SupportingDocumentUrl: "",
-        SupportingDocumentId: ""
-    }
-    formReportNumber = "";
-
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitBiasIncidentFormFail = false;
+        let attachDocumentResponse = {
+            Status: "",
+            SupportingDocumentUrl: "",
+            SupportingDocumentId: ""
+        }
+        let formReportNumber = "";
 
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
-            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Bias Incident',
-                this.attachDocumentResponse, this.biasIncidentFormValues);
-
-            console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Bias Incident', attachDocumentResponse);
+            this.biasIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
             console.log('this.biasIncidentFormValues: ', JSON.stringify(this.biasIncidentFormValues));
 
             // const supportingDocumentName = 'Advocate Bias Incident';
@@ -435,24 +433,27 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
 
         /*START TEST INPUTS*/
         this.submitBiasIncidentFormFail = true;
-        this.formReportNumber = "TEST-aaaaa";
+        formReportNumber = "";
         /*END TEST INPUTS*/
 
-        if (!this.saveDocumentsFail && !this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber})
-                console.log("updateSupportingDocument Path");
-            } catch (e) {
-                console.log("updateSupportingDocument error: " + JSON.stringify(e));
-            }
-        } else if (!this.saveDocumentsFail && this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
-                console.log("deleteSupportingDocument Path");
-            } catch (e) {
-                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-            }
-        }
+        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitBiasIncidentFormFail, attachDocumentResponse, formReportNumber);
+
+        // if (!this.saveDocumentsFail && !this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber})
+        //         this.biasIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+        //         console.log("updateSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // } else if (!this.saveDocumentsFail && this.submitBiasIncidentFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
+        //         console.log("deleteSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // }
 
         // if (this.saveDocumentsFail || this.submitBiasIncidentFormFail) {
         //     this.handleHideSpinner();

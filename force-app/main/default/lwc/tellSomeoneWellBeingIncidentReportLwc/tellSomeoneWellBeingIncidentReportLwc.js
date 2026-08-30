@@ -4,11 +4,11 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import wellBeingReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getWellBeingOptions";
-import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
-import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
-import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
+// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+// import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
+// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
     @api tellSomeoneReportType = "";
@@ -352,31 +352,23 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
     saveDocumentsFail = false;
     submitWellBeingFormFail = false;
-    attachDocumentResponse = {
-        Status: "",
-        SupportingDocumentUrl: "",
-        SupportingDocumentId: ""
-    }
-    formReportNumber = "";
-
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
         this.submitWellBeingFormFail = false;
-        this.attachDocumentResponse = {
+        let attachDocumentResponse = {
             Status: "",
             SupportingDocumentUrl: "",
             SupportingDocumentId: ""
         }
-        this.formReportNumber = "";
+        let formReportNumber = "";
 
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
-            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Well Being Incident',
-                this.attachDocumentResponse, this.wellBeingIncidentFormValues);
-
-            console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
+            this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
+            this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
             console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
 
             // const supportingDocumentName = 'Advocate Well Being Incident';
@@ -430,21 +422,23 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         this.formReportNumber = "TEST-xxxxx";
         /*END TEST INPUTS*/
 
-        if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
-                console.log("updateSupportingDocument Path");
-            } catch (e) {
-                console.log("updateSupportingDocument error: " + JSON.stringify(e));
-            }
-        } else if (!this.saveDocumentsFail && this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
-                console.log("deleteSupportingDocument Path");
-            } catch (e) {
-                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-            }
-        }
+        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
+
+        // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
+        //         console.log("updateSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // } else if (!this.saveDocumentsFail && this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
+        //     try {
+        //         await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
+        //         console.log("deleteSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // }
         // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
         //     try {
         //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {

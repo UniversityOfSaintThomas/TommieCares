@@ -270,14 +270,11 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static void updateSupportingDocument(String supportingDocumentId, String advocateReportNumber) {
-        String updateStatus = '';
-
         if (String.isNotBlank(supportingDocumentId) && String.isNotBlank(advocateReportNumber)) {
             Id validSupportDocumentId;
             try {
                 validSupportDocumentId = Id.valueOf(supportingDocumentId);
             } catch (System.StringException e) {
-                updateStatus = 'failed';
                 System.debug('updateSupportingDocument invalid Id: ' + e);
                 return;
             }
@@ -285,13 +282,10 @@ public without sharing class TellSomeoneLwcController {
             try {
                 Supporting_Document__c supportingDocument = new Supporting_Document__c(
                         Id = validSupportDocumentId,
-                        Supporting_Document_Unique_External_ID__c = advocateReportNumber
-                );
+                        Supporting_Document_Unique_External_ID__c = advocateReportNumber);
                 update supportingDocument;
-                updateStatus = 'success';
-                System.debug('updateSupportingDocument status: ' + updateStatus);
+                System.debug('updateSupportingDocument status: success ' + validSupportDocumentId);
             } catch (DmlException e) {
-                updateStatus = 'failed';
                 System.debug('updateSupportingDocument DML error: ' + e);
             }
         }
@@ -299,28 +293,38 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static void deleteSupportingDocument(String supportingDocumentId) {
-        String deleteStatus = '';
-
         if (String.isNotBlank(supportingDocumentId)) {
             Id validSupportDocumentId;
             try {
                 validSupportDocumentId = Id.valueOf(supportingDocumentId);
             } catch (System.StringException e) {
-                deleteStatus = 'failed';
                 System.debug('deleteSupportingDocument invalid Id: ' + e);
                 return;
             }
+            // Enqueue async delete w/ retry
+            System.enqueueJob(new SupportingDocumentDeleteJob(validSupportDocumentId, 0));
+        }
+    }
 
+    public class SupportingDocumentDeleteJob implements Queueable {
+        private final Id docId;
+        private final Integer attempt;
+        private final Integer MAX_ATTEMPTS = 3;
+
+        public SupportingDocumentDeleteJob(Id docId, Integer attempt) {
+            this.docId = docId;
+            this.attempt = attempt;
+        }
+
+        public void execute(QueueableContext context) {
             try {
-                Supporting_Document__c supportingDocument = new Supporting_Document__c(
-                        Id = validSupportDocumentId
-                );
-                delete supportingDocument;
-                deleteStatus = 'success';
-                System.debug('deleteSupportingDocument status: ' + deleteStatus);
+                delete new Supporting_Document__c(Id = docId);
+                System.debug('deleteSupportingDocument success: ' + docId);
             } catch (DmlException e) {
-                deleteStatus = 'failed';
-                System.debug('deleteSupportingDocument DML error: ' + e);
+                System.debug('deleteSupportingDocument DML error (attempt ' + attempt + '): ' + e);
+                if (attempt + 1 < MAX_ATTEMPTS) {
+                    System.enqueueJob(new SupportingDocumentDeleteJob(docId, attempt + 1));
+                }
             }
         }
     }

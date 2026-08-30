@@ -4,11 +4,11 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import titleIxReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getTitleIxReportingOptions";
-import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
-import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
-import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-import {emailValidation, attachDocumentsUpload, attachedDocumentsSave} from "c/tellSomeoneUtilJs";
+// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
+// import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
+// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
+// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
+import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElement {
     //From parent component
@@ -251,11 +251,10 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     get showAttachDocumentExcludeName() {
         return this.attachDocumentsExclude.length !== 0;
     }
-    acceptedExtensionTypes = ".csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx"; //[".csv", ".doc", ".docx", ".jpg", ".jpeg", ".pdf", ".png", ".txt", ".xls", ".xlsx"];
+    acceptedExtensionTypes = ".csv, .doc, .docx, .jpg, .jpeg, .pdf, .png, .txt, .xls, .xlsx";
     acceptedMimeTypes = ["text/csv", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "image/jpeg", "application/pdf", "image/png", "text/plain", "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
-
     @track attachDocuments = [];
     @track attachDocumentsExclude = [];
     fileIndex = 0;
@@ -283,7 +282,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     }
 
     showSpinner = false;
-
     handleShowSpinner() {
         this.showSpinner = true;
     }
@@ -292,18 +290,21 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         this.showSpinner = false;
     }
 
-    submittedUrl() {
+    get submittedUrl() {
         this.searchParamsUrl = new URL(this.tellSomeoneParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
+        if (this.submitTitleIxIncidentFormFail) {
+            this.searchParamsUrl.searchParams.set("submitvalid", "false");
+        }
         if (this.saveDocumentsFail) {
             this.searchParamsUrl.searchParams.set("nodocument", "true");
         }
         return this.searchParamsUrl;
     }
 
+    submitLimit = 0;
     saveDocumentsFail = false;
     submitTitleIxIncidentFormFail = false;
-
     async submitFormHandler(event) {
         const eventField = event.currentTarget;
         this.saveDocumentsFail = false;
@@ -319,11 +320,10 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
         if (this.attachDocuments.length > 0) {
 
-            this.saveDocumentsFail = await attachedDocumentsSave(saveSupportingDocuments, this.attachDocuments, 'Advocate Title IX Incident',
-                attachDocumentResponse, this.titleIxIncidentFormValues);
-
-                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+            this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Title IX Incident', attachDocumentResponse);
+            this.titleIxIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
+            console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
         }
 
         // if (!this.saveDocumentsFail) {
@@ -345,35 +345,38 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
         /*START TEST INPUTS*/
         this.submitTitleIxIncidentFormFail = true;
+        this.submitLimit++;
         formReportNumber = "TEST-123456";
         this.saveDocumentsFail = false;
         /*END TEST INPUTS*/
 
-        if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await updateSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: formReportNumber});
-                console.log("updateSupportingDocument Path");
-            } catch (e) {
-                console.log("updateSupportingDocument error: " + JSON.stringify(e));
-            }
-        } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && attachDocumentResponse.SupportingDocumentUrl) {
-            try {
-                await deleteSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
-                console.log("deleteSupportingDocument Path");
-            } catch (e) {
-                console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-            }
-        }
+        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
 
-        if (this.submitTitleIxIncidentFormFail) {
+        // if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.titleIxIncidentFormValues.salesforce_support_documents) {
+        //     try {
+        //         await updateSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: formReportNumber});
+        //         console.log("updateSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && this.titleIxIncidentFormValues.salesforce_support_documents) {
+        //     try {
+        //         await deleteSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
+        //         console.log("deleteSupportingDocument Path");
+        //     } catch (e) {
+        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
+        //     }
+        // }
+
+        if (this.submitTitleIxIncidentFormFail && this.submitLimit < 2) {
             this.handleHideSpinner();
-            eventField.scrollIntoView({
-                behavior: 'smooth',
-            });
+            // eventField.scrollIntoView({
+            //     behavior: 'smooth',
+            // });
         } else {
             this.handleHideSpinner();
             // eslint-disable-next-line no-restricted-globals
-            location.replace(this.submittedUrl());
+            location.replace(this.submittedUrl);
         }
 
         /*START TEST INPUTS*/
