@@ -1,8 +1,8 @@
 /**
- * Created by nguy0092 on 10/14/2024.
+ * Created by nguy0092 on 8/30/2026.
  */
 
-public without sharing class TommieAlertsLwcController {
+public without sharing class TommieAlertsAdvisingStudentLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTommieCaresPicklists() {
@@ -10,8 +10,6 @@ public without sharing class TommieAlertsLwcController {
 
         result.put('tommieCaresReasons', getPicklistOptions(Case.Tommie_Alert_Primary_Reason__c));
         result.put('tommieHigh5Reasons', getPicklistOptions(Case.Tommie_High_5__c));
-        result.put('academicPerformanceReasons', getPicklistOptions(Case.Academic_Performance_Reason_s__c));
-        result.put('attendanceConcernsReasons', getPicklistOptions(Case.Attendance_Concerns_Reason_s__c));
 
         return result;
     }
@@ -29,152 +27,125 @@ public without sharing class TommieAlertsLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static Map<String, String> currentTermAdvisor(String urlBid) {
+    public static Contact advisorInformation(String advisorBannerId) {
 
-        Map<String, String> termAdvisorMap = new Map<String, String>{
-                'Current_Term' => '',
-                'Advisor_ContactId' => '',
-                'Advisor_ContactName' => '',
-                'Advisor_LNameFName' => '',
-                'Advisor_Email' => '',
-                'Advisor_BannerId' => ''
-        };
-        List<hed__Term__c> currentTerm = new List<hed__Term__c>();
-        List<Contact> advisor = new List<Contact>();
+        Contact advisorContact = new Contact();
+        List<Contact> advisorContactList = new List<Contact>();
 
-        currentTerm = [
-                SELECT Id
-                FROM hed__Term__c
-                WHERE Current_Term__c = TRUE
-        ];
-
-        if (!currentTerm.isEmpty()) {
-            termAdvisorMap.put('Current_Term', currentTerm[0].Id);
-        }
-
-        if (String.isNotBlank(urlBid)) {
-            advisor = [
+        if (String.isNotBlank(advisorBannerId)) {
+            advisorContactList = [
                     SELECT Id,
                             Name,
                             FirstName,
                             LastName,
+                            Email,
                             Last_Name_First_Name__c,
                             hed__UniversityEmail__c,
                             University_Banner_ID__c,
                             St_Thomas_Connection__c
                     FROM Contact
-                    WHERE University_Banner_ID__c = :urlBid
+                    WHERE University_Banner_ID__c = :advisorBannerId
+                    AND St_Thomas_Connection__c INCLUDES ('Faculty', 'Staff')
                     WITH SECURITY_ENFORCED
+                    LIMIT 1
             ];
         }
 
-        if (!advisor.isEmpty()) {
-            termAdvisorMap.put('Advisor_ContactId', advisor[0].Id);
-            termAdvisorMap.put('Advisor_ContactName', advisor[0].Name);
-            termAdvisorMap.put('Advisor_FirstName', advisor[0].FirstName);
-            termAdvisorMap.put('Advisor_LastName', advisor[0].LastName);
-            termAdvisorMap.put('Advisor_LNameFName', advisor[0].Last_Name_First_Name__c);
-            termAdvisorMap.put('Advisor_Email', advisor[0].hed__UniversityEmail__c);
-            termAdvisorMap.put('Advisor_BannerId', advisor[0].University_Banner_ID__c);
-            termAdvisorMap.put('Advisor_StThomasConnection', advisor[0].St_Thomas_Connection__c);
+        if (advisorContactList.size() > 0) {
+            advisorContact = advisorContactList[0];
         }
 
-        System.debug('termAdvisorMap: '+termAdvisorMap);
-        return termAdvisorMap;
+        return advisorContact;
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Map<String, String>> advisorCoursesList(String advisorContactId, String courseCrn) {
+    public static List<Contact> searchStudent(String searchMode, String bannerId, String lastName, String email) {
+        List<Contact> matches = new List<Contact>();
 
-        List<Map<String, String>> courseMapList = new List<Map<String, String>>();
-        List<hed__Course_Offering__c> courses = new List<hed__Course_Offering__c>();
-        String singleCrnCriteria = '';
-
-        String allCourseCriteria = 'SELECT Id, Name, Course_Title__c, hed__Section_ID__c\n' +
-                ' FROM hed__Course_Offering__c\n' +
-                ' WHERE hed__Faculty__r.Id = :advisorContactId\n' +
-                ' AND Current_Term__c = TRUE\n';
-
-        String allCoursesQuery = allCourseCriteria + '\n' +
-                ' ORDER BY Name ASC';
-
-        if (String.isNotBlank(courseCrn)) {
-            singleCrnCriteria = ' AND Course_CRN__c = \'' + courseCrn + '\'';
-
-            String singleStudentQuery = allCourseCriteria + '\n' +
-                    singleCrnCriteria + '\n' +
-                    ' ORDER BY Name ASC';
-
-            courses = Database.query(singleStudentQuery);
+        // Basic guard
+        if (String.isBlank(searchMode)) {
+            return matches;
         }
 
-        if (courses.size() == 0) {
-            courses = Database.query(allCoursesQuery);
+        // Build SELECT clause
+        String baseSelect = 'SELECT Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, '
+                + 'University_Banner_ID__c, St_Thomas_Connection__c, Undergraduate_Cohort_Code__c FROM Contact '
+                + 'WHERE St_Thomas_Connection__c INCLUDES (\'Student\')';
+
+        // Build WHERE parts dynamically (use escapeSingleQuotes to avoid SOQL injection)
+        List<String> whereParts = new List<String>();
+
+        if (searchMode == 'banner') {
+            if (String.isBlank(bannerId) || String.isBlank(lastName)) {
+                return matches; // keep existing behavior: require bannerId + lastName (you can change to be more permissive)
+            }
+            whereParts.add('University_Banner_ID__c = \'' + String.escapeSingleQuotes(bannerId) + '\'');
+            // We intentionally don't try to normalize last name in SOQL; we'll filter in Apex (keeps query selective)
+        } else if (searchMode == 'email') {
+            if (String.isBlank(email)) {
+                return matches;
+            }
+            // match exact stored university email (escape the input)
+            whereParts.add('hed__UniversityEmail__c = \'' + String.escapeSingleQuotes(email.trim()) + '\'');
+        } else {
+            // unknown mode
+            return matches;
         }
 
-        for (hed__Course_Offering__c c : courses) {
+        if (whereParts.isEmpty()) {
+            return matches; // no filters => return empty set instead of full table scan
+        }
+        // Compose final query; include WITH SECURITY_ENFORCED so the running user must have access
+        String andWhereClause = ' AND ' + String.join(whereParts, ' AND ');
+        String finalQuery = baseSelect + andWhereClause + ' WITH SECURITY_ENFORCED LIMIT 1'; // add a reasonable limit to prevent abuse
 
-            Map<String, String> courseValueLabel = new Map<String, String>{'label' => c.Name + ' - ' + c.hed__Section_ID__c + ' (' + c.Course_Title__c + ')', 'value' => c.Id};
-            courseMapList.add(courseValueLabel);
+        // Execute dynamic query
+        List<Contact> contacts = Database.query(finalQuery);
+
+        List<Contact> filteredContacts = new List<Contact>();
+        for (Contact c : contacts) {
+            if (String.isBlank(c.Undergraduate_Cohort_Code__c) || !c.Undergraduate_Cohort_Code__c.contains('DCNFDSFL')) {
+                filteredContacts.add(c);
+            }
         }
 
-        return courseMapList;
+        // If banner search, filter by normalized last name in Apex (existing normalizeLastName helper)
+        if (searchMode == 'banner') {
+            String normalizedInput = normalizeLastName(lastName);
+            if (String.isBlank(normalizedInput)) {
+                return matches;
+            }
+            for (Contact c : filteredContacts) {
+                String normalizedStored = normalizeLastName(c.LastName);
+                if (normalizedInput.equals(normalizedStored)) {
+                    matches.add(c);
+                }
+            }
+            return matches;
+        }
+
+        // For email search just return results
+        return filteredContacts;
     }
 
-    @AuraEnabled(Cacheable=true)
-//    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
-    public static List<hed__Course_Enrollment__c> studentCourseList(String studentBannerId, String courseId) {
-
-//        List<Map<String, String>> studentMapList = new List<Map<String, String>>();
-        List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
-        String singleStudentCriteria = '';
-
-        List<RecordType> recordId = [
-                SELECT Id,
-                        Name
-                FROM RecordType
-                WHERE SobjectType = 'hed__Course_Enrollment__c'
-                AND DeveloperName = 'Student'
-        ];
-
-        String studentRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
-
-        String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id,' +
-                ' hed__Contact__r.FirstName, hed__Contact__r.LastName, hed__Contact__r.Mailing_First_Name__c,' +
-                ' hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c,' +
-                ' hed__Contact__r.University_Banner_ID__c, hed__Contact__r.St_Thomas_Connection__c\n' +
-                ' FROM hed__Course_Enrollment__c\n' +
-                ' WHERE Current_Term_Course__c = TRUE\n' +
-                ' AND hed__Course_Offering__c = :courseId\n' +
-                ' AND RecordTypeId = :studentRecordId\n' +
-                ' AND Course_Connection_Deleted_in_Banner__c = FALSE\n' +
-                ' AND (Registration_Code__c = \'OR\'\n' +
-                ' OR Registration_Code__c = \'RE\')';
-
-        String allStudentQuery = allStudentsCriteria + '\n' +
-                ' WITH SECURITY_ENFORCED\n' +
-                ' ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC';
-
-        if (String.isNotBlank(studentBannerId)) {
-            singleStudentCriteria = ' AND hed__Contact__r.University_Banner_ID__c = \'' + studentBannerId + '\'';
-
-            String singleStudentQuery = allStudentsCriteria + '\n' +
-                    singleStudentCriteria + '\n' +
-                    ' WITH SECURITY_ENFORCED\n' +
-                    ' ORDER BY hed__Contact__r.Last_Name_First_Name__c ASC';
-
-            students = Database.query(singleStudentQuery);
-        }
-
-        if (students.size() == 0) {
-            students = Database.query(allStudentQuery);
-        }
-
-        return students;
+// Helper: remove whitespace, hyphens, and apostrophes, then lowercase.
+// Examples:
+//   "O'Connor" -> "oconnor"
+//   "Smith-Jones" -> "smithjones"
+//   " Van Dyke " -> "vandyke"
+    public static String normalizeLastName(String s) {
+        if (s == null) return '';
+        // Remove whitespace using regex, then remove hyphens and apostrophes.
+        // Use String.valueOf((char)39) to represent the apostrophe character safely.
+        String withoutWhitespace = s.replaceAll('\\s', '');
+        String withoutHyphens = withoutWhitespace.replace('-', '');
+//        String apostrophe = String.valueOf((char)39); // char(39) == '
+        String withoutApos = withoutHyphens.replace('\'', '');
+        return withoutApos.toLowerCase();
     }
 
     @AuraEnabled(Cacheable=false)
-    public static void submitTommieAlertsCase(Map<String, String> formSelections) {
+    public static void submitTommieAlertsAdvisingStudent(Map<String, String> formSelections) {
         Case tommieCaresCase = new Case();
 
         List<RecordType> recordId = [
@@ -190,7 +161,7 @@ public without sharing class TommieAlertsLwcController {
         List<String> advocateReportNumbers = new List<String>();
 
         if (Boolean.valueOf(formSelections.get('submitWellBeingFormFail'))) {
-            advocateReportNumbers.add('Advocate Well-Being Report Submission Failed');
+                advocateReportNumbers.add('Advocate Well-Being Report Submission Failed');
         } else if (!Boolean.valueOf(formSelections.get('submitWellBeingFormFail')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingReportNumber'))) {
             advocateReportNumbers.add('Advocate Well-Being Report Number: '+formSelections.get('TellSomeoneWellBeingReportNumber'));
         }
@@ -209,8 +180,6 @@ public without sharing class TommieAlertsLwcController {
         tommieCaresCase.Origin = 'Web';
         tommieCaresCase.Reporter_University_Email__c = formSelections.get('AdvisorEmail');
         tommieCaresCase.ContactId = formSelections.get('StudentContactId');
-        tommieCaresCase.Course_Offering__c = formSelections.get('CourseSelectionId');
-        tommieCaresCase.Alert_Term_lookup__c = formSelections.get('currentTermId');
         tommieCaresCase.Tommie_Alert_Primary_Reason__c = formSelections.get('TommieCares_Reasons');
         tommieCaresCase.Tommie_High_5__c = formSelections.get('High5_Reasons');
         tommieCaresCase.Attendance_Concerns_Reason_s__c = formSelections.get('Attendance_Reasons');
@@ -221,19 +190,6 @@ public without sharing class TommieAlertsLwcController {
         tommieCaresCase.Case_Reporter_Notes_to_Student__c = formSelections.get('Personal_Message');
         tommieCaresCase.Shared_Case_Notes__c = formSelections.get('Additional_Concerns');
         tommieCaresCase.Description = caseDescription;
-
-        //Get Course Connection for student selected
-        List<hed__Course_Enrollment__c> studentCourseEnrollmentList = [
-                SELECT Id
-                FROM hed__Course_Enrollment__c
-                WHERE Course_Offering_ID__c = :tommieCaresCase.Course_Offering__c
-                AND hed__Contact__c = :tommieCaresCase.ContactId
-                WITH SECURITY_ENFORCED
-        ];
-
-        if (studentCourseEnrollmentList.size() > 0) {
-            tommieCaresCase.Course_Connection__c = studentCourseEnrollmentList[studentCourseEnrollmentList.size() - 1].Id;
-        }
 
         List <String> relationshipTypes = new List<String>{
                 'Primary Advisor',
@@ -253,19 +209,18 @@ public without sharing class TommieAlertsLwcController {
                         hed__Contact__r.Id,
                         hed__Contact__r.Name,
                         hed__Contact__r.Email,
-                        Name,
-                        hed__Type__c,
+                        Name, hed__Type__c,
                         hed__Status__c,
                         hed__RelatedContact__r.Id,
                         hed__RelatedContact__r.Name,
                         hed__RelatedContact__r.hed__UniversityEmail__c
+//                        hed__RelatedContact__r.Email
                 FROM hed__Relationship__c
                 WHERE hed__Type__c IN :relationshipTypes
                 AND hed__Contact__c = :tommieCaresCase.ContactId
                 AND hed__Status__c = 'Current'
                 WITH SECURITY_ENFORCED
                 ORDER BY CreatedDate DESC NULLS LAST
-
         ];
 
         Map<String, hed__Relationship__c> advisorContactsMap = new Map<String, hed__Relationship__c>();
@@ -297,18 +252,6 @@ public without sharing class TommieAlertsLwcController {
             tommieCaresCase.Primary_Advisory_Email__c = 'registrar@stthomas.edu';
         }
 
-        List<hed__Course_Enrollment__c> courseConnection = [
-                SELECT Id
-                FROM hed__Course_Enrollment__c
-                WHERE hed__Contact__r.Id = :tommieCaresCase.ContactId
-                AND hed__Course_Offering__c = :formSelections.get('CourseSelectionId')
-                WITH SECURITY_ENFORCED
-        ];
-
-        if (courseConnection.size() > 0) {
-            tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
-        }
-
         System.debug(JSON.serializePretty(tommieCaresCase));
 
         insert tommieCaresCase;
@@ -323,6 +266,7 @@ public without sharing class TommieAlertsLwcController {
                     advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Id;
                 } else if (EmailOrId == 'Email') {
                     advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.hed__UniversityEmail__c;
+//                    advisorInfo = advisorContactsMap.get(relationshipType).hed__RelatedContact__r.Email;
                 }
             }
         }

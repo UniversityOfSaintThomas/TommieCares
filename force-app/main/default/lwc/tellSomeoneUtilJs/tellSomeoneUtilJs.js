@@ -156,8 +156,8 @@ const finalizeSupportingDocument = async (saveDocumentsFail, submitFormFail, att
     }
 };
 
-const tommieAlertsTellSomeoneSubmission = async (template, formSubmitSelections,
-                                            {selectorName, visible, documentTypeLabel, submitApexMethod, formSubmitSelectionsKey}) => {
+const tommieAlertsTellSomeoneSubmission = async (template, /*formSubmitSelections,*/
+                                            {selectorName, visible, documentTypeLabel, submitApexMethod/*, formSubmitSelectionsKey*/}) => {
     let formValues = {};
     let documents = [];
     let attachDocumentResponse = {
@@ -189,10 +189,12 @@ const tommieAlertsTellSomeoneSubmission = async (template, formSubmitSelections,
 
             /*START TEST FOR TOMMIE ALERTS SUBMIT*/
             // this.submitTitleIxIncidentFormFail = true;
-            reportNumber = "This is a yes!";
-            /*END TEST FOR TOMMIE ALERTS SUBMIT*/
+            const currentDateTime = new Date().toLocaleString();
+            // reportNumber = `Report: ${currentDateTime}`;
+            reportNumber = "";
+                /*END TEST FOR TOMMIE ALERTS SUBMIT*/
 
-            formSubmitSelections[formSubmitSelectionsKey] = reportNumber;
+            // formSubmitSelections[formSubmitSelectionsKey] = reportNumber;
             submitFormFail = !reportNumber;
 
             await finalizeSupportingDocument(saveDocumentsFail, submitFormFail, attachDocumentResponse, reportNumber);

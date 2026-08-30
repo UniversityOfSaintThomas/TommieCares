@@ -1,66 +1,53 @@
 /**
- * Created by nguy0092 on 10/8/2024.
+ * Created by nguy0092 on 8/30/2026.
  */
 
 import {LightningElement, api, wire, track} from 'lwc';
-import {refreshApex} from "@salesforce/apex";
-import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsLwcController.getTommieCaresPicklists";
-import currentTermAdvisor from "@salesforce/apex/TommieAlertsLwcController.currentTermAdvisor";
-import advisorCoursesList from "@salesforce/apex/TommieAlertsLwcController.advisorCoursesList";
-import studentCourseList from "@salesforce/apex/TommieAlertsLwcController.studentCourseList";
-// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
-// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
-// import submitTellSomeoneTitleIx from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
-import submitTommieAlertsCase from "@salesforce/apex/TommieAlertsLwcController.submitTommieAlertsCase";
+// import {getPicklistValues} from "lightning/uiObjectInfoApi";
+import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.getTommieCaresPicklists";
+import advisorInformation from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.advisorInformation";
+import searchStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.searchStudent";
+// import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
+// import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
+import submitTommieAlertsAdvisingStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.submitTommieAlertsAdvisingStudent";
 import {tommieAlertsTellSomeoneSubmission} from "c/tellSomeoneUtilJs";
 
-export default class TommieAlertsLwc extends LightningElement {
-    //To TellSomeone child component
+export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElement {
+
     get childProps() {
         return {
-            tellSomeoneReportType: "Faculty",
-            tellSomeoneReporterFirstName: this.termAdvisorData.Advisor_FirstName,
-            tellSomeoneReporterLastName: this.termAdvisorData.Advisor_LastName,
-            tellSomeoneReporterEmail: this.termAdvisorData.Advisor_Email,
+            tellSomeoneReportType: this.advisorContactInfo.St_Thomas_Connection__c,
+            tellSomeoneReporterFirstName: this.advisorContactInfo.FirstName,
+            tellSomeoneReporterLastName: this.advisorContactInfo.LastName,
+            tellSomeoneReporterEmail: this.advisorContactInfo.hed__UniversityEmail__c,
             tellSomeoneParamsUrl: this.searchParamsUrl,
             tommieAlertsReporterPhone: "Tommie Alerts Submission",
-            tommieAlertsStudentName: this.studentName,
-            tommieAlertsStudentEmail: this.studentEmail,
+            tommieAlertsStudentName: this.formSubmitSelections.StudentName,
+            tommieAlertsStudentEmail: this.formSubmitSelections.StudentEmail,
             tommieAlertsHideCss: "tommie-alerts_hide",
         }
     }
 
-    @api paramBId = "";
-    @api paramSBid = "";
-    @api paramCrn = "";
     @api paramUrl = "";
     @api tellSomeoneLwc = ""; //used as a variable for child component in Tell Someone LWC
 
-    @track studentsListOptions = [];
     @track tommieCaresOptionsAll = [];
     @track tommieCaresOptions = [];
     @track tommieHigh5Options = [];
-    @track attendanceOptions = [];
-    @track academicOptions = [];
-    @track termAdvisorData = {};
     @track positiveAlertGroup = [];
     @track advisingGroup = [];
     @track behaviorWellBeingGroup = [];
     @track lifeCircumstanceGroup = [];
     @track formSubmitSelections = {
-        currentTermId: "",
         AdvisorContactId: "",
         AdvisorContactName: "",
         AdvisorEmail: "",
-        CourseSelectionId: "",
         StudentContactId: "",
         StudentName: "",
         StudentEmail: "",
+        StudentType: "",
         TommieCares_Reasons: "",
         High5_Reasons: "",
-        Attendance_Reasons: "",
-        Academic_Reasons: "",
         High5_Details: "",
         Pass_Course_Selection: "",
         Other_Details: "",
@@ -73,9 +60,6 @@ export default class TommieAlertsLwc extends LightningElement {
     };
     @track selectionsCheck = {
         high5Check: false,
-        attendanceCheck: false,
-        academicCheck: false,
-        attendanceAcademicCheck: false,
         missedAdvisingAppointmentCheck: false,
         nonResponsiveOutreachCheck: false,
         behaviorWellBeingCheck: false,
@@ -88,16 +72,31 @@ export default class TommieAlertsLwc extends LightningElement {
     }
     @track formRequired = {
         High5_Required: false,
-        Attendance_Required: false,
-        Academic_Required: false,
-        PassCourse_Required: false,
         Other_Required: false,
+        // TellSomeoneWellBeingRequired: false,
     }
 
-    coursesListOptions = [];
-    studentsList = [];
+    searchParamsUrl;
+    advisorContactInfo;
+    paramBId = "";
+    bannerId = '';
+    lastName = '';
+    stThomasEmail = '';
+    isValidStThomasEmail = false;
+    advisorContactIdCheck = false;
+    noAdvisorContactIdCheck = false;
+    caseSubmittedCheck = false;
+    caseSubmittedErrorCheck = false;
+    submitCaseSpinner = false;
+    noStudentsFound = false;
+    searchMode = null; // default
+
+    tommieCaresGeneralExclusions = [
+        "Academic performance concerns",
+        "Attendance concerns",
+        "Life Circumstances Impacting Success"
+    ];
     tommieCaresGraduateExclusions = [
-        "Behavior or Well-Being Concern",
         "Behavior concerns",
         "Financial concerns",
         "Mental health concerns",
@@ -114,34 +113,24 @@ export default class TommieAlertsLwc extends LightningElement {
     ]
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
-        {"Advising Alert": [
-                "Academic performance concerns",
-                "Attendance concerns",
-                "Academic Standing Requirement Not Met (only for Academic Counselors)",
-                "Missed Advising Appointment",
-                "Non-Responsive to Outreach"
-            ]},
-        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging",]},
-        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success",  "Other"]},
+        {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
+        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging"]},
+        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
-    passCourseOptions = [
-        {label: "", value: ""},
-        {label: "Yes", value: "Yes"},
-        {label: "No", value: "No"},
-        {label: "Maybe", value: "Maybe"},
-    ]
-    searchParamsUrl;
-    courseSelection;
-    studentName = "";
-    studentEmail = "";
-    noCurrentTermCheck = false;
-    advisorContactIdCheck = false;
-    noAdvisorContactIdCheck = false;
-    caseSubmittedCheck = false;
-    caseSubmittedErrorCheck = false;
-    submitCaseSpinner = false;
-    _incidentDate = "";
 
+    get isEmail() {
+        return this.searchMode === 'email';
+    }
+    get isBanner() {
+        return this.searchMode === 'banner';
+    }
+    get isBannerSearchDisabled() {
+        // disable until both non-empty
+        return !(this.bannerId && /^\d+$/.test(this.bannerId) && this.lastName);
+    }
+    get isEmailSearchDisabled() {
+        return !(this.isValidStThomasEmail && this.stThomasEmail);
+    }
     get initialPageView() {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
     }
@@ -151,21 +140,18 @@ export default class TommieAlertsLwc extends LightningElement {
     get tellSomeoneLwcNoAdvisor() {
         return !!this.tellSomeoneLwc; //returns no faculty information was found when displaying on Community of Concern LWC
     }
-    get studentSelection() {
-        return this.formSubmitSelections.StudentContactId;
-    }
-    get courseSelectionCheck() {
-        return !!this.courseSelection;
-    }
     get studentSelectionCheck() {
-        return !!this.formSubmitSelections.StudentContactId;
+        return this.formSubmitSelections.StudentContactId && !this.noStudentsFound;
     }
     get caresSelectionCheck() {
         return !!this.formSubmitSelections.TommieCares_Reasons;
     }
     get showAdditionalConcerns() {
-        const excluded = new Set(['high5Check', 'behaviorWellBeingCheck', 'senseOfBelongingCheck', 'otherCheck']);
+        const excluded = new Set(['otherCheck', 'high5Check']);
         return Object.entries(this.selectionsCheck).some(([key, value]) => !excluded.has(key) && value);
+    }
+    get noStudentFoundMessage() {
+        return this.noStudentsFound && (!!this.bannerId || !!this.lastName || !!this.stThomasEmail);
     }
     get tellSomeoneWellBeingVisible() {
         return !!(this.selectionsCheck.behaviorWellBeingCheck || this.selectionsCheck.senseOfBelongingCheck);
@@ -176,53 +162,21 @@ export default class TommieAlertsLwc extends LightningElement {
             || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
     }
 
-    hasAncestorWithId(startNode, id) {
-        let node = startNode;
-
-        while (node) {
-            node = node.parentNode;
-
-            if (typeof ShadowRoot !== "undefined" && node instanceof ShadowRoot) {
-                node = node.host;
-            }
-
-            if (node && node.nodeType === 1 && node.id === id) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     connectedCallback() {
         const baseUrl = this.paramUrl || window.location.href;
         this.searchParamsUrl = new URL(baseUrl);
+
         for (let [key, value] of this.searchParamsUrl.searchParams.entries()) {
             // eslint-disable-next-line default-case
             switch (key) {
                 case "bid":
                     if (!this.paramBId) this.paramBId = value;
                     break;
-                case "sbid":
-                    if (!this.paramSBid) this.paramSBid = value;
-                    break;
-                case "crn":
-                    if (!this.paramCrn) this.paramCrn = value;
-                    break;
                 case "submitted":
                     if (value === "true") this.caseSubmittedCheck = true;
                     break;
             }
         }
-
-        // eslint-disable-next-line @lwc/lwc/no-document-query
-        const idInUse = document.getElementById('tommieAlertsLightingOut') || this.hasAncestorWithId(this, 'tommieAlertsLightingOut');
-        if (idInUse) {
-            console.log("Lighting Out");
-        } else {
-            console.log("NOT Lighting Out");
-        }
-
     }
 
     @wire(getTommieCaresPicklists)
@@ -230,101 +184,32 @@ export default class TommieAlertsLwc extends LightningElement {
         if (data) {
             this.tommieCaresOptionsAll = JSON.parse(JSON.stringify(data.tommieCaresReasons || []));
             this.tommieHigh5Options = JSON.parse(JSON.stringify(data.tommieHigh5Reasons || []));
-            this.academicOptions = JSON.parse(JSON.stringify(data.academicPerformanceReasons || []));
-            this.attendanceOptions = JSON.parse(JSON.stringify(data.attendanceConcernsReasons || []));
+            // this.academicOptions = JSON.parse(JSON.stringify(data.academicPerformanceReasons || []));
+            // this.attendanceOptions = JSON.parse(JSON.stringify(data.attendanceConcernsReasons || []));
         } else if (error) {
             console.log("picklistsWire Error: " + JSON.stringify(error));
         }
     }
 
-    @wire(currentTermAdvisor, {urlBid: "$paramBId"})
-    termAdvisorWire({error, data}) {
+    @wire (advisorInformation, {advisorBannerId: "$paramBId"})
+    advisorInformationWire({error, data}) {
         if (data) {
-            this.termAdvisorData = JSON.parse(JSON.stringify(data));
-
-            this.noCurrentTermCheck = !this.termAdvisorData.Current_Term;
-            this.advisorContactIdCheck = !!this.termAdvisorData.Advisor_ContactId;
+            this.advisorContactInfo = JSON.parse(JSON.stringify(data));
+            this.advisorContactIdCheck = !!this.advisorContactInfo.Id;
             this.noAdvisorContactIdCheck = !this.advisorContactIdCheck;
 
-            // if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Faculty")) {
-            //     this.termAdvisorData.Advisor_StThomasConnection = "Faculty";
-            // } else if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Staff")) {
-            //     this.termAdvisorData.Advisor_StThomasConnection = "Staff";
-            // } else if (this.termAdvisorData.Advisor_StThomasConnection?.includes("Student")) {
-            //     this.termAdvisorData.Advisor_StThomasConnection = "Student";
-            // }
-        }
-
-        if (error) {
-            console.log("termAdvisorWire error!");
-        }
-    }
-
-    @wire(advisorCoursesList, {advisorContactId: "$termAdvisorData.Advisor_ContactId", courseCrn: "$paramCrn"})
-    coursesListWire({error, data}) {
-        if (data) {
-            this.coursesListOptions = JSON.parse(JSON.stringify(data));
-
-            if (this.coursesListOptions.length === 1) {
-                this.courseSelection = this.coursesListOptions[0].value;
-            } else {
-                this.coursesListOptions.unshift({value: "", label: "Select Course"});
-                this.courseSelection= "";
+            if (this.advisorContactInfo.St_Thomas_Connection__c?.includes("Faculty")) {
+                this.advisorContactInfo.St_Thomas_Connection__c = "Faculty";
+            } else if (this.advisorContactInfo.St_Thomas_Connection__c?.includes("Staff")) {
+                this.advisorContactInfo.St_Thomas_Connection__c = "Staff";
+            } else if (this.advisorContactInfo.St_Thomas_Connection__c?.includes("Student")) {
+                this.advisorContactInfo.St_Thomas_Connection__c = "Student";
             }
         }
 
         if (error) {
-            console.log("coursesListWire error!");
-        }
-    }
-
-    @wire(studentCourseList, {studentBannerId: "$paramSBid", courseId: "$courseSelection"})
-    studentCourseListWire({error, data}) {
-        let listOptions = [];
-
-        if (data) {
-            this.studentsList = JSON.parse(JSON.stringify(data));
-
-            this.studentsList.forEach(s => {
-                listOptions.push({label: s.hed__Contact__r.Last_Name_First_Name__c+' ('+s.hed__Contact__r.hed__UniversityEmail__c+')', value: s.hed__Contact__r.Id});
-            })
-
-            this.studentsListOptions = listOptions;
-
-            if (this.studentsListOptions.length === 1) {
-                this.formSubmitSelections.StudentContactId = this.studentsListOptions[0].value;
-                this.studentTypeCheck(this.formSubmitSelections.StudentContactId);
-            } else {
-                this.studentsListOptions.unshift({label: "Select Student", value: ""});
-                this.formSubmitSelections.StudentContactId = "";
-            }
-        }
-
-        if (error) {
-            console.log("studentCourseListWire error!");
-        }
-    }
-
-    singleSelect(event) {
-        const eventValue = event.detail.value;
-
-        // eslint-disable-next-line default-case
-        switch (event.currentTarget.dataset.selecttype) {
-            case "courseSelect":
-                this.resetForm();
-                this.courseSelection = eventValue;
-                refreshApex(this.studentsList);
-                this.caseSubmittedCheck = false;
-                break;
-            case "studentSelect":
-                this.resetForm();
-                this.formSubmitSelections.StudentContactId = eventValue;
-                this.studentTypeCheck(eventValue);
-                break;
-            case "passCourseSelect":
-                this.formSubmitSelections.Pass_Course_Selection = eventValue;
-                this.passCourseRequired();
-                break;
+            this.noAdvisorContactIdCheck = true;
+            console.log("advisorInformationWire error!");
         }
     }
 
@@ -361,25 +246,95 @@ export default class TommieAlertsLwc extends LightningElement {
         }
     }
 
-    studentTypeCheck(contactId) {
-        this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
+    handleSearchModeChange(event) {
+        this.resetForm();
+        this.noStudentsFound = false;
+        this.searchMode = event.target.value;
 
-        let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
-        console.log("Selected Student: ", foundStudent);
-
-        if (foundStudent) {
-            this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
-            this.studentEmail = foundStudent.hed__Contact__r.hed__UniversityEmail__c;
-            if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
-                this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
-            }
+        if (this.searchMode === 'email') {
+            this.bannerId = '';
+            this.lastName = '';
+        } else if (this.searchMode === 'banner') {
+            this.stThomasEmail = '';
         }
-        
-        if (this.tellSomeoneLwc) {
-            this.removeTommieCaresOptions(this.tellSomeoneExclusions, this.tommieCaresOptions);
+    }
+
+    handleBannerIdInput(event) {
+        const eventField = event.target;
+        eventField.setCustomValidity("");
+        this.noStudentsFound = false;
+
+        this.bannerId = (event.detail?.value ?? '').trim();
+        const isInputValueDigits = /^\d+$/.test(this.bannerId);
+
+        if (!isInputValueDigits && this.bannerId) {
+            eventField.setCustomValidity("Must be numbers");
         }
 
-        this.buildAlertGroups();
+        eventField.reportValidity();
+        console.log("this.bannerId: "+this.bannerId);
+    }
+
+    handleLastNameInput(event) {
+        this.lastName = (event.detail?.value || '').trim();
+        this.noStudentsFound = false;
+        console.log("this.lastName: "+this.lastName);
+    }
+
+    handleEmailChange(event) {
+        const eventField = event.target;
+        eventField.setCustomValidity("");
+        this.noStudentsFound = false;
+
+        this.stThomasEmail = (event.detail?.value || '').trim();
+        const stThomasEmailRegex = /^[A-Za-z0-9._%+\-=]+@stthomas\.edu$/i;
+        const stThomasEmailStagingRegex = /^[A-Za-z0-9._%+\-=]+@example\.com$/i;
+        this.isValidStThomasEmail = stThomasEmailRegex.test(this.stThomasEmail) || stThomasEmailStagingRegex.test(this.stThomasEmail);
+
+        if (!this.isValidStThomasEmail && this.stThomasEmail) {
+            eventField.setCustomValidity("Must contain @stthomas.edu");
+        }
+
+        eventField.reportValidity();
+        console.log("this.stThomasEmail: "+this.stThomasEmail);
+    }
+
+    handleSearchStudent() {
+        this.resetForm();
+        console.log("email: " + this.stThomasEmail + "bannerId: " + this.bannerId + "lastName: " + this.lastName);
+
+        searchStudent({ searchMode: this.searchMode, bannerId: this.bannerId, lastName: this.lastName, email: this.stThomasEmail })
+            .then(result => {
+                if (!Array.isArray(result) || result.length === 0) {
+                    this.noStudentsFound = true;
+                    console.log('No students found');
+                    return;
+                }
+
+                this.noStudentsFound = false;
+                console.log("Found Search Result:", JSON.stringify(result));
+
+                const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c } = result[0];
+                this.formSubmitSelections.StudentContactId = Id;
+                this.formSubmitSelections.StudentName = Name;
+                this.formSubmitSelections.StudentEmail = hed__UniversityEmail__c;
+
+                this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
+                if (St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
+                    this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
+                }
+
+                if (this.tellSomeoneLwc) {
+                    this.removeTommieCaresOptions(this.tellSomeoneExclusions, this.tommieCaresOptions);
+                }
+
+                this.buildAlertGroups();
+            })
+            .catch(error => {
+                // handle error, e.g. show message
+                console.error("Search error:", error);
+                // Example: this.emailSearchMessage = "Search failed. Please try again.";
+            });
     }
 
     reasonsCheckbox(event) {
@@ -398,22 +353,6 @@ export default class TommieAlertsLwc extends LightningElement {
                     }
                     this.selectionsCheck.high5Check = eventChecked;
                     this.formRequired.High5_Required = eventChecked;
-                }
-                if (eventValue === "Academic performance concerns") {
-                    if (!eventChecked) {
-                        this.formSubmitSelections.Academic_Reasons = "";
-                    }
-                    this.selectionsCheck.academicCheck = eventChecked;
-                    this.formRequired.Academic_Required = eventChecked;
-                    this.attendanceAcademic();
-                }
-                if (eventValue === "Attendance concerns") {
-                    if (!eventChecked) {
-                        this.formSubmitSelections.Attendance_Reasons = "";
-                    }
-                    this.selectionsCheck.attendanceCheck = eventChecked;
-                    this.formRequired.Attendance_Required = eventChecked;
-                    this.attendanceAcademic();
                 }
                 if (eventValue === "Missed Advising Appointment") {
                     this.selectionsCheck.missedAdvisingAppointmentCheck = eventChecked;
@@ -460,21 +399,26 @@ export default class TommieAlertsLwc extends LightningElement {
                 this.formSubmitSelections.High5_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.High5_Reasons);
                 this.formRequired.High5_Required = !(this.formSubmitSelections.High5_Reasons && this.formSubmitSelections.High5_Details);
                 break;
-            case "attendance":
-                this.formSubmitSelections.Attendance_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.Attendance_Reasons);
-                this.formRequired.Attendance_Required = !this.formSubmitSelections.Attendance_Reasons;
-                this.passCourseRequired();
-                break;
-            case "academic":
-                this.formSubmitSelections.Academic_Reasons = this.checkBoxSelect(event, this.formSubmitSelections.Academic_Reasons);
-                this.formRequired.Academic_Required = !this.formSubmitSelections.Academic_Reasons;
-                this.passCourseRequired();
-                break;
         }
 
-        if (!this.formSubmitSelections.TommieCares_Reasons || !this.showAdditionalConcerns) {
+        if (!(this.formSubmitSelections.TommieCares_Reasons || !this.showAdditionalConcerns)) {
             this.formSubmitSelections.Additional_Concerns = "";
         }
+    }
+
+    checkBoxSelect(evt, selectionType) {
+        let selections = selectionType ? selectionType.split(";") : [];
+
+        if (evt.target.checked) {
+            selections.push(evt.target.value);
+        } else {
+            const index = selections.indexOf(evt.target.value);
+
+            if (index !== -1) {
+                selections.splice(index, 1);
+            }
+        }
+        return selections.join(";");
     }
 
     textAreaDetails(event) {
@@ -503,65 +447,40 @@ export default class TommieAlertsLwc extends LightningElement {
         }
     }
 
-    checkBoxSelect(evt, selectionType) {
-        let selections = selectionType ? selectionType.split(";") : [];
-
-        if (evt.target.checked) {
-            selections.push(evt.target.value);
-        } else {
-            const index = selections.indexOf(evt.target.value);
-
-            if (index !== -1) {
-                selections.splice(index, 1);
-            }
-        }
-        return selections.join(";");
-    }
-
-    attendanceAcademic() {
-        if (this.selectionsCheck.attendanceCheck || this.selectionsCheck.academicCheck) {
-            this.selectionsCheck.attendanceAcademicCheck = true;
-            this.passCourseRequired();
-        } else {
-            this.selectionsCheck.attendanceAcademicCheck = false;
-            this.formSubmitSelections.Pass_Course_Selection = "";
-            this.formSubmitSelections.Personal_Message = "";
-            this.formRequired.PassCourse_Required = false;
-        }
-    }
-
-    passCourseRequired() {
-        this.formRequired.PassCourse_Required = !this.formSubmitSelections.Pass_Course_Selection;
-    }
-
     resetForm() {
+        const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
+
+        if (checkboxes) {
+            checkboxes.forEach(check => {
+                check.checked = false;
+            })
+        }
+
+        const textareas = this.template.querySelectorAll("lightning-textarea");
+        if (textareas) {
+            textareas.forEach(ta => { ta.value = ""; });
+        }
+
+        Object.keys(this.formSubmitSelections).forEach(k => {
+            this.formSubmitSelections[k] = '';
+        });
+        Object.keys(this.selectionsCheck).forEach(k => {
+            this.selectionsCheck[k] = false;
+        });
+        Object.keys(this.formRequired).forEach(k => {
+            this.formRequired[k] = false;
+        });
+
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
         this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
-
-        this.template.querySelectorAll("input[type='checkbox']").forEach(check => {
-            check.checked = false;
-        });
-
-        Object.keys(this.formSubmitSelections).forEach(k => {
-            this.formSubmitSelections[k] = ""
-        });
-        Object.keys(this.selectionsCheck).forEach(k => {
-            this.selectionsCheck[k] = false
-        });
-        Object.keys(this.formRequired).forEach(k => {
-            this.formRequired[k] = false
-        });
+        // this._incidentDate = "";
     }
 
     submittedUrl() {
-        this.searchParamsUrl.searchParams.set("bid", this.paramBId);
-        this.searchParamsUrl.searchParams.set("sbid", "");
-        this.searchParamsUrl.searchParams.set("crn", "");
         this.searchParamsUrl.searchParams.set("submitted", "true");
-
-        return this.searchParamsUrl;
+        return this.searchParamsUrl.toString();
     }
 
     submitAnother() {
@@ -584,19 +503,15 @@ export default class TommieAlertsLwc extends LightningElement {
         console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
-
     wellBeingSaveDocumentsFail = false;
-    submitWellBeingFormFail = false;
+    // submitWellBeingFormFail = false;
     titleIxSaveDocumentsFail = false;
-    submitTitleIxIncidentFormFail = false;
+    // submitTitleIxIncidentFormFail = false;
     async submitCase() {
-        this.formSubmitSelections.currentTermId = this.termAdvisorData.Current_Term;
-        this.formSubmitSelections.AdvisorContactId = this.termAdvisorData.Advisor_ContactId;
-        this.formSubmitSelections.AdvisorContactName = this.termAdvisorData.Advisor_ContactName;
-        this.formSubmitSelections.AdvisorEmail = this.termAdvisorData.Advisor_Email;
-        this.formSubmitSelections.CourseSelectionId = this.courseSelection;
-        this.formSubmitSelections.StudentName = this.studentName;
-        this.formSubmitSelections.StudentEmail = this.studentEmail;
+        this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
+        this.formSubmitSelections.AdvisorContactName = this.advisorContactInfo.Name;
+        this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.hed__UniversityEmail__c;
+        console.log("I am being submitted");
 
         try {
             this.caseSubmittedErrorCheck = false;
@@ -625,9 +540,8 @@ export default class TommieAlertsLwc extends LightningElement {
             this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxResult.reportNumber;
             this.formSubmitSelections.submitTitleIxIncidentFormFail = titleIxResult.submitFormFail;
 
-            await submitTommieAlertsCase({formSelections: this.formSubmitSelections});
+            await submitTommieAlertsAdvisingStudent({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
-            // eslint-disable-next-line no-restricted-globals
             // location.replace(this.submittedUrl());
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));

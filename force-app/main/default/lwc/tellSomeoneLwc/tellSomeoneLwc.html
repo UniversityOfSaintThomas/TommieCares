@@ -151,6 +151,9 @@
                 <div lwc:if={showWhatTommieAlerts} class="slds-m-top_large">
                     <c-tommie-alerts-lwc param-url={paramUrl} tell-someone-lwc="advisor_info_hide"></c-tommie-alerts-lwc>
                 </div>
+                <div lwc:if={showWhatTommieAlertsAdvisingStudent} class="slds-m-top_large">
+                    <c-tommie-alerts-advising-student-support-lwc param-url={paramUrl} tell-someone-lwc="advisor_info_hide"></c-tommie-alerts-advising-student-support-lwc>
+                </div>
                 <template lwc:if={showWhatWellBeing.show}>
                     <div class="slds-m-vertical_medium">
                         <p class="slds-m-bottom_small" lwc:if={showWhatWellBeing.student}>Concerns for students may include mental health,
