@@ -190,7 +190,7 @@ lightning-textarea.custom-textarea {
 }
 
 .tommie-cares-form {
-    box-sizing: border-box;   /* include padding in width */
+    /*box-sizing: border-box;   !* include padding in width *!*/
     /*width: 80%;               !* change percent to taste *!*/
     /*max-width: 800px;         !* optional cap so it doesn't get huge *!*/
     margin: 0;                /* left aligned (no auto centering) */

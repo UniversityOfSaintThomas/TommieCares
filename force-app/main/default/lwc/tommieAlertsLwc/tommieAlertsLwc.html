@@ -103,7 +103,7 @@
                 </div>
                 <div class="regular-body-text">
                     <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555">(651)962-5555</a>.</p>
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555" class="slds-truncate">(651)962-5555</a>.</p>
                     <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
                         individuals in order to provide additional support.<br>
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -190,22 +190,24 @@
                                         </template>
                                     </div>
                                 </fieldset>
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                        <span class="slds-text-nowrap">Tommie High 5 details<abbr class="slds-required" title="required">*</abbr></span></label>
-                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
-                                        The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
-                                    <div class="slds-form-element__control slds-m-left_xxx-small">
-                                        <lightning-textarea id="high5-details-id"
-                                                            name="high5-details"
-                                                            label=""
-                                                            value=""
-                                                            data-texttype="high5Details"
-                                                            onchange={textAreaDetails}
-                                                            variant="label-hidden"
-                                                            class="custom-textarea"
-                                                            required="true">
-                                        </lightning-textarea>
+                                <div class="slds-grid">
+                                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
+                                        <label class="slds-form-element__label element-sublabel" for="high5-details-id">
+                                            <span class="slds-text-nowrap">Tommie High 5 details<abbr class="slds-required" title="required">*</abbr></span></label>
+                                        <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
+                                            The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
+                                        <div class="slds-form-element__control slds-m-left_xxx-small">
+                                            <lightning-textarea id="high5-details-id"
+                                                                name="high5-details"
+                                                                label=""
+                                                                value=""
+                                                                data-texttype="high5Details"
+                                                                onchange={textAreaDetails}
+                                                                variant="label-hidden"
+                                                                class="custom-textarea"
+                                                                required="true">
+                                            </lightning-textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -308,19 +310,21 @@
                                     </div>
                                 </div>
                                 <!-- Personal message -->
-                                <div class="slds-form-element">
-                                    <label class="slds-form-element__label element-sublabel">Please provide a personalized message to the student receiving this alert (sent verbatim to the student):</label>
-                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">We encourage your message to be supportive and a call to action. The information provided below <b>will</b> be shared with the student.</p>
-                                    <div class="slds-form-element__control slds-m-left_xxx-small">
-                                        <lightning-textarea id="personal-message-id"
-                                                            name="personal-message"
-                                                            label=""
-                                                            value=""
-                                                            data-texttype="personalMessage"
-                                                            onchange={textAreaDetails}
-                                                            variant="label-hidden"
-                                                            class="custom-textarea">
-                                        </lightning-textarea>
+                                <div class="slds-grid">
+                                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
+                                        <label class="slds-form-element__label element-sublabel">Please provide a personalized message to the student receiving this alert (sent verbatim to the student):</label>
+                                        <p class="slds-m-bottom_xxx-small textarea-sublabel">We encourage your message to be supportive and a call to action. The information provided below <b>will</b> be shared with the student.</p>
+                                        <div class="slds-form-element__control slds-m-left_xxx-small">
+                                            <lightning-textarea id="personal-message-id"
+                                                                name="personal-message"
+                                                                label=""
+                                                                value=""
+                                                                data-texttype="personalMessage"
+                                                                onchange={textAreaDetails}
+                                                                variant="label-hidden"
+                                                                class="custom-textarea">
+                                            </lightning-textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -408,8 +412,8 @@
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.otherCheck}>
-                                <div class="slds-form-element">
+                            <div class="slds-grid slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.otherCheck}>
+                                <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
                                         <span class="slds-text-nowrap">Please provide additional details about your Other concerns:<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
@@ -431,20 +435,22 @@
                         </fieldset>
                     </template>
                     <template lwc:if={showAdditionalConcerns}>
-                        <div class="slds-m-top_medium alert-group">
-                            <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
-                            <div class="slds-form-element">
-                                <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
-                                <div class="slds-form-element__control">
-                                    <lightning-textarea id="additional-concerns-id"
-                                                        name="additional-concerns"
-                                                        label=""
-                                                        value=""
-                                                        data-texttype="additionalConcerns"
-                                                        onchange={textAreaDetails}
-                                                        variant="label-hidden"
-                                                        class="custom-textarea">
-                                    </lightning-textarea>
+                        <div class="slds-grid">
+                            <div class=" slds-col slds-size_1-of-1 slds-large-size_11-of-12 slds-m-top_medium alert-group">
+                                <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
+                                <div class="slds-form-element">
+                                    <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
+                                    <div class="slds-form-element__control">
+                                        <lightning-textarea id="additional-concerns-id"
+                                                            name="additional-concerns"
+                                                            label=""
+                                                            value=""
+                                                            data-texttype="additionalConcerns"
+                                                            onchange={textAreaDetails}
+                                                            variant="label-hidden"
+                                                            class="custom-textarea">
+                                        </lightning-textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -469,17 +475,17 @@
                 </div>
                 <div class="slds-m-top_x-large regular-body-text">
                     <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
-                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230">(651)962-6230</a>.</p>
+                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651)962-6230</a>.</p>
                 </div>
 
-                <lightning-button
-                        label="Get TitleIX Child Value"
-                        onclick={tellSomeoneTitleIxForm}>
-                </lightning-button>
-                <lightning-button
-                        label="Get Well Being Child Value"
-                        onclick={tellSomeoneWellBeingForm}>
-                </lightning-button>
+<!--                <lightning-button-->
+<!--                        label="Get TitleIX Child Value"-->
+<!--                        onclick={tellSomeoneTitleIxForm}>-->
+<!--                </lightning-button>-->
+<!--                <lightning-button-->
+<!--                        label="Get Well Being Child Value"-->
+<!--                        onclick={tellSomeoneWellBeingForm}>-->
+<!--                </lightning-button>-->
 
             </div>
         </div>

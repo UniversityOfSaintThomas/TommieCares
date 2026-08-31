@@ -31,8 +31,9 @@ export default class TellSomeoneLwc extends LightningElement {
 
     @track iAmOptions = [];
     @track concernedWhoOptions = [];
-    @track whatPicklist = [];
-    @track whatNoStudentPicklist = [];
+    @track whatAllOptionPicklist = [];
+    @track whatNoTommieAlertsPicklist = [];
+    @track whatNoStudentOptionPicklist = [];
     @track initialContactInfo = {};
     @track tellSomeoneCase = {
         IAmValue: "",
@@ -69,12 +70,14 @@ export default class TellSomeoneLwc extends LightningElement {
 
     get concernedWhatOptions() {
         if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
-            return this.whatPicklist;
-        } else {
-            return this.whatNoStudentPicklist;
-        }
+            return this.whatAllOptionPicklist;
+        } else if ((this.tellSomeoneCase.IAmValue === "Faculty" || this.tellSomeoneCase.IAmValue === "Staff")
+            && (this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") || this.tellSomeoneCase.IAmStThomasConnection?.includes("Staff")) && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
+                return this.whatNoTommieAlertsPicklist;
+        } 
+            return this.whatNoStudentOptionPicklist;
     }
-
+    
     get iAmAnonymousCheck() {
         return this.tellSomeoneCase.IAmValue === "Anonymous";
     }
@@ -196,15 +199,13 @@ export default class TellSomeoneLwc extends LightningElement {
                 }
 
                 this.concernedWhoOptions = JSON.parse(JSON.stringify(data.tellSomeoneWhoType || []));
-                this.whatPicklist = JSON.parse(JSON.stringify(data.tellSomeoneWhatType || []));
-                //
-                // const excludedWhatLabels = [
-                //     "I would like to report a concern about a student in one of my classes",
-                //     "I would like to report a Advising and Student Support concern"
-                // ];
-                // this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => !excludedWhatLabels.includes(obj.label));
-                this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
-                // this.whatNoStudentPicklist = this.whatPicklist.filter((obj) => obj.label !== "I would like to report a Advising and Student support concern");
+                this.whatAllOptionPicklist = JSON.parse(JSON.stringify(data.tellSomeoneWhatType || []));
+                this.whatNoTommieAlertsPicklist = this.whatAllOptionPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
+                const excludedWhatLabels = [
+                    "I would like to report a concern about a student in one of my classes",
+                    "I would like to report a Advising and Student Support concern"
+                ];
+                this.whatNoStudentOptionPicklist = this.whatAllOptionPicklist.filter((obj) => !excludedWhatLabels.includes(obj.label));
             }
         }
 
@@ -226,6 +227,7 @@ export default class TellSomeoneLwc extends LightningElement {
                     IAmStThomasConnection: this.initialContactInfo.St_Thomas_Connection__c,
                     IAmBannerId: this.initialContactInfo.University_Banner_ID__c,
                 }
+
                 if (this.initialContactInfo.hed__UniversityEmail__c) {
                     let emailValidationResults = emailValidation(this.initialContactInfo.hed__UniversityEmail__c);
                     this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
@@ -239,7 +241,14 @@ export default class TellSomeoneLwc extends LightningElement {
                 } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Student")) {
                     this.tellSomeoneCase.IAmValue = "Student";
                 }
+
+                if (this.tellSomeoneCase.IAmValue) {
+                    this.iAmOptions = this.iAmOptions.filter(option =>
+                        option.label === this.tellSomeoneCase.IAmValue || option.label === "Anonymous"
+                    );
+                }
             }
+
             if (window.location && window.location.search) {
                 this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
                 this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);

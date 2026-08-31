@@ -173,14 +173,14 @@
                 <div class="slds-m-top_medium" lwc:if={showWhatMisconduct}>
                     <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps}></c-tell-someone-title-ix-incident-report-lwc>
                 </div>
-                <template lwc:if={showWhatOther.show}>
+                <div class="slds-m-top_large" lwc:if={showWhatOther.show}>
                     <div lwc:if={showWhatOther.text}>
                         <p class="slds-m-top_small slds-m-bottom_none">If you have updates to provide on a concern regarding a faculty or staff, please contact Human Resources at <a href="mailto:askhr@stthomas.edu">askhr@stthomas.edu</a>.</p>
                     </div>
 <!--                        <p class="slds-m-vertical_x-small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>-->
                     <template lwc:if={iAmNotAnonymousCheck}>
-                        <fieldset class="slds-m-top_large">
-                            <legend class="slds-m-bottom_xxx-small"><b>Your Information</b></legend>
+                        <div class="slds-m-top_medium">
+                            <h2 class="slds-m-bottom_xxx-small">Your Information</h2>
                             <div class="slds-grid slds-wrap">
                                 <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-right_medium">
                                     <label class="slds-form-element__label selection-labels" for="i-am-first-name-id">
@@ -256,10 +256,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
+                        </div>
                     </template>
-                    <fieldset class="slds-m-top_small">
-                        <legend class="slds-m-bottom_xx-small"><b>Who You Are Concerned About Information</b></legend>
+                    <div class="slds-m-top_small">
+                        <h2 class="slds-m-bottom_xx-small">Who You Are Concerned About Information</h2>
                         <div class="slds-grid slds-wrap">
                             <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-right_medium">
                                 <label class="slds-form-element__label selection-labels" for="concerned-who-first-name-id">
@@ -333,7 +333,7 @@
                                 </div>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
                     <div class="slds-grid slds-m-bottom_large">
                         <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12 slds-m-bottom_x-small">
                             <label class="slds-form-element__label slds-m-bottom_xx-small selection-labels" for="concerned-what-additional-info-id">
@@ -370,7 +370,7 @@
                             <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
                         </template>
                     </div>
-                </template>
+                </div>
                 <template lwc:if={submitCaseFail}>
                     <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
                         <div class="slds-media__figure">
