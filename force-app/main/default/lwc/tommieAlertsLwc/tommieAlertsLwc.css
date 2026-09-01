@@ -3,13 +3,13 @@
  */
 
 a {
-    color: rebeccapurple;            /* new color for normal state */
+    color: rebeccapurple !important;            /* new color for normal state */
 }
 
 a:hover,
 a:active {
-    color: #8348ad;                  /* hover / active color */
-    text-decoration: underline;
+    color: #8348ad !important;                  /* hover / active color */
+    text-decoration: underline !important;
 }
 
 abbr.slds-required {
@@ -50,6 +50,13 @@ abbr.slds-required {
     --sds-c-input-color-border: rebeccapurple;
 }
 
+lightning-checkbox-group {
+    --slds-c-checkbox-color-border: black !important;
+    --sds-c-checkbox-color-border: black !important;
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
 /*.container {*/
 /*    position: relative;*/
 /*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
@@ -62,6 +69,11 @@ abbr.slds-required {
 .element-sublabel {
     font-size: 1rem !important;
     color: black !important;
+}
+
+.error-message {
+    border: solid 1px rebeccapurple;
+    background: #f4eefa;
 }
 
 .form-element__label-custom {

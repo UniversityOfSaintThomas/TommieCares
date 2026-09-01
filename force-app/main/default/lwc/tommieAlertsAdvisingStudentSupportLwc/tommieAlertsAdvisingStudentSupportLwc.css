@@ -65,6 +65,11 @@ abbr.slds-required {
     color: black !important;
 }
 
+.error-message {
+    border: solid 1px rebeccapurple;
+    background: #f4eefa;
+}
+
 .footer-info p {
     font-size: 1rem !important;
 }

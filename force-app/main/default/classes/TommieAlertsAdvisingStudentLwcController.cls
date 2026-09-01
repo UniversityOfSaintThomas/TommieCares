@@ -145,7 +145,9 @@ public without sharing class TommieAlertsAdvisingStudentLwcController {
     }
 
     @AuraEnabled(Cacheable=false)
-    public static void submitTommieAlertsAdvisingStudent(Map<String, String> formSelections) {
+    public static Boolean submitTommieAlertsAdvisingStudent(Map<String, String> formSelections) {
+        Boolean caseSubmittedErrorCheck = false;
+
         Case tommieCaresCase = new Case();
 
         List<RecordType> recordId = [
@@ -254,8 +256,14 @@ public without sharing class TommieAlertsAdvisingStudentLwcController {
 
         System.debug(JSON.serializePretty(tommieCaresCase));
 
-        insert tommieCaresCase;
+        try {
+            insert tommieCaresCase;
+        } catch (DmlException e) {
+            System.debug('Error occurred while inserting Tommie Cares Advising Student Case:' + e.getMessage());
+            caseSubmittedErrorCheck = true;
+        }
 
+        return caseSubmittedErrorCheck;
     }
 
     public static String getAdvisorInfo(String EmailOrId, String relationshipType, Map<String, hed__Relationship__c> advisorContactsMap) {

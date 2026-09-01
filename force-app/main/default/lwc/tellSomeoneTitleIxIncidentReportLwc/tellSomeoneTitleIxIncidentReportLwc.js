@@ -5,7 +5,7 @@
 import {api, LightningElement, track, wire} from 'lwc';
 import titleIxReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getTitleIxReportingOptions";
 // import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
-// import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
+import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 // import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
 // import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
@@ -16,6 +16,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     @api tellSomeoneReporterFirstName = "";
     @api tellSomeoneReporterLastName = "";
     @api tellSomeoneReporterEmail = "";
+    @api tellSomeoneConcernWhoValue = "";
     @api tellSomeoneParamsUrl = "";
     @api tommieAlertsStudentName = "";
     @api tommieAlertsHideCss = "";
@@ -85,6 +86,10 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     get isNotAnonymous() {
         return !this.isAnonymous;
+    }
+
+    get statusWhoCausedHarmValue() {
+        return this.titleIxIncidentFormValues.status_of_individual_who_caused_harm[0] || "";
     }
 
     get submitDisable() {
@@ -174,7 +179,8 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 console.log("i_understand_the_statement_about_anonymous_r eventValueHtml: "+eventValueHtml);
                 break;
             case "statuswhocausedharm":
-                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
+                // this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
+                this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue ? [eventValue] : [];
                 console.log("status_of_individual_who_caused_harm eventValue: "+eventValue);
                 console.log("status_of_individual_who_caused_harm eventValueHtml: "+eventValueHtml);
                 break;
@@ -319,57 +325,37 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         this.handleShowSpinner();
 
         if (this.attachDocuments.length > 0) {
-
             this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Title IX Incident', attachDocumentResponse);
             this.titleIxIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
             console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
             console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
         }
 
-        // if (!this.saveDocumentsFail) {
-        //     try {
-        //         let formValues = JSON.stringify(this.titleIxIncidentFormValues);
-        //         let titleIxReportNumber = await submitTitleIxReportForm({formValues: formValues});
-        //
-        //         if (titleIxReportNumber) {
-        //             this.formReportNumber = titleIxReportNumber;
-        //             console.log('titleIxReportNumber: '+this.formReportNumber);
-        //         } else {
-        //             this.submitTitleIxIncidentFormFail = true;
-        //             console.log('No titleIxReportNumber returned from submitTitleIxReporting');
-        //         }
-        //     } catch (error) {
-        //         this.submitTitleIxIncidentFormFail = true;
-        //     }
-        // }
+        if (!this.saveDocumentsFail) {
+            try {
+                let formValues = JSON.stringify(this.titleIxIncidentFormValues);
+                console.log('formValues: ', formValues);
+                formReportNumber = await submitTitleIxReportForm({formValues: formValues});
+                this.submitTitleIxIncidentFormFail = !formReportNumber;
+                console.log('formReportNumber: ', formReportNumber);
+            } catch (error) {
+                this.submitTitleIxIncidentFormFail = true;
+                console.error('Error submitting titleIx form:', error);
+            }
+        }
 
         /*START TEST INPUTS*/
-        this.submitTitleIxIncidentFormFail = true;
-        this.submitLimit++;
-        formReportNumber = "TEST-123456";
-        this.saveDocumentsFail = false;
+        // this.submitTitleIxIncidentFormFail = true;
+        // this.submitLimit++;
+        // formReportNumber = "TEST-123456";
+        // this.saveDocumentsFail = false;
         /*END TEST INPUTS*/
 
         await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
 
-        // if (!this.saveDocumentsFail && !this.submitTitleIxIncidentFormFail && this.titleIxIncidentFormValues.salesforce_support_documents) {
-        //     try {
-        //         await updateSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: formReportNumber});
-        //         console.log("updateSupportingDocument Path");
-        //     } catch (e) {
-        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // } else if (!this.saveDocumentsFail && this.submitTitleIxIncidentFormFail && this.titleIxIncidentFormValues.salesforce_support_documents) {
-        //     try {
-        //         await deleteSupportingDocument( {supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
-        //         console.log("deleteSupportingDocument Path");
-        //     } catch (e) {
-        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // }
-
         if (this.submitTitleIxIncidentFormFail && this.submitLimit < 2) {
             this.handleHideSpinner();
+            this.submitLimit++;
             // eventField.scrollIntoView({
             //     behavior: 'smooth',
             // });

@@ -5,7 +5,7 @@
 import {api, LightningElement, track, wire} from 'lwc';
 import wellBeingReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getWellBeingOptions";
 // import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
-// import submitForm from "@salesforce/apexContinuation/CommunityOfConcernLwcController.submitForm";
+import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
 // import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
 // import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
@@ -32,26 +32,22 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     @track reporterTypeOptions = [];
     @track whoAreYouConcernedAboutOptions = [];
 
-    reporterType; //Using variable to hold value for form because can't pass to API reporterType
+    // reporterType; //Using variable to hold value for form because can't pass to API reporterType
+    reporter_type_custom; //Using variable to hold value for form because can't pass to API reporterType
     @track wellBeingIncidentFormValues = {
-        reporterType: "",
-        reporter_type_custom: "", //Using because can't pass to API reporterType
-        reporterName: "",
-        reporterEmail: "",
-        reporterPhone: "",
-        who_are_you_concerned_about: "", //This is a custom field
-        otherStudent: "",
-        individuals_email_address: "", //This is a custom field
-        individuals_phone_number: "", //This is a custom field
-        incidentDate: "",
+        collection: "6320164b2a4a1fad79299ed27d892c07", //done
+        caseType: "186974515f78c9526452e03483778417", //done
+        reporter_type: "", //done
+        reporterName: "", //done
+        reporterEmail: "", //done
+        reporterPhone: "", //done
+        affiliation_of_the_person_of_concern: "", //This is a custom field
+        students_first_name: "",
+        students_email_address: "", //This is a custom field
+        students_phone_number: "", //This is a custom field
+        date_of_concerning_incident: "",
         description: "",
-        // incidentType: "14", //required
-        // additionalLocation: "1", //required
-        // emsCalled: false, //required
-        // residentialHallStaffCalled: false, //required
-        // policeCalled: false, //required
-        // alcohol: false, //required
-        salesforce_support_documents: "" //For Supporting Documents record ID
+        // salesforce_support_documents: "" //For Supporting Documents record ID REMOVING FOR NOW UNTIL I GET NEW FIELD
     }
 
     get reporterElementsCss() {
@@ -67,7 +63,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     }
 
     get showFormAll() {
-        return !!this.wellBeingIncidentFormValues.reporter_type_custom;
+        return !!this.reporter_type_custom;
     }
 
     get isAnonymous() {
@@ -79,7 +75,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     }
 
     get submitDisable() {
-        return !(!!this.wellBeingIncidentFormValues.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.otherStudent &&
+        return !(!!this.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.students_first_name &&
             (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
     }
 
@@ -94,10 +90,10 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
             this.wellBeingIncidentFormValues.reporterPhone = this.tommieAlertsReporterPhone;
 
-            this.wellBeingIncidentFormValues.otherStudent = this.tommieAlertsStudentName;
+            this.wellBeingIncidentFormValues.students_first_name = this.tommieAlertsStudentName;
             if (this.tommieAlertsStudentEmail) {
                 let emailValidationResults = emailValidation(this.tommieAlertsStudentEmail);
-                this.wellBeingIncidentFormValues.individuals_email_address = emailValidationResults.emailAddress;
+                this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
             }
 
             this.rendered = !this.rendered;
@@ -119,17 +115,17 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 })
 
                 this.reporterTypeOptions = _reporterTypeOptions;
-                if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && (!this.wellBeingIncidentFormValues.reporter_type_custom || !this.wellBeingIncidentFormValues.reporterType)) {
+                if (this.reporterTypeOptions.length > 0 && this.tellSomeoneReportType && (!this.reporter_type_custom || !this.wellBeingIncidentFormValues.reporter_type)) {
                     for (let i = 0; i < this.reporterTypeOptions.length; i++) {
                         if (this.reporterTypeOptions[i].label.toLowerCase().includes(this.tellSomeoneReportType.toLowerCase())) {
-                            this.wellBeingIncidentFormValues.reporterType = this.reporterTypeOptions[i].value;
-                            this.wellBeingIncidentFormValues.reporter_type_custom = this.reporterTypeOptions[i].label;
+                            this.wellBeingIncidentFormValues.reporter_type = this.reporterTypeOptions[i].value;
+                            this.reporter_type_custom = this.reporterTypeOptions[i].label;
                             break;
                         } else {
                             let otherType = _reporterTypeOptions.find((typeOption) => typeOption.label.toLowerCase() === 'community member');
                             if (otherType) {
-                                this.wellBeingIncidentFormValues.reporterType = otherType.value;
-                                this.wellBeingIncidentFormValues.reporter_type_custom = otherType.label;
+                                this.wellBeingIncidentFormValues.reporter_type = otherType.value;
+                                this.reporter_type_custom = otherType.label;
                             }
                         }
                     }
@@ -149,7 +145,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 if (this.whoAreYouConcernedAboutOptions.length > 0 && this.tellSomeoneConcernWhoValue) {
                     for (let i = 0; i < this.whoAreYouConcernedAboutOptions.length; i++) {
                         if (this.whoAreYouConcernedAboutOptions[i].label.toLowerCase().includes(this.tellSomeoneConcernWhoValue.toLowerCase())) {
-                            this.wellBeingIncidentFormValues.who_are_you_concerned_about = this.whoAreYouConcernedAboutOptions[i].value;
+                            this.wellBeingIncidentFormValues.affiliation_of_the_person_of_concern = this.whoAreYouConcernedAboutOptions[i].value;
                             break;
                         }
                     }
@@ -162,18 +158,18 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         }
     }
 
-    selectValueHandler(event) {
-        let eventValue = event.detail.value;
-        // eslint-disable-next-line default-case
-        switch (event.currentTarget.dataset.selecttype) {
-            case "reportertype":
-                this.reporterType = eventValue;
-                // eslint-disable-next-line no-case-declarations
-                let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
-                this.wellBeingIncidentFormValues.reporter_type_custom = reporterTypeLabel.label;
-                break;
-        }
-    }
+    // selectValueHandler(event) {
+    //     let eventValue = event.detail.value;
+    //     // eslint-disable-next-line default-case
+    //     switch (event.currentTarget.dataset.selecttype) {
+    //         case "reportertype":
+    //             this.reporterType = eventValue;
+    //             // eslint-disable-next-line no-case-declarations
+    //             let reporterTypeLabel = this.reporterTypeOptions.find((typeOption) => typeOption.value === eventValue);
+    //             this.reporter_type_custom = reporterTypeLabel.label;
+    //             break;
+    //     }
+    // }
 
     inputValueHandler(event) {
         let eventField = event.target;
@@ -195,10 +191,10 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.wellBeingIncidentFormValues.reporterPhone = eventValue;
                 break;
             case "involvedname":
-                this.wellBeingIncidentFormValues.otherStudent = eventValue;
+                this.wellBeingIncidentFormValues.students_first_name = eventValue;
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.individuals_email_address = eventValue;
+                this.wellBeingIncidentFormValues.students_email_address = eventValue;
                 if (!eventValue) {
                     this.validEmailWarningIndividual = false;
                     this.validEmailIndividual = true;
@@ -207,7 +203,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
                 break;
             case "involvedphone":
-                this.wellBeingIncidentFormValues.individuals_phone_number = eventValue;
+                this.wellBeingIncidentFormValues.students_phone_number = eventValue;
                 break;
             case "date":
                 if (eventValue) {
@@ -246,7 +242,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.individuals_email_address = emailValidationResults.emailAddress;
+                this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
                 this.validEmailIndividual = emailValidationResults.validEmail;
                 this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
                 if (this.validEmailWarningIndividual) {
@@ -281,7 +277,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.validDateWarning = true;
                 this.validTimeWarning = false;
             } else {
-                this.wellBeingIncidentFormValues.incidentDate = inputDate;
+                this.wellBeingIncidentFormValues.date_of_concerning_incident = inputDate;
                 this.validDate = true;
                 this.validDateWarning = false;
             }
@@ -347,9 +343,16 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     submittedUrl() {
         this.searchParamsUrl = new URL(this.tellSomeoneParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
+        if (this.submitWellBeingFormFail) {
+            this.searchParamsUrl.searchParams.set("submitvalid", "false");
+        }
+        if (this.saveDocumentsFail) {
+            this.searchParamsUrl.searchParams.set("nodocument", "true");
+        }
         return this.searchParamsUrl;
     }
 
+    submitLimit = 0;
     saveDocumentsFail = false;
     submitWellBeingFormFail = false;
     async submitFormHandler(event) {
@@ -367,98 +370,43 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
         if (this.attachDocuments.length > 0) {
             this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
-            this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+            // this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
             console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
             console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
-
-            // const supportingDocumentName = 'Advocate Well Being Incident';
-            // try {
-            //     let saveSupportingDocumentsResults = await saveSupportingDocuments({attachedDocumentsList: this.attachDocuments, supportingDocumentName: supportingDocumentName});
-            //
-            //     if (saveSupportingDocumentsResults.Status === 'success') {
-            //         this.attachDocumentResponse = {
-            //             Status: saveSupportingDocumentsResults.Status,
-            //             SupportingDocumentUrl: saveSupportingDocumentsResults.Url,
-            //             SupportingDocumentId: saveSupportingDocumentsResults.SupportingDocumentId
-            //         }
-            //
-            //         this.wellBeingIncidentFormValues.salesforce_support_documents = this.attachDocumentResponse.SupportingDocumentUrl;
-            //     } else if (saveSupportingDocumentsResults.Status === 'error') {
-            //         this.saveDocumentsFail = true;
-            //     }
-            //
-            //     console.log('this.attachDocumentResponse: ', JSON.stringify(this.attachDocumentResponse));
-            //     console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
-            //
-            // } catch (e) {
-            //     console.log("Save documents error: " + JSON.stringify(e));
-            //     this.saveDocumentsFail = true;
-            // }
         }
 
-        // if (!this.saveDocumentsFail) {
-        //     try {
-        //         let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
-        //         let formType = 'wellbeing'
-        //         await submitForm({formValues: formValues, formType: formType}).then((result) => {
-        //             // console.log('This all result: '+JSON.stringify(result));
-        //
-        //             if (result[0] !== 201) {
-        //                 this.submitWellBeingFormFail = true;
-        //                 console.log('This result ERROR getStatusCode: '+result[0]);
-        //             }
-        //
-        //             this.formReportNumber = result[1].reportNumber;
-        //             // console.log('Report Number: '+this.formReportNumber);
-        //         });
-        //
-        //     } catch (error) {
-        //         this.submitWellBeingFormFail = true;
-        //     }
-        // }
+        if (!this.saveDocumentsFail) {
+            try {
+                let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+                console.log('formValues: ', formValues);
+                formReportNumber = await submitWellBeingReportForm({formValues: formValues});
+                this.submitWellBeingFormFail = !formReportNumber;
+                console.log('formReportNumber: ', formReportNumber);
+            } catch (error) {
+                this.submitWellBeingFormFail = true;
+                console.error('Error submitting well-being form:', error);
+            }
+        }
 
         /*START TEST INPUTS*/
-        this.submitWellBeingFormFail = true;
-        this.formReportNumber = "TEST-xxxxx";
+        // this.submitWellBeingFormFail = true;
+        // formReportNumber = "TEST-xxxxx";
+        // this.saveDocumentsFail = false;
         /*END TEST INPUTS*/
 
         await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
 
-        // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-        //     try {
-        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber});
-        //         console.log("updateSupportingDocument Path");
-        //     } catch (e) {
-        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // } else if (!this.saveDocumentsFail && this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-        //     try {
-        //         await deleteSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId});
-        //         console.log("deleteSupportingDocument Path");
-        //     } catch (e) {
-        //         console.log("deleteSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // }
-        // if (!this.saveDocumentsFail && !this.submitWellBeingFormFail && this.attachDocumentResponse.SupportingDocumentUrl) {
-        //     try {
-        //         await updateSupportingDocument( {supportingDocumentId: this.attachDocumentResponse.SupportingDocumentId, advocateReportNumber: this.formReportNumber} ).then((result) => {
-        //             // console.log("Update Status: "+result);
-        //         });
-        //     } catch (e) {
-        //         console.log("updateSupportingDocument error: " + JSON.stringify(e));
-        //     }
-        // }
-
-        // if (this.saveDocumentsFail || this.submitWellBeingFormFail) {
-        //     this.handleHideSpinner();
-        //     eventField.scrollIntoView({
-        //         behavior: 'smooth',
-        //     });
-        // } else {
-        //     this.handleHideSpinner();
-        //     // console.log("Update submittedUrl: "+this.submittedUrl());
-        //     location.replace(this.submittedUrl());
-        // }
+        if (this.submitWellBeingFormFail && this.submitLimit < 2) {
+            this.submitLimit++;
+            this.handleHideSpinner();
+            // eventField.scrollIntoView({
+            //     behavior: 'smooth',
+            // });
+        } else {
+            this.handleHideSpinner();
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
+        }
 
         /*START TEST INPUTS*/
         this.handleHideSpinner();

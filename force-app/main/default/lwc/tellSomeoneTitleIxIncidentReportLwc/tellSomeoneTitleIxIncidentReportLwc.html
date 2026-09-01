@@ -94,7 +94,7 @@
                             <lightning-combobox id="titleix-report-status-who-caused-harm-id"
                                                 name="Status Who Caused Harm"
                                                 label=""
-                                                value=""
+                                                value={statusWhoCausedHarmValue}
                                                 placeholder="Select..."
                                                 options={statusWhoCausedHarmOptions}
                                                 data-selecttype="statuswhocausedharm"
@@ -358,8 +358,8 @@
                         <div class="slds-media slds-media_center slds-scoped-notification slds-m-top_large slds-m-bottom_medium submit-error-message" role="status">
                             <div class="slds-media__figure">
                                 <lightning-icon icon-name="utility:warning"
-                                                alternative-text="submit bias incident form error"
-                                                title="submit bias incident form error"
+                                                alternative-text="submit titleix form error"
+                                                title="submit titleix form error"
                                                 size="small">
                                 </lightning-icon>
                             </div>

@@ -10,6 +10,8 @@ import searchStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcContro
 // import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
 // import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
 import submitTommieAlertsAdvisingStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.submitTommieAlertsAdvisingStudent";
+import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
+import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import {tommieAlertsTellSomeoneSubmission} from "c/tellSomeoneUtilJs";
 
 export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElement {
@@ -20,6 +22,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             tellSomeoneReporterFirstName: this.advisorContactInfo.FirstName,
             tellSomeoneReporterLastName: this.advisorContactInfo.LastName,
             tellSomeoneReporterEmail: this.advisorContactInfo.hed__UniversityEmail__c,
+            tellSomeoneConcernWhoValue: "Student",
             tellSomeoneParamsUrl: this.searchParamsUrl,
             tommieAlertsReporterPhone: "Tommie Alerts Submission",
             tommieAlertsStudentName: this.formSubmitSelections.StudentName,
@@ -85,8 +88,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     isValidStThomasEmail = false;
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
-    caseSubmittedCheck = false;
-    caseSubmittedErrorCheck = false;
     submitCaseSpinner = false;
     noStudentsFound = false;
     searchMode = null; // default
@@ -118,6 +119,15 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
 
+    get initialPageView() {
+        return this.advisorContactIdCheck && !this.caseSubmittedCheck;
+    }
+    get caseSubmittedSuccessCheck() {
+        return this.caseSubmittedCheck
+            && !this.caseSubmittedErrorCheck
+            && !this.formSubmitSelections.submitWellBeingFormFail
+            && !this.formSubmitSelections.submitTitleIxIncidentFormFail;
+    }
     get isEmail() {
         return this.searchMode === 'email';
     }
@@ -130,9 +140,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     }
     get isEmailSearchDisabled() {
         return !(this.isValidStThomasEmail && this.stThomasEmail);
-    }
-    get initialPageView() {
-        return this.advisorContactIdCheck && !this.caseSubmittedCheck;
     }
     get advisorInfoViewClass() {
         return "advisor_info "+this.tellSomeoneLwc; //hiding Advisor information when displaying on Community of Concern LWC
@@ -503,10 +510,98 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
+    get tellSomeoneWellBeingAttempt() {
+        if (!this.formSubmitSelections.submitWellBeingFormFail && this.formSubmitSelections.TellSomeoneWellBeingReportNumber) {
+            return "pass"
+        }
+        if (this.formSubmitSelections.submitWellBeingFormFail) {
+            return "fail"
+        }
+        return "no attempt"
+    }
+
+    get tellSomeoneTitleIXAttempt() {
+        if (!this.formSubmitSelections.submitTitleIxIncidentFormFail && this.formSubmitSelections.TellSomeoneTitleIxReportNumber) {
+            return "pass"
+        }
+        if (this.formSubmitSelections.submitTitleIxIncidentFormFail) {
+            return "fail"
+        }
+        return "no attempt"
+    }
+
+    get tellSomeoneSubmitErrorMsg() {
+        const groups = [];
+
+        // Tommie Alert case submission
+        const caseGroup = [];
+        if (this.caseSubmittedErrorCheck) {
+            caseGroup.push(`Not Received: Tommie Alert to the Center for Student Achievement: Retention and Student Success.<br>
+            Please contact the Center for Student Achievement: Retention and Student Success directly at <a href="mailto:studentsuccess@stthomas.edu" target="_blank" style="color:rebeccapurple">studentsuccess@stthomas.edu</a> so this concern is recorded.`);
+        } else {
+            caseGroup.push(`Received: Tommie Alert to the Center for Student Achievement: Retention and Student Success.`);
+        }
+        groups.push(caseGroup);
+
+        // Behavior/Well Being (Dean of Students) submission
+        const wellBeingGroup = [];
+        if (this.tellSomeoneWellBeingAttempt === 'fail') {
+            wellBeingGroup.push(`Not Received: the report to the Dean of Students.<br>
+            Please contact the Dean of Students directly at <a href="mailto:deanstudents@stthomas.edu" target="_blank" style="color:rebeccapurple">deanstudents@stthomas.edu</a> so this concern is recorded.`);
+        } else if (this.tellSomeoneWellBeingAttempt === 'pass') {
+            wellBeingGroup.push(`Received: The report to the Dean of Students.`);
+            if (this.wellBeingSaveDocumentsFail) {
+                wellBeingGroup.push(`Documents did not save. Please contact the Dean of Students directly at <a href="mailto:deanstudents@stthomas.edu" target="_blank" style="color:rebeccapurple">deanstudents@stthomas.edu</a> to have your supporting documents attached.`);
+            }
+        }
+        if (wellBeingGroup.length > 0) {
+            groups.push(wellBeingGroup);
+        }
+
+        // Title IX submission
+        const titleIxGroup = [];
+        if (this.tellSomeoneTitleIXAttempt === 'fail') {
+            titleIxGroup.push(`Not Received: the Title IX report.<br>
+            For a relationship violence, stalking, or Title IX concern, please contact the Title IX Office directly at <a href="mailto:centerforwellbeing@stthomas.edu" target="_blank" style="color:rebeccapurple">centerforwellbeing@stthomas.edu</a> so this concern is recorded.`);
+        } else if (this.tellSomeoneTitleIXAttempt === 'pass') {
+            titleIxGroup.push(`Received: The Title IX report.`);
+            if (this.titleIxSaveDocumentsFail) {
+                titleIxGroup.push(`Documents did not save. Please contact the Title IX Office directly at <a href="mailto:centerforwellbeing@stthomas.edu" target="_blank" style="color:rebeccapurple">centerforwellbeing@stthomas.edu</a> to have your supporting documents attached.`);
+            }
+        }
+        if (titleIxGroup.length > 0) {
+            groups.push(titleIxGroup);
+        }
+
+        const anyFailed = this.caseSubmittedErrorCheck
+            || this.tellSomeoneWellBeingAttempt === 'fail'
+            || this.tellSomeoneTitleIXAttempt === 'fail'
+            || this.wellBeingSaveDocumentsFail
+            || this.titleIxSaveDocumentsFail;
+        const anyPassed = !this.caseSubmittedErrorCheck
+            || this.tellSomeoneWellBeingAttempt === 'pass'
+            || this.tellSomeoneTitleIXAttempt === 'pass';
+
+        let header;
+        if (anyFailed && anyPassed) {
+            header = `<p class="slds-m-bottom_none"><b>Your submission was only partly successful</b></p>`;
+        } else if (anyFailed) {
+            header = `<p class="slds-m-bottom_none"><b>Your submission was not successful</b></p>`;
+        } else {
+            return "";
+        }
+
+        const body = groups
+            .map(group => `<p>${group.join('<br>')}</p>`)
+            .join('');
+
+        return `${header}${body}`.replace(/\n\s*/g, ' ');
+    }
+
+    caseSubmittedCheck = false;
+    caseSubmittedErrorCheck = false;
     wellBeingSaveDocumentsFail = false;
-    // submitWellBeingFormFail = false;
     titleIxSaveDocumentsFail = false;
-    // submitTitleIxIncidentFormFail = false;
     async submitCase() {
         this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
         this.formSubmitSelections.AdvisorContactName = this.advisorContactInfo.Name;
@@ -517,32 +612,58 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             this.caseSubmittedErrorCheck = false;
             this.submitCaseSpinner = true;
 
-            const wellBeingResult = await tommieAlertsTellSomeoneSubmission(this.template, /*this.formSubmitSelections,*/ {
-                selectorName: 'c-tell-someone-well-being-incident-report-lwc',
-                visible: this.selectionsCheck.relationshipCheck && !this.tellSomeoneWellBeingSubmitDisable,
-                documentTypeLabel: 'Advocate Well-Being Incident',
-                submitApexMethod: null,
-                formSubmitSelectionsKey: 'TellSomeoneWellBeingReportNumber'
-            });
-            this.wellBeingSaveDocumentsFail = wellBeingResult.saveDocumentsFail;
-            this.formSubmitSelections.TellSomeoneWellBeingReportNumber = wellBeingResult.reportNumber;
-            this.formSubmitSelections.submitWellBeingFormFail = wellBeingResult.submitFormFail;
+            try {
+                const wellBeingResult = await tommieAlertsTellSomeoneSubmission(this.template, "wellbeing", {
+                    selectorName: 'c-tell-someone-well-being-incident-report-lwc',
+                    visible: this.selectionsCheck.behaviorWellBeingCheck && !this.tellSomeoneWellBeingSubmitDisable,
+                    documentTypeLabel: 'Advocate Well-Being Incident',
+                    submitApexMethod: submitWellBeingReportForm,
+                    // formSubmitSelectionsKey: 'TellSomeoneWellBeingReportNumber'
+                });
+                this.wellBeingSaveDocumentsFail = wellBeingResult.saveDocumentsFail;
+                this.formSubmitSelections.TellSomeoneWellBeingReportNumber = wellBeingResult.reportNumber;
+                this.formSubmitSelections.submitWellBeingFormFail = wellBeingResult.submitFormFail;
+            } catch (e) {
+                console.log("Well Being Submission Error: "+JSON.stringify(e));
+                this.wellBeingSaveDocumentsFail = true;
+                this.formSubmitSelections.submitWellBeingFormFail = true;
+            }
 
+            try {
+                const titleIxResult = await tommieAlertsTellSomeoneSubmission(this.template, "titleix", {
+                    selectorName: 'c-tell-someone-title-ix-incident-report-lwc',
+                    visible: this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable,
+                    documentTypeLabel: 'Advocate Title IX Incident',
+                    submitApexMethod: submitTitleIxReportForm,
+                    // formSubmitSelectionsKey: 'TellSomeoneTitleIxReportNumber'
+                });
+                this.titleIxSaveDocumentsFail = titleIxResult.saveDocumentsFail;
+                this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxResult.reportNumber;
+                this.formSubmitSelections.submitTitleIxIncidentFormFail = titleIxResult.submitFormFail;
+            } catch (e) {
+                console.log("Title IX Submission Error: "+JSON.stringify(e));
+                this.titleIxSaveDocumentsFail = true;
+                this.formSubmitSelections.submitTitleIxIncidentFormFail = true;
+            }
 
-            const titleIxResult = await tommieAlertsTellSomeoneSubmission(this.template, /*this.formSubmitSelections,*/ {
-                selectorName: 'c-tell-someone-title-ix-incident-report-lwc',
-                visible: this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable,
-                documentTypeLabel: 'Advocate Title IX Incident',
-                submitApexMethod: null,
-                formSubmitSelectionsKey: 'TellSomeoneTitleIxReportNumber'
-            });
-            this.titleIxSaveDocumentsFail = titleIxResult.saveDocumentsFail;
-            this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxResult.reportNumber;
-            this.formSubmitSelections.submitTitleIxIncidentFormFail = titleIxResult.submitFormFail;
+            try {
+                this.caseSubmittedErrorCheck = await submitTommieAlertsAdvisingStudent({formSelections: this.formSubmitSelections});
+            } catch (e) {
+                console.log("Tommie Alerts Submission Error: "+JSON.stringify(e));
+                this.caseSubmittedErrorCheck = true;
+            }
 
-            await submitTommieAlertsAdvisingStudent({formSelections: this.formSubmitSelections});
             this.submitCaseSpinner = false;
-            // location.replace(this.submittedUrl());
+
+            if (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail) {
+                this.caseSubmittedCheck = true;
+                console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
+                console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
+                console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
+            } else {
+                // eslint-disable-next-line no-restricted-globals
+                location.replace(this.submittedUrl());
+            }
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
@@ -550,4 +671,54 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         }
     }
 
+    //TESTING
+    get failedSubmitMessages() {
+        return [
+            { label: 'Behavior or Well Being Report Failed', value: 'Behavior or Well Being Report Failed' },
+            { label: 'Title IX Public Report Failed', value: 'Title IX Public Report Failed' },
+            { label: 'Case Submission Error Failed', value: 'Case Submission Error Failed' }
+        ];
+    }
+
+    @track checkBoxSubmitValue = [];
+
+    failedSubmitCheckbox(event) {
+        this.value = event.detail.value;
+        this.formSubmitSelections.submitWellBeingFormFail = this.value.includes('Behavior or Well Being Report Failed');
+        this.formSubmitSelections.submitTitleIxIncidentFormFail = this.value.includes('Title IX Public Report Failed');
+        this.caseSubmittedErrorCheck = this.value.includes('Case Submission Error Failed');
+    }
+
+    get failedSubmitDocuments() {
+        return [
+            { label: 'Behavior or Well Being Report Documents Failed', value: 'Behavior or Well Being Report Documents Failed' },
+            { label: 'Title IX Public Report Documents Failed', value: 'Title IX Public Report Documents Failed' },
+        ];
+    }
+
+    @track checkBoxDocumentsValue = [];
+
+    failedDocumentsCheckbox(event) {
+        this.value = event.detail.value;
+        this.wellBeingSaveDocumentsFail = this.value.includes('Behavior or Well Being Report Documents Failed');
+        this.titleIxSaveDocumentsFail = this.value.includes('Title IX Public Report Documents Failed');
+    }
+
+    get reportNumber() {
+        return [
+            { label: 'Behavior or Well Being Report', value: 'Behavior or Well Being Report' },
+            { label: 'TitleIX Report', value: 'TitleIX Report' },
+        ];
+    }
+
+    @track checkBoxReportNumberValue = [];
+
+    reportNumberCheckbox(event) {
+        this.value = event.detail.value;
+        this.formSubmitSelections.TellSomeoneWellBeingReportNumber = this.value.includes('Behavior or Well Being Report') ? "1234" : "";
+        this.formSubmitSelections.TellSomeoneTitleIxReportNumber = this.value.includes('TitleIX Report') ? "1234" : "";
+    }
+
+    testBoolean = true;
+    //END TESTING
 }

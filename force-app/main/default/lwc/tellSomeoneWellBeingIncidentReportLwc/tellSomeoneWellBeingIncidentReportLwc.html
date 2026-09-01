@@ -74,7 +74,7 @@
                         <lightning-input id="well-being-individual-name-id"
                                          type="text"
                                          label=""
-                                         value={wellBeingIncidentFormValues.otherStudent}
+                                         value={wellBeingIncidentFormValues.students_first_name}
                                          data-inputtype="involvedname"
                                          variant="label-hidden"
                                          required="true"
@@ -91,7 +91,7 @@
                             <lightning-input id="well-being-individual-email-id"
                                              type="text"
                                              label=""
-                                             value={wellBeingIncidentFormValues.individuals_email_address}
+                                             value={wellBeingIncidentFormValues.students_email_address}
                                              data-inputtype="involvedemail"
                                              variant="label-hidden"
                                              onchange={inputValueHandler}
@@ -108,7 +108,7 @@
                             <lightning-input id="well-being-individual-phone-id"
                                              type="text"
                                              label=""
-                                             value={wellBeingIncidentFormValues.individuals_phone_number}
+                                             value={wellBeingIncidentFormValues.students_phone_number}
                                              data-inputtype="involvedphone"
                                              variant="label-hidden"
                                              onchange={inputValueHandler}>
@@ -210,31 +210,31 @@
                                       disable-animation>
                     </lightning-button>
                 </div>
-                <template lwc:if={saveDocumentsFail}>
-                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                        <div class="slds-media__figure">
-                            <lightning-icon icon-name="utility:warning"
-                                            alternative-text="save documents error"
-                                            title="save documents error"
-                                            size="small">
-                            </lightning-icon>
-                        </div>
-                        <div class="slds-media__body">
-                            <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>
-                        </div>
-                    </div>
-                </template>
+<!--                <template lwc:if={saveDocumentsFail}>-->
+<!--                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">-->
+<!--                        <div class="slds-media__figure">-->
+<!--                            <lightning-icon icon-name="utility:warning"-->
+<!--                                            alternative-text="save documents error"-->
+<!--                                            title="save documents error"-->
+<!--                                            size="small">-->
+<!--                            </lightning-icon>-->
+<!--                        </div>-->
+<!--                        <div class="slds-media__body">-->
+<!--                            <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </template>-->
                 <template lwc:if={submitWellBeingFormFail}>
                     <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
                         <div class="slds-media__figure">
                             <lightning-icon icon-name="utility:warning"
-                                            alternative-text="submit bias incident form error"
-                                            title="submit bias incident form error"
+                                            alternative-text="submit well-being form error"
+                                            title="submit well-being form error"
                                             size="small">
                             </lightning-icon>
                         </div>
                         <div class="slds-media__body">
-                            <p>There was a problem submitting your form. Please contact salesforce@stthomas.edu to report this error.</p>
+                            <p>There was a problem submitting your form. Try submitting your form again. If the problem continues, please contact <a href="mailto:salesforce@stthomas.edu">salesforce@stthomas.edu</a>.</p>
                         </div>
                     </div>
                 </template>

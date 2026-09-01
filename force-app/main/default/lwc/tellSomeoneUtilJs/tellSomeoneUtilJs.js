@@ -156,7 +156,7 @@ const finalizeSupportingDocument = async (saveDocumentsFail, submitFormFail, att
     }
 };
 
-const tommieAlertsTellSomeoneSubmission = async (template, /*formSubmitSelections,*/
+const tommieAlertsTellSomeoneSubmission = async (template, formType,
                                             {selectorName, visible, documentTypeLabel, submitApexMethod/*, formSubmitSelectionsKey*/}) => {
     let formValues = {};
     let documents = [];
@@ -180,7 +180,11 @@ const tommieAlertsTellSomeoneSubmission = async (template, /*formSubmitSelection
         if (formValues && Object.keys(formValues).length > 0) {
             if (documents.length > 0) {
                 saveDocumentsFail = await attachedDocumentsSave(documents, documentTypeLabel, attachDocumentResponse);
-                formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+
+                if (formType === "titleix") {
+                    formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //For Supporting Documents record ID
+                }
+                // WAITING ON SALESFORCE SUPPORT DOCUMENT FIELD FOR WELL-BEING BEFORE ASSIGNING
             }
 
             if (submitApexMethod) {
@@ -189,19 +193,20 @@ const tommieAlertsTellSomeoneSubmission = async (template, /*formSubmitSelection
 
             /*START TEST FOR TOMMIE ALERTS SUBMIT*/
             // this.submitTitleIxIncidentFormFail = true;
-            const currentDateTime = new Date().toLocaleString();
+            // const currentDateTime = new Date().toLocaleString();
             // reportNumber = `Report: ${currentDateTime}`;
-            reportNumber = "";
+            // reportNumber = "";
                 /*END TEST FOR TOMMIE ALERTS SUBMIT*/
 
             // formSubmitSelections[formSubmitSelectionsKey] = reportNumber;
             submitFormFail = !reportNumber;
+            console.log("submitFormFail: " + submitFormFail);
 
             await finalizeSupportingDocument(saveDocumentsFail, submitFormFail, attachDocumentResponse, reportNumber);
         }
     }
 
-    return {formValues, documents, attachDocumentResponse, reportNumber, saveDocumentsFail, submitFormFail};
+    return {attachDocumentResponse, reportNumber, saveDocumentsFail, submitFormFail};
 };
 
 

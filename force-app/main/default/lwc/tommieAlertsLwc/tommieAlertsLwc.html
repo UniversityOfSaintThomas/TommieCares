@@ -4,56 +4,108 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
+
+
+    <div class="slds-grid slds-m-bottom_x-large">
+        <div class="slds-col">
+            <lightning-checkbox-group
+                    name="checkboxSubmitGroup"
+                    label="Failed Message"
+                    options={failedSubmitMessages}
+                    value={checkBoxSubmitValue}
+                    onchange={failedSubmitCheckbox}>
+            </lightning-checkbox-group>
+        </div>
+        <div class="slds-col">
+            <lightning-checkbox-group
+                    name="checkboxDocumentsGroup"
+                    label="Failed Documents"
+                    options={failedSubmitDocuments}
+                    value={checkBoxDocumentsValue}
+                    onchange={failedDocumentsCheckbox}>
+            </lightning-checkbox-group>
+        </div>
+        <div class="slds-col">
+            <lightning-checkbox-group
+                    name="checkboxDocumentsGroup"
+                    label="Report Numbers"
+                    options={reportNumber}
+                    value={checkBoxReportNumberValue}
+                    onchange={reportNumberCheckbox}>
+            </lightning-checkbox-group>
+        </div>
+    </div>
+
+
+
     <template lwc:if={noCurrentTermCheck}>
-        <div class="slds-media slds-media_center slds-theme_warning slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+<!--        <template lwc:if={testBoolean}>-->
+        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="current term warning"
                                 title="current term warning"
-                                size="small"
-                                class="slds-align-middle"
-                                variant="inverse">
+                                size="small">
                 </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
+            <div class="slds-media__body">
                 <p>No Active Academic Terms. Please contact salesforce@stthomas.edu to report this error.</p>
             </div>
         </div>
     </template>
-    <template lwc:if={caseSubmittedErrorCheck}>
-        <div class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
-            <div class="slds-media__figure">
-                <lightning-icon icon-name="utility:error"
-                                alternative-text="submit case error"
-                                title="submit case error"
-                                size="small"
-                                class="slds-align-middle"
-                                variant="inverse">
-                </lightning-icon>
-            </div>
-            <div class="slds-media__body regular-body-text">
-                <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>
+<!--    <template lwc:if={caseSubmittedErrorCheck}>-->
+<!--&lt;!&ndash;        <template lwc:if={testBoolean}>&ndash;&gt;-->
+<!--        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
+<!--            <div class="slds-media__figure">-->
+<!--                <lightning-icon icon-name="utility:warning"-->
+<!--                                alternative-text="submit case error"-->
+<!--                                title="submit case error"-->
+<!--                                size="small">-->
+<!--                </lightning-icon>-->
+<!--            </div>-->
+<!--            <div class="slds-media__body">-->
+<!--                <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </template>-->
+
+
+    <template lwc:if={tellSomeoneSubmitErrorMsg}>
+        <div class="slds-m-bottom_medium">
+            <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:warning"
+                                    alternative-text="form submit error"
+                                    title="form submit error"
+                                    size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <lightning-formatted-rich-text value={tellSomeoneSubmitErrorMsg}></lightning-formatted-rich-text>
+                </div>
             </div>
         </div>
     </template>
-    <template lwc:if={caseSubmittedCheck}>
-        <div class="slds-media slds-theme_success slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+
+
+
+    <template lwc:if={caseSubmittedSuccessCheck}>
+        <div class="slds-media slds-theme_success slds-scoped-notification" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:success"
                                 alternative-text="submit success"
                                 title="submit success"
                                 size="small"
-                                class="slds-align-middle"
                                 variant="inverse">
                 </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
-                <p class="slds-m-bottom_xx-small">Thank you for your submission, and for all you do both in the classroom and as an advisor.
+            <div class="slds-media__body">
+                <p class="slds-m-bottom_xx-small">Thank you for your Tommie Alert submission, and for all you do both in the classroom and as an advisor.
                     You have a tremendous impact on each student’s experience.</p>
                 <p><i>You can submit another below, or close this window if you are done.</i></p>
             </div>
         </div>
-        <div class="slds-m-top_xx-large">
+        <div class="slds-m-top_x-large">
             <lightning-button variant="brand"
                               type="button"
                               label="SUBMIT ANOTHER"
@@ -64,27 +116,26 @@
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
-        <div lwc:if={tellSomeoneLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+        <div lwc:if={tellSomeoneLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
+<!--            <div lwc:if={testBoolean} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no faculty or student course found"
                                 title="no faculty or student course found warning"
-                                size="small"
-                                class="slds-align-middle">
+                                size="small">
                 </lightning-icon>
             </div>
             <div class="slds-media__body regular-body-text">
                 <p>No faculty or student course information was found. Please select another option.</p>
             </div>
         </div>
-        <div lwc:else class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">
+        <div lwc:else class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
+<!--            <div lwc:if={testBoolean} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
             <div class="slds-media__figure">
-                <lightning-icon icon-name="utility:error"
+                <lightning-icon icon-name="utility:warning"
                                 alternative-text="no advisor information found"
                                 title="no advisor information found error"
-                                size="small"
-                                class="slds-align-middle"
-                                variant="inverse">
+                                size="small">
                 </lightning-icon>
             </div>
             <div class="slds-media__body regular-body-text">
@@ -486,7 +537,6 @@
 <!--                        label="Get Well Being Child Value"-->
 <!--                        onclick={tellSomeoneWellBeingForm}>-->
 <!--                </lightning-button>-->
-
             </div>
         </div>
     </template>
