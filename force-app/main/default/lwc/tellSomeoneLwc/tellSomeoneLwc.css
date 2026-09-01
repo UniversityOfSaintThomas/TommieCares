@@ -32,6 +32,10 @@ abbr.slds-required {
 /*    !*width: 80%;*!*/
 /*}*/
 
+.custom-error-icon-color {
+    --slds-c-icon-color-foreground-default: red !important;
+}
+
 .custom-textarea-tall {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
     /*width: 90%;*/
@@ -150,8 +154,9 @@ lightning-button.submit_button {
 }
 
 .submit-error-message {
-    border: solid 1px rebeccapurple;
-    background: #f4eefa;
+    border: solid 1.5px red;
+    background: #ff740008;
+    /*background: #f4eefa;*/
 }
 
 .slds-radio_faux {

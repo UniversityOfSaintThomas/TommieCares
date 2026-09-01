@@ -1,14 +1,13 @@
 /**
- * Created by nguy0092 on 8/30/2026.
+ * Created by nguy0092 on 09/01/2026
+ * Calls TellSomeone child LWC components:
+ * tellSomeoneTitleIxIncidentReport and tellSomeoneWellBeingIncidentReport
  */
 
 import {LightningElement, api, wire, track} from 'lwc';
-// import {getPicklistValues} from "lightning/uiObjectInfoApi";
 import getTommieCaresPicklists from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.getTommieCaresPicklists";
 import advisorInformation from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.advisorInformation";
 import searchStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.searchStudent";
-// import TOMMIE_CARES_REASONS from '@salesforce/schema/Case.Tommie_Alert_Primary_Reason__c';
-// import TOMMIE_HIGH_5_REASONS from "@salesforce/schema/Case.Tommie_High_5__c";
 import submitTommieAlertsAdvisingStudent from "@salesforce/apex/TommieAlertsAdvisingStudentLwcController.submitTommieAlertsAdvisingStudent";
 import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
 import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
@@ -447,10 +446,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
                 break;
-            // case "wellBeingDescription":
-            //     this.formSubmitSelections.TellSomeoneWellBeingDescription = eventValueTrim;
-            //     // this.tellSomeoneWellBeingRequired();
-            //     break;
         }
     }
 
@@ -672,53 +667,51 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     }
 
     //TESTING
-    get failedSubmitMessages() {
-        return [
-            { label: 'Behavior or Well Being Report Failed', value: 'Behavior or Well Being Report Failed' },
-            { label: 'Title IX Public Report Failed', value: 'Title IX Public Report Failed' },
-            { label: 'Case Submission Error Failed', value: 'Case Submission Error Failed' }
-        ];
-    }
-
-    @track checkBoxSubmitValue = [];
-
-    failedSubmitCheckbox(event) {
-        this.value = event.detail.value;
-        this.formSubmitSelections.submitWellBeingFormFail = this.value.includes('Behavior or Well Being Report Failed');
-        this.formSubmitSelections.submitTitleIxIncidentFormFail = this.value.includes('Title IX Public Report Failed');
-        this.caseSubmittedErrorCheck = this.value.includes('Case Submission Error Failed');
-    }
-
-    get failedSubmitDocuments() {
-        return [
-            { label: 'Behavior or Well Being Report Documents Failed', value: 'Behavior or Well Being Report Documents Failed' },
-            { label: 'Title IX Public Report Documents Failed', value: 'Title IX Public Report Documents Failed' },
-        ];
-    }
-
-    @track checkBoxDocumentsValue = [];
-
-    failedDocumentsCheckbox(event) {
-        this.value = event.detail.value;
-        this.wellBeingSaveDocumentsFail = this.value.includes('Behavior or Well Being Report Documents Failed');
-        this.titleIxSaveDocumentsFail = this.value.includes('Title IX Public Report Documents Failed');
-    }
-
-    get reportNumber() {
-        return [
-            { label: 'Behavior or Well Being Report', value: 'Behavior or Well Being Report' },
-            { label: 'TitleIX Report', value: 'TitleIX Report' },
-        ];
-    }
-
-    @track checkBoxReportNumberValue = [];
-
-    reportNumberCheckbox(event) {
-        this.value = event.detail.value;
-        this.formSubmitSelections.TellSomeoneWellBeingReportNumber = this.value.includes('Behavior or Well Being Report') ? "1234" : "";
-        this.formSubmitSelections.TellSomeoneTitleIxReportNumber = this.value.includes('TitleIX Report') ? "1234" : "";
-    }
-
-    testBoolean = true;
+    // get failedSubmitMessages() {
+    //     return [
+    //         { label: 'Behavior or Well Being Report Failed', value: 'Behavior or Well Being Report Failed' },
+    //         { label: 'Title IX Public Report Failed', value: 'Title IX Public Report Failed' },
+    //         { label: 'Case Submission Error Failed', value: 'Case Submission Error Failed' }
+    //     ];
+    // }
+    //
+    // @track checkBoxSubmitValue = [];
+    //
+    // failedSubmitCheckbox(event) {
+    //     this.value = event.detail.value;
+    //     this.formSubmitSelections.submitWellBeingFormFail = this.value.includes('Behavior or Well Being Report Failed');
+    //     this.formSubmitSelections.submitTitleIxIncidentFormFail = this.value.includes('Title IX Public Report Failed');
+    //     this.caseSubmittedErrorCheck = this.value.includes('Case Submission Error Failed');
+    // }
+    //
+    // get failedSubmitDocuments() {
+    //     return [
+    //         { label: 'Behavior or Well Being Report Documents Failed', value: 'Behavior or Well Being Report Documents Failed' },
+    //         { label: 'Title IX Public Report Documents Failed', value: 'Title IX Public Report Documents Failed' },
+    //     ];
+    // }
+    //
+    // @track checkBoxDocumentsValue = [];
+    //
+    // failedDocumentsCheckbox(event) {
+    //     this.value = event.detail.value;
+    //     this.wellBeingSaveDocumentsFail = this.value.includes('Behavior or Well Being Report Documents Failed');
+    //     this.titleIxSaveDocumentsFail = this.value.includes('Title IX Public Report Documents Failed');
+    // }
+    //
+    // get reportNumber() {
+    //     return [
+    //         { label: 'Behavior or Well Being Report', value: 'Behavior or Well Being Report' },
+    //         { label: 'TitleIX Report', value: 'TitleIX Report' },
+    //     ];
+    // }
+    //
+    // @track checkBoxReportNumberValue = [];
+    //
+    // reportNumberCheckbox(event) {
+    //     this.value = event.detail.value;
+    //     this.formSubmitSelections.TellSomeoneWellBeingReportNumber = this.value.includes('Behavior or Well Being Report') ? "1234" : "";
+    //     this.formSubmitSelections.TellSomeoneTitleIxReportNumber = this.value.includes('TitleIX Report') ? "1234" : "";
+    // }
     //END TESTING
 }

@@ -4,48 +4,43 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
-
-
-    <div class="slds-grid slds-m-bottom_x-large">
-        <div class="slds-col">
-            <lightning-checkbox-group
-                    name="checkboxSubmitGroup"
-                    label="Failed Message"
-                    options={failedSubmitMessages}
-                    value={checkBoxSubmitValue}
-                    onchange={failedSubmitCheckbox}>
-            </lightning-checkbox-group>
-        </div>
-        <div class="slds-col">
-            <lightning-checkbox-group
-                    name="checkboxDocumentsGroup"
-                    label="Failed Documents"
-                    options={failedSubmitDocuments}
-                    value={checkBoxDocumentsValue}
-                    onchange={failedDocumentsCheckbox}>
-            </lightning-checkbox-group>
-        </div>
-        <div class="slds-col">
-            <lightning-checkbox-group
-                    name="checkboxDocumentsGroup"
-                    label="Report Numbers"
-                    options={reportNumber}
-                    value={checkBoxReportNumberValue}
-                    onchange={reportNumberCheckbox}>
-            </lightning-checkbox-group>
-        </div>
-    </div>
-
-
-
+<!--    <div class="slds-grid slds-m-bottom_x-large">-->
+<!--        <div class="slds-col">-->
+<!--            <lightning-checkbox-group-->
+<!--                    name="checkboxSubmitGroup"-->
+<!--                    label="Failed Message"-->
+<!--                    options={failedSubmitMessages}-->
+<!--                    value={checkBoxSubmitValue}-->
+<!--                    onchange={failedSubmitCheckbox}>-->
+<!--            </lightning-checkbox-group>-->
+<!--        </div>-->
+<!--        <div class="slds-col">-->
+<!--            <lightning-checkbox-group-->
+<!--                    name="checkboxDocumentsGroup"-->
+<!--                    label="Failed Documents"-->
+<!--                    options={failedSubmitDocuments}-->
+<!--                    value={checkBoxDocumentsValue}-->
+<!--                    onchange={failedDocumentsCheckbox}>-->
+<!--            </lightning-checkbox-group>-->
+<!--        </div>-->
+<!--        <div class="slds-col">-->
+<!--            <lightning-checkbox-group-->
+<!--                    name="checkboxDocumentsGroup"-->
+<!--                    label="Report Numbers"-->
+<!--                    options={reportNumber}-->
+<!--                    value={checkBoxReportNumberValue}-->
+<!--                    onchange={reportNumberCheckbox}>-->
+<!--            </lightning-checkbox-group>-->
+<!--        </div>-->
+<!--    </div>-->
     <template lwc:if={noCurrentTermCheck}>
-<!--        <template lwc:if={testBoolean}>-->
         <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="current term warning"
                                 title="current term warning"
-                                size="small">
+                                size="small"
+                                class="custom-error-icon-color">
                 </lightning-icon>
             </div>
             <div class="slds-media__body">
@@ -54,7 +49,6 @@
         </div>
     </template>
 <!--    <template lwc:if={caseSubmittedErrorCheck}>-->
-<!--&lt;!&ndash;        <template lwc:if={testBoolean}>&ndash;&gt;-->
 <!--        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
 <!--            <div class="slds-media__figure">-->
 <!--                <lightning-icon icon-name="utility:warning"-->
@@ -68,8 +62,6 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </template>-->
-
-
     <template lwc:if={tellSomeoneSubmitErrorMsg}>
         <div class="slds-m-bottom_medium">
             <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
@@ -77,7 +69,8 @@
                     <lightning-icon icon-name="utility:warning"
                                     alternative-text="form submit error"
                                     title="form submit error"
-                                    size="small">
+                                    size="small"
+                                    class="custom-error-icon-color">
                     </lightning-icon>
                 </div>
                 <div class="slds-media__body">
@@ -86,11 +79,8 @@
             </div>
         </div>
     </template>
-
-
-
     <template lwc:if={caseSubmittedSuccessCheck}>
-        <div class="slds-media slds-theme_success slds-scoped-notification" role="status">
+        <div class="slds-media slds-media_center slds-theme_success slds-scoped-notification" role="status">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:success"
                                 alternative-text="submit success"
@@ -122,7 +112,8 @@
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no faculty or student course found"
                                 title="no faculty or student course found warning"
-                                size="small">
+                                size="small"
+                                class="custom-error-icon-color">
                 </lightning-icon>
             </div>
             <div class="slds-media__body regular-body-text">
@@ -135,7 +126,8 @@
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no advisor information found"
                                 title="no advisor information found error"
-                                size="small">
+                                size="small"
+                                class="custom-error-icon-color">
                 </lightning-icon>
             </div>
             <div class="slds-media__body regular-body-text">
@@ -154,7 +146,7 @@
                 </div>
                 <div class="regular-body-text">
                     <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555" class="slds-truncate">(651)962-5555</a>.</p>
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555" class="slds-truncate">(651) 962-5555</a>.</p>
                     <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
                         individuals in order to provide additional support.<br>
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -526,17 +518,8 @@
                 </div>
                 <div class="slds-m-top_x-large regular-body-text">
                     <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
-                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651)962-6230</a>.</p>
+                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651) 962-6230</a>.</p>
                 </div>
-
-<!--                <lightning-button-->
-<!--                        label="Get TitleIX Child Value"-->
-<!--                        onclick={tellSomeoneTitleIxForm}>-->
-<!--                </lightning-button>-->
-<!--                <lightning-button-->
-<!--                        label="Get Well Being Child Value"-->
-<!--                        onclick={tellSomeoneWellBeingForm}>-->
-<!--                </lightning-button>-->
             </div>
         </div>
     </template>

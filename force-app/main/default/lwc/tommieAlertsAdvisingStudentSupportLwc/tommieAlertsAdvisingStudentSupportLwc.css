@@ -56,8 +56,12 @@ abbr.slds-required {
 /*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
 /*}*/
 
-.custom-warning-icon {
-    --slds-c-icon-color-foreground-default: rebeccapurple; /*utility icons*/
+.custom-error-icon-color {
+    --slds-c-icon-color-foreground-default: red !important;
+}
+
+.custom-warning-icon-color {
+    --slds-c-icon-color-foreground-default: rebeccapurple !important; /*utility icons*/
 }
 
 .element-sublabel {
@@ -66,8 +70,8 @@ abbr.slds-required {
 }
 
 .error-message {
-    border: solid 1px rebeccapurple;
-    background: #f4eefa;
+    border: solid 1.5px red;
+    background: #ff740008;
 }
 
 .footer-info p {
