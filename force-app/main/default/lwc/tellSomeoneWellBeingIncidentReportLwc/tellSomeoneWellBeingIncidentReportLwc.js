@@ -1,5 +1,6 @@
 /**
- * Created by nguy0092 on 8/19/2026.
+ * Created: 09/02/2026:
+ * This LWC is a child component in tellSomeoneLwc, tommieAlertsLwc, tommieAlertsAdvisingStudentSupportLwc.
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
@@ -8,6 +9,7 @@ import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
+    //From parent component
     @api tellSomeoneReportType = "";
     @api tellSomeoneReporterFirstName = "";
     @api tellSomeoneReporterLastName = "";
@@ -71,7 +73,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
 
     get submitDisable() {
         return !(!!this.reporter_type_custom && this.validDate && !!this.wellBeingIncidentFormValues.description && !!this.wellBeingIncidentFormValues.students_first_name &&
-            (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && !!this.wellBeingIncidentFormValues.reporterEmail)));
+            (this.isAnonymous || (!!this.wellBeingIncidentFormValues.reporterName && !!this.wellBeingIncidentFormValues.reporterPhone && this.validEmail && this.validEmailIndividual && !!this.wellBeingIncidentFormValues.reporterEmail)));
     }
 
     rendered = false;
@@ -237,13 +239,15 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
-                this.validEmailIndividual = emailValidationResults.validEmail;
-                this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
-                if (this.validEmailWarningIndividual) {
-                    emailField.classList.add("slds-has-error");
-                } else {
-                    emailField.classList.remove("slds-has-error");
+                if (emailAddress) {
+                    this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
+                    this.validEmailIndividual = emailValidationResults.validEmail;
+                    this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
+                    if (this.validEmailWarningIndividual) {
+                        emailField.classList.add("slds-has-error");
+                    } else {
+                        emailField.classList.remove("slds-has-error");
+                    }
                 }
                 break;
         }
@@ -365,35 +369,31 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
             }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                // let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
-                console.log('formValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
-                formReportNumber = await submitWellBeingReportForm({formValues: this.wellBeingIncidentFormValues});
-                this.submitWellBeingFormFail = !formReportNumber;
-                console.log('formReportNumber: ', formReportNumber);
-            } catch (error) {
-                this.submitWellBeingFormFail = true;
-                console.error('Error submitting well-being form:', error);
-            }
+        try {
+            console.log('formValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
+            formReportNumber = await submitWellBeingReportForm({formValues: this.wellBeingIncidentFormValues});
+            this.submitWellBeingFormFail = !formReportNumber;
+            console.log('formReportNumber: ', formReportNumber);
+        } catch (error) {
+            this.submitWellBeingFormFail = true;
+            console.error('Error submitting well-being form:', error);
         }
 
 /*START TEST INPUTS*/
-formReportNumber = "Testing 123";
-this.submitWellBeingFormFail = !formReportNumber ;
+// formReportNumber = "Testing 123";
+// this.submitWellBeingFormFail = !formReportNumber ;
 // this.saveDocumentsFail = true;
 /*END TEST INPUTS*/
 
-        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
-
-        this.showSpinner = false;
-        // eslint-disable-next-line no-restricted-globals
-        location.replace(this.submittedUrl());
-
-/*START TEST INPUTS*/
-// this.handleHideSpinner();
-/*END TEST INPUTS*/
-
+        try {
+            await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
+        } catch (error) {
+            console.error('Error finalizing supporting document:', error);
+        } finally {
+            this.showSpinner = false;
+        }
     }
 
     submitDisableToTommieAlerts() {

@@ -57,11 +57,6 @@ lightning-checkbox-group {
     box-shadow: none !important;
 }
 
-/*.container {*/
-/*    position: relative;*/
-/*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
-/*}*/
-
 .custom-error-icon-color {
     --slds-c-icon-color-foreground-default: red !important;
 }
@@ -84,10 +79,6 @@ lightning-checkbox-group {
     font-size: 1rem !important;
     color: black;
 }
-
-/*:host {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*}*/
 
 lightning-button.submit_button {
     font-size: 1rem !important;

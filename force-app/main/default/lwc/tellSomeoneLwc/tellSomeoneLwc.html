@@ -60,7 +60,7 @@
                 <lightning-button variant="brand"
                                   label="Enter another concern"
                                   title="Enter another concern"
-                                  onclick={openNewForm}>
+                                  onclick={submitAnother}>
                 </lightning-button>
             </p>
         </template>
@@ -173,7 +173,7 @@
                 <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps}></c-tell-someone-well-being-incident-report-lwc>
             </template>
             <div class="slds-m-top_medium" lwc:if={showWhatDiscrimination}>
-                <c-tell-someone-bias-incident-report lwc:spread={childProps}></c-tell-someone-bias-incident-report>
+                <c-tell-someone-bias-incident-report-lwc lwc:spread={childProps}></c-tell-someone-bias-incident-report-lwc>
             </div>
             <div class="slds-m-top_medium" lwc:if={showWhatMisconduct}>
                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps}></c-tell-someone-title-ix-incident-report-lwc>
@@ -182,7 +182,6 @@
                 <div lwc:if={showWhatOther.text}>
                     <p class="slds-m-top_small slds-m-bottom_none">If you have updates to provide on a concern regarding a faculty or staff, please contact Human Resources at <a href="mailto:askhr@stthomas.edu">askhr@stthomas.edu</a>.</p>
                 </div>
-<!--                        <p class="slds-m-vertical_x-small textarea-sublabel-2"><abbr class="slds-required" title="Required"><b>*</b></abbr> indicates a required field</p>-->
                 <template lwc:if={iAmNotAnonymousCheck}>
                     <div class="slds-m-top_medium">
                         <h2 class="slds-m-bottom_xxx-small">Your Information</h2>
@@ -344,7 +343,7 @@
                         <label class="slds-form-element__label slds-m-bottom_xx-small selection-labels" for="concerned-what-additional-info-id">
                             <span class="slds-text-nowrap">Please provide additional information about your concern<abbr class="slds-required" title="required">*</abbr></span></label>
                         <div class="slds-form-element__control">
-                            <lightning-textarea class="custom-textarea-tall"
+                            <lightning-textarea class="custom-textarea"
                                                 id="concerned-what-additional-info-id"
                                                 label=""
                                                 value={tellSomeoneCase.ConcernedWhatAdditionalInfo}
@@ -373,21 +372,6 @@
                     </lightning-button>
                 </div>
             </div>
-            <template lwc:if={submitCaseFail}>
-                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="utility:error"
-                                        alternative-text="submit case error"
-                                        title="submit case error"
-                                        size="small">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <p>There was a problem with your submission. Please contact <a href="mailto: salesforce@stthomas.edu" target="_blank">salesforce@stthomas.edu</a> to report this error.</p>
-                    </div>
-                </div>
-            </template>
-<!--            </div>-->
 <!--                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-m-bottom_medium">-->
 <!--                    <img src={tellSomeoneLogo} alt="Tell Someone Logo" class="logo-size">-->
 <!--                    <div class="slds-m-top_medium link-text-size">-->
@@ -414,6 +398,5 @@
 <!--                    </div>-->
 <!--                </div>-->
         </div>
-<!--        </div>-->
     </div>
 </template>

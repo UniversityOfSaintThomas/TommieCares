@@ -14,7 +14,7 @@ import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.s
 import {tommieAlertsTellSomeoneSubmission} from "c/tellSomeoneUtilJs";
 
 export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElement {
-
+    //To TellSomeone child component
     get childProps() {
         return {
             tellSomeoneReportType: this.advisorContactInfo.St_Thomas_Connection__c,
@@ -337,9 +337,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                 this.buildAlertGroups();
             })
             .catch(error => {
-                // handle error, e.g. show message
                 console.error("Search error:", error);
-                // Example: this.emailSearchMessage = "Search failed. Please try again.";
             });
     }
 
@@ -477,7 +475,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         this.advisingGroup = [];
         this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
-        // this._incidentDate = "";
     }
 
     submittedUrl() {
@@ -493,7 +490,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             this.searchParamsUrl.searchParams.delete("submitted");
         }
         // eslint-disable-next-line no-restricted-globals
-        location.replace(this.searchParamsUrl.toString());
+        location.replace(this.searchParamsUrl);
     }
 
     tellSomeoneWellBeingSubmitDisable = true;
@@ -616,7 +613,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                     visible: this.selectionsCheck.behaviorWellBeingCheck && !this.tellSomeoneWellBeingSubmitDisable,
                     documentTypeLabel: 'Advocate Well-Being Incident',
                     submitApexMethod: submitWellBeingReportForm,
-                    // formSubmitSelectionsKey: 'TellSomeoneWellBeingReportNumber'
                 });
                 this.wellBeingSaveDocumentsFail = wellBeingResult.saveDocumentsFail;
                 this.formSubmitSelections.TellSomeoneWellBeingReportNumber = wellBeingResult.reportNumber;
@@ -633,7 +629,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                     visible: this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable,
                     documentTypeLabel: 'Advocate Title IX Incident',
                     submitApexMethod: submitTitleIxReportForm,
-                    // formSubmitSelectionsKey: 'TellSomeoneTitleIxReportNumber'
                 });
                 this.titleIxSaveDocumentsFail = titleIxResult.saveDocumentsFail;
                 this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxResult.reportNumber;
@@ -651,24 +646,11 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                 this.caseSubmittedErrorCheck = true;
             }
 
-            // this.submitCaseSpinner = false;
-            //
-            // if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
-            //     this.caseSubmittedCheck = true;
-            //     console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
-            //     console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
-            //     console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
-            // } else {
-            //     // eslint-disable-next-line no-restricted-globals
-            //     location.replace(this.submittedUrl());
-            // }
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
         }
-
-        this.submitCaseSpinner = false;
 
         if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
             this.caseSubmittedCheck = true;
@@ -679,6 +661,8 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             // eslint-disable-next-line no-restricted-globals
             location.replace(this.submittedUrl());
         }
+
+        this.submitCaseSpinner = false;
     }
 
     //TESTING

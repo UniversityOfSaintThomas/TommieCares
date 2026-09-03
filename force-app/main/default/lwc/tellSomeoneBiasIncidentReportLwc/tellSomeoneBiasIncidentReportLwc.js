@@ -1,5 +1,6 @@
 /**
- * Created by nguy0092 on 8/21/2026.
+ * Created: 09/02/2026:
+ * This LWC is a child component in tellSomeoneLwc.
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
@@ -7,7 +8,8 @@ import biasReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.
 import submitBiasIncidentReportForm from "@salesforce/apex/TellSomeoneLwcController.submitBiasIncidentReportForm";
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
-export default class TellSomeoneBiasIncidentReport extends LightningElement {
+export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
+    //From parent component
     @api tellSomeoneReportType = "";
     @api tellSomeoneReporterFirstName = "";
     @api tellSomeoneReporterLastName = "";
@@ -386,36 +388,31 @@ export default class TellSomeoneBiasIncidentReport extends LightningElement {
             }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                // let formValues = JSON.stringify(this.biasIncidentFormValues);
-                console.log('formValues: ', JSON.stringify(this.biasIncidentFormValues));
-                formReportNumber = await submitBiasIncidentReportForm({formValues: this.biasIncidentFormValues});
-                // formReportNumber = await submitBiasIncidentReportForm({formValues: formValues});
-                this.submitBiasIncidentFormFail = !formReportNumber;
-                console.log('formReportNumber: ', formReportNumber);
-            } catch (error) {
-                this.submitBiasIncidentFormFail = true;
-                console.error('Error submitting titleIx form:', error);
-            }
+        try {
+            console.log('formValues: ', JSON.stringify(this.biasIncidentFormValues));
+            formReportNumber = await submitBiasIncidentReportForm({formValues: this.biasIncidentFormValues});
+            this.submitBiasIncidentFormFail = !formReportNumber;
+            console.log('formReportNumber: ', formReportNumber);
+        } catch (error) {
+            this.submitBiasIncidentFormFail = true;
+            console.error('Error submitting titleIx form:', error);
         }
 
-/*START TEST INPUTS*/
+        /*START TEST INPUTS*/
 // formReportNumber = "Test0987";
 // this.submitBiasIncidentFormFail = !formReportNumber;
 // this.saveDocumentsFail = true;
-/*END TEST INPUTS*/
+        /*END TEST INPUTS*/
 
-        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitBiasIncidentFormFail, attachDocumentResponse, formReportNumber);
-
-        this.showSpinner = false;
-        // eslint-disable-next-line no-restricted-globals
-        location.replace(this.submittedUrl());
-
-/*START TEST INPUTS*/
-this.handleHideSpinner();
-/*END TEST INPUTS*/
-
+        try {
+            await finalizeSupportingDocument(this.saveDocumentsFail, this.submitBiasIncidentFormFail, attachDocumentResponse, formReportNumber);
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
+        } catch (error) {
+            console.error('Error finalizing supporting document:', error);
+        } finally {
+            this.showSpinner = false;
+        }
     }
 
 }

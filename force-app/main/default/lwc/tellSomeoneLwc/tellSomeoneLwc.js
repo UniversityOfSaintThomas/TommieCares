@@ -1,20 +1,33 @@
 /**
- * Created by nguy0092 on 6/23/2026.
- * Utilize child components:
- * -AdvocateBiasIncidentReportLwc
- * -AdvocateTitleIxIncidentReportLwc
- * -AdvocateWellBeingIncidentReportLwc
- * -TommieCaresLwc
+ * Created by nguy0092 on 09/02/2026.
+ * Replaces previous communityOfConcernLwc
+ * Uses child components:
+ * -tommieAlertsLwc
+ * -tommieAlertsAdvisingStudentSupportLwc
+ * -tellSomeoneWellBeingIncidentReportLwc
+ * -tellSomeoneBiasIncidentReportLwc
+ * -tellSomeoneTitleIxIncidentReportLwc
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
 import getTellSomeonePicklists from "@salesforce/apex/TellSomeoneLwcController.getTellSomeonePicklists";
 import iAmContactInfo from "@salesforce/apex/TellSomeoneLwcController.iAmContactInfo";
-import saveCase from "@salesforce/apex/CommunityOfConcernLwcController.saveCase";
-import TELL_SOMEONE_LOGO from '@salesforce/resourceUrl/TellSomeoneLogoPng';
+import submitCaseRecord from "@salesforce/apex/TellSomeoneLwcController.submitCaseRecord";
+// import TELL_SOMEONE_LOGO from '@salesforce/resourceUrl/TellSomeoneLogoPng';
 import {emailValidation} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneLwc extends LightningElement {
+    //To child components
+    get childProps() {
+        return {
+            tellSomeoneReportType: this.tellSomeoneCase?.IAmValue,
+            tellSomeoneReporterFirstName: this.tellSomeoneCase?.IAmFirstName,
+            tellSomeoneReporterLastName: this.tellSomeoneCase?.IAmLastName,
+            tellSomeoneReporterEmail: this.tellSomeoneCase?.IAmEmail,
+            tellSomeoneConcernWhoValue: this.tellSomeoneCase?.ConcernedWhoValue,
+            tellSomeoneParamsUrl: this.searchParamsUrl,
+        }
+    }
 
     @api paramSfId = "";
     @api paramBId = "";
@@ -24,7 +37,6 @@ export default class TellSomeoneLwc extends LightningElement {
     @api paramUrl = "";
 
     searchParamsUrl;
-    paramsString;
     caseSubmittedCheck = false;
     formSubmitError = false;
     documentAttachFail = false;
@@ -53,20 +65,9 @@ export default class TellSomeoneLwc extends LightningElement {
         ConcernedWhatAdditionalInfo: "",
     }
 
-    get tellSomeoneLogo() {
-        return TELL_SOMEONE_LOGO;
-    }
-
-    get childProps() {
-        return {
-            tellSomeoneReportType: this.tellSomeoneCase?.IAmValue,
-            tellSomeoneReporterFirstName: this.tellSomeoneCase?.IAmFirstName,
-            tellSomeoneReporterLastName: this.tellSomeoneCase?.IAmLastName,
-            tellSomeoneReporterEmail: this.tellSomeoneCase?.IAmEmail,
-            tellSomeoneConcernWhoValue: this.tellSomeoneCase?.ConcernedWhoValue,
-            tellSomeoneParamsUrl: this.searchParamsUrl,
-        }
-    }
+    // get tellSomeoneLogo() {
+    //     return TELL_SOMEONE_LOGO;
+    // }
 
     get concernedWhatOptions() {
         if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
@@ -374,68 +375,58 @@ export default class TellSomeoneLwc extends LightningElement {
                 }
                 break;
             case "concernedwhoinfo":
-                this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
-                this.validEmailWho = emailValidationResults.validEmail;
-                this.validEmailWarningWho = emailValidationResults.validEmailWarning;
-                if (this.validEmailWarningWho) {
-                    emailField.classList.add("slds-has-error");
-                } else {
-                    emailField.classList.remove("slds-has-error");
+                if (emailAddress) {
+                    this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
+                    this.validEmailWho = emailValidationResults.validEmail;
+                    this.validEmailWarningWho = emailValidationResults.validEmailWarning;
+                    if (this.validEmailWarningWho) {
+                        emailField.classList.add("slds-has-error");
+                    } else {
+                        emailField.classList.remove("slds-has-error");
+                    }
                 }
                 break;
         }
 
     }
 
-    showSpinner = false;
-    handleShowSpinner() {
-        this.showSpinner = true;
-    }
-
-    handleHideSpinner() {
-        this.showSpinner = false;
-    }
-
     get submittedUrl() {
         this.searchParamsUrl.searchParams.set("submitted", "true");
+        if (this.submitCaseFail) {
+            this.searchParamsUrl.searchParams.set("submitvalid", "false");
+        }
         return this.searchParamsUrl;
     }
 
-    openNewForm() {
+    submitAnother() {
         this.searchParamsUrl.searchParams.set("bid", this.tellSomeoneCase.IAmBannerId);
         this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
         this.searchParamsUrl.searchParams.delete("submitted");
         this.searchParamsUrl.searchParams.delete("submitvalid");
         this.searchParamsUrl.searchParams.delete("nodocument");
         // eslint-disable-next-line no-restricted-globals
-        location.replace(this.searchParamsUrl.toString());
+        location.replace(this.searchParamsUrl);
     }
 
+    showSpinner = false;
     submitCaseFail = false;
     async submitCase(event) {
-        // console.log("communityOfConcernCase: " + JSON.stringify(this.communityOfConcernCase));
-        const eventField = event.currentTarget;
+        // const eventField = event.currentTarget;
         this.submitCaseFail = false;
+
+        this.showSpinner = true;
+
         try {
-            this.handleShowSpinner();
-            await saveCase({formSelections: this.tellSomeoneCase}).then((result) => {
-                this.submitCaseFail = !!result;
-            });
-        } catch (e) {
-            console.log("Submission Error: " + JSON.stringify(e));
+            this.submitCaseFail = await submitCaseRecord({formSelections: this.tellSomeoneCase});
+        } catch (error) {
+            console.log("Submission Error: " + JSON.stringify(error));
             this.submitCaseFail = true;
         }
 
-        if (this.submitCaseFail) {
-            this.handleHideSpinner();
-            eventField.scrollIntoView({
-                behavior: 'smooth',
-            });
-        } else {
-            this.handleHideSpinner();
-            // eslint-disable-next-line no-restricted-globals
-            location.replace(this.submittedUrl);
-        }
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(this.submittedUrl);
+
+        this.showSpinner = false;
     }
 
 }

@@ -1,13 +1,11 @@
 /**
- * Created by nguy0092 on 8/19/2026.
+ * Created: 09/02/2026:
+ * This LWC is a child component in tellSomeoneLwc, tommieAlertsLwc, tommieAlertsAdvisingStudentSupportLwc.
  */
 
 import {api, LightningElement, track, wire} from 'lwc';
 import titleIxReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getTitleIxReportingOptions";
-// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
 import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
-// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElement {
@@ -327,35 +325,31 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             }
         }
 
-        if (!this.saveDocumentsFail) {
-            try {
-                // let formValues = JSON.stringify(this.titleIxIncidentFormValues);
-                console.log('formValues: ', JSON.stringify(this.titleIxIncidentFormValues));
-                formReportNumber = await submitTitleIxReportForm({formValues: this.titleIxIncidentFormValues});
-                this.submitTitleIxIncidentFormFail = !formReportNumber;
-                console.log('formReportNumber: ', formReportNumber);
-            } catch (error) {
-                this.submitTitleIxIncidentFormFail = true;
-                console.error('Error submitting titleIx form:', error);
-            }
+        try {
+            console.log('formValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+            formReportNumber = await submitTitleIxReportForm({formValues: this.titleIxIncidentFormValues});
+            this.submitTitleIxIncidentFormFail = !formReportNumber;
+            console.log('formReportNumber: ', formReportNumber);
+        } catch (error) {
+            this.submitTitleIxIncidentFormFail = true;
+            console.error('Error submitting titleIx form:', error);
         }
 
 /*START TEST INPUTS*/
-formReportNumber = "TESTING"
-this.submitTitleIxIncidentFormFail = !formReportNumber;
+// formReportNumber = "TESTING"
+// this.submitTitleIxIncidentFormFail = !formReportNumber;
 // this.saveDocumentsFail = true;
 /*END TEST INPUTS*/
 
-        await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
-
-        this.showSpinner = false;
-        // eslint-disable-next-line no-restricted-globals
-        location.replace(this.submittedUrl());
-
-/*START TEST INPUTS*/
-// this.showSpinner = false;
-/*END TEST INPUTS*/
-
+        try {
+            await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
+        } catch (error) {
+            console.error('Error finalizing supporting document:', error);
+        } finally {
+            this.showSpinner = false;
+        }
     }
 
     submitDisableToTommieAlerts() {

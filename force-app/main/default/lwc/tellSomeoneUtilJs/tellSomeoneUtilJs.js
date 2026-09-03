@@ -141,13 +141,13 @@ const attachedDocumentsSave = async (attachDocuments, supportingDocumentName, at
 }
 
 const finalizeSupportingDocument = async (saveDocumentsFail, submitFormFail, attachDocumentResponse, reportNumber) => {
-    if (!saveDocumentsFail && !submitFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+    if (!saveDocumentsFail && !submitFormFail && attachDocumentResponse.SupportingDocumentId) {
         try {
             await updateSupportingDocument({supportingDocumentId: attachDocumentResponse.SupportingDocumentId, advocateReportNumber: reportNumber});
         } catch (e) {
             console.log("updateSupportingDocument error: " + JSON.stringify(e));
         }
-    } else if (!saveDocumentsFail && submitFormFail && attachDocumentResponse.SupportingDocumentUrl) {
+    } else if (!saveDocumentsFail && submitFormFail && attachDocumentResponse.SupportingDocumentId) {
         try {
             await deleteSupportingDocument({supportingDocumentId: attachDocumentResponse.SupportingDocumentId});
         } catch (e) {
@@ -157,7 +157,7 @@ const finalizeSupportingDocument = async (saveDocumentsFail, submitFormFail, att
 };
 
 const tommieAlertsTellSomeoneSubmission = async (template, formType,
-                                            {selectorName, visible, documentTypeLabel, submitApexMethod/*, formSubmitSelectionsKey*/}) => {
+                                            {selectorName, visible, documentTypeLabel, submitApexMethod}) => {
     let formValues = {};
     let documents = [];
     let attachDocumentResponse = {
@@ -191,14 +191,6 @@ const tommieAlertsTellSomeoneSubmission = async (template, formType,
                 reportNumber = await submitApexMethod({formValues: formValues});
             }
 
-            /*START TEST FOR TOMMIE ALERTS SUBMIT*/
-            // this.submitTitleIxIncidentFormFail = true;
-            // const currentDateTime = new Date().toLocaleString();
-            // reportNumber = `Report: ${currentDateTime}`;
-            // reportNumber = "";
-                /*END TEST FOR TOMMIE ALERTS SUBMIT*/
-
-            // formSubmitSelections[formSubmitSelectionsKey] = reportNumber;
             submitFormFail = !reportNumber;
             console.log("submitFormFail: " + submitFormFail);
 
@@ -208,7 +200,5 @@ const tommieAlertsTellSomeoneSubmission = async (template, formType,
 
     return {attachDocumentResponse, reportNumber, saveDocumentsFail, submitFormFail};
 };
-
-
 
 export { emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument, tommieAlertsTellSomeoneSubmission };

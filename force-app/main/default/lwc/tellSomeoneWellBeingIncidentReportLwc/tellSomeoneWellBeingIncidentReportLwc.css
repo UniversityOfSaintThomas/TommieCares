@@ -26,13 +26,6 @@ abbr.slds-required {
     /*width: 80%;*/
 }
 
-.form-required-label::after {
-    content: "*";
-    color: #ea001e; /* Standard Salesforce error red */
-    font-weight: bold;
-    display: inline; /* Keeps it on the same line as the text */
-}
-
 lightning-button.submit_button {
     font-size: 1rem !important;
     font-weight: bold;

@@ -271,6 +271,67 @@ public without sharing class TellSomeoneLwcController {
         return titleIxReportNumber;
     }
 
+    @AuraEnabled(Cacheable=false)
+    public static Boolean submitCaseRecord(Map<String, String> formSelections) {
+        Boolean submitCaseRecordFail = false;
+
+        Case communityOfConcernCase = new Case();
+
+        List<Contact> defaultReporter = [
+                SELECT Id,
+                        FirstName,
+                        LastName,
+                        Email
+                FROM Contact
+                WHERE FirstName = 'Etl'
+                AND LastName = 'User'
+                AND Email = 'salesforce@stthomas.edu'
+                WITH SECURITY_ENFORCED
+                LIMIT 1
+        ];
+
+        List<RecordType> recordId = [
+                SELECT Id,
+                        Name
+                FROM RecordType
+                WHERE SobjectType = 'Case'
+                AND DeveloperName = 'Community_Concern'
+        ];
+
+        String caseRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
+
+        communityOfConcernCase.RecordTypeId = caseRecordId;
+        communityOfConcernCase.Origin = 'Web';
+        communityOfConcernCase.Subject = 'Community Concern';
+        communityOfConcernCase.Community_Concern_Reporter_Type__c = formSelections.get('IAmValue');
+        if (String.isNotBlank(formSelections.get('IAmContactId'))) {
+            communityOfConcernCase.Case_Reporter__c = formSelections.get('IAmContactId');
+        } else {
+            if (defaultReporter.size() > 0) {
+                communityOfConcernCase.Case_Reporter__c = defaultReporter[0].Id;
+            }
+        }
+        communityOfConcernCase.SuppliedName = formSelections.get('IAmFirstName') + ' ' + formSelections.get('IAmLastName');
+        communityOfConcernCase.SuppliedEmail = formSelections.get('IAmEmail');
+        communityOfConcernCase.SuppliedPhone = formSelections.get('IAmPhone');
+        communityOfConcernCase.Community_Concern_Who_Type__c = formSelections.get('ConcernedWhoValue');
+        communityOfConcernCase.First_Name__c = formSelections.get('ConcernedWhoFirstName');
+        communityOfConcernCase.Last_Name__c = formSelections.get('ConcernedWhoLastName');
+        communityOfConcernCase.St_Thomas_Email__c = formSelections.get('ConcernedWhoEmail');
+        communityOfConcernCase.Phone__c = formSelections.get('ConcernedWhoPhone');
+        communityOfConcernCase.Community_Concern__c = formSelections.get('ConcernedWhatValue');
+        communityOfConcernCase.Restricted_Access_Notes__c = formSelections.get('ConcernedWhatAdditionalInfo');
+
+        try {
+            insert communityOfConcernCase;
+        } catch (DmlException e) {
+            submitCaseRecordFail = true;
+            System.debug('Insert Case error: '+e);
+        }
+
+        return submitCaseRecordFail;
+    }
+
     public class DocumentsWrapper {
         @AuraEnabled public String fileId { get; set; }
         @AuraEnabled public String fileContent { get; set; }

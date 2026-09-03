@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>67.0</apiVersion>
-    <description>Tell Someone Bias Incident Report</description>
+    <description>Tell Someone Bias Incident Report Lwc</description>
     <isExposed>true</isExposed>
-    <masterLabel>Tell Someone Bias Incident Report</masterLabel>
+    <masterLabel>Tell Someone Bias Incident Report Lwc</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>

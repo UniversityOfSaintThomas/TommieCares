@@ -51,11 +51,6 @@ abbr.slds-required {
     --sds-c-input-color-border: rebeccapurple;
 }
 
-/*.container {*/
-/*    position: relative;*/
-/*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
-/*}*/
-
 .custom-error-icon-color {
     --slds-c-icon-color-foreground-default: red !important;
 }
@@ -77,14 +72,6 @@ abbr.slds-required {
 .footer-info p {
     font-size: 1rem !important;
 }
-
-/*:host {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*}*/
-
-/*.label-margin {*/
-/*    margin-top: -18px;*/
-/*}*/
 
 lightning-button.submit_button {
     /*--slds-c-button-brand-text-color: #fff;*/
@@ -245,36 +232,6 @@ lightning-textarea.custom-textarea {
     outline: 2px solid #ffd966;   /* visible focus ring */
     outline-offset: 2px;
 }
-
-/* optional: tighten radio spacing */
-/*.search-mode .slds-radio {*/
-/*    margin-bottom: .30rem !important;*/
-/*}*/
-
-
-/* stack only the radios inside the search-mode block */
-/*.search-mode .slds-form-element__control {*/
-/*    !* turn the grid's direction to column so children stack *!*/
-/*    flex-direction: column !important;*/
-/*    align-items: flex-start; !* keep items left aligned *!*/
-/*    gap: 0.25rem;             !* spacing between radios *!*/
-/*}*/
-
-/* Ensure columns in the banner-search and eamil-search row match height */
-/*.banner-search .slds-grid,*/
-/*.email-search .slds-grid {*/
-/*    flex-wrap: wrap;*/
-/*    align-items: stretch; !* make children equal height *!*/
-/*}*/
-
-/* Make each column a vertical flex container. Inputs remain at top, errors can be anchored to bottom. */
-/*.banner-search .slds-grid > .slds-col,*/
-/*.email-search .slds-grid > .slds-col {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    justify-content: flex-start;*/
-/*}*/
-
 
 .warning-text {
     font-size: 1rem;

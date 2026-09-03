@@ -139,7 +139,6 @@ export default class TommieAlertsLwc extends LightningElement {
     advisorContactIdCheck = false;
     noAdvisorContactIdCheck = false;
     submitCaseSpinner = false;
-    // _incidentDate = "";
 
     get initialPageView() {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
@@ -572,7 +571,7 @@ export default class TommieAlertsLwc extends LightningElement {
             this.searchParamsUrl.searchParams.delete("submitted");
         }
         // eslint-disable-next-line no-restricted-globals
-        location.replace(this.searchParamsUrl.toString());
+        location.replace(this.searchParamsUrl);
     }
 
     tellSomeoneWellBeingSubmitDisable = true;
@@ -698,7 +697,6 @@ export default class TommieAlertsLwc extends LightningElement {
                     visible: this.selectionsCheck.behaviorWellBeingCheck && !this.tellSomeoneWellBeingSubmitDisable,
                     documentTypeLabel: 'Advocate Well-Being Incident',
                     submitApexMethod: submitWellBeingReportForm,
-                    // formSubmitSelectionsKey: 'TellSomeoneWellBeingReportNumber'
                 });
                 this.wellBeingSaveDocumentsFail = wellBeingResult.saveDocumentsFail;
                 this.formSubmitSelections.TellSomeoneWellBeingReportNumber = wellBeingResult.reportNumber;
@@ -715,7 +713,6 @@ export default class TommieAlertsLwc extends LightningElement {
                     visible: this.selectionsCheck.relationshipCheck && !this.tellSomeoneTitleIxSubmitDisable,
                     documentTypeLabel: 'Advocate Title IX Incident',
                     submitApexMethod: submitTitleIxReportForm,
-                    // formSubmitSelectionsKey: 'TellSomeoneTitleIxReportNumber'
                 });
                 this.titleIxSaveDocumentsFail = titleIxResult.saveDocumentsFail;
                 this.formSubmitSelections.TellSomeoneTitleIxReportNumber = titleIxResult.reportNumber;
@@ -733,24 +730,12 @@ export default class TommieAlertsLwc extends LightningElement {
                 this.caseSubmittedErrorCheck = true;
             }
 
-            // this.submitCaseSpinner = false;
-
-            // if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
-            //     this.caseSubmittedCheck = true;
-            //     console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
-            //     console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
-            //     console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
-            // } else {
-            //     // eslint-disable-next-line no-restricted-globals
-            //     location.replace(this.submittedUrl());
-            // }
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
         }
 
-        this.submitCaseSpinner = false;
         if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
             this.caseSubmittedCheck = true;
             console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
@@ -760,6 +745,8 @@ export default class TommieAlertsLwc extends LightningElement {
             // eslint-disable-next-line no-restricted-globals
             location.replace(this.submittedUrl());
         }
+
+        this.submitCaseSpinner = false;
     }
 
     //TESTING

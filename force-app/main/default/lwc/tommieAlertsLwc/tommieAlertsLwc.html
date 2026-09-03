@@ -107,7 +107,6 @@
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
         <div lwc:if={tellSomeoneLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
-<!--            <div lwc:if={testBoolean} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no faculty or student course found"
@@ -121,7 +120,6 @@
             </div>
         </div>
         <div lwc:else class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
-<!--            <div lwc:if={testBoolean} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
             <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no advisor information found"
@@ -480,7 +478,7 @@
                     <template lwc:if={showAdditionalConcerns}>
                         <div class="slds-grid">
                             <div class=" slds-col slds-size_1-of-1 slds-large-size_11-of-12 slds-m-top_medium alert-group">
-                                <label class="slds-text-title_caps slds-m-top_x-small slds-m-bottom_xxx-small alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
+                                <label class="slds-text-title_caps alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
                                 <div class="slds-form-element">
                                     <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
                                     <div class="slds-form-element__control">

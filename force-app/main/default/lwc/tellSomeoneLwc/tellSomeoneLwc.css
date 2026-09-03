@@ -20,37 +20,18 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-/*.advocate-well-being-form {*/
-/*    box-sizing: border-box;   !* include padding in width *!*/
-/*    !*width: 80%;               !* change percent to taste *!*!*/
-/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
-/*    margin: 0;                !* left aligned (no auto centering) *!*/
-/*}*/
-
-/*.custom-textarea {*/
-/*    --sds-c-textarea-sizing-min-height: 100px; !* Set your desired height *!*/
-/*    !*width: 80%;*!*/
-/*}*/
+.custom-textarea {
+    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
+    /*width: 80%;*/
+}
 
 .custom-error-icon-color {
     --slds-c-icon-color-foreground-default: red !important;
 }
 
-.custom-textarea-tall {
-    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
-    /*width: 90%;*/
-}
-
-/*h2 {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*    font-size: 1rem !important;*/
-/*}*/
-
-/*.form-required-label::after {*/
-/*    content: "*";*/
-/*    color: #ea001e; !* Standard Salesforce error red *!*/
-/*    font-weight: bold;*/
-/*    display: inline; !* Keeps it on the same line as the text *!*/
+/*.custom-textarea-tall {*/
+/*    --sds-c-textarea-sizing-min-height: 150px; !* Set your desired height *!*/
+/*    !*width: 90%;*!*/
 /*}*/
 
 .heading-labels {
@@ -79,10 +60,10 @@ lightning-button.submit_button {
 /*    --sds-c-textarea-color-border: rebeccapurple;*/
 /*}*/
 
-.logo-size {
-    width:125px;
-    margin-left: 20px;
-}
+/*.logo-size {*/
+/*    width:125px;*/
+/*    margin-left: 20px;*/
+/*}*/
 
 /*@media (max-width: 768px) {*/
 /*    lightning-textarea {*/

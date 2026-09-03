@@ -1,5 +1,5 @@
 /**
- * Created by nguy0092 on 8/21/2026.
+ * Created by nguy0092 on 09/02/2026.
  */
 
 /*:host {*/
@@ -28,13 +28,6 @@ abbr.slds-required {
 .custom-textarea-tall {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
     /*width: 80%;*/
-}
-
-.form-required-label::after {
-    content: "*";
-    color: #ea001e; /* Standard Salesforce error red */
-    font-weight: bold;
-    display: inline; /* Keeps it on the same line as the text */
 }
 
 .heading-labels {
@@ -152,4 +145,3 @@ p.textarea-sublabel {
     /*font-size: 0.75rem;*/
     /*margin-top: 0.125rem;*/
 }
-
