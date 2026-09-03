@@ -4,7 +4,10 @@
 
 <!-- Tell Someone Lwc -->
 <template>
-    <div id="tellsomeonelwcform" data-form="tellsomeonelwcform" class="tellsomeonelwcform">
+    <div id="tellsomeonelwcform" data-form="tellsomeonelwcform" class="tellsomeonelwcform slds-is-relative">
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
+        </template>
 <!--        <div class="case-submitted">-->
         <template lwc:if={caseSubmittedCheck}>
             <div lwc:if={formSubmitError} class="slds-m-bottom_xx-large">
@@ -18,7 +21,7 @@
                         </lightning-icon>
                     </div>
                     <div class="slds-media__body">
-                        <p>There was a problem with your submission. Please contact <a href="mailto:salesforce@stthomas.edu" target="_blank">salesforce@stthomas.edu</a>.</p>
+                        <p>There was a problem with your submission. Please contact the Dean of Students directly at <a href="mailto:deanstudents@stthomas.edu" target="_blank">deanstudents@stthomas.edu</a> so this concern is recorded.</p>
                     </div>
                 </div>
             </div>
@@ -368,9 +371,6 @@
                                       onclick={submitCase}
                                       disable-animation>
                     </lightning-button>
-                    <template lwc:if={showSpinner}>
-                        <lightning-spinner alternative-text="Submitting" size="medium" variant="brand"></lightning-spinner>
-                    </template>
                 </div>
             </div>
             <template lwc:if={submitCaseFail}>

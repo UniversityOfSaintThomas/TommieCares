@@ -561,7 +561,9 @@ export default class TommieAlertsLwc extends LightningElement {
         this.searchParamsUrl.searchParams.set("sbid", "");
         this.searchParamsUrl.searchParams.set("crn", "");
         this.searchParamsUrl.searchParams.set("submitted", "true");
-
+        if (this.tellSomeoneLwc && this.caseSubmittedErrorCheck) {
+            this.searchParamsUrl.searchParams.set("submitvalid", "false");
+        }
         return this.searchParamsUrl;
     }
 
@@ -731,21 +733,32 @@ export default class TommieAlertsLwc extends LightningElement {
                 this.caseSubmittedErrorCheck = true;
             }
 
-            this.submitCaseSpinner = false;
+            // this.submitCaseSpinner = false;
 
-            if (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail) {
-                this.caseSubmittedCheck = true;
-                console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
-                console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
-                console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
-            } else {
-                // eslint-disable-next-line no-restricted-globals
-                location.replace(this.submittedUrl());
-            }
+            // if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
+            //     this.caseSubmittedCheck = true;
+            //     console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
+            //     console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
+            //     console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
+            // } else {
+            //     // eslint-disable-next-line no-restricted-globals
+            //     location.replace(this.submittedUrl());
+            // }
         } catch (e) {
             console.log("Submission Error: "+JSON.stringify(e));
             this.caseSubmittedErrorCheck = true;
             this.submitCaseSpinner = false;
+        }
+
+        this.submitCaseSpinner = false;
+        if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
+            this.caseSubmittedCheck = true;
+            console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
+            console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
+            console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
+        } else {
+            // eslint-disable-next-line no-restricted-globals
+            location.replace(this.submittedUrl());
         }
     }
 

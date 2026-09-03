@@ -188,7 +188,7 @@ const tommieAlertsTellSomeoneSubmission = async (template, formType,
             }
 
             if (submitApexMethod) {
-                reportNumber = await submitApexMethod({formValues: JSON.stringify(formValues)});
+                reportNumber = await submitApexMethod({formValues: formValues});
             }
 
             /*START TEST FOR TOMMIE ALERTS SUBMIT*/

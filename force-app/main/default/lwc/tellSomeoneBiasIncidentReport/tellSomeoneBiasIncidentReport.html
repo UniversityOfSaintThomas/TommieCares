@@ -126,7 +126,7 @@
                             <lightning-textarea class="custom-textarea"
                                                 id="bias-report-location-id"
                                                 label=""
-                                                value={biasIncidentFormValues.additionalInformation}
+                                                value={biasIncidentFormValues.incident_location}
                                                 data-inputtype="location"
                                                 variant="label-hidden"
                                                 required="true"
@@ -148,7 +148,7 @@
                                 <lightning-textarea class="custom-textarea"
                                                     id="bias-report-students-involved-id"
                                                     label=""
-                                                    value={biasIncidentFormValues.otherStudent}
+                                                    value={biasIncidentFormValues.individuals_involved}
                                                     data-inputtype="studentsinvolved"
                                                     variant="label-hidden"
                                                     required="true"
@@ -166,7 +166,7 @@
                                     <lightning-input id="bias-report-who-harmed-id"
                                                      type="text"
                                                      label=""
-                                                     value={biasIncidentFormValues.who_was_the_target_of_the_behavior}
+                                                     value={biasIncidentFormValues.who_was_harmed}
                                                      data-inputtype="whoharmed"
                                                      variant="label-hidden"
                                                      required="true"
@@ -181,7 +181,7 @@
                                     <lightning-combobox id="bias-report-affiliation-harmed-id"
                                                         label=""
                                                         options={affiliationOfTargetOptions}
-                                                        value={biasIncidentFormValues.affiliation_of_target}
+                                                        value={biasIncidentFormValues.affiliation_of_harmed_party}
                                                         data-selecttype="affiliationharmed"
                                                         variant="label-hidden"
                                                         required="true"
@@ -196,7 +196,7 @@
                                     <lightning-input id="bias-report-who-caused-harm-id"
                                                      type="text"
                                                      label=""
-                                                     value={biasIncidentFormValues.who_engaged_in_the_behavior}
+                                                     value={biasIncidentFormValues.who_caused_the_harm}
                                                      data-inputtype="whocausedharm"
                                                      variant="label-hidden"
                                                      required="true"
@@ -211,7 +211,7 @@
                                     <lightning-combobox id="bias-report-affiliation-person-caused-harm-id"
                                                         label=""
                                                         options={affiliationOfPersonEngagedInHarmOptions}
-                                                        value={biasIncidentFormValues.affiliation_of_person_engaged_in_harm}
+                                                        value={biasIncidentFormValues.affiliation_of_person_who_caused_harm}
                                                         data-selecttype="affiliationcausedharm"
                                                         variant="label-hidden"
                                                         required="true"
@@ -303,34 +303,6 @@
                                   disable-animation>
                 </lightning-button>
             </div>
-            <template lwc:if={saveDocumentsFail}>
-                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="utility:warning"
-                                        alternative-text="save documents error"
-                                        title="save documents error"
-                                        size="small">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <p>There was a problem saving your documents. Please contact salesforce@stthomas.edu to report this error.</p>
-                    </div>
-                </div>
-            </template>
-            <template lwc:if={submitBiasIncidentFormFail}>
-                <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium submit-error-message" role="status">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="utility:warning"
-                                        alternative-text="submit bias incident form error"
-                                        title="submit bias incident form error"
-                                        size="small">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <p>There was a problem submitting your form. Please contact salesforce@stthomas.edu to report this error.</p>
-                    </div>
-                </div>
-            </template>
         </template>
     </div>
 </template>

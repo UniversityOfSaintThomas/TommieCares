@@ -20,13 +20,6 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-/*.advocate-well-being-form {*/
-/*    box-sizing: border-box;   !* include padding in width *!*/
-/*    !*width: 80%;               !* change percent to taste *!*!*/
-/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
-/*    margin: 0;                !* left aligned (no auto centering) *!*/
-/*}*/
-
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
     /*width: 80%;*/
@@ -36,12 +29,6 @@ abbr.slds-required {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
     /*width: 80%;*/
 }
-
-/*h2 {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: bold !important;*/
-/*}*/
 
 .form-required-label::after {
     content: "*";

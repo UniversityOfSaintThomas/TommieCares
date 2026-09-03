@@ -2,10 +2,6 @@
  * Created by nguy0092 on 8/19/2026.
  */
 
-/*:host {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*}*/
-
 a {
     color: rebeccapurple;
 }
@@ -19,13 +15,6 @@ a:active {
 abbr.slds-required {
     font-weight: bold;
 }
-
-/*.advocate-well-being-form {*/
-/*    box-sizing: border-box;   !* include padding in width *!*/
-/*    !*width: 80%;               !* change percent to taste *!*!*/
-/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
-/*    margin: 0;                !* left aligned (no auto centering) *!*/
-/*}*/
 
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */

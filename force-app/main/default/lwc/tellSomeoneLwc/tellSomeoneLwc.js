@@ -160,28 +160,22 @@ export default class TellSomeoneLwc extends LightningElement {
         }
     }
 
-    // rendered = false;
-    renderedCount = 1;
-    // renderedCallback() {
-    //     // if (!this.rendered) {
-    //         window.scrollTo({
-    //             top: 0,
-    //             behavior: 'smooth'
-    //         });
-    //         // if (this.caseSubmittedCheck) {
-    //         //     const caseSubmittedElement = this.template.querySelector(".case-submitted");
-    //         //     if (caseSubmittedElement) {
-    //         //         caseSubmittedElement.scrollIntoView({
-    //         //             top: 0,
-    //         //             behavior: "instant",
-    //         //             // block: "center"
-    //         //         });
-    //         //     }
-    //         // }
-    //         // this.rendered = !this.rendered;
-    //     console.log("rendered count: "+this.renderedCount);
-    //     }
-    // }
+    rendered = false;
+    renderedCallback() {
+        if (!this.rendered && this.caseSubmittedCheck) {
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            setTimeout(() => {
+                const caseSubmittedElement = this.template.querySelector(".tellsomeonelwcform");
+                if (caseSubmittedElement) {
+                    caseSubmittedElement.scrollIntoView({
+                        behavior: "instant",
+                        block: 'start'
+                    });
+                }
+            }, 300);
+        }
+        this.rendered = true;
+    }
 
     @wire(getTellSomeonePicklists, {})
     wireGetTellSomeonePicklists({error, data}) {

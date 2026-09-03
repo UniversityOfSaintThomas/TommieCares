@@ -287,16 +287,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         }
     }
 
-    showSpinner = false;
-    handleShowSpinner() {
-        this.showSpinner = true;
-    }
-
-    handleHideSpinner() {
-        this.showSpinner = false;
-    }
-
-    get submittedUrl() {
+    submittedUrl() {
         this.searchParamsUrl = new URL(this.tellSomeoneParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
         if (this.submitTitleIxIncidentFormFail) {
@@ -308,7 +299,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         return this.searchParamsUrl;
     }
 
-    submitLimit = 0;
+    showSpinner = false;
     saveDocumentsFail = false;
     submitTitleIxIncidentFormFail = false;
     async submitFormHandler(event) {
@@ -322,20 +313,25 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         }
         let formReportNumber = "";
 
-        this.handleShowSpinner();
+        this.showSpinner = true;
 
         if (this.attachDocuments.length > 0) {
-            this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Title IX Incident', attachDocumentResponse);
-            this.titleIxIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
-            console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-            console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+            try {
+                this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Title IX Incident', attachDocumentResponse);
+                this.titleIxIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
+                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
+                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+            } catch (error) {
+                this.saveDocumentsFail = true;
+                console.error('Error saving attached documents:', error);
+            }
         }
 
         if (!this.saveDocumentsFail) {
             try {
-                let formValues = JSON.stringify(this.titleIxIncidentFormValues);
-                console.log('formValues: ', formValues);
-                formReportNumber = await submitTitleIxReportForm({formValues: formValues});
+                // let formValues = JSON.stringify(this.titleIxIncidentFormValues);
+                console.log('formValues: ', JSON.stringify(this.titleIxIncidentFormValues));
+                formReportNumber = await submitTitleIxReportForm({formValues: this.titleIxIncidentFormValues});
                 this.submitTitleIxIncidentFormFail = !formReportNumber;
                 console.log('formReportNumber: ', formReportNumber);
             } catch (error) {
@@ -344,30 +340,22 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             }
         }
 
-        /*START TEST INPUTS*/
-        // this.submitTitleIxIncidentFormFail = true;
-        // this.submitLimit++;
-        // formReportNumber = "TEST-123456";
-        // this.saveDocumentsFail = false;
-        /*END TEST INPUTS*/
+/*START TEST INPUTS*/
+formReportNumber = "TESTING"
+this.submitTitleIxIncidentFormFail = !formReportNumber;
+// this.saveDocumentsFail = true;
+/*END TEST INPUTS*/
 
         await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
 
-        if (this.submitTitleIxIncidentFormFail && this.submitLimit < 2) {
-            this.handleHideSpinner();
-            this.submitLimit++;
-            // eventField.scrollIntoView({
-            //     behavior: 'smooth',
-            // });
-        } else {
-            this.handleHideSpinner();
-            // eslint-disable-next-line no-restricted-globals
-            location.replace(this.submittedUrl);
-        }
+        this.showSpinner = false;
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(this.submittedUrl());
 
-        /*START TEST INPUTS*/
-        this.handleHideSpinner();
-        /*END TEST INPUTS*/
+/*START TEST INPUTS*/
+// this.showSpinner = false;
+/*END TEST INPUTS*/
+
     }
 
     submitDisableToTommieAlerts() {

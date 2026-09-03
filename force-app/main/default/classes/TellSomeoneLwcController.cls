@@ -5,6 +5,9 @@
 public without sharing class TellSomeoneLwcController {
     private static final String symplicityAdvocateIntegrationKeyCallout = 'callout:Symplicity_Advocate_Integration_Key';
     private static final String symplicityAdvocateFlexFormTokenCallout = 'callout:Symplicity_Advocate_Flex_Forms';
+    private static final String symplicityAdvocateCollectionId = '6320164b2a4a1fad79299ed27d892c07';
+    private static final String symplicityAdvocateBiasCaseType = '46214421aff18d7d5116033b74be526d';
+    private static final String symplicityAdvocateWellBeingCaseType = '186974515f78c9526452e03483778417';
 
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTellSomeonePicklists() {
@@ -71,11 +74,11 @@ public without sharing class TellSomeoneLwcController {
         Map<String, Object> resultsObjects = new Map<String, Object>();
 
         HttpRequest req1 = new HttpRequest();
-        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
+        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/' + symplicityAdvocateCollectionId + '/cases/reporter_type');
         req1.setMethod('GET');
 
         HttpRequest req2 = new HttpRequest();
-        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_the_person_of_concern');
+        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/' + symplicityAdvocateCollectionId + '/cases/affiliation_of_the_person_of_concern');
         req2.setMethod('GET');
 
         Http http = new Http();
@@ -105,15 +108,15 @@ public without sharing class TellSomeoneLwcController {
         Map<String, Object> resultsObjects = new Map<String, Object>();
 
         HttpRequest req1 = new HttpRequest();
-        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/reporter_type');
+        req1.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/' + symplicityAdvocateCollectionId + '/cases/reporter_type');
         req1.setMethod('GET');
 
         HttpRequest req2 = new HttpRequest();
-        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_harmed_party');
+        req2.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/' + symplicityAdvocateCollectionId + '/cases/affiliation_of_harmed_party');
         req2.setMethod('GET');
 
         HttpRequest req3 = new HttpRequest();
-        req3.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/6320164b2a4a1fad79299ed27d892c07/cases/affiliation_of_person_who_caused_harm');
+        req3.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/picklists/fw/' + symplicityAdvocateCollectionId + '/cases/affiliation_of_person_who_caused_harm');
         req3.setMethod('GET');
 
         Http http = new Http();
@@ -180,30 +183,21 @@ public without sharing class TellSomeoneLwcController {
         return resultsObjects;
     }
 
-//    public class tellSomeoneWellBeingWrapper {
-//        public String collection;
-//        public String caseType;
-////        public Integer reporter_type;
-//        public String reporterName;
-//        public String reporterPhone;
-//        public String reporterEmail;
-////        public Integer affiliation_of_harmed_party;
-//        public String students_first_name;
-//        public String students_email_address;
-//        public String students_phone_number;
-//        public String date_of_concerning_incident;
-//        public String description;
-//    }
-
     @AuraEnabled(Cacheable=false)
-    public static String submitWellBeingReportForm(String formValues) {
-        String wellBeingReportNumber = '';
+    public static String submitBiasIncidentReportForm(Map<String, Object> formValues) {
+//      public static String submitBiasIncidentReportForm(String formValues) {
+        String biasIncidentReportNumber = '';
+
+        if (formValues != null && !formValues.isEmpty()) {
+            formValues.put('collection', symplicityAdvocateCollectionId);
+            formValues.put('caseType', symplicityAdvocateBiasCaseType);
+        }
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.setBody(formValues);
+        req.setBody(JSON.serialize(formValues));
 
         try {
             Http http = new Http();
@@ -211,74 +205,56 @@ public without sharing class TellSomeoneLwcController {
             System.debug('Response: ' + response.getBody());
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-                wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for TitleIX report number
+                biasIncidentReportNumber = (String) responseBody.get('reportNumber'); //for Bias Incident report number
+            }
+        } catch (Exception e) {
+            System.debug('Error submitting request: ' + e.getMessage());
+        }
+
+        return biasIncidentReportNumber;
+    }
+
+    @AuraEnabled(Cacheable=false)
+    public static String submitWellBeingReportForm(Map<String, Object> formValues) {
+//    public static String submitWellBeingReportForm(String formValues) {
+        String wellBeingReportNumber = '';
+
+        if (formValues != null && !formValues.isEmpty()) {
+            formValues.put('collection', symplicityAdvocateCollectionId);
+            formValues.put('caseType', symplicityAdvocateWellBeingCaseType);
+        }
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        req.setBody(JSON.serialize(formValues));
+
+        try {
+            Http http = new Http();
+            HttpResponse response = http.send(req);
+            System.debug('Response: ' + response.getBody());
+            if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
+                Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being  report number
             }
         } catch (Exception e) {
             System.debug('Error submitting request: ' + e.getMessage());
         }
 
         return wellBeingReportNumber;
-
-//        String tellSomeoneCollection = '6320164b2a4a1fad79299ed27d892c07';
-//        String tellSomeoneCaseType = '186974515f78c9526452e03483778417';
-//
-//        if (String.isNotBlank(formSelections.get('TellSomeoneWellBeingDate')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingDescription'))) {
-//            String wellBeingReportNumber = '';
-//
-//            tellSomeoneWellBeingWrapper advocateWellBeing = new tellSomeoneWellBeingWrapper();
-//            advocateWellBeing.collection = tellSomeoneCollection;
-//            advocateWellBeing.caseType = tellSomeoneCaseType;
-////            advocateWellBeing.reporter_type = 2;
-//            advocateWellBeing.reporterName = formSelections.get('AdvisorContactName');
-//            advocateWellBeing.reporterPhone = '';
-//            advocateWellBeing.reporterEmail = formSelections.get('AdvisorEmail');
-////            advocateWellBeing.affiliation_of_harmed_party = 1;
-//            advocateWellBeing.students_first_name = formSelections.get('StudentName');
-//            advocateWellBeing.students_email_address = formSelections.get('StudentEmail');
-//            advocateWellBeing.students_phone_number = '';
-//            advocateWellBeing.date_of_concerning_incident = formSelections.get('TellSomeoneWellBeingDate');
-//            advocateWellBeing.description = formSelections.get('TellSomeoneWellBeingDescription');
-//
-//            String advocateWellBeingString = JSON.serialize(advocateWellBeing);
-//            System.debug('advocateWellBeingString: ' + advocateWellBeingString);
-//
-//            HttpRequest req = new HttpRequest();
-//            req.setEndpoint('callout:Symplicity_Advocate_Flex_Forms/v1/fw/cases');
-//            req.setMethod('POST');
-//            req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-//            req.setBody(advocateWellBeingString);
-//
-//            try {
-//                Http http = new Http();
-//                HttpResponse response = http.send(req);
-//                System.debug('Response: ' + response.getBody());
-//                if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
-//                    Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-//                    wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being Cases
-//                }
-//            } catch (Exception e) {
-//                System.debug('Error occurred while sending request: ' + e.getMessage());
-//            }
-//
-//            if (String.isNotBlank(wellBeingReportNumber)) {
-//                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: ' + wellBeingReportNumber);
-//            } else {
-//                formSelections.put('CaseDescription', formSelections.get('TellSomeoneWellBeingDescription') + ' | Advocate Record Number: Unable to create record. Reach out to Dean of Students with questions');
-//            }
-//            System.debug('formSelections CaseDescription: ' + formSelections.get('CaseDescription'));
-//        }
     }
 
-
     @AuraEnabled(Cacheable=false)
-    public static String submitTitleIxReportForm(String formValues) {
+    public static String submitTitleIxReportForm(Map<String, Object> formValues) {
+//    public static String submitTitleIxReportForm(String formValues) {
         String titleIxReportNumber = '';
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/titleix_reports');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
-        req.setBody(formValues);
+        req.setBody(JSON.serialize(formValues));
 
         try {
             Http http = new Http();

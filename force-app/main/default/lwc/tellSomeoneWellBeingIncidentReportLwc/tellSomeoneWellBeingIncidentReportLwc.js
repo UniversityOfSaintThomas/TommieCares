@@ -4,10 +4,7 @@
 
 import {api, LightningElement, track, wire} from 'lwc';
 import wellBeingReportingFormOptions from "@salesforce/apex/TellSomeoneLwcController.getWellBeingOptions";
-// import saveSupportingDocuments from "@salesforce/apex/TellSomeoneLwcController.saveSupportingDocuments";
 import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
-// import updateSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.updateSupportingDocument";
-// import deleteSupportingDocument from "@salesforce/apex/TellSomeoneLwcController.deleteSupportingDocument";
 import {emailValidation, attachDocumentsUpload, attachedDocumentsSave, finalizeSupportingDocument} from "c/tellSomeoneUtilJs";
 
 export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElement {
@@ -35,8 +32,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     // reporterType; //Using variable to hold value for form because can't pass to API reporterType
     reporter_type_custom; //Using variable to hold value for form because can't pass to API reporterType
     @track wellBeingIncidentFormValues = {
-        collection: "6320164b2a4a1fad79299ed27d892c07", //done
-        caseType: "186974515f78c9526452e03483778417", //done
         reporter_type: "", //done
         reporterName: "", //done
         reporterEmail: "", //done
@@ -330,16 +325,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         }
     }
 
-    showSpinner = false;
-
-    handleShowSpinner() {
-        this.showSpinner = true;
-    }
-
-    handleHideSpinner() {
-        this.showSpinner = false;
-    }
-
     submittedUrl() {
         this.searchParamsUrl = new URL(this.tellSomeoneParamsUrl);
         this.searchParamsUrl.searchParams.set("submitted", "true");
@@ -352,7 +337,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         return this.searchParamsUrl;
     }
 
-    submitLimit = 0;
+    showSpinner = false;
     saveDocumentsFail = false;
     submitWellBeingFormFail = false;
     async submitFormHandler(event) {
@@ -366,20 +351,25 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         }
         let formReportNumber = "";
 
-        this.handleShowSpinner();
+        this.showSpinner = true;
 
         if (this.attachDocuments.length > 0) {
-            this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
-            // this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
-            console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-            console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
+            try {
+                this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
+                // this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //REMOVING FOR NOW UNTIL I GET NEW FIELD
+                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
+                console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
+            } catch (error) {
+                this.saveDocumentsFail = true;
+                console.error('Error saving attached documents:', error);
+            }
         }
 
         if (!this.saveDocumentsFail) {
             try {
-                let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
-                console.log('formValues: ', formValues);
-                formReportNumber = await submitWellBeingReportForm({formValues: formValues});
+                // let formValues = JSON.stringify(this.wellBeingIncidentFormValues);
+                console.log('formValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
+                formReportNumber = await submitWellBeingReportForm({formValues: this.wellBeingIncidentFormValues});
                 this.submitWellBeingFormFail = !formReportNumber;
                 console.log('formReportNumber: ', formReportNumber);
             } catch (error) {
@@ -388,29 +378,22 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
             }
         }
 
-        /*START TEST INPUTS*/
-        // this.submitWellBeingFormFail = true;
-        // formReportNumber = "TEST-xxxxx";
-        // this.saveDocumentsFail = false;
-        /*END TEST INPUTS*/
+/*START TEST INPUTS*/
+formReportNumber = "Testing 123";
+this.submitWellBeingFormFail = !formReportNumber ;
+// this.saveDocumentsFail = true;
+/*END TEST INPUTS*/
 
         await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
 
-        if (this.submitWellBeingFormFail && this.submitLimit < 2) {
-            this.submitLimit++;
-            this.handleHideSpinner();
-            // eventField.scrollIntoView({
-            //     behavior: 'smooth',
-            // });
-        } else {
-            this.handleHideSpinner();
-            // eslint-disable-next-line no-restricted-globals
-            location.replace(this.submittedUrl());
-        }
+        this.showSpinner = false;
+        // eslint-disable-next-line no-restricted-globals
+        location.replace(this.submittedUrl());
 
-        /*START TEST INPUTS*/
-        this.handleHideSpinner();
-        /*END TEST INPUTS*/
+/*START TEST INPUTS*/
+// this.handleHideSpinner();
+/*END TEST INPUTS*/
+
     }
 
     submitDisableToTommieAlerts() {

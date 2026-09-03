@@ -2,10 +2,6 @@
  * Created by nguy0092 on 8/19/2026.
  */
 
-/*:host {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*}*/
-
 a {
     color: rebeccapurple;
 }
@@ -20,18 +16,6 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-/*.advocate-well-being-form {*/
-/*    box-sizing: border-box;   !* include padding in width *!*/
-/*    !*width: 80%;               !* change percent to taste *!*!*/
-/*    !*max-width: 800px;         !* optional cap so it doesn't get huge *!*!*/
-/*    margin: 0;                !* left aligned (no auto centering) *!*/
-/*}*/
-
-/*.container {*/
-/*    position: relative;*/
-/*    min-height: 100px; !* ensures spinner is visible even if content is short *!*/
-/*}*/
-
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
     /*width: 90%;*/
@@ -41,23 +25,6 @@ abbr.slds-required {
     --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
     /*width: 90%;*/
 }
-
-/*h2 {*/
-/*    font-family: "Lato Regular", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;*/
-/*    font-size: 1rem !important;*/
-/*}*/
-
-/*.form-required-label::after {*/
-/*    content: "*";*/
-/*    color: #ea001e; !* Standard Salesforce error red *!*/
-/*    font-weight: bold;*/
-/*    display: inline; !* Keeps it on the same line as the text *!*/
-/*}*/
-
-/*.heading-labels {*/
-/*    font-size: 1rem !important;*/
-/*    font-weight: bold !important;*/
-/*}*/
 
 lightning-button.submit_button {
     font-size: 1rem !important;
@@ -142,8 +109,8 @@ p.textarea-sublabel {
 }
 
 .submit-error-message {
-    border: solid 1px rebeccapurple;
-    background: #f4eefa;
+    border: solid 1.5px red;
+    background: #ff740008;
 }
 
 .slds-radio_faux {
@@ -155,19 +122,6 @@ p.textarea-sublabel {
     display: flex !important;
     align-items: center !important;
 }
-
-/*.spinner-backdrop {*/
-/*    position: fixed;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100vw;*/
-/*    height: 100vh;*/
-/*    background-color: rgba(255, 255, 255, 0.7);*/
-/*    z-index: 9999;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
 
 .tommie-alerts_hide {
     display: none;
