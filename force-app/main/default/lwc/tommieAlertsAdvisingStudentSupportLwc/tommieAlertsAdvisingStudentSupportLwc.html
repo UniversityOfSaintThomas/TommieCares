@@ -367,14 +367,14 @@
                                 </div>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p class="slds-m-top_xx-small">Behavior or Well-Being and Sense of Belonging concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_xx-small"><b>Behavior or Well-Being and Sense of Belonging concerns</b> will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
-                                <div class="slds-m-top_xx-small" lwc:if={tellSomeoneWellBeingVisible}></div>
-                                <p class="slds-m-top_xx-small">Relationship violence/stalking concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                                <div class="slds-m-top_xx-small sub-content-divider" lwc:if={tellSomeoneWellBeingVisible}></div>
+                                <p class="slds-m-top_xx-small"><b>Relationship violence/stalking concerns</b> are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
                                 <h2>Title IX Public Report</h2>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
@@ -405,24 +405,24 @@
                                 </div>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
-                                <p>Difficulty Meeting Basic Needs concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
+                                <p><b>Difficulty Meeting Basic Needs concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
-                                <p>Financial concerns will be sent directly to the Financial Aid office.<br>
+                                <p><b>Financial concerns</b> will be sent directly to the Financial Aid office.<br>
                                     The student's financial aid counselor will connect with the student.<br>
                                     No advisors will be copied or notified.</p>
                             </div>
                             <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
-                                <p>Life Circumstances Impacting Success concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
+                                <p><b>Life Circumstances Impacting Success concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
                             <div class="slds-grid slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.otherCheck}>
                                 <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
-                                        <span class="slds-text-nowrap">Please provide additional details about your Other concerns:<abbr class="slds-required" title="required">*</abbr></span></label>
+                                        <span class="slds-text-nowrap">Please provide additional details about your <b>Other concerns</b><abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
                                         <br>No advisors will be copied or notified.</p>
                                     <div class="slds-form-element__control">
@@ -447,7 +447,7 @@
                         <div class="slds-size_1-of-1 slds-large-size_11-of-12 slds-m-top_medium alert-group">
                             <label class="slds-text-title_caps alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
                             <div class="slds-form-element">
-                                <p class="slds-form-element__label textarea-sublabel">The information provided below <b>will not</b> be shared with the student.</p>
+                                <p class="slds-form-element__label textarea-sublabel">The information provided below&nbsp;<b>will not</b>&nbsp;be shared with the student.</p>
                                 <div class="slds-form-element__control">
                                     <lightning-textarea id="additional-concerns-id"
                                                         name="additional-concerns"

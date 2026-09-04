@@ -115,15 +115,15 @@ export default class TommieAlertsLwc extends LightningElement {
     ]
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
-        {"Advising Alert": [
+        {"Course Alert": [
                 "Academic performance concerns",
                 "Attendance concerns",
                 "Academic Standing Requirement Not Met (only for Academic Counselors)",
-                "Missed Advising Appointment",
-                "Non-Responsive to Outreach"
+                // "Missed Advising Appointment",
+                // "Non-Responsive to Outreach"
             ]},
         {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging",]},
-        {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns", "Life Circumstances Impacting Success",  "Other"]},
+        {"Life Circumstances Alert": [/*"Difficulty Meeting Basic Needs (food/housing, etc)",*/ "Financial concerns", /*"Life Circumstances Impacting Success",*/  "Other"]},
     ]
     passCourseOptions = [
         {label: "", value: ""},
@@ -345,7 +345,7 @@ export default class TommieAlertsLwc extends LightningElement {
     buildAlertGroups() {
         const groupMap = {
             "Positive Alert":         "positiveAlertGroup",
-            "Advising Alert":               "advisingGroup",
+            "Course Alert":               "advisingGroup",
             "Behavior Well Being Alert": "behaviorWellBeingGroup",
             "Life Circumstances Alert":     "lifeCircumstanceGroup",
         };

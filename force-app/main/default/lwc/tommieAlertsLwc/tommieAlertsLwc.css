@@ -178,6 +178,12 @@ lightning-textarea.custom-textarea {
     padding-top: 0.5rem;
 }
 
+.sub-content-divider {
+    border-top: 1px dashed rebeccapurple;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+
 .sub-content p:not(.textarea-sublabel) {
     margin-bottom: 0 !important;
 }

@@ -194,6 +194,8 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     inputValueHandler(event) {
         let eventValue = event.detail.value;
+        const eventField = event.currentTarget;
+        const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -207,27 +209,44 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 break;
             case "description":
                 this.titleIxIncidentFormValues.description = eventValue;
+                this.maxlengthCheck(eventField, eventValue, 20000);
                 break;
             case "whoharmed":
                 this.titleIxIncidentFormValues.person_who_was_harmed_complainants = eventValue;
+                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
                 break;
             case "location":
                 this.titleIxIncidentFormValues.additionalLocation = eventValue;
+                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
                 break;
             case "dates":
                 this.titleIxIncidentFormValues.date_of_incidents = eventValue;
                 break;
             case "whocausedharm":
                 this.titleIxIncidentFormValues.person_who_did_harm_respondents = eventValue;
+                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
                 break;
             case "witnesses":
                 this.titleIxIncidentFormValues.otherWitness = eventValue;
+                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
                 break;
             case "followup":
                 this.titleIxIncidentFormValues.reporter_followup = eventValue;
+                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
                 break;
         }
         this.submitDisableToTommieAlerts();
+    }
+
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
     }
 
     validEmail = true;

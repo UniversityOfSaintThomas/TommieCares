@@ -117,6 +117,7 @@
                                                  value={titleIxIncidentFormValues.reporterName}
                                                  data-inputtype="name"
                                                  variant="label-hidden"
+                                                 max-length=255
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
                             </div>
@@ -131,6 +132,7 @@
                                                  value={titleIxIncidentFormValues.reporterEmail}
                                                  data-inputtype="email"
                                                  variant="label-hidden"
+                                                 max-length=255
                                                  required="true"
                                                  onchange={inputValueHandler}
                                                  onblur={emailValidationBlur}>
@@ -148,6 +150,7 @@
                                                  value={titleIxIncidentFormValues.reporterPhone}
                                                  data-inputtype="phone"
                                                  variant="label-hidden"
+                                                 max-length=255
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
                             </div>
@@ -166,6 +169,7 @@
                                                 value={titleIxIncidentFormValues.description}
                                                 data-inputtype="description"
                                                 variant="label-hidden"
+                                                max-length=20000
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
@@ -183,6 +187,7 @@
                                              value={titleIxIncidentFormValues.person_who_was_harmed_complainants}
                                              data-inputtype="whoharmed"
                                              variant="label-hidden"
+                                             max-length=255
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -201,6 +206,7 @@
                                                 value={titleIxIncidentFormValues.additionalLocation}
                                                 data-inputtype="location"
                                                 variant="label-hidden"
+                                                max-length="255"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
@@ -218,6 +224,7 @@
                                              data-inputtype="dates"
                                              variant="label-hidden"
                                              required="true"
+                                             max-length="255"
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -233,6 +240,7 @@
                                          value={titleIxIncidentFormValues.person_who_did_harm_respondents}
                                          data-inputtype="whocausedharm"
                                          variant="label-hidden"
+                                         max-length="255"
                                          onchange={inputValueHandler}>
                         </lightning-input>
                     </div>
@@ -249,6 +257,7 @@
                                                 value={titleIxIncidentFormValues.otherWitness}
                                                 data-inputtype="witnesses"
                                                 variant="label-hidden"
+                                                max-length="255"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
@@ -283,12 +292,13 @@
                         <p class="textarea-sublabel">Let us know the kind of follow-up you'd like to receive once you have
                             submitted this report (advice, self-care, resources, no follow-up requested, etc.)</p>
                         <div class="slds-form-element__control">
-                            <lightning-textarea class="custom-textarea-tall"
+                            <lightning-textarea class="custom-textarea"
                                                 id="titleix-report-follow-up-id"
                                                 label=""
                                                 value={titleIxIncidentFormValues.reporter_followup}
                                                 data-inputtype="followup"
                                                 variant="label-hidden"
+                                                max-length=255
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
