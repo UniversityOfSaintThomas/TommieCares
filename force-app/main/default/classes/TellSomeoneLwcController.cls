@@ -5,9 +5,13 @@
 public without sharing class TellSomeoneLwcController {
     private static final String symplicityAdvocateIntegrationKeyCallout = 'callout:Symplicity_Advocate_Integration_Key';
     private static final String symplicityAdvocateFlexFormTokenCallout = 'callout:Symplicity_Advocate_Flex_Forms';
-    private static final String symplicityAdvocateCollectionId = '6320164b2a4a1fad79299ed27d892c07';
-    private static final String symplicityAdvocateBiasCaseType = '46214421aff18d7d5116033b74be526d';
-    private static final String symplicityAdvocateWellBeingCaseType = '186974515f78c9526452e03483778417';
+    private static final String symplicityAdvocateCollectionId = trimmedValue(Advocate_Flex_Form_Collection_Case_Type__mdt.getInstance('IDs').get('Collection_Id__c'));
+    private static final String symplicityAdvocateBiasCaseType = trimmedValue(Advocate_Flex_Form_Collection_Case_Type__mdt.getInstance('IDs').get('Bias_Incident_Case_Type_Id__c'));
+    private static final String symplicityAdvocateWellBeingCaseType = trimmedValue(Advocate_Flex_Form_Collection_Case_Type__mdt.getInstance('IDs').get('Well_Being_Case_Type_Id__c'));
+
+    private static String trimmedValue(Object rawValue) {
+        return rawValue == null ? null : ((String) rawValue).trim();
+    }
 
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTellSomeonePicklists() {
