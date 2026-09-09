@@ -44,7 +44,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         students_phone_number: "", //This is a custom field
         date_of_concerning_incident: "",
         description: "",
-        // salesforce_support_documents: "" //For Supporting Documents record ID REMOVING FOR NOW UNTIL I GET NEW FIELD
+        salesforce_support_documents: "" //For Supporting Documents record ID
     }
 
     get tommieAlertsDisable() {
@@ -190,7 +190,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         let eventField = event.target;
         let eventValue = event.detail.value;
         let eventValueTrim = eventValue.trim();
-        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -198,7 +197,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "email":
-                // this.wellBeingIncidentFormValues.reporterEmail = eventValueTrim;
                 if (!eventValue) {
                     this.validEmailWarning = false;
                     this.validEmail = true;
@@ -216,7 +214,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "involvedemail":
-                // this.wellBeingIncidentFormValues.students_email_address = eventValueTrim;
                 if (!eventValue) {
                     this.validEmailWarningIndividual = false;
                     this.validEmailIndividual = true;
@@ -310,43 +307,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         this.submitDisableToTommieAlerts();
     }
 
-    // validEmail = true;
-    // validEmailWarning = false;
-    // validEmailIndividual = true;
-    // validEmailWarningIndividual = false;
-    // emailValidationBlur(event) {
-    //     const emailField = event.currentTarget;
-    //     const emailAddress = event.target.value;
-    //     let emailValidationResults = emailValidation(emailAddress);
-    //
-    //     // eslint-disable-next-line default-case
-    //     switch (event.currentTarget.dataset.inputtype) {
-    //         case "email":
-    //             this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-    //             this.validEmail = emailValidationResults.validEmail;
-    //             this.validEmailWarning = emailValidationResults.validEmailWarning;
-    //             if (this.validEmailWarning) {
-    //                 emailField.classList.add("slds-has-error");
-    //             } else {
-    //                 emailField.classList.remove("slds-has-error");
-    //             }
-    //             break;
-    //         case "involvedemail":
-    //             if (emailAddress) {
-    //                 this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
-    //                 this.validEmailIndividual = emailValidationResults.validEmail;
-    //                 this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
-    //                 if (this.validEmailWarningIndividual) {
-    //                     emailField.classList.add("slds-has-error");
-    //                 } else {
-    //                     emailField.classList.remove("slds-has-error");
-    //                 }
-    //             }
-    //             break;
-    //     }
-    //     this.submitDisableToTommieAlerts();
-    // }
-
     _incidentDate = "";
     validDate = false;
     validDateWarning = false;
@@ -416,7 +376,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        // console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
@@ -453,7 +412,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         if (this.attachDocuments.length > 0) {
             try {
                 this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
-                // this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //REMOVING FOR NOW UNTIL I GET NEW FIELD
+                this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
                 console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
                 console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
             } catch (error) {
@@ -471,12 +430,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
             this.submitWellBeingFormFail = true;
             console.error('Error submitting well-being form:', error);
         }
-
-/*START TEST INPUTS*/
-// formReportNumber = "Testing 123";
-// this.submitWellBeingFormFail = !formReportNumber ;
-// this.saveDocumentsFail = true;
-/*END TEST INPUTS*/
 
         try {
             await finalizeSupportingDocument(this.saveDocumentsFail, this.submitWellBeingFormFail, attachDocumentResponse, formReportNumber);
@@ -496,5 +449,4 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         });
         this.dispatchEvent(customEvent);
     }
-
 }

@@ -185,7 +185,6 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static String submitBiasIncidentReportForm(Map<String, Object> formValues) {
-//      public static String submitBiasIncidentReportForm(String formValues) {
         String biasIncidentReportNumber = '';
 
         if (formValues != null && !formValues.isEmpty()) {
@@ -216,7 +215,6 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static String submitWellBeingReportForm(Map<String, Object> formValues) {
-//    public static String submitWellBeingReportForm(String formValues) {
         String wellBeingReportNumber = '';
 
         if (formValues != null && !formValues.isEmpty()) {
@@ -247,7 +245,6 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static String submitTitleIxReportForm(Map<String, Object> formValues) {
-//    public static String submitTitleIxReportForm(String formValues) {
         String titleIxReportNumber = '';
 
         HttpRequest req = new HttpRequest();

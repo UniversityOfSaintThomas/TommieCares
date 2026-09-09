@@ -16,11 +16,6 @@ abbr.slds-required {
     font-weight: bold;
 }
 
-/*.additional-text-message {*/
-/*    font-size: .90rem !important;*/
-/*    color: black !important;*/
-/*}*/
-
 .advisor_info {
     font-size: 1rem !important;
     font-weight: bold;
@@ -220,12 +215,6 @@ lightning-textarea.custom-textarea {
     font-weight: normal !important;                 /* match label weight (adjust if needed) */
     color: black !important;          /* same color */
 }
-
-/*.validation-text {*/
-/*    color: rgb(234, 0, 30);*/
-/*    font-size: 0.75rem;*/
-/*    margin-top: 0.125rem;*/
-/*}*/
 
 .warning-text {
     font-size: 1rem;

@@ -182,7 +182,6 @@ export default class TommieAlertsLwc extends LightningElement {
 
     hasAncestorWithId(startNode, id) {
         let node = startNode;
-
         while (node) {
             node = node.parentNode;
 
@@ -194,7 +193,6 @@ export default class TommieAlertsLwc extends LightningElement {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -226,7 +224,6 @@ export default class TommieAlertsLwc extends LightningElement {
         } else {
             console.log("NOT Lighting Out");
         }
-
     }
 
     @wire(getTommieCaresPicklists)
@@ -576,10 +573,6 @@ export default class TommieAlertsLwc extends LightningElement {
         this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
 
-        // this.template.querySelectorAll("input[type='checkbox']").forEach(check => {
-        //     check.checked = false;
-        // });
-
         Object.keys(this.formSubmitSelections).forEach(k => {
             this.formSubmitSelections[k] = ""
         });
@@ -786,53 +779,4 @@ export default class TommieAlertsLwc extends LightningElement {
 
         this.submitCaseSpinner = false;
     }
-
-    //TESTING
-    //         get failedSubmitMessages() {
-    //             return [
-    //                 { label: 'Behavior or Well Being Report Failed', value: 'Behavior or Well Being Report Failed' },
-    //                 { label: 'Title IX Public Report Failed', value: 'Title IX Public Report Failed' },
-    //                 { label: 'Case Submission Error Failed', value: 'Case Submission Error Failed' }
-    //             ];
-    //         }
-    //
-    //         @track checkBoxSubmitValue = [];
-    //
-    //         failedSubmitCheckbox(event) {
-    //             this.value = event.detail.value;
-    //             this.formSubmitSelections.submitWellBeingFormFail = this.value.includes('Behavior or Well Being Report Failed');
-    //             this.formSubmitSelections.submitTitleIxIncidentFormFail = this.value.includes('Title IX Public Report Failed');
-    //             this.caseSubmittedErrorCheck = this.value.includes('Case Submission Error Failed');
-    //         }
-    //
-    //         get failedSubmitDocuments() {
-    //             return [
-    //                 { label: 'Behavior or Well Being Report Documents Failed', value: 'Behavior or Well Being Report Documents Failed' },
-    //                 { label: 'Title IX Public Report Documents Failed', value: 'Title IX Public Report Documents Failed' },
-    //             ];
-    //         }
-    //
-    //         @track checkBoxDocumentsValue = [];
-    //
-    //         failedDocumentsCheckbox(event) {
-    //             this.value = event.detail.value;
-    //             this.wellBeingSaveDocumentsFail = this.value.includes('Behavior or Well Being Report Documents Failed');
-    //             this.titleIxSaveDocumentsFail = this.value.includes('Title IX Public Report Documents Failed');
-    //         }
-    //
-    //         get reportNumber() {
-    //             return [
-    //                 { label: 'Behavior or Well Being Report', value: 'Behavior or Well Being Report' },
-    //                 { label: 'TitleIX Report', value: 'TitleIX Report' },
-    //             ];
-    //         }
-    //
-    //         @track checkBoxReportNumberValue = [];
-    //
-    //         reportNumberCheckbox(event) {
-    //             this.value = event.detail.value;
-    //             this.formSubmitSelections.TellSomeoneWellBeingReportNumber = this.value.includes('Behavior or Well Being Report') ? "1234" : "";
-    //             this.formSubmitSelections.TellSomeoneTitleIxReportNumber = this.value.includes('TitleIX Report') ? "1234" : "";
-    //         }
-    //END TESTING
 }

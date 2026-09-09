@@ -26,7 +26,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             tommieAlertsReporterPhone: "Tommie Alerts Submission",
             tommieAlertsStudentName: this.formSubmitSelections.StudentName,
             tommieAlertsStudentEmail: this.formSubmitSelections.StudentEmail,
-            tommieAlertsHideCss: "tommie-alerts_hide",
+            tommieAlertsForm: true,
         }
     }
 
@@ -429,7 +429,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     }
 
     high5detailsLengthCount = 0;
-    // personalMessageLengthCount = 0;
     otherDetailsLengthCount = 0;
     additionalConcernsLengthCount = 0;
     maxCharacterLength = 20000;
@@ -451,9 +450,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                 this.otherDetailsLengthCount = eventValue.length;
                 this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
-            // case "personalMessage":
-            //     this.formSubmitSelections.Personal_Message = eventValueTrim;
-            //     break;
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
                 this.additionalConcernsLengthCount = eventValue.length;
@@ -475,25 +471,11 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
 
     resetCharacterLengths() {
         this.high5detailsLengthCount = 0;
-        this.personalMessageLengthCount = 0;
         this.otherDetailsLengthCount = 0;
         this.additionalConcernsLengthCount = 0;
     }
 
     resetForm() {
-        // const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
-        //
-        // if (checkboxes) {
-        //     checkboxes.forEach(check => {
-        //         check.checked = false;
-        //     })
-        // }
-        //
-        // const textareas = this.template.querySelectorAll("lightning-textarea");
-        // if (textareas) {
-        //     textareas.forEach(ta => { ta.value = ""; });
-        // }
-
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
         this.behaviorWellBeingGroup = [];
@@ -699,53 +681,4 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
 
         this.submitCaseSpinner = false;
     }
-
-    //TESTING
-    // get failedSubmitMessages() {
-    //     return [
-    //         { label: 'Behavior or Well Being Report Failed', value: 'Behavior or Well Being Report Failed' },
-    //         { label: 'Title IX Public Report Failed', value: 'Title IX Public Report Failed' },
-    //         { label: 'Case Submission Error Failed', value: 'Case Submission Error Failed' }
-    //     ];
-    // }
-    //
-    // @track checkBoxSubmitValue = [];
-    //
-    // failedSubmitCheckbox(event) {
-    //     this.value = event.detail.value;
-    //     this.formSubmitSelections.submitWellBeingFormFail = this.value.includes('Behavior or Well Being Report Failed');
-    //     this.formSubmitSelections.submitTitleIxIncidentFormFail = this.value.includes('Title IX Public Report Failed');
-    //     this.caseSubmittedErrorCheck = this.value.includes('Case Submission Error Failed');
-    // }
-    //
-    // get failedSubmitDocuments() {
-    //     return [
-    //         { label: 'Behavior or Well Being Report Documents Failed', value: 'Behavior or Well Being Report Documents Failed' },
-    //         { label: 'Title IX Public Report Documents Failed', value: 'Title IX Public Report Documents Failed' },
-    //     ];
-    // }
-    //
-    // @track checkBoxDocumentsValue = [];
-    //
-    // failedDocumentsCheckbox(event) {
-    //     this.value = event.detail.value;
-    //     this.wellBeingSaveDocumentsFail = this.value.includes('Behavior or Well Being Report Documents Failed');
-    //     this.titleIxSaveDocumentsFail = this.value.includes('Title IX Public Report Documents Failed');
-    // }
-    //
-    // get reportNumber() {
-    //     return [
-    //         { label: 'Behavior or Well Being Report', value: 'Behavior or Well Being Report' },
-    //         { label: 'TitleIX Report', value: 'TitleIX Report' },
-    //     ];
-    // }
-    //
-    // @track checkBoxReportNumberValue = [];
-    //
-    // reportNumberCheckbox(event) {
-    //     this.value = event.detail.value;
-    //     this.formSubmitSelections.TellSomeoneWellBeingReportNumber = this.value.includes('Behavior or Well Being Report') ? "1234" : "";
-    //     this.formSubmitSelections.TellSomeoneTitleIxReportNumber = this.value.includes('TitleIX Report') ? "1234" : "";
-    // }
-    //END TESTING
 }

@@ -4,35 +4,6 @@
 
 <!-- Tommie Alerts Lwc -->
 <template>
-<!--    <div class="slds-grid slds-m-bottom_x-large">-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxSubmitGroup"-->
-<!--                    label="Failed Message"-->
-<!--                    options={failedSubmitMessages}-->
-<!--                    value={checkBoxSubmitValue}-->
-<!--                    onchange={failedSubmitCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxDocumentsGroup"-->
-<!--                    label="Failed Documents"-->
-<!--                    options={failedSubmitDocuments}-->
-<!--                    value={checkBoxDocumentsValue}-->
-<!--                    onchange={failedDocumentsCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxDocumentsGroup"-->
-<!--                    label="Report Numbers"-->
-<!--                    options={reportNumber}-->
-<!--                    value={checkBoxReportNumberValue}-->
-<!--                    onchange={reportNumberCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--    </div>-->
     <template lwc:if={noCurrentTermCheck}>
         <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
             <div class="slds-media__figure">
@@ -48,20 +19,6 @@
             </div>
         </div>
     </template>
-<!--    <template lwc:if={caseSubmittedErrorCheck}>-->
-<!--        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">-->
-<!--            <div class="slds-media__figure">-->
-<!--                <lightning-icon icon-name="utility:warning"-->
-<!--                                alternative-text="submit case error"-->
-<!--                                title="submit case error"-->
-<!--                                size="small">-->
-<!--                </lightning-icon>-->
-<!--            </div>-->
-<!--            <div class="slds-media__body">-->
-<!--                <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </template>-->
     <template lwc:if={tellSomeoneSubmitErrorMsg}>
         <div class="slds-m-bottom_medium">
             <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
@@ -282,7 +239,6 @@
                             <!-- Academic sub-checkboxes -->
                             <div class="slds-m-left_xx-small  sub-content" lwc:if={selectionsCheck.attendanceAcademicCheck}>
                                 <template lwc:if={selectionsCheck.academicCheck}>
-    <!--                                <div class="sub-content">-->
                                     <fieldset class="slds-form-element regular-body-text">
                                         <legend class="slds-form-element__label element-sublabel">
                                             <span class="slds-text-nowrap">Please select academic concerns<abbr class="slds-required" title="required">*</abbr></span></legend>

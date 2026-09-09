@@ -4,35 +4,6 @@
 
 <!-- Tommie Alerts Advising Student Support Lwc -->
 <template>
-<!--    <div class="slds-grid slds-m-bottom_x-large">-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxSubmitGroup"-->
-<!--                    label="Failed Message"-->
-<!--                    options={failedSubmitMessages}-->
-<!--                    value={checkBoxSubmitValue}-->
-<!--                    onchange={failedSubmitCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxDocumentsGroup"-->
-<!--                    label="Failed Documents"-->
-<!--                    options={failedSubmitDocuments}-->
-<!--                    value={checkBoxDocumentsValue}-->
-<!--                    onchange={failedDocumentsCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--        <div class="slds-col">-->
-<!--            <lightning-checkbox-group-->
-<!--                    name="checkboxDocumentsGroup"-->
-<!--                    label="Report Numbers"-->
-<!--                    options={reportNumber}-->
-<!--                    value={checkBoxReportNumberValue}-->
-<!--                    onchange={reportNumberCheckbox}>-->
-<!--            </lightning-checkbox-group>-->
-<!--        </div>-->
-<!--    </div>-->
     <template lwc:if={noAdvisorContactIdCheck}>
         <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
             <div class="slds-media__figure">
@@ -48,22 +19,6 @@
             </div>
         </div>
     </template>
-<!--    <template lwc:if={caseSubmittedErrorCheck}>-->
-<!--        <div class="slds-media slds-media_center slds-theme_error slds-scoped-notification slds-m-bottom_medium slds-p-around_small" role="status">-->
-<!--            <div class="slds-media__figure">-->
-<!--                <lightning-icon icon-name="utility:error"-->
-<!--                                alternative-text="submit case error"-->
-<!--                                title="submit case error"-->
-<!--                                size="small"-->
-<!--                                class="slds-align-middle"-->
-<!--                                variant="inverse">-->
-<!--                </lightning-icon>-->
-<!--            </div>-->
-<!--            <div class="slds-media__body regular-body-text">-->
-<!--                <p>There was a problem with your submission. Please contact salesforce@stthomas.edu to report this error.</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </template>-->
     <template lwc:if={tellSomeoneSubmitErrorMsg}>
         <div class="slds-m-bottom_medium">
             <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
@@ -117,7 +72,7 @@
                 </div>
                 <div class="regular-body-text">
                     <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555" class="slds-truncate">(651)962-5555</a>.</p>
+                        or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555" class="slds-truncate">(651) 962-5555</a>.</p>
                     <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
                         individuals in order to provide additional support.<br>
                         All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
@@ -141,41 +96,39 @@
                         </div>
                         <!-- Banner search (shows only when Banner radio selected) -->
                         <template if:true={isBanner}>
-                            <div class="slds-form-element slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
-                                <div class="slds-form-element__control">
-                                    <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                            <lightning-input name="bannerId"
-                                                             label=""
-                                                             type="text"
-                                                             max-length="10"
-                                                             placeholder="Banner ID"
-                                                             value={bannerId}
-                                                             onchange={handleBannerIdInput}
-                                                             class="slds-m-right_x-small banner-input"
-                                                             variant="label-hidden">
-                                            </lightning-input>
-                                        </div>
-                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
-                                            <lightning-input name="lastName"
-                                                             label=""
-                                                             type="text"
-                                                             max-length="50"
-                                                             placeholder="Last Name"
-                                                             value={lastName}
-                                                             onchange={handleLastNameInput}
-                                                             class="slds-m-right_x-small lastname-input"
-                                                             variant="label-hidden">
-                                            </lightning-input>
-                                        </div>
-                                        <div class="slds-col slds-grow-none input-wrapper">
-                                            <lightning-button label="Search"
-                                                              variant="brand"
-                                                              disabled={isBannerSearchDisabled}
-                                                              onclick={handleSearchStudent}
-                                                              title="Search by Banner Id and Last name">
-                                            </lightning-button>
-                                        </div>
+                            <div class="slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
+                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                        <lightning-input name="bannerId"
+                                                         label=""
+                                                         type="text"
+                                                         max-length="10"
+                                                         placeholder="Banner ID"
+                                                         value={bannerId}
+                                                         onchange={handleBannerIdInput}
+                                                         class="slds-m-right_x-small banner-input"
+                                                         variant="label-hidden">
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                        <lightning-input name="lastName"
+                                                         label=""
+                                                         type="text"
+                                                         max-length="50"
+                                                         placeholder="Last Name"
+                                                         value={lastName}
+                                                         onchange={handleLastNameInput}
+                                                         class="slds-m-right_x-small lastname-input"
+                                                         variant="label-hidden">
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-grow-none input-wrapper">
+                                        <lightning-button label="Search"
+                                                          variant="brand"
+                                                          disabled={isBannerSearchDisabled}
+                                                          onclick={handleSearchStudent}
+                                                          title="Search by Banner Id and Last name">
+                                        </lightning-button>
                                     </div>
                                 </div>
                             </div>
@@ -194,31 +147,29 @@
                         </div>
                         <!-- Email search (replace reusable lookup) -->
                         <template if:true={isEmail}>
-                            <div class="slds-form-element slds-m-left_large slds-m-top_x-small email-search">
-                                <div class="slds-form-element__control">
-                                    <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
-                                            <lightning-input id="email-search-id"
-                                                             name="stThomasEmail"
-                                                             type="email"
-                                                             max-length="75"
-                                                             label=""
-                                                             placeholder="student@stthomas.edu"
-                                                             value={stThomasEmail}
-                                                             onchange={handleEmailChange}
-                                                             class="slds-m-right_x-small email-input"
-                                                             autocomplete="off"
-                                                             variant="label-hidden">
-                                            </lightning-input>
-                                        </div>
-                                        <div class="slds-col slds-grow-none input-wrapper">
-                                            <lightning-button label="Search"
-                                                              variant="brand"
-                                                              disabled={isEmailSearchDisabled}
-                                                              onclick={handleSearchStudent}
-                                                              title="Search by Email">
-                                            </lightning-button>
-                                        </div>
+                            <div class="slds-m-left_large slds-m-top_x-small email-search">
+                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
+                                        <lightning-input id="email-search-id"
+                                                         name="stThomasEmail"
+                                                         type="email"
+                                                         max-length="75"
+                                                         label=""
+                                                         placeholder="student@stthomas.edu"
+                                                         value={stThomasEmail}
+                                                         onchange={handleEmailChange}
+                                                         class="slds-m-right_x-small email-input"
+                                                         autocomplete="off"
+                                                         variant="label-hidden">
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-grow-none input-wrapper">
+                                        <lightning-button label="Search"
+                                                          variant="brand"
+                                                          disabled={isEmailSearchDisabled}
+                                                          onclick={handleSearchStudent}
+                                                          title="Search by Email">
+                                        </lightning-button>
                                     </div>
                                 </div>
                             </div>
@@ -488,7 +439,7 @@
                 </template>
                 <div class="slds-m-top_x-large regular-body-text">
                     <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
-                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651)962-6230</a>.</p>
+                    <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651) 962-6230</a>.</p>
                 </div>
             </div>
         </div>

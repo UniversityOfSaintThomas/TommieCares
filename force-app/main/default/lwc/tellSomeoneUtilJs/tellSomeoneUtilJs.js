@@ -118,7 +118,7 @@ const attachDocumentsUpload = async (uploadedFiles, acceptedExtensionTypes, acce
     return attachDocumentResults;
 }
 
-const attachedDocumentsSave = async (attachDocuments, supportingDocumentName, attachDocumentResponse/*, formValues*/) =>  {
+const attachedDocumentsSave = async (attachDocuments, supportingDocumentName, attachDocumentResponse) =>  {
     let saveDocumentsFail = false;
 
     try {
@@ -128,7 +128,6 @@ const attachedDocumentsSave = async (attachDocuments, supportingDocumentName, at
             attachDocumentResponse.Status = saveSupportingDocumentsResults.Status;
             attachDocumentResponse.SupportingDocumentUrl = saveSupportingDocumentsResults.Url;
             attachDocumentResponse.SupportingDocumentId = saveSupportingDocumentsResults.SupportingDocumentId;
-            // formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
         } else if (saveSupportingDocumentsResults.Status === 'error') {
             saveDocumentsFail = true;
         }
@@ -180,11 +179,7 @@ const tommieAlertsTellSomeoneSubmission = async (template, formType,
         if (formValues && Object.keys(formValues).length > 0) {
             if (documents.length > 0) {
                 saveDocumentsFail = await attachedDocumentsSave(documents, documentTypeLabel, attachDocumentResponse);
-
-                if (formType === "titleix") {
-                    formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //For Supporting Documents record ID
-                }
-                // WAITING ON SALESFORCE SUPPORT DOCUMENT FIELD FOR WELL-BEING BEFORE ASSIGNING
+                formValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //For Supporting Documents record ID
             }
 
             if (submitApexMethod) {

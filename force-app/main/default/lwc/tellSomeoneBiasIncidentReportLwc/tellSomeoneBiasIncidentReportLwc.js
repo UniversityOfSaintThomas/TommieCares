@@ -38,13 +38,7 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         who_caused_the_harm: "", //Who caused the harm
         affiliation_of_person_who_caused_harm: "", //Affiliation of Person Who Caused Harm - picklist
         description: "", //Incident Description
-        // incidentType: "12", //required
-        // additionalLocation: "1", //required
-        // emsCalled: false, //required
-        // residentialHallStaffCalled: false, //required
-        // policeCalled: false, //required
-        // alcohol: false, //required
-        // salesforce_support_documents: "" //For Supporting Documents record ID REMOVING FOR NOW WAITING FOR NEW FIELD
+        salesforce_support_documents: "" //For Supporting Documents record ID
     }
 
     get showFormAll() {
@@ -77,16 +71,9 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         }
 
         if (!this.reporterEmailValidated && this.tellSomeoneReporterEmail && this.showFormAll) {
-            // let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
-            // this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
             let emailField = this.template.querySelector('[data-inputtype="email"]');
             this.validateReporterEmail(this.tellSomeoneReporterEmail, emailField);
             this.reporterEmailValidated = true;
-            // if (emailField) {
-            //     this.validateReporterEmail(this.tellSomeoneReporterEmail, emailField);
-            //     // this.emailValidationBlur({currentTarget: emailField, target: {value: this.tellSomeoneReporterEmail}});
-            //     this.reporterEmailValidated = true;
-            // }
         }
 
         this.dateFieldElement = this.template.querySelector("[data-inputtype='date']");
@@ -188,7 +175,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         let eventField = event.target;
         let eventValue = event.detail.value;
         let eventValueTrim = eventValue.trim();
-        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -261,10 +247,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
 
     validEmail = true;
     validEmailWarning = false;
-    validEmailIndividual = true;
-    validEmailWarningIndividual = false;
-    reporterInfoRevealed = false;
-    individualInfoRevealed = false;
 
     validateReporterEmail(emailAddress, emailField) {
         let emailValidationResults = emailValidation(emailAddress);
@@ -281,35 +263,8 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         const emailAddress = event.target.value;
 
         this.validateReporterEmail(emailAddress, emailField);
-        // eslint-disable-next-line default-case
-        // switch (event.currentTarget.dataset.inputtype) {
-        //     case "email":
-        //         this.validateReporterEmail(emailAddress, emailField);
-        //         break;
-        //     case "involvedemail":
-        //         this.validateIndividualEmail(emailAddress, emailField);
-        //         break;
-        // }
         this.submitDisableToTommieAlerts();
     }
-
-    // validEmail = true;
-    // validEmailWarning = false;
-    // emailValidationBlur(event) {
-    //     const emailField = event.currentTarget;
-    //     const emailAddress = event.target.value;
-    //     let emailValidationResults = emailValidation(emailAddress);
-    //
-    //     this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-    //     this.validEmail = emailValidationResults.validEmail;
-    //     this.validEmailWarning = emailValidationResults.validEmailWarning;
-    //
-    //     if (this.validEmailWarning) {
-    //         emailField.classList.add("slds-has-error");
-    //     } else {
-    //         emailField.classList.remove("slds-has-error");
-    //     }
-    // }
 
     _incidentDate = "";
     _incidentTime = "";
@@ -414,7 +369,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        // console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
@@ -451,7 +405,7 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         if (this.attachDocuments.length > 0) {
             try {
                 this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Bias Incident', attachDocumentResponse);
-                // this.biasIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl; //REMOVING FOR NOW WAITING FOR NEW FIELD
+                this.biasIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
                 console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
                 console.log('this.biasIncidentFormValues: ', JSON.stringify(this.biasIncidentFormValues));
             } catch (error) {
@@ -470,12 +424,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
             console.error('Error submitting titleIx form:', error);
         }
 
-        /*START TEST INPUTS*/
-// formReportNumber = "Test0987";
-// this.submitBiasIncidentFormFail = !formReportNumber;
-// this.saveDocumentsFail = true;
-        /*END TEST INPUTS*/
-
         try {
             await finalizeSupportingDocument(this.saveDocumentsFail, this.submitBiasIncidentFormFail, attachDocumentResponse, formReportNumber);
             // eslint-disable-next-line no-restricted-globals
@@ -486,5 +434,4 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
             this.showSpinner = false;
         }
     }
-
 }

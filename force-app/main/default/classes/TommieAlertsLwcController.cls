@@ -122,10 +122,7 @@ public without sharing class TommieAlertsLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-//    public static List<Map<String, String>> studentCourseList(String studentBannerId, String courseId) {
     public static List<hed__Course_Enrollment__c> studentCourseList(String studentBannerId, String courseId) {
-
-//        List<Map<String, String>> studentMapList = new List<Map<String, String>>();
         List<hed__Course_Enrollment__c> students = new List<hed__Course_Enrollment__c>();
         String singleStudentCriteria = '';
 
@@ -176,7 +173,6 @@ public without sharing class TommieAlertsLwcController {
     @AuraEnabled(Cacheable=false)
     public static Boolean submitTommieAlertsCase(Map<String, String> formSelections) {
         Boolean caseSubmittedErrorCheck = false;
-
         Case tommieCaresCase = new Case();
 
         List<RecordType> recordId = [
@@ -190,7 +186,6 @@ public without sharing class TommieAlertsLwcController {
         String caseRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
 
         List<String> advocateReportNumbers = new List<String>();
-
         if (Boolean.valueOf(formSelections.get('submitWellBeingFormFail'))) {
             advocateReportNumbers.add('Advocate Well-Being Report Submission Failed');
         } else if (!Boolean.valueOf(formSelections.get('submitWellBeingFormFail')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingReportNumber'))) {

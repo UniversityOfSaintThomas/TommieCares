@@ -82,14 +82,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         return !this.tommieAlertsForm || this.reporterInfoRevealed;
     }
 
-    // get reporterElementsCss() {
-    //     return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
-    // }
-    //
-    // get submitSectionElementCss() {
-    //     return this.tommieAlertsHideCss;
-    // }
-
     get showFormAll() {
         return !!this.titleIxIncidentFormValues.reporter_type_custom;
     }
@@ -195,7 +187,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 console.log("i_understand_the_statement_about_anonymous_r eventValueHtml: "+eventValueHtml);
                 break;
             case "statuswhocausedharm":
-                // this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue;
                 this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue ? [eventValue] : [];
                 console.log("status_of_individual_who_caused_harm eventValue: "+eventValue);
                 console.log("status_of_individual_who_caused_harm eventValueHtml: "+eventValueHtml);
@@ -217,7 +208,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         let eventField = event.currentTarget;
         let eventValue = event.detail.value;
         let eventValueTrim = eventValue.trim();
-        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
@@ -284,10 +274,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     validEmail = true;
     validEmailWarning = false;
-    validEmailIndividual = true;
-    validEmailWarningIndividual = false;
     reporterInfoRevealed = false;
-    individualInfoRevealed = false;
 
     validateReporterEmail(emailAddress, emailField) {
         let emailValidationResults = emailValidation(emailAddress);
@@ -307,39 +294,8 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         const emailAddress = event.target.value;
 
         this.validateReporterEmail(emailAddress, emailField);
-        // eslint-disable-next-line default-case
-        // switch (event.currentTarget.dataset.inputtype) {
-        //     case "email":
-        //         this.validateReporterEmail(emailAddress, emailField);
-        //         break;
-        //     case "involvedemail":
-        //         this.validateIndividualEmail(emailAddress, emailField);
-        //         break;
-        // }
         this.submitDisableToTommieAlerts();
     }
-
-    // validEmail = true;
-    // validEmailWarning = false;
-    // emailValidationBlur(event) {
-    //     const emailField = event.currentTarget;
-    //     const emailAddress = event.target.value;
-    //
-    //     console.log('I am being called: ', emailField);
-    //     console.log('emailAddress', emailAddress);
-    //
-    //     let emailValidationResults = emailValidation(emailAddress);
-    //
-    //     this.titleIxIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-    //     this.validEmail = emailValidationResults.validEmail;
-    //     this.validEmailWarning = emailValidationResults.validEmailWarning;
-    //
-    //     if (this.validEmailWarning) {
-    //         emailField.classList.add("slds-has-error");
-    //     } else {
-    //         emailField.classList.remove("slds-has-error");
-    //     }
-    // }
 
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;
@@ -372,7 +328,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     attachDocumentsDelete(event) {
         let removeFileId = event.currentTarget.dataset.fileid;
         this.attachDocuments = this.attachDocuments.filter(obj => obj.fileId.toString() !== removeFileId.toString());
-        // console.log("After remove file length: "+this.attachDocuments.length);
         if (this.attachDocuments.length === 0) {
             this.attachDocumentsExclude = [];
         }
@@ -428,12 +383,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             console.error('Error submitting titleIx form:', error);
         }
 
-/*START TEST INPUTS*/
-// formReportNumber = "TESTING"
-// this.submitTitleIxIncidentFormFail = !formReportNumber;
-// this.saveDocumentsFail = true;
-/*END TEST INPUTS*/
-
         try {
             await finalizeSupportingDocument(this.saveDocumentsFail, this.submitTitleIxIncidentFormFail, attachDocumentResponse, formReportNumber);
             // eslint-disable-next-line no-restricted-globals
@@ -452,5 +401,4 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         });
         this.dispatchEvent(customEvent);
     }
-
 }

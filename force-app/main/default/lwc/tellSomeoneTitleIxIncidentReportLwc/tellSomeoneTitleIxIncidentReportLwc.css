@@ -77,25 +77,17 @@ lightning-button.submit_button {
     border: none !important;
 }
 
-/* Body copy / intro paragraphs */
-/*.regular-body-text p {*/
-/*    font-size: 1rem !important;*/
-/*    color: black !important;*/
-/*}*/
-
 p.submit-warning {
     font-size: 0.75rem !important;
     margin-bottom: 0.5rem !important;
 }
 
-/* Helper/description text under labels — matches .textarea-sublabel */
 p.textarea-sublabel {
     font-size: .90rem !important;
     color: black !important;
     margin-bottom: 0 !important;
 }
 
-/* Form field labels — matches .form-element__label-custom in tommieCaresLwcv2 */
 .selection-labels {
     font-size: 1rem !important;
     color: black !important;
@@ -111,11 +103,6 @@ p.textarea-sublabel {
     display: flex !important;
     align-items: center !important;
 }
-
-/*.submit-error-message {*/
-/*    border: solid 1.5px red;*/
-/*    background: #ff740008;*/
-/*}*/
 
 .slds-radio_faux {
     border-color: black !important;

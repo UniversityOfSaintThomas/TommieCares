@@ -249,7 +249,6 @@ export default class TellSomeoneLwc extends LightningElement {
                 this.searchParamsUrl.searchParams.set("sfid", this.tellSomeoneCase.IAmContactId);
                 // eslint-disable-next-line @lwc/lwc/no-api-reassignments
                 this.paramUrl = this.searchParamsUrl.toString();
-                // console.log("paramUrl: " + this.paramUrl)
             }
         }
 
@@ -381,8 +380,6 @@ export default class TellSomeoneLwc extends LightningElement {
     validEmailWarning = false;
     validEmailIndividual = true;
     validIndividualEmailWarning = false;
-    reporterInfoRevealed = false;
-    individualInfoRevealed = false;
 
     validateReporterEmail(emailAddress, emailField) {
         let emailValidationResults = emailValidation(emailAddress);
@@ -423,42 +420,6 @@ export default class TellSomeoneLwc extends LightningElement {
         this.submitDisableToTommieAlerts();
     }
 
-    // validEmail = true;
-    // validEmailWarning = false;
-    // validEmailWho = true;
-    // validEmailWarningWho = false;
-    // emailValidationBlur(event) {
-    //     const emailField = event.currentTarget;
-    //     const emailAddress = event.target.value;
-    //     let emailValidationResults = emailValidation(emailAddress);
-    //
-    //     // eslint-disable-next-line default-case
-    //     switch (event.currentTarget.dataset.inputgroup) {
-    //         case "iaminfo":
-    //             this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
-    //             this.validEmail = emailValidationResults.validEmail;
-    //             this.validEmailWarning = emailValidationResults.validEmailWarning;
-    //             if (this.validEmailWarning) {
-    //                 emailField.classList.add("slds-has-error");
-    //             } else {
-    //                 emailField.classList.remove("slds-has-error");
-    //             }
-    //             break;
-    //         case "concernedwhoinfo":
-    //             if (emailAddress) {
-    //                 this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
-    //                 this.validEmailWho = emailValidationResults.validEmail;
-    //                 this.validEmailWarningWho = emailValidationResults.validEmailWarning;
-    //                 if (this.validEmailWarningWho) {
-    //                     emailField.classList.add("slds-has-error");
-    //                 } else {
-    //                     emailField.classList.remove("slds-has-error");
-    //                 }
-    //             }
-    //             break;
-    //     }
-    // }
-
     get submittedUrl() {
         this.searchParamsUrl.searchParams.set("submitted", "true");
         if (this.submitCaseFail) {
@@ -482,7 +443,6 @@ export default class TellSomeoneLwc extends LightningElement {
     async submitCase(event) {
         // const eventField = event.currentTarget;
         this.submitCaseFail = false;
-
         this.showSpinner = true;
 
         try {
@@ -494,8 +454,6 @@ export default class TellSomeoneLwc extends LightningElement {
 
         // eslint-disable-next-line no-restricted-globals
         location.replace(this.submittedUrl);
-
         this.showSpinner = false;
     }
-
 }
