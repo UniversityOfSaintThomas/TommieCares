@@ -198,6 +198,7 @@
                                                      data-inputtype="firstname"
                                                      placeholder="First Name"
                                                      variant="label-hidden"
+                                                     max-length={maxCharacterLength}
                                                      required="true"
                                                      disabled={iAmInfoInputDisabled}
                                                      onchange={inputValueHandler}>
@@ -216,6 +217,7 @@
                                                      data-inputtype="lastname"
                                                      placeholder="Last Name"
                                                      variant="label-hidden"
+                                                     max-length={maxCharacterLength}
                                                      required="true"
                                                      disabled={iAmInfoInputDisabled}
                                                      onchange={inputValueHandler}>
@@ -255,6 +257,7 @@
                                                      data-inputtype="phone"
                                                      placeholder="Phone"
                                                      variant="label-hidden"
+                                                     max-length={maxCharacterLength}
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
                                 </div>
@@ -277,6 +280,7 @@
                                                  data-inputtype="firstname"
                                                  placeholder="First Name"
                                                  variant="label-hidden"
+                                                 max-length={maxCharacterLength}
                                                  required="true"
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
@@ -294,6 +298,7 @@
                                                  data-inputtype="lastname"
                                                  placeholder="Last Name"
                                                  variant="label-hidden"
+                                                 max-length={maxCharacterLength}
                                                  required="true"
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
@@ -316,7 +321,7 @@
                                                  onchange={inputValueHandler}
                                                  onblur={emailValidationBlur}>
                                 </lightning-input>
-                                <div lwc:if={validEmailWarningWho} class="validation-text">Invalid email address format</div>
+                                <div lwc:if={validIndividualEmailWarning} class="validation-text">Invalid email address format</div>
 
                             </div>
                         </div>
@@ -332,6 +337,7 @@
                                                  data-inputtype="phone"
                                                  placeholder="Phone"
                                                  variant="label-hidden"
+                                                 max-length={maxCharacterLength}
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
                             </div>
@@ -350,9 +356,11 @@
                                                 data-inputgroup="concernedwhatadditionalinfo"
                                                 placeholder="Additional information"
                                                 variant="label-hidden"
+                                                max-length={maxAdditionalInfoLength}
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
+                            <span class="character-length-counter">{additionalInfoLengthCount}/{maxAdditionalInfoLength} characters limit</span>
                         </div>
                     </div>
                 </div>

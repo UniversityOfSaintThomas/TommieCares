@@ -16,14 +16,30 @@ abbr.slds-required {
     font-weight: bold;
 }
 
+.attached-file-list * {
+    font-size: .75rem !important;
+    color: black !important;;
+    margin-bottom: 0 !important;;
+}
+
+.character-length-counter {
+    font-size: .90rem !important;
+}
+
 .custom-textarea {
     --sds-c-textarea-sizing-min-height: 100px; /* Set your desired height */
     /*width: 90%;*/
 }
 
 .custom-textarea-tall {
-    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
+    --sds-c-textarea-sizing-min-height: 175px; /* Set your desired height */
     /*width: 90%;*/
+}
+
+.excluded-file-list * {
+    font-size: .75rem !important;
+    color: rgb(234, 0, 30) !important;;
+    margin-bottom: 0 !important;;
 }
 
 lightning-button.submit_button {
@@ -61,18 +77,6 @@ lightning-button.submit_button {
     border: none !important;
 }
 
-.attached-file-list * {
-    font-size: .75rem !important;
-    color: black !important;;
-    margin-bottom: 0 !important;;
-}
-
-.excluded-file-list * {
-    font-size: .75rem !important;
-    color: red !important;;
-    margin-bottom: 0 !important;;
-}
-
 /* Body copy / intro paragraphs */
 /*.regular-body-text p {*/
 /*    font-size: 1rem !important;*/
@@ -108,10 +112,10 @@ p.textarea-sublabel {
     align-items: center !important;
 }
 
-.submit-error-message {
-    border: solid 1.5px red;
-    background: #ff740008;
-}
+/*.submit-error-message {*/
+/*    border: solid 1.5px red;*/
+/*    background: #ff740008;*/
+/*}*/
 
 .slds-radio_faux {
     border-color: black !important;
@@ -128,7 +132,7 @@ p.textarea-sublabel {
 }
 
 .validation-text {
-    color: red;
-    /*font-size: 0.75rem;*/
+    color: rgb(234, 0, 30);
+    font-size: 12px;
     /*margin-top: 0.125rem;*/
 }

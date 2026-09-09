@@ -20,8 +20,12 @@ abbr.slds-required {
     font-weight: bold;
 }
 
+.character-length-counter {
+    font-size: .90rem !important;
+}
+
 .custom-textarea {
-    --sds-c-textarea-sizing-min-height: 150px; /* Set your desired height */
+    --sds-c-textarea-sizing-min-height: 175px; /* Set your desired height */
     /*width: 80%;*/
 }
 
@@ -159,7 +163,7 @@ lightning-button.submit_button {
 }
 
 .validation-text {
-    color: red;
-    /*font-size: 0.75rem;*/
+    color: rgb(234, 0, 30);
+    font-size: 12px;
     /*margin-top: 0.125rem;*/
 }

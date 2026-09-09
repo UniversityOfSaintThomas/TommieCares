@@ -129,7 +129,7 @@ export default class TellSomeoneLwc extends LightningElement {
     }
 
     get submitDisable() {
-        return !(!!this.tellSomeoneCase.ConcernedWhatAdditionalInfo && this.validEmailWho);
+        return !(!!this.tellSomeoneCase.ConcernedWhatAdditionalInfo && this.validEmailIndividual);
     }
 
     get iAmInfoInputDisabled() {
@@ -299,18 +299,25 @@ export default class TellSomeoneLwc extends LightningElement {
         }
     }
 
+    additionalInfoLengthCount = 0;
+    maxAdditionalInfoLength = 20000;
+    maxCharacterLength = 100;
     inputValueHandler(event) {
+        let eventField = event.target;
         let eventValue = event.detail.value;
+        let eventValueTrim = eventValue.trim();
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
                 // eslint-disable-next-line default-case
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.tellSomeoneCase.IAmFirstName = eventValue.trim();
+                        this.tellSomeoneCase.IAmFirstName = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                         break;
                     case "lastname":
-                        this.tellSomeoneCase.IAmLastName = eventValue.trim();
+                        this.tellSomeoneCase.IAmLastName = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                         break;
                     case "email":
                         if (!eventValue) {
@@ -321,7 +328,8 @@ export default class TellSomeoneLwc extends LightningElement {
                         }
                         break;
                     case "phone":
-                        this.tellSomeoneCase.IAmPhone = eventValue.trim();
+                        this.tellSomeoneCase.IAmPhone = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                         break;
                 }
                 break;
@@ -329,66 +337,127 @@ export default class TellSomeoneLwc extends LightningElement {
                 // eslint-disable-next-line default-case
                 switch (event.currentTarget.dataset.inputtype) {
                     case "firstname":
-                        this.tellSomeoneCase.ConcernedWhoFirstName = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoFirstName = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                         break;
                     case "lastname":
-                        this.tellSomeoneCase.ConcernedWhoLastName = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoLastName = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                         break;
                     case "email":
                         if (!eventValue) {
-                            this.validEmailWarningWho = false;
-                            this.validEmailWho = true;
+                            this.validIndividualEmailWarning = false;
+                            this.validEmailIndividual = true;
                         } else {
-                            this.validEmailWho = false;
+                            this.validEmailIndividual = false;
                         }
                         break;
                     case "phone":
-                        this.tellSomeoneCase.ConcernedWhoPhone = eventValue.trim();
+                        this.tellSomeoneCase.ConcernedWhoPhone = eventValueTrim;
+                        this.maxlengthCheck(eventField, eventValueTrim, this.maxCharacterLength);
                         break;
                 }
                 break;
             case "concernedwhatadditionalinfo":
-                this.tellSomeoneCase.ConcernedWhatAdditionalInfo = eventValue.trim();
+                this.tellSomeoneCase.ConcernedWhatAdditionalInfo = eventValueTrim;
+                this.additionalInfoLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxAdditionalInfoLength);
                 break;
         }
+    }
+
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
     }
 
     validEmail = true;
     validEmailWarning = false;
-    validEmailWho = true;
-    validEmailWarningWho = false;
+    validEmailIndividual = true;
+    validIndividualEmailWarning = false;
+    reporterInfoRevealed = false;
+    individualInfoRevealed = false;
+
+    validateReporterEmail(emailAddress, emailField) {
+        let emailValidationResults = emailValidation(emailAddress);
+        this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
+        this.validEmail = emailValidationResults.validEmail;
+        this.validEmailWarning = emailValidationResults.validEmailWarning;
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validEmailWarning);
+        }
+    }
+
+    validateIndividualEmail(emailAddress, emailField) {
+        if (!emailAddress) return;
+        let emailValidationResults = emailValidation(emailAddress);
+        this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
+        this.validEmailIndividual = emailValidationResults.validEmail;
+        this.validIndividualEmailWarning = emailValidationResults.validEmailWarning;
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validIndividualEmailWarning);
+        }
+    }
+
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
-        let emailValidationResults = emailValidation(emailAddress);
 
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputgroup) {
             case "iaminfo":
-                this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
-                this.validEmail = emailValidationResults.validEmail;
-                this.validEmailWarning = emailValidationResults.validEmailWarning;
-                if (this.validEmailWarning) {
-                    emailField.classList.add("slds-has-error");
-                } else {
-                    emailField.classList.remove("slds-has-error");
-                }
+                this.validateReporterEmail(emailAddress, emailField);
                 break;
             case "concernedwhoinfo":
                 if (emailAddress) {
-                    this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
-                    this.validEmailWho = emailValidationResults.validEmail;
-                    this.validEmailWarningWho = emailValidationResults.validEmailWarning;
-                    if (this.validEmailWarningWho) {
-                        emailField.classList.add("slds-has-error");
-                    } else {
-                        emailField.classList.remove("slds-has-error");
-                    }
+                    this.validateIndividualEmail(emailAddress, emailField);
                 }
                 break;
         }
-
+        this.submitDisableToTommieAlerts();
     }
+
+    // validEmail = true;
+    // validEmailWarning = false;
+    // validEmailWho = true;
+    // validEmailWarningWho = false;
+    // emailValidationBlur(event) {
+    //     const emailField = event.currentTarget;
+    //     const emailAddress = event.target.value;
+    //     let emailValidationResults = emailValidation(emailAddress);
+    //
+    //     // eslint-disable-next-line default-case
+    //     switch (event.currentTarget.dataset.inputgroup) {
+    //         case "iaminfo":
+    //             this.tellSomeoneCase.IAmEmail = emailValidationResults.emailAddress;
+    //             this.validEmail = emailValidationResults.validEmail;
+    //             this.validEmailWarning = emailValidationResults.validEmailWarning;
+    //             if (this.validEmailWarning) {
+    //                 emailField.classList.add("slds-has-error");
+    //             } else {
+    //                 emailField.classList.remove("slds-has-error");
+    //             }
+    //             break;
+    //         case "concernedwhoinfo":
+    //             if (emailAddress) {
+    //                 this.tellSomeoneCase.ConcernedWhoEmail = emailValidationResults.emailAddress;
+    //                 this.validEmailWho = emailValidationResults.validEmail;
+    //                 this.validEmailWarningWho = emailValidationResults.validEmailWarning;
+    //                 if (this.validEmailWarningWho) {
+    //                     emailField.classList.add("slds-has-error");
+    //                 } else {
+    //                     emailField.classList.remove("slds-has-error");
+    //                 }
+    //             }
+    //             break;
+    //     }
+    // }
 
     get submittedUrl() {
         this.searchParamsUrl.searchParams.set("submitted", "true");

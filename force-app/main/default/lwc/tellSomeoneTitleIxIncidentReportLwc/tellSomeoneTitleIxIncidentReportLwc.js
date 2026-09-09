@@ -17,7 +17,7 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     @api tellSomeoneConcernWhoValue = "";
     @api tellSomeoneParamsUrl = "";
     @api tommieAlertsStudentName = "";
-    @api tommieAlertsHideCss = "";
+    @api tommieAlertsForm = false;
 
     @api get formToTommieAlerts() {
         return this.titleIxIncidentFormValues;
@@ -66,13 +66,29 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     notificationSelect = ""
     iUnderstandTheStatementAboutAnonymousSelect = []
 
-    get reporterElementsCss() {
-        return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
+    get tommieAlertsDisable() {
+        return this.tommieAlertsForm;
     }
 
-    get submitSectionElementCss() {
-        return this.tommieAlertsHideCss;
+    get tommieAlertsHide() {
+        return !this.tommieAlertsDisable;
     }
+
+    get tommieAlertsDisableReporterEmail() {
+        return this.tommieAlertsDisable && !this.reporterInfoRevealed;
+    }
+
+    get showReporterInfo() {
+        return !this.tommieAlertsForm || this.reporterInfoRevealed;
+    }
+
+    // get reporterElementsCss() {
+    //     return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
+    // }
+    //
+    // get submitSectionElementCss() {
+    //     return this.tommieAlertsHideCss;
+    // }
 
     get showFormAll() {
         return !!this.titleIxIncidentFormValues.reporter_type_custom;
@@ -94,20 +110,22 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         return !(!!this.titleIxIncidentFormValues.reporter_type_custom && !!this.titleIxIncidentFormValues.description &&
             this.titleIxIncidentFormValues.status_of_individual_who_caused_harm.length > 0 && !!this.titleIxIncidentFormValues.date_of_incidents &&
             this.titleIxIncidentFormValues.notification != null && this.titleIxIncidentFormValues.reporter_followup &&
-            (this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r || (this.validEmail && !!this.titleIxIncidentFormValues.reporterEmail)));
+            (this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r || (this.validEmail && !!this.titleIxIncidentFormValues.reporterEmail && this.titleIxIncidentFormValues.reporterName)));
     }
 
     rendered = false;
+    reporterEmailValidated = false;
     renderedCallback() {
         if(!this.rendered) {
             this.titleIxIncidentFormValues.reporterName = this.tellSomeoneReporterFirstName ? this.tellSomeoneReporterFirstName + " " + this.tellSomeoneReporterLastName : "";
-            if (this.tellSomeoneReporterEmail) {
-                let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
-                this.titleIxIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-            }
             this.titleIxIncidentFormValues.person_who_was_harmed_complainants = this.tommieAlertsStudentName;
+            this.rendered = true;
+        }
 
-            this.rendered = !this.rendered;
+        if (!this.reporterEmailValidated && this.tellSomeoneReporterEmail && this.showFormAll) {
+            let reporterEmailField = this.template.querySelector('[data-inputtype="email"]');
+            this.validateReporterEmail(this.tellSomeoneReporterEmail, reporterEmailField);
+            this.reporterEmailValidated = true;
         }
     }
 
@@ -192,50 +210,65 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         this.submitDisableToTommieAlerts();
     }
 
+    descriptionLengthCount = 0;
+    maxDescriptionCharacterLength = 20000;
+    maxStandardCharacterLength = 255;
     inputValueHandler(event) {
+        let eventField = event.currentTarget;
         let eventValue = event.detail.value;
-        const eventField = event.currentTarget;
-        const MAX_LENGTH = 255;
+        let eventValueTrim = eventValue.trim();
+        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
-                this.titleIxIncidentFormValues.reporterName = eventValue;
+                this.titleIxIncidentFormValues.reporterName = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "email":
-                this.titleIxIncidentFormValues.reporterEmail = eventValue;
+                if (!eventValue) {
+                    this.validEmailWarning = false;
+                    this.validEmail = true;
+                } else {
+                    this.validEmail = false;
+                }
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "phone":
-                this.titleIxIncidentFormValues.reporterPhone = eventValue;
+                this.titleIxIncidentFormValues.reporterPhone = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "description":
-                this.titleIxIncidentFormValues.description = eventValue;
-                this.maxlengthCheck(eventField, eventValue, 20000);
+                this.titleIxIncidentFormValues.description = eventValueTrim;
+                this.descriptionLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxDescriptionCharacterLength);
                 break;
             case "whoharmed":
-                this.titleIxIncidentFormValues.person_who_was_harmed_complainants = eventValue;
-                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
+                this.titleIxIncidentFormValues.person_who_was_harmed_complainants = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "location":
-                this.titleIxIncidentFormValues.additionalLocation = eventValue;
-                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
+                this.titleIxIncidentFormValues.additionalLocation = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "dates":
-                this.titleIxIncidentFormValues.date_of_incidents = eventValue;
+                this.titleIxIncidentFormValues.date_of_incidents = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "whocausedharm":
-                this.titleIxIncidentFormValues.person_who_did_harm_respondents = eventValue;
-                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
+                this.titleIxIncidentFormValues.person_who_did_harm_respondents = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "witnesses":
-                this.titleIxIncidentFormValues.otherWitness = eventValue;
-                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
+                this.titleIxIncidentFormValues.otherWitness = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "followup":
-                this.titleIxIncidentFormValues.reporter_followup = eventValue;
-                this.maxlengthCheck(eventField, eventValue, MAX_LENGTH);
+                this.titleIxIncidentFormValues.reporter_followup = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
         }
         this.submitDisableToTommieAlerts();
+        console.log("this.titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
     }
 
     maxlengthCheck(field, fieldValue, maxLength) {
@@ -251,21 +284,62 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
 
     validEmail = true;
     validEmailWarning = false;
-    emailValidationBlur(event) {
-        const emailField = event.currentTarget;
-        const emailAddress = event.target.value;
-        let emailValidationResults = emailValidation(emailAddress);
+    validEmailIndividual = true;
+    validEmailWarningIndividual = false;
+    reporterInfoRevealed = false;
+    individualInfoRevealed = false;
 
+    validateReporterEmail(emailAddress, emailField) {
+        let emailValidationResults = emailValidation(emailAddress);
         this.titleIxIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
         this.validEmail = emailValidationResults.validEmail;
         this.validEmailWarning = emailValidationResults.validEmailWarning;
-
-        if (this.validEmailWarning) {
-            emailField.classList.add("slds-has-error");
-        } else {
-            emailField.classList.remove("slds-has-error");
+        if (this.tommieAlertsForm && this.validEmailWarning) {
+            this.reporterInfoRevealed = true; // only latch open when in TommieAlerts form flow
+        }
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validEmailWarning);
         }
     }
+
+    emailValidationBlur(event) {
+        const emailField = event.currentTarget;
+        const emailAddress = event.target.value;
+
+        this.validateReporterEmail(emailAddress, emailField);
+        // eslint-disable-next-line default-case
+        // switch (event.currentTarget.dataset.inputtype) {
+        //     case "email":
+        //         this.validateReporterEmail(emailAddress, emailField);
+        //         break;
+        //     case "involvedemail":
+        //         this.validateIndividualEmail(emailAddress, emailField);
+        //         break;
+        // }
+        this.submitDisableToTommieAlerts();
+    }
+
+    // validEmail = true;
+    // validEmailWarning = false;
+    // emailValidationBlur(event) {
+    //     const emailField = event.currentTarget;
+    //     const emailAddress = event.target.value;
+    //
+    //     console.log('I am being called: ', emailField);
+    //     console.log('emailAddress', emailAddress);
+    //
+    //     let emailValidationResults = emailValidation(emailAddress);
+    //
+    //     this.titleIxIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+    //     this.validEmail = emailValidationResults.validEmail;
+    //     this.validEmailWarning = emailValidationResults.validEmailWarning;
+    //
+    //     if (this.validEmailWarning) {
+    //         emailField.classList.add("slds-has-error");
+    //     } else {
+    //         emailField.classList.remove("slds-has-error");
+    //     }
+    // }
 
     get showAttachDocumentName() {
         return this.attachDocuments.length !== 0;

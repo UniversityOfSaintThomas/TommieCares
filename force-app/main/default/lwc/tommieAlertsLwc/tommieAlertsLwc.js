@@ -28,7 +28,7 @@ export default class TommieAlertsLwc extends LightningElement {
             tommieAlertsReporterPhone: "Tommie Alerts Submission",
             tommieAlertsStudentName: this.studentName,
             tommieAlertsStudentEmail: this.studentEmail,
-            tommieAlertsHideCss: "tommie-alerts_hide",
+            tommieAlertsForm: true,
         }
     }
 
@@ -399,6 +399,7 @@ export default class TommieAlertsLwc extends LightningElement {
                     if (!eventChecked) {
                         this.formSubmitSelections.High5_Reasons = "";
                         this.formSubmitSelections.High5_Details = "";
+                        this.high5detailsLengthCount = 0;
                     }
                     this.selectionsCheck.high5Check = eventChecked;
                     this.formRequired.High5_Required = eventChecked;
@@ -455,6 +456,7 @@ export default class TommieAlertsLwc extends LightningElement {
                 if (eventValue === "Other") {
                     if (!eventChecked) {
                         this.formSubmitSelections.Other_Details = "";
+                        this.otherDetailsLengthCount = 0;
                     }
                     this.selectionsCheck.otherCheck = eventChecked;
                     this.formRequired.Other_Required = eventChecked;
@@ -478,29 +480,55 @@ export default class TommieAlertsLwc extends LightningElement {
 
         if (!this.formSubmitSelections.TommieCares_Reasons || !this.showAdditionalConcerns) {
             this.formSubmitSelections.Additional_Concerns = "";
+            this.additionalConcernsLengthCount = 0;
         }
     }
 
+    high5detailsLengthCount = 0;
+    personalMessageLengthCount = 0;
+    otherDetailsLengthCount = 0;
+    additionalConcernsLengthCount = 0;
+    maxCharacterLength = 20000;
     textAreaDetails(event) {
-        const eventValueTrim = event.detail.value.trim();
-
+        let eventField = event.target;
+        let eventValue = event.detail.value;
+        let eventValueTrim = eventValue.trim();
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.texttype) {
             case "high5Details":
                 this.formSubmitSelections.High5_Details = eventValueTrim;
                 this.formRequired.High5_Required = !(this.formSubmitSelections.High5_Reasons && this.formSubmitSelections.High5_Details);
+                this.high5detailsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
+                break;
+            case "personalMessage":
+                this.formSubmitSelections.Personal_Message = eventValueTrim;
+                this.personalMessageLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
             case "otherDetails":
                 this.formSubmitSelections.Other_Details = eventValueTrim;
                 this.formRequired.Other_Required = !this.formSubmitSelections.Other_Details;
-                break;
-            case "personalMessage":
-                this.formSubmitSelections.Personal_Message = eventValueTrim;
+                this.otherDetailsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
+                this.additionalConcernsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
         }
+    }
+
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
     }
 
     checkBoxSelect(evt, selectionType) {
@@ -526,6 +554,7 @@ export default class TommieAlertsLwc extends LightningElement {
             this.selectionsCheck.attendanceAcademicCheck = false;
             this.formSubmitSelections.Pass_Course_Selection = "";
             this.formSubmitSelections.Personal_Message = "";
+            this.personalMessageLengthCount = 0;
             this.formRequired.PassCourse_Required = false;
         }
     }
@@ -534,15 +563,22 @@ export default class TommieAlertsLwc extends LightningElement {
         this.formRequired.PassCourse_Required = !this.formSubmitSelections.Pass_Course_Selection;
     }
 
+    resetCharacterLengths() {
+        this.high5detailsLengthCount = 0;
+        this.personalMessageLengthCount = 0;
+        this.otherDetailsLengthCount = 0;
+        this.additionalConcernsLengthCount = 0;
+    }
+
     resetForm() {
         this.positiveAlertGroup = [];
         this.advisingGroup = [];
         this.behaviorWellBeingGroup = [];
         this.lifeCircumstanceGroup = [];
 
-        this.template.querySelectorAll("input[type='checkbox']").forEach(check => {
-            check.checked = false;
-        });
+        // this.template.querySelectorAll("input[type='checkbox']").forEach(check => {
+        //     check.checked = false;
+        // });
 
         Object.keys(this.formSubmitSelections).forEach(k => {
             this.formSubmitSelections[k] = ""
@@ -553,6 +589,8 @@ export default class TommieAlertsLwc extends LightningElement {
         Object.keys(this.formRequired).forEach(k => {
             this.formRequired[k] = false
         });
+
+        this.resetCharacterLengths();
     }
 
     submittedUrl() {

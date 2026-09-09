@@ -354,6 +354,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                     if (!eventChecked) {
                         this.formSubmitSelections.High5_Reasons = "";
                         this.formSubmitSelections.High5_Details = "";
+                        this.high5detailsLengthCount = 0;
                     }
                     this.selectionsCheck.high5Check = eventChecked;
                     this.formRequired.High5_Required = eventChecked;
@@ -394,6 +395,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
                 if (eventValue === "Other") {
                     if (!eventChecked) {
                         this.formSubmitSelections.Other_Details = "";
+                        this.otherDetailsLengthCount = 0;
                     }
                     this.selectionsCheck.otherCheck = eventChecked;
                     this.formRequired.Other_Required = eventChecked;
@@ -406,6 +408,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         }
 
         if (!(this.formSubmitSelections.TommieCares_Reasons || !this.showAdditionalConcerns)) {
+            this.formSubmitSelections.Additional_Concerns = "";
             this.formSubmitSelections.Additional_Concerns = "";
         }
     }
@@ -425,41 +428,76 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         return selections.join(";");
     }
 
+    high5detailsLengthCount = 0;
+    // personalMessageLengthCount = 0;
+    otherDetailsLengthCount = 0;
+    additionalConcernsLengthCount = 0;
+    maxCharacterLength = 20000;
     textAreaDetails(event) {
-        const eventValueTrim = event.detail.value.trim();
-
+        let eventField = event.target;
+        let eventValue = event.detail.value;
+        const eventValueTrim = eventValue.trim();
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.texttype) {
             case "high5Details":
                 this.formSubmitSelections.High5_Details = eventValueTrim;
                 this.formRequired.High5_Required = !(this.formSubmitSelections.High5_Reasons && this.formSubmitSelections.High5_Details);
+                this.high5detailsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
             case "otherDetails":
                 this.formSubmitSelections.Other_Details = eventValueTrim;
                 this.formRequired.Other_Required = !this.formSubmitSelections.Other_Details;
+                this.otherDetailsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
-            case "personalMessage":
-                this.formSubmitSelections.Personal_Message = eventValueTrim;
-                break;
+            // case "personalMessage":
+            //     this.formSubmitSelections.Personal_Message = eventValueTrim;
+            //     break;
             case "additionalConcerns":
                 this.formSubmitSelections.Additional_Concerns = eventValueTrim;
+                this.additionalConcernsLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxCharacterLength);
                 break;
         }
     }
 
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
+    }
+
+    resetCharacterLengths() {
+        this.high5detailsLengthCount = 0;
+        this.personalMessageLengthCount = 0;
+        this.otherDetailsLengthCount = 0;
+        this.additionalConcernsLengthCount = 0;
+    }
+
     resetForm() {
-        const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
+        // const checkboxes = this.template.querySelectorAll("input[type='checkbox']");
+        //
+        // if (checkboxes) {
+        //     checkboxes.forEach(check => {
+        //         check.checked = false;
+        //     })
+        // }
+        //
+        // const textareas = this.template.querySelectorAll("lightning-textarea");
+        // if (textareas) {
+        //     textareas.forEach(ta => { ta.value = ""; });
+        // }
 
-        if (checkboxes) {
-            checkboxes.forEach(check => {
-                check.checked = false;
-            })
-        }
-
-        const textareas = this.template.querySelectorAll("lightning-textarea");
-        if (textareas) {
-            textareas.forEach(ta => { ta.value = ""; });
-        }
+        this.positiveAlertGroup = [];
+        this.advisingGroup = [];
+        this.behaviorWellBeingGroup = [];
+        this.lifeCircumstanceGroup = [];
 
         Object.keys(this.formSubmitSelections).forEach(k => {
             this.formSubmitSelections[k] = '';
@@ -471,10 +509,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
             this.formRequired[k] = false;
         });
 
-        this.positiveAlertGroup = [];
-        this.advisingGroup = [];
-        this.behaviorWellBeingGroup = [];
-        this.lifeCircumstanceGroup = [];
+        this.resetCharacterLengths();
     }
 
     submittedUrl() {

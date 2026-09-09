@@ -85,7 +85,7 @@ public without sharing class TommieAlertsLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static List<Map<String, String>> advisorCoursesList(String advisorContactId, String courseCrn) {
-
+        System.debug('WHAT IS advisorContactId: '+advisorContactId);
         List<Map<String, String>> courseMapList = new List<Map<String, String>>();
         List<hed__Course_Offering__c> courses = new List<hed__Course_Offering__c>();
         String singleCrnCriteria = '';

@@ -50,11 +50,8 @@ abbr.slds-required {
     --sds-c-input-color-border: rebeccapurple;
 }
 
-lightning-checkbox-group {
-    --slds-c-checkbox-color-border: black !important;
-    --sds-c-checkbox-color-border: black !important;
-    border-color: black !important;
-    box-shadow: none !important;
+.character-length-counter {
+    font-size: .90rem !important;
 }
 
 .custom-error-icon-color {
@@ -85,6 +82,13 @@ lightning-button.submit_button {
     font-weight: bold;
 }
 
+lightning-checkbox-group {
+    --slds-c-checkbox-color-border: black !important;
+    --sds-c-checkbox-color-border: black !important;
+    border-color: black !important;
+    box-shadow: none !important;
+}
+
 /*lightning-combobox,*/
 /*lightning-input {*/
 /*    --slds-c-input-color-border: rebeccapurple;*/
@@ -94,7 +98,7 @@ lightning-button.submit_button {
 lightning-textarea.custom-textarea {
     /*--slds-c-textarea-color-border: rebeccapurple;*/
     /*--sds-c-textarea-color-border: rebeccapurple;*/
-    --sds-c-textarea-sizing-min-height: 100px;
+    --sds-c-textarea-sizing-min-height: 150px;
     box-sizing: border-box;
     width: 90%;
 }
@@ -217,11 +221,11 @@ lightning-textarea.custom-textarea {
     color: black !important;          /* same color */
 }
 
-.validation-text {
-    color: #ba0517;
-    font-size: 0.75rem;
-    margin-top: 0.125rem;
-}
+/*.validation-text {*/
+/*    color: rgb(234, 0, 30);*/
+/*    font-size: 0.75rem;*/
+/*    margin-top: 0.125rem;*/
+/*}*/
 
 .warning-text {
     font-size: 1rem;

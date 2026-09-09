@@ -106,10 +106,10 @@
                     </div>
                 </div>
                 <template lwc:if={isNotAnonymous}>
-                    <fieldset class={reporterElementsCss}>
+                    <fieldset class="slds-grid slds-grid_vertical" lwc:if={showReporterInfo}>
                         <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_small">
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-name-id">
-                                Reporter's Name</label>
+                                <span class="slds-text-nowrap">Reporter's Name<abbr class="slds-required" title="required">*</abbr></span></label>
                             <div class="slds-form-element__control">
                                 <lightning-input id="titleix-reporter-name-id"
                                                  type="text"
@@ -117,7 +117,9 @@
                                                  value={titleIxIncidentFormValues.reporterName}
                                                  data-inputtype="name"
                                                  variant="label-hidden"
-                                                 max-length=255
+                                                 max-length={maxStandardCharacterLength}
+                                                 required="true"
+                                                 disabled={tommieAlertsDisable}
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
                             </div>
@@ -132,15 +134,17 @@
                                                  value={titleIxIncidentFormValues.reporterEmail}
                                                  data-inputtype="email"
                                                  variant="label-hidden"
-                                                 max-length=255
+                                                 max-length={maxStandardCharacterLength}
                                                  required="true"
+                                                 disabled={tommieAlertsDisableReporterEmail}
                                                  onchange={inputValueHandler}
-                                                 onblur={emailValidationBlur}>
+                                                 onblur={emailValidationBlur}
+                                class="reporterEmail">
                                 </lightning-input>
                                 <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
                             </div>
                         </div>
-                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium" lwc:if={tommieAlertsHide}>
                             <label class="slds-form-element__label selection-labels" for="titleix-reporter-phone-id">
                                 Reporter's Phone</label>
                             <div class="slds-form-element__control">
@@ -150,7 +154,7 @@
                                                  value={titleIxIncidentFormValues.reporterPhone}
                                                  data-inputtype="phone"
                                                  variant="label-hidden"
-                                                 max-length=255
+                                                 max-length={maxStandardCharacterLength}
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
                             </div>
@@ -169,14 +173,15 @@
                                                 value={titleIxIncidentFormValues.description}
                                                 data-inputtype="description"
                                                 variant="label-hidden"
-                                                max-length=20000
+                                                max-length={maxDescriptionCharacterLength}
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
+                            <span class="character-length-counter">{descriptionLengthCount}/{maxDescriptionCharacterLength} characters limit</span>
                         </div>
                     </div>
                 </div>
-                <div class="slds-grid slds-m-bottom_medium">
+                <div class="slds-grid slds-m-bottom_medium" lwc:if={tommieAlertsHide}>
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12">
                         <label class="slds-form-element__label selection-labels" for="titleix-report-who-harmed-id">
                             Name of the person who was harmed</label>
@@ -187,7 +192,7 @@
                                              value={titleIxIncidentFormValues.person_who_was_harmed_complainants}
                                              data-inputtype="whoharmed"
                                              variant="label-hidden"
-                                             max-length=255
+                                             max-length={maxStandardCharacterLength}
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -206,7 +211,7 @@
                                                 value={titleIxIncidentFormValues.additionalLocation}
                                                 data-inputtype="location"
                                                 variant="label-hidden"
-                                                max-length="255"
+                                                max-length={maxStandardCharacterLength}
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
@@ -224,7 +229,7 @@
                                              data-inputtype="dates"
                                              variant="label-hidden"
                                              required="true"
-                                             max-length="255"
+                                             max-length={maxStandardCharacterLength}
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -240,7 +245,7 @@
                                          value={titleIxIncidentFormValues.person_who_did_harm_respondents}
                                          data-inputtype="whocausedharm"
                                          variant="label-hidden"
-                                         max-length="255"
+                                         max-length={maxStandardCharacterLength}
                                          onchange={inputValueHandler}>
                         </lightning-input>
                     </div>
@@ -257,7 +262,7 @@
                                                 value={titleIxIncidentFormValues.otherWitness}
                                                 data-inputtype="witnesses"
                                                 variant="label-hidden"
-                                                max-length="255"
+                                                max-length={maxStandardCharacterLength}
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
                         </div>
@@ -298,7 +303,7 @@
                                                 value={titleIxIncidentFormValues.reporter_followup}
                                                 data-inputtype="followup"
                                                 variant="label-hidden"
-                                                max-length=255
+                                                max-length={maxStandardCharacterLength}
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
@@ -346,7 +351,7 @@
                         </template>
                     </div>
                 </div>
-                <div class={submitSectionElementCss}>
+                <div class={tommieAlertsHide}>
                     <div class="slds-m-top_x-large slds-m-bottom_medium">
                         <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
                             <p class="submit-warning">

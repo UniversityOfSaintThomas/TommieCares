@@ -36,6 +36,7 @@
                                                      value={biasIncidentFormValues.reporterName}
                                                      data-inputtype="name"
                                                      variant="label-hidden"
+                                                     max-length={maxStandardCharacterLength}
                                                      required="true"
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
@@ -51,6 +52,7 @@
                                                      value={biasIncidentFormValues.reporterPhone}
                                                      data-inputtype="phone"
                                                      variant="label-hidden"
+                                                     max-length={maxStandardCharacterLength}
                                                      onchange={inputValueHandler}>
                                     </lightning-input>
                                 </div>
@@ -65,6 +67,7 @@
                                                      value={biasIncidentFormValues.reporterEmail}
                                                      data-inputtype="email"
                                                      variant="label-hidden"
+                                                     max-length={maxStandardCharacterLength}
                                                      required="true"
                                                      onchange={inputValueHandler}
                                                      onblur={emailValidationBlur}>
@@ -127,6 +130,7 @@
                                                 value={biasIncidentFormValues.incident_location}
                                                 data-inputtype="location"
                                                 variant="label-hidden"
+                                                max-length={maxStandardCharacterLength}
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
@@ -147,6 +151,7 @@
                                                 value={biasIncidentFormValues.individuals_involved}
                                                 data-inputtype="studentsinvolved"
                                                 variant="label-hidden"
+                                                max-length={maxStandardCharacterLength}
                                                 required="true"
                                                 onchange={inputValueHandler}>
                             </lightning-textarea>
@@ -163,6 +168,7 @@
                                                  value={biasIncidentFormValues.who_was_harmed}
                                                  data-inputtype="whoharmed"
                                                  variant="label-hidden"
+                                                 max-length={maxStandardCharacterLength}
                                                  required="true"
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
@@ -193,6 +199,7 @@
                                                  value={biasIncidentFormValues.who_caused_the_harm}
                                                  data-inputtype="whocausedharm"
                                                  variant="label-hidden"
+                                                 max-length={maxStandardCharacterLength}
                                                  required="true"
                                                  onchange={inputValueHandler}>
                                 </lightning-input>
@@ -230,9 +237,11 @@
                                             value={biasIncidentFormValues.description}
                                             data-inputtype="description"
                                             variant="label-hidden"
+                                            max-length={maxDescriptionCharacterLength}
                                             required="true"
                                             onchange={inputValueHandler}>
                         </lightning-textarea>
+                        <span class="character-length-counter">{descriptionLengthCount}/{maxDescriptionCharacterLength} characters</span>
                     </div>
                 </div>
             </div>

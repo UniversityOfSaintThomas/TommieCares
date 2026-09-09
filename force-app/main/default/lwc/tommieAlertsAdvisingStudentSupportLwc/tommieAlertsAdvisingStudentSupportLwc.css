@@ -51,6 +51,10 @@ abbr.slds-required {
     --sds-c-input-color-border: rebeccapurple;
 }
 
+.character-length-counter {
+    font-size: .90rem !important;
+}
+
 .custom-error-icon-color {
     --slds-c-icon-color-foreground-default: red !important;
 }

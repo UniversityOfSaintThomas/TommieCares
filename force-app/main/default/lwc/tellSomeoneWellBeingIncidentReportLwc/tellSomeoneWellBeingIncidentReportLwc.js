@@ -19,7 +19,7 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     @api tommieAlertsReporterPhone = ""; //used for Tommie Alert Submission
     @api tommieAlertsStudentName = "";
     @api tommieAlertsStudentEmail = "";
-    @api tommieAlertsHideCss = "";
+    @api tommieAlertsForm = false;
 
     @api get formToTommieAlerts() {
         return this.wellBeingIncidentFormValues;
@@ -47,16 +47,28 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         // salesforce_support_documents: "" //For Supporting Documents record ID REMOVING FOR NOW UNTIL I GET NEW FIELD
     }
 
-    get reporterElementsCss() {
-        return "slds-grid slds-grid_vertical " + this.tommieAlertsHideCss;
+    get tommieAlertsDisable() {
+        return this.tommieAlertsForm;
     }
 
-    get indidvidualConcernElementsCss() {
-        return this.tommieAlertsHideCss;
+    get tommieAlertsHide() {
+        return !this.tommieAlertsDisable;
     }
 
-    get submitSectionElementCss() {
-        return this.tommieAlertsHideCss;
+    get tommieAlertsDisableReporterEmail() {
+        return this.tommieAlertsDisable && !this.reporterInfoRevealed;
+    }
+
+    get showReporterInfo() {
+        return !this.tommieAlertsForm || this.reporterInfoRevealed;
+    }
+
+    get tommieAlertsDisableStudentEmail() {
+        return this.tommieAlertsDisable && !this.individualInfoRevealed;
+    }
+
+    get showIndividualInfo() {
+        return !this.tommieAlertsForm || this.individualInfoRevealed;
     }
 
     get showFormAll() {
@@ -77,23 +89,26 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     }
 
     rendered = false;
+    reporterEmailValidated = false;
+    studentEmailValidated = false;
     renderedCallback() {
         if(!this.rendered) {
             this.wellBeingIncidentFormValues.reporterName = this.tellSomeoneReporterFirstName ? this.tellSomeoneReporterFirstName + " " + this.tellSomeoneReporterLastName : "";
-            if (this.tellSomeoneReporterEmail) {
-                let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
-                this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-            }
-
             this.wellBeingIncidentFormValues.reporterPhone = this.tommieAlertsReporterPhone;
-
             this.wellBeingIncidentFormValues.students_first_name = this.tommieAlertsStudentName;
-            if (this.tommieAlertsStudentEmail) {
-                let emailValidationResults = emailValidation(this.tommieAlertsStudentEmail);
-                this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
-            }
+            this.rendered = true;
+        }
 
-            this.rendered = !this.rendered;
+        if (!this.reporterEmailValidated && this.tellSomeoneReporterEmail && this.showFormAll) {
+            let reporterEmailField = this.template.querySelector('[data-inputtype="email"]');
+            this.validateReporterEmail(this.tellSomeoneReporterEmail, reporterEmailField);
+            this.reporterEmailValidated = true;
+        }
+
+        if (!this.studentEmailValidated && this.tommieAlertsStudentEmail && this.showFormAll) {
+            let studentEmailField = this.template.querySelector('[data-inputtype="involvedemail"]');
+            this.validateIndividualEmail(this.tommieAlertsStudentEmail, studentEmailField);
+            this.studentEmailValidated = true;
         }
     }
 
@@ -168,39 +183,51 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     //     }
     // }
 
+    descriptionLengthCount = 0;
+    maxDescriptionCharacterLength = 20000;
+    maxStandardCharacterLength = 255;
     inputValueHandler(event) {
         let eventField = event.target;
         let eventValue = event.detail.value;
+        let eventValueTrim = eventValue.trim();
+        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
-                this.wellBeingIncidentFormValues.reporterName = eventValue;
+                this.wellBeingIncidentFormValues.reporterName = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "email":
+                // this.wellBeingIncidentFormValues.reporterEmail = eventValueTrim;
                 if (!eventValue) {
                     this.validEmailWarning = false;
                     this.validEmail = true;
                 } else {
                     this.validEmail = false;
                 }
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "phone":
-                this.wellBeingIncidentFormValues.reporterPhone = eventValue;
+                this.wellBeingIncidentFormValues.reporterPhone = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "involvedname":
-                this.wellBeingIncidentFormValues.students_first_name = eventValue;
+                this.wellBeingIncidentFormValues.students_first_name = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "involvedemail":
-                this.wellBeingIncidentFormValues.students_email_address = eventValue;
+                // this.wellBeingIncidentFormValues.students_email_address = eventValueTrim;
                 if (!eventValue) {
                     this.validEmailWarningIndividual = false;
                     this.validEmailIndividual = true;
                 } else {
                     this.validEmailIndividual = false;
                 }
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "involvedphone":
-                this.wellBeingIncidentFormValues.students_phone_number = eventValue;
+                this.wellBeingIncidentFormValues.students_phone_number = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "date":
                 if (eventValue) {
@@ -210,49 +237,115 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
                 }
                 break;
             case "description":
-                this.wellBeingIncidentFormValues.description = eventValue;
+                this.wellBeingIncidentFormValues.description = eventValueTrim;
+                this.descriptionLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxDescriptionCharacterLength);
                 break;
         }
 
         this.submitDisableToTommieAlerts();
+        console.log("this.wellBeingIncidentFormValues: "+JSON.stringify(this.wellBeingIncidentFormValues));
+    }
+
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
     }
 
     validEmail = true;
     validEmailWarning = false;
     validEmailIndividual = true;
     validEmailWarningIndividual = false;
+    reporterInfoRevealed = false;
+    individualInfoRevealed = false;
+
+    validateReporterEmail(emailAddress, emailField) {
+        let emailValidationResults = emailValidation(emailAddress);
+        this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+        this.validEmail = emailValidationResults.validEmail;
+        this.validEmailWarning = emailValidationResults.validEmailWarning;
+        if (this.tommieAlertsForm && this.validEmailWarning) {
+            this.reporterInfoRevealed = true; // only latch open when in TommieAlerts form flow
+        }
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validEmailWarning);
+        }
+    }
+
+    validateIndividualEmail(emailAddress, emailField) {
+        if (!emailAddress) return;
+        let emailValidationResults = emailValidation(emailAddress);
+        this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
+        this.validEmailIndividual = emailValidationResults.validEmail;
+        this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
+        if (this.tommieAlertsForm && this.validEmailWarningIndividual) {
+            this.individualInfoRevealed = true; // only latch open when in TommieAlerts form flow
+        }
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validEmailWarningIndividual);
+        }
+    }
+
     emailValidationBlur(event) {
         const emailField = event.currentTarget;
         const emailAddress = event.target.value;
-        let emailValidationResults = emailValidation(emailAddress);
 
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "email":
-                this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-                this.validEmail = emailValidationResults.validEmail;
-                this.validEmailWarning = emailValidationResults.validEmailWarning;
-                if (this.validEmailWarning) {
-                    emailField.classList.add("slds-has-error");
-                } else {
-                    emailField.classList.remove("slds-has-error");
-                }
+                this.validateReporterEmail(emailAddress, emailField);
                 break;
             case "involvedemail":
                 if (emailAddress) {
-                    this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
-                    this.validEmailIndividual = emailValidationResults.validEmail;
-                    this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
-                    if (this.validEmailWarningIndividual) {
-                        emailField.classList.add("slds-has-error");
-                    } else {
-                        emailField.classList.remove("slds-has-error");
-                    }
+                    this.validateIndividualEmail(emailAddress, emailField);
                 }
                 break;
         }
         this.submitDisableToTommieAlerts();
     }
+
+    // validEmail = true;
+    // validEmailWarning = false;
+    // validEmailIndividual = true;
+    // validEmailWarningIndividual = false;
+    // emailValidationBlur(event) {
+    //     const emailField = event.currentTarget;
+    //     const emailAddress = event.target.value;
+    //     let emailValidationResults = emailValidation(emailAddress);
+    //
+    //     // eslint-disable-next-line default-case
+    //     switch (event.currentTarget.dataset.inputtype) {
+    //         case "email":
+    //             this.wellBeingIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+    //             this.validEmail = emailValidationResults.validEmail;
+    //             this.validEmailWarning = emailValidationResults.validEmailWarning;
+    //             if (this.validEmailWarning) {
+    //                 emailField.classList.add("slds-has-error");
+    //             } else {
+    //                 emailField.classList.remove("slds-has-error");
+    //             }
+    //             break;
+    //         case "involvedemail":
+    //             if (emailAddress) {
+    //                 this.wellBeingIncidentFormValues.students_email_address = emailValidationResults.emailAddress;
+    //                 this.validEmailIndividual = emailValidationResults.validEmail;
+    //                 this.validEmailWarningIndividual = emailValidationResults.validEmailWarning;
+    //                 if (this.validEmailWarningIndividual) {
+    //                     emailField.classList.add("slds-has-error");
+    //                 } else {
+    //                     emailField.classList.remove("slds-has-error");
+    //                 }
+    //             }
+    //             break;
+    //     }
+    //     this.submitDisableToTommieAlerts();
+    // }
 
     _incidentDate = "";
     validDate = false;

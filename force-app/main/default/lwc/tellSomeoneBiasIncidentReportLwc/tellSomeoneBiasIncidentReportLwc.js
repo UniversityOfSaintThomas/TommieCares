@@ -67,17 +67,28 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
     }
 
     rendered = false;
+    reporterEmailValidated = false;
     dateFieldElement;
     timeFieldElement;
     renderedCallback() {
         if(!this.rendered) {
             this.biasIncidentFormValues.reporterName = this.tellSomeoneReporterFirstName ? this.tellSomeoneReporterFirstName + " " + this.tellSomeoneReporterLastName : "";
-            if (this.tellSomeoneReporterEmail) {
-                let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
-                this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
-            }
-            this.rendered = !this.rendered;
+            this.rendered = true;
         }
+
+        if (!this.reporterEmailValidated && this.tellSomeoneReporterEmail && this.showFormAll) {
+            // let emailValidationResults = emailValidation(this.tellSomeoneReporterEmail);
+            // this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+            let emailField = this.template.querySelector('[data-inputtype="email"]');
+            this.validateReporterEmail(this.tellSomeoneReporterEmail, emailField);
+            this.reporterEmailValidated = true;
+            // if (emailField) {
+            //     this.validateReporterEmail(this.tellSomeoneReporterEmail, emailField);
+            //     // this.emailValidationBlur({currentTarget: emailField, target: {value: this.tellSomeoneReporterEmail}});
+            //     this.reporterEmailValidated = true;
+            // }
+        }
+
         this.dateFieldElement = this.template.querySelector("[data-inputtype='date']");
         this.timeFieldElement = this.template.querySelector("[data-inputtype='time']");
     }
@@ -170,16 +181,23 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         }
     }
 
+    descriptionLengthCount = 0;
+    maxDescriptionCharacterLength = 20000;
+    maxStandardCharacterLength = 255;
     inputValueHandler(event) {
         let eventField = event.target;
         let eventValue = event.detail.value;
+        let eventValueTrim = eventValue.trim();
+        // const MAX_LENGTH = 255;
         // eslint-disable-next-line default-case
         switch (event.currentTarget.dataset.inputtype) {
             case "name":
-                this.biasIncidentFormValues.reporterName = eventValue;
+                this.biasIncidentFormValues.reporterName = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "phone":
-                this.biasIncidentFormValues.reporterPhone = eventValue;
+                this.biasIncidentFormValues.reporterPhone = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "email":
                 if (!eventValue) {
@@ -188,6 +206,7 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
                 } else {
                     this.validEmail = false;
                 }
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "date":
                 if (eventValue) {
@@ -204,40 +223,93 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
                 }
                 break;
             case "location":
-                this.biasIncidentFormValues.incident_location = eventValue;
+                this.biasIncidentFormValues.incident_location = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "studentsinvolved":
-                this.biasIncidentFormValues.individuals_involved = eventValue;
+                this.biasIncidentFormValues.individuals_involved = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "whoharmed":
-                this.biasIncidentFormValues.who_was_harmed = eventValue;
+                this.biasIncidentFormValues.who_was_harmed = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "whocausedharm":
-                this.biasIncidentFormValues.who_caused_the_harm = eventValue;
+                this.biasIncidentFormValues.who_caused_the_harm = eventValueTrim;
+                this.maxlengthCheck(eventField, eventValue, this.maxStandardCharacterLength);
                 break;
             case "description":
-                this.biasIncidentFormValues.description = eventValue;
+                this.biasIncidentFormValues.description = eventValueTrim;
+                this.descriptionLengthCount = eventValue.length;
+                this.maxlengthCheck(eventField, eventValue, this.maxDescriptionCharacterLength);
                 break;
         }
+
+        console.log('biasIncidentFormValues:', JSON.stringify(this.biasIncidentFormValues));
+    }
+
+    maxlengthCheck(field, fieldValue, maxLength) {
+        if (fieldValue.length === maxLength) {
+            // Set the custom error message
+            field.setCustomValidity(`Max limit of ${maxLength} characters reached.`);
+        } else {
+            // Clear the error message if they delete characters and go under the limit
+            field.setCustomValidity('');
+        }
+        field.reportValidity();
     }
 
     validEmail = true;
     validEmailWarning = false;
-    emailValidationBlur(event) {
-        const emailField = event.currentTarget;
-        const emailAddress = event.target.value;
-        let emailValidationResults = emailValidation(emailAddress);
+    validEmailIndividual = true;
+    validEmailWarningIndividual = false;
+    reporterInfoRevealed = false;
+    individualInfoRevealed = false;
 
+    validateReporterEmail(emailAddress, emailField) {
+        let emailValidationResults = emailValidation(emailAddress);
         this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
         this.validEmail = emailValidationResults.validEmail;
         this.validEmailWarning = emailValidationResults.validEmailWarning;
-
-        if (this.validEmailWarning) {
-            emailField.classList.add("slds-has-error");
-        } else {
-            emailField.classList.remove("slds-has-error");
+        if (emailField) {
+            emailField.classList.toggle("slds-has-error", this.validEmailWarning);
         }
     }
+
+    emailValidationBlur(event) {
+        const emailField = event.currentTarget;
+        const emailAddress = event.target.value;
+
+        this.validateReporterEmail(emailAddress, emailField);
+        // eslint-disable-next-line default-case
+        // switch (event.currentTarget.dataset.inputtype) {
+        //     case "email":
+        //         this.validateReporterEmail(emailAddress, emailField);
+        //         break;
+        //     case "involvedemail":
+        //         this.validateIndividualEmail(emailAddress, emailField);
+        //         break;
+        // }
+        this.submitDisableToTommieAlerts();
+    }
+
+    // validEmail = true;
+    // validEmailWarning = false;
+    // emailValidationBlur(event) {
+    //     const emailField = event.currentTarget;
+    //     const emailAddress = event.target.value;
+    //     let emailValidationResults = emailValidation(emailAddress);
+    //
+    //     this.biasIncidentFormValues.reporterEmail = emailValidationResults.emailAddress;
+    //     this.validEmail = emailValidationResults.validEmail;
+    //     this.validEmailWarning = emailValidationResults.validEmailWarning;
+    //
+    //     if (this.validEmailWarning) {
+    //         emailField.classList.add("slds-has-error");
+    //     } else {
+    //         emailField.classList.remove("slds-has-error");
+    //     }
+    // }
 
     _incidentDate = "";
     _incidentTime = "";

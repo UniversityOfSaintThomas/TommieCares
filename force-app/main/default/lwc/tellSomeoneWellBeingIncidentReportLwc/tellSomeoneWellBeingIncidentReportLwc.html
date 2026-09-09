@@ -13,7 +13,8 @@
                 <h2>Behavior or Well Being Report</h2>
             </div>
             <template lwc:if={isNotAnonymous}>
-                <fieldset class={reporterElementsCss}>
+                <fieldset class="slds-grid slds-grid_vertical" lwc:if={showReporterInfo}>
+                <!--                <fieldset class={reporterElementsCss}>-->
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="well-being-reporter-name-id">
                             <span class="slds-text-nowrap">Your Name<abbr class="slds-required" title="required">*</abbr></span></label>
@@ -25,7 +26,9 @@
                                              value={wellBeingIncidentFormValues.reporterName}
                                              data-inputtype="name"
                                              variant="label-hidden"
+                                             max-length={maxStandardCharacterLength}
                                              required="true"
+                                             disabled={tommieAlertsDisable}
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
@@ -41,14 +44,16 @@
                                              value={wellBeingIncidentFormValues.reporterEmail}
                                              data-inputtype="email"
                                              variant="label-hidden"
+                                             max-length={maxStandardCharacterLength}
                                              required="true"
+                                             disabled={tommieAlertsDisableReporterEmail}
                                              onchange={inputValueHandler}
                                              onblur={emailValidationBlur}>
                             </lightning-input>
                             <div lwc:if={validEmailWarning} class="validation-text">Invalid email address format</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium" lwc:if={tommieAlertsHide}>
                         <label class="slds-form-element__label selection-labels" for="well-being-reporter-phone-id">
                             <span class="slds-text-nowrap">Your Phone Number<abbr class="slds-required" title="required">*</abbr></span></label>
                         <div class="slds-form-element__control">
@@ -58,6 +63,7 @@
                                              value={wellBeingIncidentFormValues.reporterPhone}
                                              data-inputtype="phone"
                                              variant="label-hidden"
+                                             max-length={maxStandardCharacterLength}
                                              required="true"
                                              onchange={inputValueHandler}>
                             </lightning-input>
@@ -65,7 +71,7 @@
                     </div>
                 </fieldset>
             </template>
-            <fieldset class="slds-grid slds-grid_vertical">
+            <fieldset class="slds-grid slds-grid_vertical" lwc:if={showIndividualInfo}>
                 <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
                     <label class="slds-form-element__label selection-labels" for="well-being-individual-name-id">
                         <span class="slds-text-nowrap">Individual of Concern<abbr class="slds-required" title="required">*</abbr></span></label>
@@ -77,12 +83,14 @@
                                          value={wellBeingIncidentFormValues.students_first_name}
                                          data-inputtype="involvedname"
                                          variant="label-hidden"
+                                         max-length={maxStandardCharacterLength}
+                                         disabled={tommieAlertsDisable}
                                          required="true"
                                          onchange={inputValueHandler}>
                         </lightning-input>
                     </div>
                 </div>
-                <div class={indidvidualConcernElementsCss}>
+<!--                <div class={indidvidualConcernElementsCss}>-->
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
                         <label class="slds-form-element__label selection-labels" for="well-being-individual-email-id">
                             Individual's Email Address</label>
@@ -94,13 +102,15 @@
                                              value={wellBeingIncidentFormValues.students_email_address}
                                              data-inputtype="involvedemail"
                                              variant="label-hidden"
+                                             max-length={maxStandardCharacterLength}
+                                             disabled={tommieAlertsDisableStudentEmail}
                                              onchange={inputValueHandler}
                                              onblur={emailValidationBlur}>
                             </lightning-input>
                             <div lwc:if={validEmailWarningIndividual} class="validation-text">Invalid email address format</div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium" lwc:if={tommieAlertsHide}>
                         <label class="slds-form-element__label selection-labels" for="well-being-individual-phone-id">
                             Individual's Phone Number:</label>
                         <p class="textarea-sublabel">Phone number of the individual you are concerned about.</p>
@@ -111,11 +121,12 @@
                                              value={wellBeingIncidentFormValues.students_phone_number}
                                              data-inputtype="involvedphone"
                                              variant="label-hidden"
+                                             max-length={maxStandardCharacterLength}
                                              onchange={inputValueHandler}>
                             </lightning-input>
                         </div>
                     </div>
-                </div>
+<!--                </div>-->
             </fieldset>
             <div class="slds-form-element slds-grid slds-grid_vertical slds-m-bottom_medium">
                 <label class="slds-form-element__label slds-col slds-size_1-of-1 selection-labels" for="well-being-incident-date-id">
@@ -146,9 +157,11 @@
                                             value={wellBeingIncidentFormValues.description}
                                             data-inputtype="description"
                                             variant="label-hidden"
+                                            max-length={maxDescriptionCharacterLength}
                                             required="true"
                                             onchange={inputValueHandler}>
                         </lightning-textarea>
+                        <span class="character-length-counter">{descriptionLengthCount}/{maxDescriptionCharacterLength} characters</span>
                     </div>
                 </div>
             </div>
@@ -193,7 +206,7 @@
                     </template>
                 </div>
             </div>
-            <div class={submitSectionElementCss}>
+            <div lwc:if={tommieAlertsHide}>
                 <div class="slds-m-top_x-large slds-m-bottom_medium">
                     <div class="slds-m-bottom_xxx-small" lwc:if={submitDisable}>
                         <p class="submit-warning">

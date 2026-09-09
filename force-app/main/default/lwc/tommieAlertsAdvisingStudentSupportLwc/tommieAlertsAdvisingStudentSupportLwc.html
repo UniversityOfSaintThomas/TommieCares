@@ -303,9 +303,11 @@
                                                                 data-texttype="high5Details"
                                                                 onchange={textAreaDetails}
                                                                 variant="label-hidden"
+                                                                max-length={maxCharacterLength}
                                                                 class="custom-textarea"
                                                                 required="true">
                                             </lightning-textarea>
+                                            <span class="character-length-counter">{high5detailsLengthCount}/{maxCharacterLength} characters limit</span>
                                         </div>
                                     </div>
                                 </div>
@@ -433,9 +435,11 @@
                                                             data-texttype="otherDetails"
                                                             onchange={textAreaDetails}
                                                             variant="label-hidden"
+                                                            max-length={maxCharacterLength}
                                                             required="true"
                                                             class="custom-textarea">
                                         </lightning-textarea>
+                                        <span class="character-length-counter">{otherDetailsLengthCount}/{maxCharacterLength} characters limit</span>
                                     </div>
                                 </div>
                             </div>
@@ -456,8 +460,10 @@
                                                         data-texttype="additionalConcerns"
                                                         onchange={textAreaDetails}
                                                         variant="label-hidden"
+                                                        max-length={maxCharacterLength}
                                                         class="custom-textarea">
                                     </lightning-textarea>
+                                    <span class="character-length-counter">{additionalConcernsLengthCount}/{maxCharacterLength} characters limit</span>
                                 </div>
                             </div>
                         </div>
