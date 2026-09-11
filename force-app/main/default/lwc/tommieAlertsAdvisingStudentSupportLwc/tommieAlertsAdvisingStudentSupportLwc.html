@@ -14,7 +14,7 @@
                                 class="custom-error-icon-color">
                </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
+            <div class="slds-media__body">
                 <p>Requester Information Not Found. Please contact salesforce@stthomas.edu to report this error.</p>
             </div>
         </div>
@@ -46,7 +46,7 @@
                                 variant="inverse">
                 </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
+            <div class="slds-media__body">
                 <p class="slds-m-bottom_xx-small">Thank you for your submission. You have a tremendous impact on each student’s experience.<br>
                 <i>You can submit another below, or close this window if you are done.</i></p>
             </div>
@@ -70,14 +70,12 @@
                 <div class={advisorInfoViewClass}>
                     <p class="slds-text-body_regular advisor_info">Your Information: {advisorContactInfo.Name} ({advisorContactInfo.Email})</p>
                 </div>
-                <div class="regular-body-text">
-                    <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555" class="slds-truncate">(651) 962-5555</a>.</p>
-                    <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
-                        individuals in order to provide additional support.<br>
-                        All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
-                        <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
-                </div>
+                <p class="slds-text-body_regular slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+                    or for the St. Thomas community, please call Public Safety at <a href="tel:6519625555" class="slds-truncate">(651) 962-5555</a>.</p>
+                <p class="slds-text-body_regular slds-m-bottom_small">All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                    individuals in order to provide additional support.<br>
+                    All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
+                    <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
                 <!-- Search mode radios -->
                 <fieldset class="slds-form-element search-mode">
                     <legend class="slds-form-element__legend slds-form-element__label slds-m-bottom_x-small section-label">Search Student By:</legend>
@@ -240,26 +238,23 @@
                                         </template>
                                     </div>
                                 </fieldset>
-                                <div class="slds-grid">
-                                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
-                                        <label class="slds-form-element__label element-sublabel" for="high5-details-id">
-                                            <span class="slds-text-nowrap">Tommie High 5 details<abbr class="slds-required" title="required">*</abbr></span></label>
-                                        <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
-                                            The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
-                                        <div class="slds-form-element__control slds-m-left_xxx-small">
-                                            <lightning-textarea id="high5-details-id"
-                                                                name="high5-details"
-                                                                label=""
-                                                                value=""
-                                                                data-texttype="high5Details"
-                                                                onchange={textAreaDetails}
-                                                                variant="label-hidden"
-                                                                max-length={maxCharacterLength}
-                                                                class="custom-textarea"
-                                                                required="true">
-                                            </lightning-textarea>
-                                            <span class="character-length-counter">{high5detailsLengthCount}/{maxCharacterLength} characters limit</span>
-                                        </div>
+                                <div class="slds-form-element custom-textarea">
+                                    <label class="slds-form-element__label element-sublabel" for="high5-details-id">
+                                        <span class="slds-text-nowrap">Tommie High 5 details<abbr class="slds-required" title="required">*</abbr></span></label>
+                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">For Tommie High 5's the student will receive an email with your message entered in the box below.<br>
+                                        The submitter and the student's advisor(s) will also be copied on the message. <i>Example: You did a great job on your assignment. Keep working hard.</i></p>
+                                    <div class="slds-form-element__control slds-m-left_xxx-small">
+                                        <lightning-textarea id="high5-details-id"
+                                                            name="high5-details"
+                                                            label=""
+                                                            value=""
+                                                            data-texttype="high5Details"
+                                                            onchange={textAreaDetails}
+                                                            variant="label-hidden"
+                                                            max-length={maxCharacterLength}
+                                                            required="true">
+                                        </lightning-textarea>
+                                        <span class="character-length-counter">{high5detailsLengthCount}/{maxCharacterLength} characters limit</span>
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +262,7 @@
                     </template>
                     <!-- Advising Alert -->
                     <template lwc:if={advisingGroup.length}>
-                        <fieldset class="slds-m-top_medium alert-group">
+                        <fieldset class="slds-m-top_large alert-group">
                             <legend class="slds-text-title_caps slds-m-top_small slds-m-bottom_xx-small alert-group-heading">Advising Alert</legend>
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
@@ -288,11 +283,11 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
                                 <p>The student will receive a message reminding them to set up an advising appointment with you.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
-                                <p>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
+                                <p>The student will not be notified of this <b>Non-Responsive to Outreach</b> alert, but it will serve as a data point for triaging outreach.</p>
                             </div>
                         </fieldset>
                     </template>
@@ -319,15 +314,15 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p class="slds-m-top_xx-small"><b>Behavior or Well-Being and Sense of Belonging concerns</b> will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
+                                <p class="slds-m-top_xx-small"><b>Behavior or Well-Being and Sense of Belonging</b> concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <div class="slds-m-top_xx-small sub-content-divider" lwc:if={tellSomeoneWellBeingVisible}></div>
-                                <p class="slds-m-top_xx-small"><b>Relationship violence/stalking concerns</b> are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                                <p class="slds-m-top_xx-small"><b>Relationship violence/stalking</b> concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
                                 <h2>Title IX Public Report</h2>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
@@ -357,25 +352,24 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
-                                <p><b>Difficulty Meeting Basic Needs concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
+                                <p><b>Difficulty Meeting Basic Needs</b> concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
-                                <p><b>Financial concerns</b> will be sent directly to the Financial Aid office.<br>
-                                    The student's financial aid counselor will connect with the student.<br>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
+                                <p><b>Financial</b> concerns will be sent directly to the Financial Aid office. The student's financial aid counselor will connect with the student.<br>
                                     No advisors will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
-                                <p><b>Life Circumstances Impacting Success concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
+                                <p><b>Life Circumstances Impacting Success</b> concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-grid slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.otherCheck}>
-                                <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_11-of-12">
+                            <div class="slds-m-left_xx-small sub-content custom-textarea" lwc:if={selectionsCheck.otherCheck}>
+                                <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
-                                        <span class="slds-text-nowrap">Please provide additional details about your <b>Other concerns</b><abbr class="slds-required" title="required">*</abbr></span></label>
+                                        <span class="slds-text-nowrap">Please provide additional details about your <b>Other</b> concerns<abbr class="slds-required" title="required">*</abbr></span></label>
                                     <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
                                         <br>No advisors will be copied or notified.</p>
                                     <div class="slds-form-element__control">
@@ -387,8 +381,7 @@
                                                             onchange={textAreaDetails}
                                                             variant="label-hidden"
                                                             max-length={maxCharacterLength}
-                                                            required="true"
-                                                            class="custom-textarea">
+                                                            required="true">
                                         </lightning-textarea>
                                         <span class="character-length-counter">{otherDetailsLengthCount}/{maxCharacterLength} characters limit</span>
                                     </div>
@@ -398,24 +391,21 @@
                     </template>
                 </div>
                 <template lwc:if={showAdditionalConcerns}>
-                    <div class="slds-grid">
-                        <div class="slds-size_1-of-1 slds-large-size_11-of-12 slds-m-top_medium alert-group">
-                            <label class="slds-text-title_caps alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
-                            <div class="slds-form-element">
-                                <p class="slds-form-element__label textarea-sublabel">The information provided below&nbsp;<b>will not</b>&nbsp;be shared with the student.</p>
-                                <div class="slds-form-element__control">
-                                    <lightning-textarea id="additional-concerns-id"
-                                                        name="additional-concerns"
-                                                        label=""
-                                                        value=""
-                                                        data-texttype="additionalConcerns"
-                                                        onchange={textAreaDetails}
-                                                        variant="label-hidden"
-                                                        max-length={maxCharacterLength}
-                                                        class="custom-textarea">
-                                    </lightning-textarea>
-                                    <span class="character-length-counter">{additionalConcernsLengthCount}/{maxCharacterLength} characters limit</span>
-                                </div>
+                    <div class="slds-m-top_large alert-group custom-textarea">
+                        <label class="slds-text-title_caps alert-group-heading">Additional concerns or information related to this student that you would like the Tommie Success Team to know</label>
+                        <div class="slds-form-element">
+                            <p class="slds-form-element__label textarea-sublabel"><span>The information provided below <b>will not</b> be shared with the student.</span></p>
+                            <div class="slds-form-element__control">
+                                <lightning-textarea id="additional-concerns-id"
+                                                    name="additional-concerns"
+                                                    label=""
+                                                    value=""
+                                                    data-texttype="additionalConcerns"
+                                                    onchange={textAreaDetails}
+                                                    variant="label-hidden"
+                                                    max-length={maxCharacterLength}>
+                                </lightning-textarea>
+                                <span class="character-length-counter">{additionalConcernsLengthCount}/{maxCharacterLength} characters limit</span>
                             </div>
                         </div>
                     </div>
@@ -437,7 +427,7 @@
                         </lightning-button>
                     </div>
                 </template>
-                <div class="slds-m-top_x-large regular-body-text">
+                <div class="slds-m-top_x-large">
                     <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
                     <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651) 962-6230</a>.</p>
                 </div>

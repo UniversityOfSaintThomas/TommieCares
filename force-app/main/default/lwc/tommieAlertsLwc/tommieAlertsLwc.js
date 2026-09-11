@@ -115,7 +115,7 @@ export default class TommieAlertsLwc extends LightningElement {
     ]
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
-        {"Course Alert": [
+        {"Academic Alert": [
                 "Academic performance concerns",
                 "Attendance concerns",
                 "Academic Standing Requirement Not Met (only for Academic Counselors)",
@@ -342,7 +342,7 @@ export default class TommieAlertsLwc extends LightningElement {
     buildAlertGroups() {
         const groupMap = {
             "Positive Alert":         "positiveAlertGroup",
-            "Course Alert":               "advisingGroup",
+            "Academic Alert":               "advisingGroup",
             "Behavior Well Being Alert": "behaviorWellBeingGroup",
             "Life Circumstances Alert":     "lifeCircumstanceGroup",
         };

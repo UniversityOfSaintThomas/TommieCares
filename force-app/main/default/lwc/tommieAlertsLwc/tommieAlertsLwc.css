@@ -3,12 +3,12 @@
  */
 
 a {
-    color: rebeccapurple !important;            /* new color for normal state */
+    color: rebeccapurple !important; /* new color for normal state */
 }
 
 a:hover,
 a:active {
-    color: #8348ad !important;                  /* hover / active color */
+    color: #8348ad !important; /* hover / active color */
     text-decoration: underline !important;
 }
 
@@ -47,6 +47,28 @@ abbr.slds-required {
 
 .character-length-counter {
     font-size: .90rem !important;
+}
+
+.component-container {
+    container-name: component-container;
+    container-type: inline-size;
+    width: 100%;
+}
+
+@container component-container (min-width: 800px) {
+    .select-course-student {
+        width: 60%;
+    }
+}
+
+@container component-container (min-width: 1000px) {
+    .select-course-student {
+        width: 40%;
+    }
+
+    .custom-textarea {
+        width: 80%;
+    }
 }
 
 .custom-error-icon-color {
@@ -90,30 +112,11 @@ lightning-checkbox-group {
 /*    --sds-c-input-color-border: rebeccapurple;*/
 /*}*/
 
-lightning-textarea.custom-textarea {
+lightning-textarea {
     /*--slds-c-textarea-color-border: rebeccapurple;*/
     /*--sds-c-textarea-color-border: rebeccapurple;*/
-    --sds-c-textarea-sizing-min-height: 150px;
+    --sds-c-textarea-sizing-min-height: 175px;
     box-sizing: border-box;
-    width: 90%;
-}
-
-@media (max-width: 7684px) {
-    /*.tommie-form {*/
-    /*    width: 100%;*/
-    /*}*/
-
-    lightning-textarea.custom-textarea {
-        min-width: 0;
-        width: 100%;
-    }
-
-    /* reduce reserved error space on small screens */
-    .banner-search .input-wrapper,
-    .email-search .input-wrapper {
-        min-height: auto;
-        padding-bottom: 0.5rem;
-    }
 }
 
 .notification-text p {
@@ -209,7 +212,6 @@ lightning-textarea.custom-textarea {
     min-height: 200px;
 }
 
-/* Make fieldset legend match the "Student Email Search:" label */
 .slds-form-element__legend.slds-form-element__label.section-label {
     font-size: 1rem !important;       /* same size as .section-label */
     font-weight: normal !important;                 /* match label weight (adjust if needed) */
