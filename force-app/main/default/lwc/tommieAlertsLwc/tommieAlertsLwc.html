@@ -72,7 +72,7 @@
                                 class="custom-error-icon-color">
                 </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
+            <div class="slds-media__body">
                 <p>No faculty or student course information was found. Please select another option.</p>
             </div>
         </div>
@@ -85,7 +85,7 @@
                                 class="custom-error-icon-color">
                 </lightning-icon>
             </div>
-            <div class="slds-media__body regular-body-text">
+            <div class="slds-media__body">
                 <p>No Advisor Information Found. Please contact salesforce@stthomas.edu to report this error.</p>
             </div>
         </div>
@@ -99,14 +99,14 @@
                 <div class={advisorInfoViewClass}>
                     <p class="advisor_info">Your Information: {termAdvisorData.Advisor_ContactName} ({termAdvisorData.Advisor_Email})</p>
                 </div>
-                <div class="regular-body-text">
-                    <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
-                        or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555" class="slds-truncate">(651) 962-5555</a>.</p>
-                    <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
-                        individuals in order to provide additional support.<br>
-                        All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
-                        <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
-                </div>
+<!--                <div>-->
+                <p class="slds-m-bottom_small">If you have immediate concerns about the health or safety of a student,
+                    or for the St. Thomas community, please call Public Safety at <a href="tel:+16519625555" class="slds-truncate">(651) 962-5555</a>.</p>
+                <p>All alerts will be treated with discretion. Information from this form may be shared with appropriate
+                    individuals in order to provide additional support.<br>
+                    All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
+                    <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
+<!--                </div>-->
                 <div class="slds-grid slds-grid_vertical">
                     <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">
                         <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>
@@ -239,7 +239,7 @@
                             <!-- Academic sub-checkboxes -->
                             <div class="slds-m-left_xx-small  sub-content" lwc:if={selectionsCheck.attendanceAcademicCheck}>
                                 <template lwc:if={selectionsCheck.academicCheck}>
-                                    <fieldset class="slds-form-element regular-body-text">
+                                    <fieldset class="slds-form-element">
                                         <legend class="slds-form-element__label element-sublabel">
                                             <span class="slds-text-nowrap">Please select academic concerns<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control slds-m-top_xx-small">
@@ -265,7 +265,7 @@
                                 </template>
                                 <!-- Attendance sub-checkboxes -->
                                 <template lwc:if={selectionsCheck.attendanceCheck}>
-                                    <fieldset class="slds-form-element regular-body-text">
+                                    <fieldset class="slds-form-element">
                                         <legend class="slds-form-element__label element-sublabel">
                                             <span class="slds-text-nowrap">Please select attendance concerns<abbr class="slds-required" title="required">*</abbr></span></legend>
                                         <div class="slds-form-element__control">
@@ -329,10 +329,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.missedAdvisingAppointmentCheck}>
                                 <p>The student will receive a message reminding them to set up an advising appointment with you.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.nonResponsiveOutreachCheck}>
                                 <p>The student will not be notified of this Non-Responsive to Outreach alert, but it will serve as a data point for triaging outreach.</p>
                             </div>
                         </fieldset>
@@ -360,13 +360,13 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={tellSomeoneWellBeingVisible}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
                                 <p class="slds-m-top_xx-small"><b>Behavior or Well-Being and Sense of Belonging concerns</b> will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
                             <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.relationshipCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
                                 <div class="slds-m-top_xx-small sub-content-divider" lwc:if={tellSomeoneWellBeingVisible}></div>
                                 <p class="slds-m-top_xx-small"><b>Relationship violence/stalking concerns</b> are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
                                     No advisors will be copied or notified.<br></p>
@@ -398,17 +398,17 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
                                 <p><b>Difficulty Meeting Basic Needs concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.financialConcernsCheck}>
                                 <p><b>Financial concerns</b> will be sent directly to the Financial Aid office.<br>
                                     The student's financial aid counselor will connect with the student.<br>
                                     No advisors will be copied or notified.</p>
                             </div>
-                            <div class="slds-m-left_xx-small regular-body-text sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
+                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
                                 <p><b>Life Circumstances Impacting Success concerns</b> will be sent directly to the Dean of Students Office with a copy to you.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
@@ -478,7 +478,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="slds-m-top_x-large regular-body-text">
+                <div class="slds-m-top_x-large">
                     <p class="slds-m-bottom_xxx-small">If you have any questions, please email <a href="mailto: studentsuccess@stthomas.edu">studentsuccess@stthomas.edu</a></p>
                     <p>To report a technical issue, please contact <a href="mailto: salesforce@stthomas.edu">salesforce@stthomas.edu</a> or the ITS Tech Desk at <a href="tel:6519626230" class="slds-truncate">(651) 962-6230</a>.</p>
                 </div>

@@ -2,6 +2,61 @@
  * Created by nguy0092 on 8/30/2026.
  */
 
+/* 1. Register the container */
+.component-container {
+    container-type: inline-size;
+    width: 100%;
+}
+
+/* 2. Default: Force columns to stack vertically when the container is narrow */
+.responsive-grid {
+    flex-direction: column;
+}
+
+.column-item-banner-search,
+.column-item-email-search {
+    width: 100%; /* Take full width when stacked */
+    min-height: auto;
+    padding-bottom: 0.5rem;
+}
+
+/* 3. When container is wide: Switch to a horizontal row layout */
+@container (min-width: 600px) {
+    .responsive-grid {
+        flex-direction: row;
+    }
+
+    .column-item-banner-search {
+        /* Mimics slds-size_1-of-2 but respects the container width */
+        width: 45%;
+        flex-grow: 0;
+        padding-bottom: 0;
+    }
+
+    .column-item-email-search {
+        /* Mimics slds-size_1-of-2 but respects the container width */
+        width: 45%;
+        flex-grow: 0;
+        padding-bottom: 0;
+    }
+}
+
+ /*4. Optional: Three columns or different sizing when extra wide */
+@container (min-width: 800px) {
+    .column-item-banner-search {
+        /* Mimics slds-size_1-of-3 */
+        width: 25%;
+    }
+}
+
+@container (min-width: 1200px) {
+    .column-item-email-search {
+        /* Mimics slds-size_1-of-3 */
+        width: 30%;
+    }
+}
+
+
 a {
     color: rebeccapurple;            /* new color for normal state */
 }

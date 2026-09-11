@@ -62,7 +62,7 @@
         </div>
     </template>
     <template lwc:if={initialPageView}>
-        <div class="slds-is-relative">
+        <div class="slds-is-relative component-container">
             <template lwc:if={submitCaseSpinner}>
                 <lightning-spinner alternative-text="Submitting" size="medium" variant="brand" class="slds-is-fixed"></lightning-spinner>
             </template>
@@ -97,8 +97,8 @@
                         <!-- Banner search (shows only when Banner radio selected) -->
                         <template if:true={isBanner}>
                             <div class="slds-m-left_large slds-m-top_x-small slds-m-bottom_small banner-search">
-                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                <div class="slds-grid slds-grid_vertical-align-start responsive-grid">
+                                    <div class="slds-col column-item-banner-search">
                                         <lightning-input name="bannerId"
                                                          label=""
                                                          type="text"
@@ -110,7 +110,7 @@
                                                          variant="label-hidden">
                                         </lightning-input>
                                     </div>
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-12 input-wrapper">
+                                    <div class="slds-col column-item-banner-search">
                                         <lightning-input name="lastName"
                                                          label=""
                                                          type="text"
@@ -122,7 +122,7 @@
                                                          variant="label-hidden">
                                         </lightning-input>
                                     </div>
-                                    <div class="slds-col slds-grow-none input-wrapper">
+                                    <div class="slds-col slds-grow-none">
                                         <lightning-button label="Search"
                                                           variant="brand"
                                                           disabled={isBannerSearchDisabled}
@@ -148,8 +148,8 @@
                         <!-- Email search (replace reusable lookup) -->
                         <template if:true={isEmail}>
                             <div class="slds-m-left_large slds-m-top_x-small email-search">
-                                <div class="slds-grid slds-wrap slds-grid_vertical-align-start">
-                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 input-wrapper">
+                                <div class="slds-grid slds-grid_vertical-align-start responsive-grid">
+                                    <div class="slds-col column-item-email-search">
                                         <lightning-input id="email-search-id"
                                                          name="stThomasEmail"
                                                          type="email"
@@ -163,7 +163,7 @@
                                                          variant="label-hidden">
                                         </lightning-input>
                                     </div>
-                                    <div class="slds-col slds-grow-none input-wrapper">
+                                    <div class="slds-col slds-grow-none">
                                         <lightning-button label="Search"
                                                           variant="brand"
                                                           disabled={isEmailSearchDisabled}
