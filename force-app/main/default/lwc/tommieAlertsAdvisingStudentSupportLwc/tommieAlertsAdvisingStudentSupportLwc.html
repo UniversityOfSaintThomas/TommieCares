@@ -314,15 +314,14 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="slds-m-left_xx-small sub-content" lwc:if={tellSomeoneWellBeingVisible}>
-                                <p class="slds-m-top_xx-small"><b>Behavior or Well-Being and Sense of Belonging</b> concerns will be sent directly to the Dean of Students Office with a copy to you (the submitter).<br>
+                            <div class="slds-m-left_xx-small slds-p-bottom_large sub-content sub-content-divider" lwc:if={selectionsCheck.behaviorWellBeingCheck}>
+                                <p><b>Behavior or Well-Being and Sense of Belonging</b> concerns will be sent directly to the Dean of Students Office.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No advisors will be copied or notified.</p>
-                            <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
+                                <c-tell-someone-well-being-incident-report-lwc lwc:spread={childProps} onsubmitdisablewellbeing={tellSomeoneWellBeingCheck}></c-tell-someone-well-being-incident-report-lwc>
                             </div>
-                            <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.relationshipCheck}>
-                                <div class="slds-m-top_xx-small sub-content-divider" lwc:if={tellSomeoneWellBeingVisible}></div>
-                                <p class="slds-m-top_xx-small"><b>Relationship violence/stalking</b> concerns are confidential and will be sent directly to the Title IX Coordinator with a copy to you (the submitter).<br>
+                            <div class="slds-m-left_xx-small slds-p-bottom_large sub-content sub-content-divider" lwc:if={selectionsCheck.relationshipCheck}>
+                                <p><b>Relationship violence/stalking</b> concerns are confidential and will be sent directly to the Title IX Coordinator.<br>
                                     No advisors will be copied or notified.<br></p>
                                 <h2>Title IX Public Report</h2>
                                 <c-tell-someone-title-ix-incident-report-lwc lwc:spread={childProps} onsubmitdisabletitleix={tellSomeoneTitleIxSubmitCheck}></c-tell-someone-title-ix-incident-report-lwc>
@@ -353,7 +352,7 @@
                                 </div>
                             </div>
                             <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.difficultyMeetingBasicNeedsCheck}>
-                                <p><b>Difficulty Meeting Basic Needs</b> concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
+                                <p><b>Difficulty Meeting Basic Needs</b> concerns will be sent directly to the Dean of Students Office.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
@@ -362,7 +361,7 @@
                                     No advisors will be copied or notified.</p>
                             </div>
                             <div class="slds-m-left_xx-small sub-content" lwc:if={selectionsCheck.lifeCircumstanceImpactingSuccessCheck}>
-                                <p><b>Life Circumstances Impacting Success</b> concerns will be sent directly to the Dean of Students Office with a copy to you.<br>
+                                <p><b>Life Circumstances Impacting Success</b> concerns will be sent directly to the Dean of Students Office.<br>
                                     The Dean of Students Office will address the concern with the student.<br>
                                     No additional staff will be copied or notified.</p>
                             </div>
@@ -370,7 +369,7 @@
                                 <div class="slds-form-element">
                                     <label class="slds-form-element__label element-sublabel" for="other-details-id">
                                         <span class="slds-text-nowrap">Please provide additional details about your <b>Other</b> concerns<abbr class="slds-required" title="required">*</abbr></span></label>
-                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office with a copy to you (the submitter).
+                                    <p class="slds-m-bottom_xxx-small textarea-sublabel">The information provided below will be sent directly to the Retention and Student Success Office.
                                         <br>No advisors will be copied or notified.</p>
                                     <div class="slds-form-element__control">
                                         <lightning-textarea id="other-details-id"

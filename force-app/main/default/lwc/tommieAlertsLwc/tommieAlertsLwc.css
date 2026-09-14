@@ -180,18 +180,24 @@ lightning-textarea {
     padding-top: 0.5rem;
 }
 
-.sub-content-divider {
-    border-top: 1px dashed rebeccapurple;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
-}
-
 .sub-content p:not(.textarea-sublabel) {
     margin-bottom: 0 !important;
 }
 
 .sub-content-overflow {
     overflow: hidden;
+}
+
+.sub-content-divider {
+    border-bottom: 1px dashed black;
+}
+
+.sub-content-divider p {
+    padding-top: 8px;
+}
+
+.sub-content-divider ~ .sub-content-divider p {
+    padding-top: 16px;
 }
 
 .submit-warning {
