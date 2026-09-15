@@ -180,21 +180,21 @@ export default class TommieAlertsLwc extends LightningElement {
             || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
     }
 
-    hasAncestorWithId(startNode, id) {
-        let node = startNode;
-        while (node) {
-            node = node.parentNode;
-
-            if (typeof ShadowRoot !== "undefined" && node instanceof ShadowRoot) {
-                node = node.host;
-            }
-
-            if (node && node.nodeType === 1 && node.id === id) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // hasAncestorWithId(startNode, id) {
+    //     let node = startNode;
+    //     while (node) {
+    //         node = node.parentNode;
+    //
+    //         if (typeof ShadowRoot !== "undefined" && node instanceof ShadowRoot) {
+    //             node = node.host;
+    //         }
+    //
+    //         if (node && node.nodeType === 1 && node.id === id) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     connectedCallback() {
         const baseUrl = this.paramUrl || window.location.href;
@@ -218,12 +218,12 @@ export default class TommieAlertsLwc extends LightningElement {
         }
 
         // eslint-disable-next-line @lwc/lwc/no-document-query
-        const idInUse = document.getElementById('tommieAlertsLightingOut') || this.hasAncestorWithId(this, 'tommieAlertsLightingOut');
-        if (idInUse) {
-            console.log("Lighting Out");
-        } else {
-            console.log("NOT Lighting Out");
-        }
+        // const idInUse = document.getElementById('tommieAlertsLightingOut') || this.hasAncestorWithId(this, 'tommieAlertsLightingOut');
+        // if (idInUse) {
+        //     console.log("Lighting Out");
+        // } else {
+        //     console.log("NOT Lighting Out");
+        // }
     }
 
     @wire(getTommieCaresPicklists)
@@ -366,7 +366,7 @@ export default class TommieAlertsLwc extends LightningElement {
         this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
 
         let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
-        console.log("Selected Student: ", foundStudent);
+        // console.log("Selected Student: ", foundStudent);
 
         if (foundStudent) {
             this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
