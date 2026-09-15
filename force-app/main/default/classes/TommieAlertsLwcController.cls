@@ -185,20 +185,25 @@ public without sharing class TommieAlertsLwcController {
 
         String caseRecordId = !recordId.isEmpty() ? recordId[0].Id : '';
 
-        List<String> advocateReportNumbers = new List<String>();
+        List<String> tellSomeoneInformation = new List<String>();
+
+        if (Boolean.valueOf(formSelections.get('TellSomeoneSubmission'))) {
+            tellSomeoneInformation.add('Tell Someone Submission');
+        }
+
         if (Boolean.valueOf(formSelections.get('submitWellBeingFormFail'))) {
-            advocateReportNumbers.add('Advocate Well-Being Report Submission Failed');
+            tellSomeoneInformation.add('Advocate Well-Being Report Submission Failed');
         } else if (!Boolean.valueOf(formSelections.get('submitWellBeingFormFail')) && String.isNotBlank(formSelections.get('TellSomeoneWellBeingReportNumber'))) {
-            advocateReportNumbers.add('Advocate Well-Being Report Number: '+formSelections.get('TellSomeoneWellBeingReportNumber'));
+            tellSomeoneInformation.add('Advocate Well-Being Report Number: '+formSelections.get('TellSomeoneWellBeingReportNumber'));
         }
 
         if (Boolean.valueOf(formSelections.get('submitTitleIxIncidentFormFail'))) {
-            advocateReportNumbers.add('Advocate Title IX Report Submission Failed');
+            tellSomeoneInformation.add('Advocate Title IX Report Submission Failed');
         } else if (!Boolean.valueOf(formSelections.get('submitTitleIxIncidentFormFail')) && String.isNotBlank(formSelections.get('TellSomeoneTitleIxReportNumber'))) {
-            advocateReportNumbers.add('Advocate Title IX Report Number: '+formSelections.get('TellSomeoneTitleIxReportNumber'));
+            tellSomeoneInformation.add('Advocate Title IX Report Number: '+formSelections.get('TellSomeoneTitleIxReportNumber'));
         }
 
-        String caseDescription = advocateReportNumbers.isEmpty() ? '' : String.join(advocateReportNumbers, ' | ');
+        String caseDescription = tellSomeoneInformation.isEmpty() ? '' : String.join(tellSomeoneInformation, ' | ');
 
         tommieCaresCase.RecordTypeId = caseRecordId;
         tommieCaresCase.Case_Reporter__c = formSelections.get('AdvisorContactId');

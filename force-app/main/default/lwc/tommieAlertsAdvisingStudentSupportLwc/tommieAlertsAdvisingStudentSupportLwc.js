@@ -59,6 +59,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         TellSomeoneWellBeingReportNumber: "",
         submitTitleIxIncidentFormFail: false,
         TellSomeoneTitleIxReportNumber: "",
+        TellSomeoneSubmission: false,
     };
     @track selectionsCheck = {
         high5Check: false,
@@ -618,7 +619,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         this.formSubmitSelections.AdvisorContactId = this.advisorContactInfo.Id;
         this.formSubmitSelections.AdvisorContactName = this.advisorContactInfo.Name;
         this.formSubmitSelections.AdvisorEmail = this.advisorContactInfo.hed__UniversityEmail__c;
-        console.log("I am being submitted");
+        this.formSubmitSelections.TellSomeoneSubmission = !!this.tellSomeoneLwc;
 
         try {
             this.caseSubmittedErrorCheck = false;

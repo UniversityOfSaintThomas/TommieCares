@@ -71,6 +71,7 @@ export default class TommieAlertsLwc extends LightningElement {
         TellSomeoneWellBeingReportNumber: "",
         submitTitleIxIncidentFormFail: false,
         TellSomeoneTitleIxReportNumber: "",
+        TellSomeoneSubmission: false,
     };
     @track selectionsCheck = {
         high5Check: false,
@@ -717,6 +718,7 @@ export default class TommieAlertsLwc extends LightningElement {
         this.formSubmitSelections.CourseSelectionId = this.courseSelection;
         this.formSubmitSelections.StudentName = this.studentName;
         this.formSubmitSelections.StudentEmail = this.studentEmail;
+        this.formSubmitSelections.TellSomeoneSubmission = !!this.tellSomeoneLwc;
 
         try {
             this.caseSubmittedErrorCheck = false;
