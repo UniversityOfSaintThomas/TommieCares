@@ -79,6 +79,18 @@ private class TellSomeoneLwcController_TEST {
     }
 
     @IsTest
+    public static void testGetTellSomeonePicklists() {
+        Test.startTest();
+        Map<String, List<TellSomeoneLwcController.PicklistOption>> result = TellSomeoneLwcController.getTellSomeonePicklists();
+        Test.stopTest();
+
+        System.assert(result.containsKey('tellSomeoneReporterType'));
+        System.assert(result.containsKey('tellSomeoneWhoType'));
+        System.assert(result.containsKey('tellSomeoneWhatType'));
+        System.assert(!result.get('tellSomeoneReporterType').isEmpty());
+    }
+
+    @IsTest
     public static void testSubmitBiasIncidentReportForm() {
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
 
@@ -206,6 +218,7 @@ private class TellSomeoneLwcController_TEST {
                     FROM RecordType
                     WHERE SobjectType = 'Supporting_Document__c'
                     AND DeveloperName = 'Current_Student_Restricted'
+                    WITH SYSTEM_MODE
             ];
 
             if (recordTypeQuery.size() > 0) {
@@ -218,7 +231,7 @@ private class TellSomeoneLwcController_TEST {
                     Source__c = 'Tell Someone',
                     Document_Load_Date__c = Date.today()
             );
-            insert testSupportingDocument;
+            Database.insert(testSupportingDocument, false, AccessLevel.SYSTEM_MODE);
 
             Test.startTest();
             TellSomeoneLwcController.updateSupportingDocument(testSupportingDocument.Id, '0605-2025');
@@ -230,6 +243,43 @@ private class TellSomeoneLwcController_TEST {
                     WHERE Id = :testSupportingDocument.Id
             ];
             System.assertEquals('0605-2025', updatedDocument.Supporting_Document_Unique_External_ID__c);
+    }
+
+    @IsTest
+    public static void testDeleteSupportingDocument() {
+            String recordType;
+            List<RecordType> recordTypeQuery = [
+                    SELECT Id,
+                            Name,
+                            DeveloperName
+                    FROM RecordType
+                    WHERE SobjectType = 'Supporting_Document__c'
+                    AND DeveloperName = 'Current_Student_Restricted'
+                    WITH SYSTEM_MODE
+            ];
+
+            if (recordTypeQuery.size() > 0) {
+                recordType = recordTypeQuery[0].Id;
+            }
+
+            Supporting_Document__c testSupportingDocument = new Supporting_Document__c(
+                    RecordTypeId = recordType,
+                    Name = 'Advocate Bias Incident',
+                    Source__c = 'Tell Someone',
+                    Document_Load_Date__c = Date.today()
+            );
+            Database.insert(testSupportingDocument, false, AccessLevel.SYSTEM_MODE);
+
+            Test.startTest();
+            TellSomeoneLwcController.deleteSupportingDocument(testSupportingDocument.Id);
+            Test.stopTest();
+
+            List<Supporting_Document__c> remainingDocuments = [
+                    SELECT Id
+                    FROM Supporting_Document__c
+                    WHERE Id = :testSupportingDocument.Id
+            ];
+            System.assertEquals(0, remainingDocuments.size());
     }
 
     private class MockHttpResponseGenerator implements HttpCalloutMock {

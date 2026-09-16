@@ -7,7 +7,6 @@ public without sharing class TommieAlertsLwcController {
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTommieCaresPicklists() {
         Map<String, List<PicklistOption>> result = new Map<String, List<PicklistOption>>();
-
         result.put('tommieCaresReasons', getPicklistOptions(Case.Tommie_Alert_Primary_Reason__c));
         result.put('tommieHigh5Reasons', getPicklistOptions(Case.Tommie_High_5__c));
         result.put('academicPerformanceReasons', getPicklistOptions(Case.Academic_Performance_Reason_s__c));
@@ -30,7 +29,6 @@ public without sharing class TommieAlertsLwcController {
 
     @AuraEnabled(Cacheable=true)
     public static Map<String, String> currentTermAdvisor(String urlBid) {
-
         Map<String, String> termAdvisorMap = new Map<String, String>{
                 'Current_Term' => '',
                 'Advisor_ContactId' => '',
@@ -79,13 +77,11 @@ public without sharing class TommieAlertsLwcController {
             termAdvisorMap.put('Advisor_StThomasConnection', advisor[0].St_Thomas_Connection__c);
         }
 
-        System.debug('termAdvisorMap: '+termAdvisorMap);
         return termAdvisorMap;
     }
 
     @AuraEnabled(Cacheable=true)
     public static List<Map<String, String>> advisorCoursesList(String advisorContactId, String courseCrn) {
-        System.debug('WHAT IS advisorContactId: '+advisorContactId);
         List<Map<String, String>> courseMapList = new List<Map<String, String>>();
         List<hed__Course_Offering__c> courses = new List<hed__Course_Offering__c>();
         String singleCrnCriteria = '';
@@ -310,8 +306,6 @@ public without sharing class TommieAlertsLwcController {
         if (courseConnection.size() > 0) {
             tommieCaresCase.Course_Connection__c = courseConnection[0].Id;
         }
-
-        System.debug(JSON.serializePretty(tommieCaresCase));
 
         try {
             insert tommieCaresCase;

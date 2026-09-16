@@ -89,9 +89,6 @@ public without sharing class TellSomeoneLwcController {
         HttpResponse response1 = http.send(req1);
         HttpResponse response2 = http.send(req2);
 
-        System.debug('Response1 Code: ' + response1.getStatusCode());
-        System.debug('Response2 Code: ' + response2.getStatusCode());
-
         if (response1.getStatusCode() == 200) {
             resultsObjects.put('reporterType', response1.getBody());
         } else {
@@ -127,10 +124,6 @@ public without sharing class TellSomeoneLwcController {
         HttpResponse response1 = http.send(req1);
         HttpResponse response2 = http.send(req2);
         HttpResponse response3 = http.send(req3);
-
-        System.debug('Response1 Code: ' + response1.getStatusCode());
-        System.debug('Response2 Code: ' + response2.getStatusCode());
-        System.debug('Response3 Code: ' + response3.getStatusCode());
 
         if (response1.getStatusCode() == 200) {
             resultsObjects.put('reporterType', response1.getBody());
@@ -169,9 +162,6 @@ public without sharing class TellSomeoneLwcController {
         HttpResponse response1 = http.send(req1);
         HttpResponse response2 = http.send(req2);
 
-        System.debug('Response1 Code: ' + response1.getStatusCode());
-        System.debug('Response2 Code: ' + response2.getStatusCode());
-
         if (response1.getStatusCode() == 200) {
             resultsObjects.put('reporterType', response1.getBody());
         } else {
@@ -205,7 +195,6 @@ public without sharing class TellSomeoneLwcController {
         try {
             Http http = new Http();
             HttpResponse response = http.send(req);
-            System.debug('Response: ' + response.getBody());
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 biasIncidentReportNumber = (String) responseBody.get('reportNumber'); //for Bias Incident report number
@@ -235,7 +224,6 @@ public without sharing class TellSomeoneLwcController {
         try {
             Http http = new Http();
             HttpResponse response = http.send(req);
-            System.debug('Response: ' + response.getBody());
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being  report number
@@ -260,7 +248,6 @@ public without sharing class TellSomeoneLwcController {
         try {
             Http http = new Http();
             HttpResponse response = http.send(req);
-            System.debug('Response: ' + response.getBody());
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
@@ -343,7 +330,6 @@ public without sharing class TellSomeoneLwcController {
 
     @AuraEnabled(Cacheable=false)
     public static Map<String, String> saveSupportingDocuments(List<DocumentsWrapper> attachedDocumentsList, String supportingDocumentName) {
-//        System.debug(JSON.serializePretty(attachedDocumentsList));
         List<ContentVersion> insertContentVersionList = new List<ContentVersion>();
         String recordUrl = '';
         Map<String, String> returnStatusUrl = new Map<String, String>{
@@ -412,7 +398,6 @@ public without sharing class TellSomeoneLwcController {
                         Id = validSupportDocumentId,
                         Supporting_Document_Unique_External_ID__c = advocateReportNumber);
                 update supportingDocument;
-                System.debug('updateSupportingDocument status: success ' + validSupportDocumentId);
             } catch (DmlException e) {
                 System.debug('updateSupportingDocument DML error: ' + e);
             }
@@ -447,7 +432,6 @@ public without sharing class TellSomeoneLwcController {
         public void execute(QueueableContext context) {
             try {
                 delete new Supporting_Document__c(Id = docId);
-                System.debug('deleteSupportingDocument success: ' + docId);
             } catch (DmlException e) {
                 System.debug('deleteSupportingDocument DML error (attempt ' + attempt + '): ' + e);
                 if (attempt + 1 < MAX_ATTEMPTS) {
