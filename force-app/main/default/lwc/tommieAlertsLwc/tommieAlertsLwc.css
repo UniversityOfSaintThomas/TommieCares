@@ -55,7 +55,7 @@ abbr.slds-required {
     width: 100%;
 }
 
-@container component-container (min-width: 800px) {
+@container component-container (min-width: 700px) {
     .select-course-student {
         width: 60%;
     }

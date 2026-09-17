@@ -241,7 +241,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         }
 
         this.submitDisableToTommieAlerts();
-        console.log("this.wellBeingIncidentFormValues: "+JSON.stringify(this.wellBeingIncidentFormValues));
     }
 
     maxlengthCheck(field, fieldValue, maxLength) {
@@ -413,8 +412,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
             try {
                 this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Well Being Incident', attachDocumentResponse);
                 this.wellBeingIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
-                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-                console.log('this.wellBeingIncidentFormValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
             } catch (error) {
                 this.saveDocumentsFail = true;
                 console.error('Error saving attached documents:', error);
@@ -422,10 +419,8 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
         }
 
         try {
-            console.log('formValues: ', JSON.stringify(this.wellBeingIncidentFormValues));
             formReportNumber = await submitWellBeingReportForm({formValues: this.wellBeingIncidentFormValues});
             this.submitWellBeingFormFail = !formReportNumber;
-            console.log('formReportNumber: ', formReportNumber);
         } catch (error) {
             this.submitWellBeingFormFail = true;
             console.error('Error submitting well-being form:', error);
@@ -443,7 +438,6 @@ export default class TellSomeoneWellBeingIncidentReportLwc extends LightningElem
     }
 
     submitDisableToTommieAlerts() {
-        console.log("this.submitDisable: "+this.submitDisable);
         const customEvent = new CustomEvent("submitdisablewellbeing", {
             detail: { value: this.submitDisable }
         });

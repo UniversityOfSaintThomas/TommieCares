@@ -70,7 +70,8 @@ export default class TellSomeoneLwc extends LightningElement {
     // }
 
     get concernedWhatOptions() {
-        if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
+        if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty")
+            && this.tellSomeoneCase.ConcernedWhoValue === "Student" && this.currentCourse) {
             return this.whatAllOptionPicklist;
         } else if ((this.tellSomeoneCase.IAmValue === "Faculty" || this.tellSomeoneCase.IAmValue === "Staff")
             && (this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") || this.tellSomeoneCase.IAmStThomasConnection?.includes("Staff")) && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
@@ -209,6 +210,7 @@ export default class TellSomeoneLwc extends LightningElement {
         }
     }
 
+    currentCourse = false;
     @wire(iAmContactInfo, {salesforceId: "$paramSfId", bannerId: "$paramBId"})
     iAmContactInfoWire({error, data}) {
         if (data) {
@@ -242,6 +244,8 @@ export default class TellSomeoneLwc extends LightningElement {
                         option.label === this.tellSomeoneCase.IAmValue || option.label === "Anonymous"
                     );
                 }
+
+                this.currentCourse = this.initialContactInfo.Current_Course;
             }
 
             if (window.location && window.location.search) {

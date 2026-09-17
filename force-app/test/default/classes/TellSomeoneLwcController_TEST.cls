@@ -72,9 +72,10 @@ private class TellSomeoneLwcController_TEST {
         String bId = '';
 
         Test.startTest();
-        List<Contact> iAmContact = TellSomeoneLwcController.iAmContactInfo(sfId, bId);
-        System.assertEquals('123456789', iAmContact[0].University_Banner_ID__c);
-        System.assertEquals('Faculty', iAmContact[0].St_Thomas_Connection__c);
+        List<Map<String, Object>> iAmContact = TellSomeoneLwcController.iAmContactInfo(sfId, bId);
+        System.assertEquals('123456789', iAmContact[0].get('University_Banner_ID__c'));
+        System.assertEquals('Faculty', iAmContact[0].get('St_Thomas_Connection__c'));
+        System.assertEquals(true, iAmContact[0].get('Current_Course'));
         Test.stopTest();
     }
 

@@ -279,13 +279,11 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         }
 
         eventField.reportValidity();
-        console.log("this.bannerId: "+this.bannerId);
     }
 
     handleLastNameInput(event) {
         this.lastName = (event.detail?.value || '').trim();
         this.noStudentsFound = false;
-        console.log("this.lastName: "+this.lastName);
     }
 
     handleEmailChange(event) {
@@ -303,23 +301,19 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         }
 
         eventField.reportValidity();
-        console.log("this.stThomasEmail: "+this.stThomasEmail);
     }
 
     handleSearchStudent() {
         this.resetForm();
-        console.log("email: " + this.stThomasEmail + "bannerId: " + this.bannerId + "lastName: " + this.lastName);
 
         searchStudent({ searchMode: this.searchMode, bannerId: this.bannerId, lastName: this.lastName, email: this.stThomasEmail })
             .then(result => {
                 if (!Array.isArray(result) || result.length === 0) {
                     this.noStudentsFound = true;
-                    console.log('No students found');
                     return;
                 }
 
                 this.noStudentsFound = false;
-                console.log("Found Search Result:", JSON.stringify(result));
 
                 const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c } = result[0];
                 this.formSubmitSelections.StudentContactId = Id;
@@ -514,13 +508,11 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     tellSomeoneWellBeingSubmitDisable = true;
     tellSomeoneWellBeingCheck(event) {
         this.tellSomeoneWellBeingSubmitDisable = event.detail.value;
-        console.log("tellSomeoneWellBeingCheck event: ", this.tellSomeoneWellBeingSubmitDisable);
     }
 
     tellSomeoneTitleIxSubmitDisable = true;
     tellSomeoneTitleIxSubmitCheck(event) {
         this.tellSomeoneTitleIxSubmitDisable = event.detail.value;
-        console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
     get tellSomeoneWellBeingAttempt() {
@@ -672,9 +664,6 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
 
         if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
             this.caseSubmittedCheck = true;
-            console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
-            console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
-            console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
         } else {
             // eslint-disable-next-line no-restricted-globals
             location.replace(this.submittedUrl());

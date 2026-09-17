@@ -230,8 +230,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
                 this.maxlengthCheck(eventField, eventValue, this.maxDescriptionCharacterLength);
                 break;
         }
-
-        console.log('biasIncidentFormValues:', JSON.stringify(this.biasIncidentFormValues));
     }
 
     maxlengthCheck(field, fieldValue, maxLength) {
@@ -406,8 +404,6 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
             try {
                 this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Bias Incident', attachDocumentResponse);
                 this.biasIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
-                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-                console.log('this.biasIncidentFormValues: ', JSON.stringify(this.biasIncidentFormValues));
             } catch (error) {
                 this.saveDocumentsFail = true;
                 console.error('Error saving attached documents:', error);
@@ -415,10 +411,8 @@ export default class TellSomeoneBiasIncidentReportLwc extends LightningElement {
         }
 
         try {
-            console.log('formValues: ', JSON.stringify(this.biasIncidentFormValues));
             formReportNumber = await submitBiasIncidentReportForm({formValues: this.biasIncidentFormValues});
             this.submitBiasIncidentFormFail = !formReportNumber;
-            console.log('formReportNumber: ', formReportNumber);
         } catch (error) {
             this.submitBiasIncidentFormFail = true;
             console.error('Error submitting titleIx form:', error);

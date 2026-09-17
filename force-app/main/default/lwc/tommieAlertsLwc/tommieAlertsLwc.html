@@ -63,21 +63,8 @@
         </div>
     </template>
     <template lwc:if={noAdvisorContactIdCheck}>
-        <div lwc:if={tellSomeoneLwcNoAdvisor} class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
-            <div class="slds-media__figure">
-                <lightning-icon icon-name="utility:warning"
-                                alternative-text="no faculty or student course found"
-                                title="no faculty or student course found warning"
-                                size="small"
-                                class="custom-error-icon-color">
-                </lightning-icon>
-            </div>
-            <div class="slds-media__body">
-                <p>No faculty or student course information was found. Please select another option.</p>
-            </div>
-        </div>
-        <div lwc:else class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
-            <div class="slds-media__figure">
+        <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status">
+        <div class="slds-media__figure">
                 <lightning-icon icon-name="utility:warning"
                                 alternative-text="no advisor information found"
                                 title="no advisor information found error"
@@ -105,70 +92,53 @@
                     individuals in order to provide additional support.<br>
                     All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                     <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank"> here</a>.</p>
-                <div class="select-course-student">
-                    <div class="slds-form-element">
-                        <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>
-                        <div class="slds-form-element__control">
-                            <lightning-combobox id="course-selection-id"
-                                                name="course-selection"
-                                                label=""
-                                                value={courseSelection}
-                                                placeholder="Select Course"
-                                                options={coursesListOptions}
-                                                data-selecttype="courseSelect"
-                                                onchange={singleSelect}
-                                                variant="label-hidden">
-                            </lightning-combobox>
+                <template lwc:if={courseListOptionsLoaded}>
+                    <div class="select-course-student" lwc:if={courseListOptionsInitialShow}>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>
+                            <div class="slds-form-element__control">
+                                <lightning-combobox id="course-selection-id"
+                                                    name="course-selection"
+                                                    label=""
+                                                    value={courseSelection}
+                                                    placeholder="Select Course"
+                                                    options={coursesListOptions}
+                                                    data-selecttype="courseSelect"
+                                                    onchange={singleSelect}
+                                                    variant="label-hidden">
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-top_medium" lwc:if={courseSelectionCheck}>
+                            <label class="slds-form-element__label form-element__label-custom" for="student-selection-id">Select the student of concern:</label>
+                            <div class="slds-form-element__control">
+                                <lightning-combobox id="student-selection-id"
+                                                    name="student-selection"
+                                                    label=""
+                                                    value={studentSelection}
+                                                    placeholder="Select Student"
+                                                    options={studentsListOptions}
+                                                    data-selecttype="studentSelect"
+                                                    onchange={singleSelect}
+                                                    variant="label-hidden">
+                                </lightning-combobox>
+                            </div>
                         </div>
                     </div>
-                    <div class="slds-form-element slds-m-top_medium" lwc:if={courseSelectionCheck}>
-                        <label class="slds-form-element__label form-element__label-custom" for="student-selection-id">Select the student of concern:</label>
-                        <div class="slds-form-element__control">
-                            <lightning-combobox id="student-selection-id"
-                                                name="student-selection"
-                                                label=""
-                                                value={studentSelection}
-                                                placeholder="Select Student"
-                                                options={studentsListOptions}
-                                                data-selecttype="studentSelect"
-                                                onchange={singleSelect}
-                                                variant="label-hidden">
-                            </lightning-combobox>
+                    <div class="slds-media slds-media_center slds-scoped-notification slds-m-bottom_medium error-message" role="status" lwc:else>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:warning"
+                                            alternative-text="no student course found"
+                                            title="no student course found warning"
+                                            size="small"
+                                            class="custom-error-icon-color">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <p>No student course information was found.</p>
                         </div>
                     </div>
-                </div>
-<!--                <div class="slds-grid slds-grid_vertical">-->
-<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12">-->
-<!--                        <label class="slds-form-element__label form-element__label-custom" for="course-selection-id">Select the student's course:</label>-->
-<!--                        <div class="slds-form-element__control">-->
-<!--                            <lightning-combobox id="course-selection-id"-->
-<!--                                                name="course-selection"-->
-<!--                                                label=""-->
-<!--                                                value={courseSelection}-->
-<!--                                                placeholder="Select Course"-->
-<!--                                                options={coursesListOptions}-->
-<!--                                                data-selecttype="courseSelect"-->
-<!--                                                onchange={singleSelect}-->
-<!--                                                variant="label-hidden">-->
-<!--                            </lightning-combobox>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="slds-form-element slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-top_medium" lwc:if={courseSelectionCheck}>-->
-<!--                        <label class="slds-form-element__label form-element__label-custom" for="student-selection-id">Select the student of concern:</label>-->
-<!--                        <div class="slds-form-element__control">-->
-<!--                            <lightning-combobox id="student-selection-id"-->
-<!--                                                name="student-selection"-->
-<!--                                                label=""-->
-<!--                                                value={studentSelection}-->
-<!--                                                placeholder="Select Student"-->
-<!--                                                options={studentsListOptions}-->
-<!--                                                data-selecttype="studentSelect"-->
-<!--                                                onchange={singleSelect}-->
-<!--                                                variant="label-hidden">-->
-<!--                            </lightning-combobox>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                </template>
                 <div class="slds-m-top_large" lwc:if={studentSelectionCheck}>
                     <label class="section-label"><b>Select Alert(s) for {studentName} ({studentEmail})</b></label>
                     <!-- Positive Alert -->

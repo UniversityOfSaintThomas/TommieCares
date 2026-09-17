@@ -183,19 +183,13 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             case "anonymousreporting":
                 this.iUnderstandTheStatementAboutAnonymousSelect = eventValueHtml;
                 this.titleIxIncidentFormValues.i_understand_the_statement_about_anonymous_r = eventValueHtml.includes("true");
-                console.log("i_understand_the_statement_about_anonymous_r eventValue: "+eventValue);
-                console.log("i_understand_the_statement_about_anonymous_r eventValueHtml: "+eventValueHtml);
                 break;
             case "statuswhocausedharm":
                 this.titleIxIncidentFormValues.status_of_individual_who_caused_harm = eventValue ? [eventValue] : [];
-                console.log("status_of_individual_who_caused_harm eventValue: "+eventValue);
-                console.log("status_of_individual_who_caused_harm eventValueHtml: "+eventValueHtml);
                 break;
             case "notification":
                 this.notificationSelect = eventValue;
                 this.titleIxIncidentFormValues.notification = eventValue === "true";
-                console.log("notification eventValue: "+eventValue);
-                console.log("notification eventValueHtml: "+eventValueHtml);
                 break;
         }
         this.submitDisableToTommieAlerts();
@@ -258,7 +252,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
                 break;
         }
         this.submitDisableToTommieAlerts();
-        console.log("this.titleIxIncidentFormValues: "+JSON.stringify(this.titleIxIncidentFormValues));
     }
 
     maxlengthCheck(field, fieldValue, maxLength) {
@@ -365,8 +358,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
             try {
                 this.saveDocumentsFail = await attachedDocumentsSave(this.attachDocuments, 'Advocate Title IX Incident', attachDocumentResponse);
                 this.titleIxIncidentFormValues.salesforce_support_documents = attachDocumentResponse.SupportingDocumentUrl;
-                console.log('attachDocumentResponse: ', JSON.stringify(attachDocumentResponse));
-                console.log('this.titleIxIncidentFormValues: ', JSON.stringify(this.titleIxIncidentFormValues));
             } catch (error) {
                 this.saveDocumentsFail = true;
                 console.error('Error saving attached documents:', error);
@@ -374,10 +365,8 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
         }
 
         try {
-            console.log('formValues: ', JSON.stringify(this.titleIxIncidentFormValues));
             formReportNumber = await submitTitleIxReportForm({formValues: this.titleIxIncidentFormValues});
             this.submitTitleIxIncidentFormFail = !formReportNumber;
-            console.log('formReportNumber: ', formReportNumber);
         } catch (error) {
             this.submitTitleIxIncidentFormFail = true;
             console.error('Error submitting titleIx form:', error);
@@ -395,7 +384,6 @@ export default class TellSomeoneTitleIxIncidentReportLwc extends LightningElemen
     }
 
     submitDisableToTommieAlerts() {
-        console.log("this.submitDisable: "+this.submitDisable);
         const customEvent = new CustomEvent("submitdisabletitleix", {
             detail: { value: this.submitDisable }
         });

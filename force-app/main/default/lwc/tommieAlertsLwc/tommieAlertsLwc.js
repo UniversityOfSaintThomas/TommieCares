@@ -153,9 +153,9 @@ export default class TommieAlertsLwc extends LightningElement {
     get advisorInfoViewClass() {
         return "advisor_info "+this.tellSomeoneLwc; //hiding Advisor information when displaying on Community of Concern LWC
     }
-    get tellSomeoneLwcNoAdvisor() {
-        return !!this.tellSomeoneLwc; //returns no faculty information was found when displaying on Community of Concern LWC
-    }
+    // get tellSomeoneLwcNoAdvisor() {
+    //     return !!this.tellSomeoneLwc; //returns no faculty information was found when displaying on Community of Concern LWC
+    // }
     get studentSelection() {
         return this.formSubmitSelections.StudentContactId;
     }
@@ -262,10 +262,14 @@ export default class TommieAlertsLwc extends LightningElement {
         }
     }
 
+    courseListOptionsLoaded = false;
+    courseListOptionsInitialShow = false;
     @wire(advisorCoursesList, {advisorContactId: "$termAdvisorData.Advisor_ContactId", courseCrn: "$paramCrn"})
     coursesListWire({error, data}) {
         if (data) {
             this.coursesListOptions = JSON.parse(JSON.stringify(data));
+
+            this.courseListOptionsInitialShow = this.coursesListOptions.length > 0;
 
             if (this.coursesListOptions.length === 1) {
                 this.courseSelection = this.coursesListOptions[0].value;
@@ -273,10 +277,12 @@ export default class TommieAlertsLwc extends LightningElement {
                 this.coursesListOptions.unshift({value: "", label: "Select Course"});
                 this.courseSelection= "";
             }
+            this.courseListOptionsLoaded = true;
         }
 
         if (error) {
             console.log("coursesListWire error!");
+            this.courseListOptionsLoaded = true;
         }
     }
 
@@ -342,10 +348,10 @@ export default class TommieAlertsLwc extends LightningElement {
 
     buildAlertGroups() {
         const groupMap = {
-            "Positive Alert":         "positiveAlertGroup",
-            "Academic Alert":               "advisingGroup",
+            "Positive Alert": "positiveAlertGroup",
+            "Academic Alert": "advisingGroup",
             "Behavior Well Being Alert": "behaviorWellBeingGroup",
-            "Life Circumstances Alert":     "lifeCircumstanceGroup",
+            "Life Circumstances Alert": "lifeCircumstanceGroup",
         };
 
         for (const groupObj of this.alertGroupingsFilter) {
@@ -367,7 +373,6 @@ export default class TommieAlertsLwc extends LightningElement {
         this.tommieCaresOptions.splice(0, this.tommieCaresOptions.length, ...this.tommieCaresOptionsAll);
 
         let foundStudent = this.studentsList.find(s => s.hed__Contact__c === contactId);
-        // console.log("Selected Student: ", foundStudent);
 
         if (foundStudent) {
             this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
@@ -609,13 +614,11 @@ export default class TommieAlertsLwc extends LightningElement {
     tellSomeoneWellBeingSubmitDisable = true;
     tellSomeoneWellBeingCheck(event) {
         this.tellSomeoneWellBeingSubmitDisable = event.detail.value;
-        console.log("tellSomeoneWellBeingCheck event: ", this.tellSomeoneWellBeingSubmitDisable);
     }
 
     tellSomeoneTitleIxSubmitDisable = true;
     tellSomeoneTitleIxSubmitCheck(event) {
         this.tellSomeoneTitleIxSubmitDisable = event.detail.value;
-        console.log("tellSomeoneTitleIxSubmitCheck event: ", this.tellSomeoneTitleIxSubmitDisable);
     }
 
     get tellSomeoneWellBeingAttempt() {
@@ -771,9 +774,6 @@ export default class TommieAlertsLwc extends LightningElement {
 
         if (!this.tellSomeoneLwc && (this.caseSubmittedErrorCheck || this.formSubmitSelections.submitWellBeingFormFail || this.formSubmitSelections.submitTitleIxIncidentFormFail)) {
             this.caseSubmittedCheck = true;
-            console.log("this.caseSubmittedErrorCheck: " + this.caseSubmittedErrorCheck);
-            console.log("this.formSubmitSelections.submitWellBeingFormFail: " + this.formSubmitSelections.submitWellBeingFormFail);
-            console.log("this.formSubmitSelections.submitTitleIxIncidentFormFail: " + this.formSubmitSelections.submitTitleIxIncidentFormFail);
         } else {
             // eslint-disable-next-line no-restricted-globals
             location.replace(this.submittedUrl());

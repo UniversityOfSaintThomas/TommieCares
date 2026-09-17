@@ -16,7 +16,6 @@ public without sharing class TellSomeoneLwcController {
     @AuraEnabled(Cacheable=true)
     public static Map<String, List<PicklistOption>> getTellSomeonePicklists() {
         Map<String, List<PicklistOption>> result = new Map<String, List<PicklistOption>>();
-
         result.put('tellSomeoneReporterType', getPicklistOptions(Case.Community_Concern_Reporter_Type__c));
         result.put('tellSomeoneWhoType', getPicklistOptions(Case.Community_Concern_Who_Type__c));
         result.put('tellSomeoneWhatType', getPicklistOptions(Case.Community_Concern__c));
@@ -37,7 +36,7 @@ public without sharing class TellSomeoneLwcController {
     }
 
     @AuraEnabled(Cacheable=true)
-    public static List<Contact> iAmContactInfo(String salesforceId, String bannerId) {
+    public static List<Map<String, Object>> iAmContactInfo(String salesforceId, String bannerId) {
         List<Contact> iAmContact = [
                 SELECT Id,
                         FirstName,
@@ -53,24 +52,38 @@ public without sharing class TellSomeoneLwcController {
                 LIMIT 1
         ];
 
-        if (!iAmContact.isEmpty()) {
-            if (String.isBlank(iAmContact[0].St_Thomas_Connection__c) || !iAmContact[0].St_Thomas_Connection__c.contains('Faculty')) {
-                List<hed__Course_Offering__c> nonFacultyCourseInstructor = [
-                        SELECT Id
-                        FROM hed__Course_Offering__c
-                        WHERE Current_Term__c = TRUE
-                        AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
-                        WITH SECURITY_ENFORCED
-                        LIMIT 1
-                ];
+        List<Map<String, Object>> result = new List<Map<String, Object>>();
 
-                if (!nonFacultyCourseInstructor.isEmpty()) {
-                    iAmContact[0].St_Thomas_Connection__c = 'Faculty';
-                }
+        if (!iAmContact.isEmpty()) {
+            Boolean hasCurrentCourse = false;
+
+            List<hed__Course_Offering__c> nonFacultyCourseInstructor = [
+                    SELECT Id
+                    FROM hed__Course_Offering__c
+                    WHERE Current_Term__c = TRUE
+                    AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
+                    WITH SECURITY_ENFORCED
+                    LIMIT 1
+            ];
+
+            if (!nonFacultyCourseInstructor.isEmpty()) {
+                iAmContact[0].St_Thomas_Connection__c = 'Faculty';
+                hasCurrentCourse = true;
             }
+
+            Map<String, Object> contactMap = new Map<String, Object>();
+            contactMap.put('Id', iAmContact[0].Id);
+            contactMap.put('FirstName', iAmContact[0].FirstName);
+            contactMap.put('LastName', iAmContact[0].LastName);
+            contactMap.put('St_Thomas_Connection__c', iAmContact[0].St_Thomas_Connection__c);
+            contactMap.put('hed__UniversityEmail__c', iAmContact[0].hed__UniversityEmail__c);
+            contactMap.put('University_Banner_ID__c', iAmContact[0].University_Banner_ID__c);
+            contactMap.put('Current_Course', hasCurrentCourse);
+
+            result.add(contactMap);
         }
 
-        return iAmContact;
+        return result;
     }
 
     @AuraEnabled(Cacheable=true)
@@ -450,4 +463,5 @@ public without sharing class TellSomeoneLwcController {
             this.value = value;
         }
     }
+
 }
