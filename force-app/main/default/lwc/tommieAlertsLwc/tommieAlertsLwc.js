@@ -123,7 +123,7 @@ export default class TommieAlertsLwc extends LightningElement {
                 // "Missed Advising Appointment",
                 // "Non-Responsive to Outreach"
             ]},
-        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging",]},
+        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", /*"Relationship violence/stalking", */"Sense of belonging",]},
         {"Life Circumstances Alert": [/*"Difficulty Meeting Basic Needs (food/housing, etc)",*/ "Financial concerns", /*"Life Circumstances Impacting Success",*/  "Other"]},
     ]
     passCourseOptions = [

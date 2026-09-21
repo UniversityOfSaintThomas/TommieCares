@@ -115,7 +115,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     alertGroupingsFilter = [
         {"Positive Alert": ["Tommie High 5"]},
         {"Advising Alert": ["Academic Standing Requirement Not Met (only for Academic Counselors)", "Missed Advising Appointment", "Non-Responsive to Outreach"]},
-        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", "Relationship violence/stalking", "Sense of belonging"]},
+        {"Behavior Well Being Alert": ["Behavior or Well-Being Concern", /*"Relationship violence/stalking", */"Sense of belonging"]},
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
 
