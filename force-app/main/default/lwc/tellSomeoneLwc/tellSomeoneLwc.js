@@ -70,16 +70,24 @@ export default class TellSomeoneLwc extends LightningElement {
     // }
 
     get concernedWhatOptions() {
+        let options;
         if (this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty")
             && this.tellSomeoneCase.ConcernedWhoValue === "Student" && this.currentCourse) {
-            return this.whatAllOptionPicklist;
+            options = this.whatAllOptionPicklist;
         } else if ((this.tellSomeoneCase.IAmValue === "Faculty" || this.tellSomeoneCase.IAmValue === "Staff")
             && (this.tellSomeoneCase.IAmStThomasConnection?.includes("Faculty") || this.tellSomeoneCase.IAmStThomasConnection?.includes("Staff")) && this.tellSomeoneCase.ConcernedWhoValue === "Student") {
-                return this.whatNoTommieAlertsPicklist;
-        } 
-            return this.whatNoStudentOptionPicklist;
+            options = this.whatNoTommieAlertsPicklist;
+        } else {
+            options = this.whatNoStudentOptionPicklist;
+        }
+
+        const isFacultyOrStaffConnection = this.initialContactInfo?.St_Thomas_Connection__c?.includes("Faculty") || this.initialContactInfo?.St_Thomas_Connection__c?.includes("Staff");
+        if (isFacultyOrStaffConnection && this.tellSomeoneCase.IAmValue === "Anonymous") {
+            return options.filter((obj) => obj.label !== "I would like to report a concern related to possible sexual misconduct (including Title IX)");
+        }
+        return options;
     }
-    
+
     get iAmAnonymousCheck() {
         return this.tellSomeoneCase.IAmValue === "Anonymous";
     }

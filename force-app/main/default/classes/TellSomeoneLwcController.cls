@@ -61,7 +61,7 @@ public without sharing class TellSomeoneLwcController {
                     SELECT Id
                     FROM hed__Course_Offering__c
                     WHERE Current_Term__c = TRUE
-                    AND hed__Faculty__r.University_Banner_ID__c = :iAmContact[0].University_Banner_ID__c
+                    AND hed__Faculty__c = :iAmContact[0].Id
                     WITH SECURITY_ENFORCED
                     LIMIT 1
             ];
@@ -201,6 +201,7 @@ public without sharing class TellSomeoneLwcController {
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
+//        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
         req.setBody(JSON.serialize(formValues));
@@ -230,6 +231,7 @@ public without sharing class TellSomeoneLwcController {
 
         HttpRequest req = new HttpRequest();
         req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
+//        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
         req.setBody(JSON.serialize(formValues));

@@ -14,6 +14,7 @@ import submitTommieAlertsCase from "@salesforce/apex/TommieAlertsLwcController.s
 import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
 import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import {tommieAlertsTellSomeoneSubmission} from "c/tellSomeoneUtilJs";
+import basePath from "@salesforce/community/basePath";
 
 export default class TommieAlertsLwc extends LightningElement {
     //To TellSomeone child component
@@ -180,6 +181,12 @@ export default class TommieAlertsLwc extends LightningElement {
         return Object.values(this.formRequired).includes(true)
             || (this.tellSomeoneWellBeingVisible && this.tellSomeoneWellBeingSubmitDisable)
             || (this.selectionsCheck.relationshipCheck && this.tellSomeoneTitleIxSubmitDisable);
+    }
+
+    get tellSomeoneLwcLink() {
+        const tellSomeoneBaseUrl =  new URL(`${basePath}/tell-someone-lwc`, window.location.origin);
+        tellSomeoneBaseUrl.searchParams.set("bid", this.paramBId);
+        return tellSomeoneBaseUrl.toString();
     }
 
     // hasAncestorWithId(startNode, id) {
