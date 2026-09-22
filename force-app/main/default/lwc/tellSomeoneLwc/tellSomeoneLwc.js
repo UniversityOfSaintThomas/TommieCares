@@ -97,7 +97,7 @@ export default class TellSomeoneLwc extends LightningElement {
     }
 
     get showWhatTommieAlerts() {
-        return this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to report a concern about a student in one of my classes" && this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.ConcernedWhoValue === "Student";
+        return this.showConcernedWhatSelect && this.tellSomeoneCase.ConcernedWhatValue === "I would like to report an academic or financial concern about a student in my class" && this.tellSomeoneCase.IAmValue === "Faculty" && this.tellSomeoneCase.ConcernedWhoValue === "Student";
     }
 
     get showWhatTommieAlertsAdvisingStudent() {
@@ -196,9 +196,9 @@ export default class TellSomeoneLwc extends LightningElement {
 
                 this.concernedWhoOptions = JSON.parse(JSON.stringify(data.tellSomeoneWhoType || []));
                 this.whatAllOptionPicklist = JSON.parse(JSON.stringify(data.tellSomeoneWhatType || []));
-                this.whatNoTommieAlertsPicklist = this.whatAllOptionPicklist.filter((obj) => obj.label !== "I would like to report a concern about a student in one of my classes");
+                this.whatNoTommieAlertsPicklist = this.whatAllOptionPicklist.filter((obj) => obj.label !== "I would like to report an academic or financial concern about a student in my class");
                 const excludedWhatLabels = [
-                    "I would like to report a concern about a student in one of my classes",
+                    "I would like to report an academic or financial concern about a student in my class",
                     "I would like to report a Advising and Student Support concern"
                 ];
                 this.whatNoStudentOptionPicklist = this.whatAllOptionPicklist.filter((obj) => !excludedWhatLabels.includes(obj.label));

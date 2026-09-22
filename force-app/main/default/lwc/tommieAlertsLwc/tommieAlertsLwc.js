@@ -108,6 +108,7 @@ export default class TommieAlertsLwc extends LightningElement {
         "Other",
     ];
     tellSomeoneExclusions = [
+        "Tommie High 5",
         "Behavior or Well-Being Concern",
         "Behavior concerns",
         "Mental health concerns",
