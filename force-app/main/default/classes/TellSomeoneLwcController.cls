@@ -268,6 +268,8 @@ public without sharing class TellSomeoneLwcController {
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 titleIxReportNumber = (String) responseBody.get('reportNo'); //for TitleIX report number
+                System.debug('TitleIX responseBody: ' + responseBody);
+                System.debug('TitleIX report number: ' + titleIxReportNumber);
             }
         } catch (Exception e) {
             System.debug('Error submitting request: ' + e.getMessage());
