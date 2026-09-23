@@ -91,7 +91,8 @@
                     individuals in order to provide additional support.<br>
                     All alerts are reviewed daily, Monday-Friday, and responded to on an as needed basis. Learn more about our alert process
                     <a href="https://one.stthomas.edu/sites/center-for-student-achievement/news/230122/alerts-proces_ost-article_sp24" target="_blank" rel="noopener noreferrer"> here</a>.</p>
-                <p>If you want to report a concern related to sexual misconduct (including Title IX) please visit <a href={tellSomeoneLwcLink} target="_blank" rel="noopener noreferrer">Tell Someone </a>to submit your report.</p>
+<!--                <p>If you want to report a concern related to sexual misconduct (including Title IX) please visit <a href={tellSomeoneLwcLink} target="_blank" rel="noopener noreferrer">Tell Someone </a>to submit your report.</p>-->
+                <p lwc:if={standaloneView}>If you want to report a concern related to sexual misconduct (including Title IX) please visit <a href={tellSomeoneLwcLink} target="_blank" rel="noopener noreferrer">Tell Someone </a>to submit your report.</p>
                 <template lwc:if={courseListOptionsLoaded}>
                     <div class="select-course-student" lwc:if={courseListOptionsInitialShow}>
                         <div class="slds-form-element">

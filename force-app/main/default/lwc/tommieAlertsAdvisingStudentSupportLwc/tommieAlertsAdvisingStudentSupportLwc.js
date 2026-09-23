@@ -12,7 +12,7 @@ import submitTommieAlertsAdvisingStudent from "@salesforce/apex/TommieAlertsAdvi
 import submitWellBeingReportForm from "@salesforce/apex/TellSomeoneLwcController.submitWellBeingReportForm";
 import submitTitleIxReportForm from "@salesforce/apex/TellSomeoneLwcController.submitTitleIxReportForm";
 import {tommieAlertsTellSomeoneSubmission} from "c/tellSomeoneUtilJs";
-import basePath from "@salesforce/community/basePath";
+// import basePath from "@salesforce/community/basePath";
 
 export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElement {
     //To TellSomeone child component
@@ -121,6 +121,17 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
         {"Life Circumstances Alert": ["Difficulty Meeting Basic Needs (food/housing, etc)", "Financial concerns",  "Other"]},
     ]
 
+    get standaloneView() {
+        return !this.tellSomeoneLwc; //hides Tell Someone link when embedded as a child (e.g. under tellSomeoneLwc/lightning:out)
+    }
+
+    get communityUrlPrefix() {
+        // derives the community site prefix from the current URL (e.g. "/CurrentStudents/s/page" -> "/CurrentStudents/s")
+        // avoids importing @salesforce/community/basePath, which is unsupported outside Experience Builder targets (breaks under lightning:out)
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        return segments.length > 1 ? `/${segments[0]}/${segments[1]}` : '';
+    }
+
     get initialPageView() {
         return this.advisorContactIdCheck && !this.caseSubmittedCheck;
     }
@@ -172,7 +183,7 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
     }
 
     get tellSomeoneLwcLink() {
-        const tellSomeoneBaseUrl =  new URL(`${basePath}/tell-someone-lwc`, window.location.origin);
+        const tellSomeoneBaseUrl = new URL(`${this.communityUrlPrefix}/tell-someone-lwc`, window.location.origin);
         tellSomeoneBaseUrl.searchParams.set("bid", this.paramBId);
         return tellSomeoneBaseUrl.toString();
     }
