@@ -200,8 +200,7 @@ public without sharing class TellSomeoneLwcController {
         }
 
         HttpRequest req = new HttpRequest();
-        req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
-//        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
+        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
         req.setBody(JSON.serialize(formValues));
@@ -212,6 +211,8 @@ public without sharing class TellSomeoneLwcController {
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 biasIncidentReportNumber = (String) responseBody.get('reportNumber'); //for Bias Incident report number
+                System.debug('Bias Incident responseBody: ' + responseBody);
+                System.debug('Bias Incident report number: ' + biasIncidentReportNumber);
             }
         } catch (Exception e) {
             System.debug('Error submitting request: ' + e.getMessage());
@@ -230,8 +231,7 @@ public without sharing class TellSomeoneLwcController {
         }
 
         HttpRequest req = new HttpRequest();
-        req.setEndpoint(symplicityAdvocateIntegrationKeyCallout + '/v1/fw/cases');
-//        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
+        req.setEndpoint(symplicityAdvocateFlexFormTokenCallout + '/v1/fw/cases');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json;charset=UTF-8');
         req.setBody(JSON.serialize(formValues));
@@ -242,6 +242,8 @@ public without sharing class TellSomeoneLwcController {
             if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
                 Map<String, Object> responseBody = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
                 wellBeingReportNumber = (String) responseBody.get('reportNumber'); //for Well Being  report number
+                System.debug('Well Being responseBody: ' + responseBody);
+                System.debug('Well Being report number: ' + wellBeingReportNumber);
             }
         } catch (Exception e) {
             System.debug('Error submitting request: ' + e.getMessage());
