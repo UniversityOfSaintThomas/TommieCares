@@ -68,7 +68,7 @@ public without sharing class TommieAlertsAdvisingStudentLwcController {
         // Build SELECT clause
         String baseSelect = 'SELECT Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, '
                 + 'University_Banner_ID__c, St_Thomas_Connection__c, Undergraduate_Cohort_Code__c, Student_Type__c FROM Contact '
-                + 'WHERE (St_Thomas_Connection__c INCLUDES (\'Student\')'
+                + 'WHERE ((St_Thomas_Connection__c INCLUDES (\'Student\') AND St_Thomas_Connection__c EXCLUDES (\'Graduate Student\'))'
                 + ' OR (St_Thomas_Connection__c = null AND Student_Type__c INCLUDES (\'FTFY\', \'Transfer\')'
                 + ' AND Student_Type__c EXCLUDES (\'Graduate\', \'DFC\')))';
 
