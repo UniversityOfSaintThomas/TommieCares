@@ -396,7 +396,7 @@ export default class TommieAlertsLwc extends LightningElement {
         if (foundStudent) {
             this.studentName = foundStudent.hed__Contact__r.Mailing_First_Name__c + " " + foundStudent.hed__Contact__r.LastName;
             this.studentEmail = foundStudent.hed__Contact__r.hed__UniversityEmail__c;
-            if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
+            if (foundStudent.hed__Contact__r.St_Thomas_Connection__c?.includes("Graduate Student") || foundStudent.hed__Contact__r.Student_Type__c?.split(";").includes("Graduate")) {
                 this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
             }
         }

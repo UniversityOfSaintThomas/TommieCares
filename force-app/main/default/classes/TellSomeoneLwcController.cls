@@ -43,7 +43,8 @@ public without sharing class TellSomeoneLwcController {
                         LastName,
                         St_Thomas_Connection__c,
                         hed__UniversityEmail__c,
-                        University_Banner_ID__c
+                        University_Banner_ID__c,
+                        Student_Type__c
                 FROM Contact
                 WHERE Id = :salesforceId
                 OR (University_Banner_ID__c != ''
@@ -79,6 +80,7 @@ public without sharing class TellSomeoneLwcController {
             contactMap.put('hed__UniversityEmail__c', iAmContact[0].hed__UniversityEmail__c);
             contactMap.put('University_Banner_ID__c', iAmContact[0].University_Banner_ID__c);
             contactMap.put('Current_Course', hasCurrentCourse);
+            contactMap.put('Student_Type__c', iAmContact[0].Student_Type__c);
 
             result.add(contactMap);
         }

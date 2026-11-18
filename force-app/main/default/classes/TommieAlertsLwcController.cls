@@ -135,7 +135,7 @@ public without sharing class TommieAlertsLwcController {
         String allStudentsCriteria = 'SELECT Id, hed__Contact__c, hed__Contact__r.Id,' +
                 ' hed__Contact__r.FirstName, hed__Contact__r.LastName, hed__Contact__r.Mailing_First_Name__c,' +
                 ' hed__Contact__r.Last_Name_First_Name__c, hed__Contact__r.hed__UniversityEmail__c,' +
-                ' hed__Contact__r.University_Banner_ID__c, hed__Contact__r.St_Thomas_Connection__c\n' +
+                ' hed__Contact__r.University_Banner_ID__c, hed__Contact__r.St_Thomas_Connection__c, hed__Contact__r.Student_Type__c\n' +
                 ' FROM hed__Course_Enrollment__c\n' +
                 ' WHERE Current_Term_Course__c = TRUE\n' +
                 ' AND hed__Course_Offering__c = :courseId\n' +

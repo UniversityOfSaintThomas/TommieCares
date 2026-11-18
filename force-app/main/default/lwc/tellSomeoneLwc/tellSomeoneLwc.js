@@ -63,6 +63,7 @@ export default class TellSomeoneLwc extends LightningElement {
         ConcernedWhoPhone: "",
         ConcernedWhatValue: "",
         ConcernedWhatAdditionalInfo: "",
+        StudentType: "",
     }
 
     // get tellSomeoneLogo() {
@@ -231,6 +232,7 @@ export default class TellSomeoneLwc extends LightningElement {
                     IAmLastName: this.initialContactInfo.LastName,
                     IAmStThomasConnection: this.initialContactInfo.St_Thomas_Connection__c,
                     IAmBannerId: this.initialContactInfo.University_Banner_ID__c,
+                    StudentType: this.initialContactInfo.Student_Type__c,
                 }
 
                 if (this.initialContactInfo.hed__UniversityEmail__c) {
@@ -243,7 +245,7 @@ export default class TellSomeoneLwc extends LightningElement {
                     this.tellSomeoneCase.IAmValue = "Faculty";
                 } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Staff")) {
                     this.tellSomeoneCase.IAmValue = "Staff";
-                } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Student")) {
+                } else if (this.tellSomeoneCase.IAmStThomasConnection?.includes("Student") || (this.tellSomeoneCase.IAmStThomasConnection == null && this.tellSomeoneCase.StudentType != null)) {
                     this.tellSomeoneCase.IAmValue = "Student";
                 }
 
@@ -285,6 +287,7 @@ export default class TellSomeoneLwc extends LightningElement {
                     this.tellSomeoneCase.IAmEmail = "";
                     this.tellSomeoneCase.IAmPhone = "";
                     this.tellSomeoneCase.IAmBannerId = "";
+                    this.tellSomeoneCase.StudentType = "";
                 } else {
                     if (this.initialContactInfo) {
                         this.tellSomeoneCase.IAmContactId = this.initialContactInfo.Id;
@@ -294,6 +297,7 @@ export default class TellSomeoneLwc extends LightningElement {
                         this.tellSomeoneCase.IAmEmail = this.initialContactInfo.hed__UniversityEmail__c;
                         this.tellSomeoneCase.IAmPhone = "";
                         this.tellSomeoneCase.IAmBannerId = this.initialContactInfo.University_Banner_ID__c;
+                        this.tellSomeoneCase.StudentType = this.initialContactInfo.Student_Type__c;
                     }
                 }
                 // eslint-disable-next-line no-case-declarations

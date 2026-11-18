@@ -334,13 +334,13 @@ export default class TommieAlertsAdvisingStudentSupportLwc extends LightningElem
 
                 this.noStudentsFound = false;
 
-                const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c } = result[0];
+                const { Id, FirstName, LastName, Name, Email, hed__UniversityEmail__c, University_Banner_ID__c, St_Thomas_Connection__c, Student_Type__c } = result[0];
                 this.formSubmitSelections.StudentContactId = Id;
                 this.formSubmitSelections.StudentName = Name;
                 this.formSubmitSelections.StudentEmail = hed__UniversityEmail__c;
 
                 this.tommieCaresOptions = [...this.tommieCaresOptionsAll];
-                if (St_Thomas_Connection__c?.toLowerCase().includes("graduate student")) {
+                if (St_Thomas_Connection__c?.includes("Graduate Student") || Student_Type__c?.split(";").includes("Graduate")) {
                     this.removeTommieCaresOptions(this.tommieCaresGraduateExclusions, this.tommieCaresOptions);
                 }
 
